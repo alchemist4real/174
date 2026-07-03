@@ -33,7 +33,10 @@ export default async function handler(req, res) {
   if (!serviceKey) return res.status(500).json({ error: 'Server config error' });
 
   // 2. Check if user is an admin via user_roles table
-  const roleRes = await fetch(`${supabaseUrl}/rest/v1/user_roles?id=eq.${userData.id}&select=role`, {
+  const username = userData.user_metadata?.username;
+  const encEmail = encodeURIComponent(email);
+  const identifierQuery = username ? `or=(identifier.eq.${encEmail},identifier.eq.${encodeURIComponent(username)})` : `identifier=eq.${encEmail}`;
+  const roleRes = await fetch(`${supabaseUrl}/rest/v1/user_roles?${identifierQuery}&select=role`, {
     headers: { 'apikey': serviceKey, 'Authorization': `Bearer ${serviceKey}` }
   });
   
@@ -243,7 +246,7 @@ export default async function handler(req, res) {
 
       if (action === 'remove_admin') {
         const { identifier } = req.body;
-        const resRole = await fetch(`${supabaseUrl}/rest/v1/user_roles?identifier=eq.${identifier}`, {
+        const resRole = await fetch(`${supabaseUrl}/rest/v1/user_roles?identifier=eq.${encodeURIComponent(identifier)}`, {
           method: 'DELETE',
           headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
         });
