@@ -1340,6 +1340,20 @@ try {
     const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
     window.supabaseClient = supabase; // Expose for admin-ui.js
 
+    // Handle token hash from custom email templates (bypasses email scanner consumption)
+    const hashParams = new URLSearchParams(window.location.search);
+    const tokenHash = hashParams.get('token_hash');
+    const authType = hashParams.get('type');
+    if (tokenHash && authType) {
+      supabase.auth.verifyOtp({ token_hash: tokenHash, type: authType }).then(({error}) => {
+        if (error) {
+          alert('Email link is invalid or expired.');
+        } else {
+          window.history.replaceState({}, document.title, window.location.pathname);
+        }
+      });
+    }
+
     const authOverlay = document.getElementById('authOverlay');
     const authForm = document.getElementById('authForm');
     const authEmail = document.getElementById('authEmail');
