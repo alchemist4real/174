@@ -1350,6 +1350,39 @@ try {
           alert('Email link is invalid or expired.');
         } else {
           window.history.replaceState({}, document.title, window.location.pathname);
+          if (authType === 'recovery') {
+            setTimeout(() => {
+              const modal = document.getElementById('resetPasswordModal');
+              if (modal) modal.classList.add('active');
+              
+              document.getElementById('btnSubmitNewPassword').onclick = async () => {
+                const newPassword = document.getElementById('newPasswordInput').value;
+                const msgEl = document.getElementById('resetPasswordMsg');
+                if (newPassword && newPassword.trim() !== '') {
+                  msgEl.style.color = 'var(--text-main)';
+                  msgEl.textContent = 'Updating...';
+                  const { error } = await supabase.auth.updateUser({ password: newPassword });
+                  if (error) {
+                    msgEl.style.color = 'var(--danger)';
+                    msgEl.textContent = "Error: " + error.message;
+                  } else {
+                    msgEl.style.color = 'var(--accent)';
+                    msgEl.textContent = "Password updated successfully!";
+                    setTimeout(() => {
+                      modal.classList.remove('active');
+                      window.location.reload();
+                    }, 1500);
+                  }
+                } else {
+                  msgEl.style.color = 'var(--danger)';
+                  msgEl.textContent = "Please enter a valid password.";
+                }
+              };
+              document.getElementById('btnCancelNewPassword').onclick = () => {
+                modal.classList.remove('active');
+              };
+            }, 500); // Give time for SIGNED_IN state to process
+          }
         }
       });
     }
