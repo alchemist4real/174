@@ -137,6 +137,20 @@ export default async function handler(req, res) {
   };
 
   try {
+    if (action === 'download') {
+      const { path } = req.body;
+      if (!path) return res.status(400).json({ error: 'Missing path' });
+      const owner = 'alchemist4real';
+      const repo = 'MR-CAPSULES';
+      const fileRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${encodeURIComponent(path)}`, {
+        headers: { 'Authorization': `token ${process.env.GH_TOKEN}`, 'Accept': 'application/vnd.github.v3+json' }
+      });
+      if (!fileRes.ok) return res.status(404).json({ error: 'File not found on GitHub' });
+      const fileData = await fileRes.json();
+      const content = Buffer.from(fileData.content, 'base64').toString('utf-8');
+      return res.status(200).json({ success: true, content, sha: fileData.sha });
+    }
+
     if (action === 'tree') {
       const ghRes = await ghApi('GET', `/git/trees/main?recursive=1`);
       if (!ghRes.ok) throw new Error(`GitHub API Error: ${await ghRes.text()}`);

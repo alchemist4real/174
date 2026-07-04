@@ -64,17 +64,38 @@ export default async function handler(req, res) {
     };
 
     if (action === 'list_tasks') {
-      const getRes = await fetch(`${supabaseUrl}/rest/v1/content_tasks?select=*,created_by_user:created_by(email),assigned_to_user:assigned_to(email),reviewed_by_user:reviewed_by(email)&order=created_at.desc`, {
+      const getRes = await fetch(`${supabaseUrl}/rest/v1/content_tasks?select=*&order=created_at.desc`, {
         headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
       });
-      const data = await getRes.json();
-      return res.status(200).json({ success: true, tasks: data });
+      const tasks = await getRes.json();
+      
+      // Fetch all users to resolve IDs to emails
+      const usersRes = await fetch(`${supabaseUrl}/auth/v1/admin/users?per_page=1000`, {
+        headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
+      });
+      const usersData = await usersRes.json();
+      const allUsers = usersData.users || [];
+      
+      // Enrich tasks with user emails
+      const enriched = tasks.map(t => {
+        const createdBy = allUsers.find(u => u.id === t.created_by);
+        const assignedTo = allUsers.find(u => u.id === t.assigned_to);
+        const reviewedBy = allUsers.find(u => u.id === t.reviewed_by);
+        return {
+          ...t,
+          created_by_user: createdBy ? { email: createdBy.email } : null,
+          assigned_to_user: assignedTo ? { email: assignedTo.email, whatsapp: null } : null,
+          reviewed_by_user: reviewedBy ? { email: reviewedBy.email } : null
+        };
+      });
+      
+      return res.status(200).json({ success: true, tasks: enriched });
     }
 
     if (action === 'create_task') {
       if (!isManagement) return res.status(403).json({ error: 'Management only' });
       
-      const res = await fetch(`${supabaseUrl}/rest/v1/content_tasks`, {
+      const fetchRes = await fetch(`${supabaseUrl}/rest/v1/content_tasks`, {
         method: 'POST',
         headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}`, 'Content-Type': 'application/json', 'Prefer': 'return=representation' },
         body: JSON.stringify({
@@ -82,8 +103,8 @@ export default async function handler(req, res) {
           status: 'open', created_by: userId
         })
       });
-      if (!res.ok) throw new Error(await res.text());
-      const data = await res.json();
+      if (!fetchRes.ok) throw new Error(await fetchRes.text());
+      const data = await fetchRes.json();
       
       await logAction(data[0].id, 'created', null, 'open', note);
       await recordContribution(data[0].id, 'task_created');
@@ -94,26 +115,26 @@ export default async function handler(req, res) {
     if (action === 'claim_task') {
       if (!isDeveloper) return res.status(403).json({ error: 'Developers only' });
       
-      const res = await fetch(`${supabaseUrl}/rest/v1/content_tasks?id=eq.${task_id}`, {
+      const fetchRes = await fetch(`${supabaseUrl}/rest/v1/content_tasks?id=eq.${task_id}`, {
         method: 'PATCH',
         headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}`, 'Content-Type': 'application/json', 'Prefer': 'return=representation' },
         body: JSON.stringify({ assigned_to: userId, status: 'in_progress', assigned_at: new Date().toISOString() })
       });
-      if (!res.ok) throw new Error(await res.text());
-      const data = await res.json();
+      if (!fetchRes.ok) throw new Error(await fetchRes.text());
+      const data = await fetchRes.json();
       
       await logAction(task_id, 'claimed', 'open', 'in_progress', note);
       return res.status(200).json({ success: true, task: data[0] });
     }
 
     if (action === 'unclaim_task') {
-      const res = await fetch(`${supabaseUrl}/rest/v1/content_tasks?id=eq.${task_id}`, {
+      const fetchRes = await fetch(`${supabaseUrl}/rest/v1/content_tasks?id=eq.${task_id}`, {
         method: 'PATCH',
         headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}`, 'Content-Type': 'application/json', 'Prefer': 'return=representation' },
         body: JSON.stringify({ assigned_to: null, status: 'open', assigned_at: null })
       });
-      if (!res.ok) throw new Error(await res.text());
-      const data = await res.json();
+      if (!fetchRes.ok) throw new Error(await fetchRes.text());
+      const data = await fetchRes.json();
       
       await logAction(task_id, 'unclaimed', 'in_progress', 'open', note);
       return res.status(200).json({ success: true, task: data[0] });
@@ -122,13 +143,13 @@ export default async function handler(req, res) {
     if (action === 'submit_task') {
       if (!isDeveloper) return res.status(403).json({ error: 'Developers only' });
       
-      const res = await fetch(`${supabaseUrl}/rest/v1/content_tasks?id=eq.${task_id}`, {
+      const fetchRes = await fetch(`${supabaseUrl}/rest/v1/content_tasks?id=eq.${task_id}`, {
         method: 'PATCH',
         headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}`, 'Content-Type': 'application/json', 'Prefer': 'return=representation' },
         body: JSON.stringify({ status: 'developed', submitted_at: new Date().toISOString() })
       });
-      if (!res.ok) throw new Error(await res.text());
-      const data = await res.json();
+      if (!fetchRes.ok) throw new Error(await fetchRes.text());
+      const data = await fetchRes.json();
       
       await logAction(task_id, 'submitted', 'in_progress', 'developed', note);
       await recordContribution(task_id, 'task_developed');
@@ -138,13 +159,13 @@ export default async function handler(req, res) {
     if (action === 'start_review') {
       if (!isReviewer) return res.status(403).json({ error: 'Reviewers only' });
       
-      const res = await fetch(`${supabaseUrl}/rest/v1/content_tasks?id=eq.${task_id}`, {
+      const fetchRes = await fetch(`${supabaseUrl}/rest/v1/content_tasks?id=eq.${task_id}`, {
         method: 'PATCH',
         headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}`, 'Content-Type': 'application/json', 'Prefer': 'return=representation' },
         body: JSON.stringify({ reviewed_by: userId, status: 'in_review', review_started_at: new Date().toISOString() })
       });
-      if (!res.ok) throw new Error(await res.text());
-      const data = await res.json();
+      if (!fetchRes.ok) throw new Error(await fetchRes.text());
+      const data = await fetchRes.json();
       
       await logAction(task_id, 'review_started', 'developed', 'in_review', note);
       return res.status(200).json({ success: true, task: data[0] });
@@ -153,13 +174,13 @@ export default async function handler(req, res) {
     if (action === 'approve_task') {
       if (!isReviewer) return res.status(403).json({ error: 'Reviewers only' });
       
-      const res = await fetch(`${supabaseUrl}/rest/v1/content_tasks?id=eq.${task_id}`, {
+      const fetchRes = await fetch(`${supabaseUrl}/rest/v1/content_tasks?id=eq.${task_id}`, {
         method: 'PATCH',
         headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}`, 'Content-Type': 'application/json', 'Prefer': 'return=representation' },
         body: JSON.stringify({ status: 'done', completed_at: new Date().toISOString() })
       });
-      if (!res.ok) throw new Error(await res.text());
-      const data = await res.json();
+      if (!fetchRes.ok) throw new Error(await fetchRes.text());
+      const data = await fetchRes.json();
       
       await logAction(task_id, 'approved', 'in_review', 'done', note);
       await recordContribution(task_id, 'task_approved');
@@ -179,13 +200,13 @@ export default async function handler(req, res) {
     if (action === 'reject_task') {
       if (!isReviewer) return res.status(403).json({ error: 'Reviewers only' });
       
-      const res = await fetch(`${supabaseUrl}/rest/v1/content_tasks?id=eq.${task_id}`, {
+      const fetchRes = await fetch(`${supabaseUrl}/rest/v1/content_tasks?id=eq.${task_id}`, {
         method: 'PATCH',
         headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}`, 'Content-Type': 'application/json', 'Prefer': 'return=representation' },
         body: JSON.stringify({ status: 'in_progress' }) // Send back to dev
       });
-      if (!res.ok) throw new Error(await res.text());
-      const data = await res.json();
+      if (!fetchRes.ok) throw new Error(await fetchRes.text());
+      const data = await fetchRes.json();
       
       await logAction(task_id, 'rejected', 'in_review', 'in_progress', note);
       return res.status(200).json({ success: true, task: data[0] });
@@ -197,11 +218,24 @@ export default async function handler(req, res) {
     }
 
     if (action === 'get_task_logs') {
-      const res = await fetch(`${supabaseUrl}/rest/v1/task_logs?task_id=eq.${task_id}&select=*,user:user_id(email)&order=created_at.desc`, {
+      const fetchRes = await fetch(`${supabaseUrl}/rest/v1/task_logs?task_id=eq.${task_id}&select=*&order=created_at.desc`, {
         headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
       });
-      const data = await res.json();
-      return res.status(200).json({ success: true, logs: data });
+      const logs = await fetchRes.json();
+      
+      // Resolve user IDs to emails
+      const usersRes = await fetch(`${supabaseUrl}/auth/v1/admin/users?per_page=1000`, {
+        headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
+      });
+      const usersData = await usersRes.json();
+      const allUsers = usersData.users || [];
+      
+      const enrichedLogs = logs.map(l => {
+        const u = allUsers.find(au => au.id === l.user_id);
+        return { ...l, user: u ? { email: u.email } : null };
+      });
+      
+      return res.status(200).json({ success: true, logs: enrichedLogs });
     }
 
     return res.status(400).json({ error: 'Unknown action' });

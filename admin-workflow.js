@@ -1,6 +1,7 @@
 // 3-Division Workflow & Tasks Logic
 let currentUserDivision = null;
 let currentUserId = null;
+let isAdminUser = false;
 
 document.addEventListener('DOMContentLoaded', async () => {
     // Wait a bit for sessionToken to be populated by admin.js auth listener
@@ -31,13 +32,17 @@ async function initWorkflow() {
     const { data: { user } } = await supabaseClient.auth.getUser();
     if(user) currentUserId = user.id;
 
+    // Check if user has admin badge in the UI (set by admin.js verifyAdmin)
+    const badge = document.getElementById('userBadge');
+    isAdminUser = badge && (badge.dataset.role === 'admin' || badge.dataset.role === 'superadmin');
+
     const divRes = await apiCall('divisions', { action: 'get_my_division' });
     if(divRes.success && divRes.division) {
         currentUserDivision = divRes.division.division_id;
         
         // Show create task button if management
         const btnCreateTask = document.getElementById('btnCreateTask');
-        if(btnCreateTask && (currentUserDivision === 'management' || document.getElementById('userBadge').textContent.includes('Admin'))) {
+        if(btnCreateTask && (currentUserDivision === 'management' || isAdminUser)) {
             btnCreateTask.style.display = 'block';
             btnCreateTask.onclick = () => createNewTaskPrompt();
         }
@@ -227,8 +232,8 @@ function renderTasksAsSyllabus(tasks) {
 }
 
 function openTaskModal(task) {
-    const isDev = currentUserDivision === 'development' || document.getElementById('userBadge').textContent.includes('Admin');
-    const isRev = currentUserDivision === 'review' || document.getElementById('userBadge').textContent.includes('Admin');
+    const isDev = currentUserDivision === 'development' || isAdminUser;
+    const isRev = currentUserDivision === 'review' || isAdminUser;
     const isMyTask = task.assigned_to === currentUserId;
 
     let actionsHtml = '';
@@ -275,7 +280,7 @@ window.loadTaskLogs = async function(taskId) {
             return;
         }
         container.innerHTML = res.logs.map(l => `<div style="font-size:11px; border-bottom:1px solid var(--border-light); padding:4px 0;">
-            <span style="color:var(--accent)">${l.action.toUpperCase()}</span> by ${l.users ? l.users.email.split('@')[0] : 'User'}
+            <span style="color:var(--accent)">${l.action.toUpperCase()}</span> by ${l.user ? l.user.email.split('@')[0] : 'User'}
             <div style="color:var(--text-muted); font-size:10px;">${new Date(l.created_at).toLocaleString()}</div>
         </div>`).join('');
     } else {
@@ -380,7 +385,7 @@ async function loadContributions() {
         // check 30 days
         const hasRecent = resMe.contributions.some(c => new Date(c.created_at) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000));
         const statusEl = document.getElementById('contributionStatus');
-        if(hasRecent || document.getElementById('userBadge').textContent.includes('Admin')) {
+        if(hasRecent || isAdminUser) {
             statusEl.textContent = 'Active Contributor (Access Granted)';
             statusEl.style.color = '#4ADE80';
         } else {
@@ -481,6 +486,20 @@ function parseCBTHtml(path, html) {
             </div>
         `;
         listEl.appendChild(block);
+
+        block.querySelector('.btn-report-issue').addEventListener('click', async () => {
+            const issue = prompt('Describe the issue with this question:');
+            if(!issue) return;
+            showToast('Reporting issue...');
+            const r = await apiCall('review-tools', { 
+                action: 'report_issue', 
+                question_index: idx, 
+                file_path: path, 
+                issue_description: issue 
+            });
+            if(r.success) showToast('Issue reported!', 'success');
+            else showToast('Failed: ' + r.error, 'error');
+        });
 
         parsedQuestions.push({ node: q, idx });
     });

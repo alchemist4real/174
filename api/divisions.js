@@ -48,13 +48,6 @@ export default async function handler(req, res) {
       });
       const divs = await divRes.json();
       
-      const memRes = await fetch(`${supabaseUrl}/rest/v1/division_members?select=division_id,user_id,users:auth.users(email,raw_user_meta_data)`, {
-        headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
-      });
-      // But wait! `auth.users` is in a different schema, cross-schema join via rest might fail or need `users:user_id(email)`. Actually `auth.users` might not be directly queryable like that unless exposed.
-      // Let's do a manual fetch of auth users, or since it's just a few we can fetch all users or use the same approach as get_users.
-      // To be safe, since auth.users isn't easily joined in PostgREST unless there's a view, let's fetch users via auth API.
-      
       const sbUsersRes = await fetch(`${supabaseUrl}/auth/v1/admin/users?per_page=1000`, {
         headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
       });

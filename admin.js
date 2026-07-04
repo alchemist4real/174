@@ -172,7 +172,8 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
 
     async function verifyAdmin(session) {
       sessionToken = session.access_token;
-      document.getElementById('userBadge').textContent = session.user.email;
+      const badgeEl = document.getElementById('userBadge');
+      badgeEl.textContent = session.user.email;
       
       try {
         const controller = new AbortController();
@@ -190,6 +191,9 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
         if (res.ok && data.success) {
           authOverlay.classList.add('hidden');
           document.getElementById('adminTabs').style.display = 'flex';
+          
+          badgeEl.dataset.role = data.isSuperAdmin ? 'superadmin' : (data.isAdmin ? 'admin' : 'user');
+
           if (data.isSuperAdmin) {
             window.isSuperAdmin = true;
             loadUsers();

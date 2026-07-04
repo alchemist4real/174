@@ -30,15 +30,21 @@ export default async function handler(req, res) {
     }
 
     if (action === 'get_leaderboard') {
-      // Fetch all contributions (could be optimized with a view/rpc, doing basic aggregation here)
-      const resData = await fetch(`${supabaseUrl}/rest/v1/contributions?select=points,user:user_id(email)`, {
+      const resData = await fetch(`${supabaseUrl}/rest/v1/contributions?select=points,user_id`, {
         headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
       });
       const data = await resData.json();
       
+      const usersRes = await fetch(`${supabaseUrl}/auth/v1/admin/users?per_page=1000`, {
+        headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
+      });
+      const usersData = await usersRes.json();
+      const allUsers = usersData.users || [];
+      
       const scores = {};
       data.forEach(c => {
-         const email = c.user ? c.user.email : 'Unknown';
+         const u = allUsers.find(au => au.id === c.user_id);
+         const email = u ? u.email : 'Unknown';
          if (!scores[email]) scores[email] = 0;
          scores[email] += c.points;
       });

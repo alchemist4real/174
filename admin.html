@@ -370,6 +370,18 @@
     </div>
   </div>
 
+  <!-- Generic Prompt Modal (used by customPrompt, customConfirm, customAlert) -->
+  <div id="promptModal" class="custom-modal-overlay hidden">
+    <div class="custom-modal">
+      <div class="modal-title" id="promptTitle">Enter value</div>
+      <input type="text" id="promptInput" class="auth-input" />
+      <div class="modal-actions">
+        <button id="promptCancel" class="btn">Cancel</button>
+        <button id="promptConfirm" class="btn primary">Confirm</button>
+      </div>
+    </div>
+  </div>
+
   <!-- HTML Editor Modal -->
   <div id="editorModal" class="custom-modal-overlay hidden">
     <div class="custom-modal editor-modal" id="editorModalContainer" style="width: 95vw; height: 95vh; max-width: 100%; display: flex; flex-direction: column; padding: 24px;">
