@@ -785,7 +785,7 @@ iframe {
           </div>
           <div class="stat-divider"></div>
           <div class="stat-item">
-            <span class="stat-label">GLOBAL UPTIME</span>
+            <span class="stat-label">GLOBAL ENGAGEMENT</span>
             <span class="stat-val" id="valGlobal">Loading...</span>
           </div>
         </div>
@@ -1547,8 +1547,18 @@ try {
           await supabase.auth.signOut();
           return;
         }
-
         if(session && session.user) {
+          try {
+             supabase.from('activity_logs').insert({
+                log_id: 'online_' + session.user.email + '_' + Date.now(),
+                type: 'online',
+                time: new Date().toISOString(),
+                user_name: session.user.user_metadata?.username || session.user.email,
+                email: session.user.email,
+                dev_str: navigator.userAgent
+             }).then(() => {});
+          } catch(e) {}
+
           supabase.from('user_stats').select('total_uptime').eq('user_id', session.user.id).single().then(({ data }) => {
             if (data) {
               baseUptime = data.total_uptime || 0;
@@ -1721,7 +1731,20 @@ try {
       }
     });
     
-    btnLogout.addEventListener('click', () => {
+    btnLogout.addEventListener('click', async () => {
+      try {
+         const { data: { session } } = await supabase.auth.getSession();
+         if (session && session.user) {
+            await supabase.from('activity_logs').insert({
+               log_id: 'offline_' + session.user.email + '_' + Date.now(),
+               type: 'offline',
+               time: new Date().toISOString(),
+               user_name: session.user.user_metadata?.username || session.user.email,
+               email: session.user.email,
+               dev_str: navigator.userAgent
+            });
+         }
+      } catch(e) {}
       supabase.auth.signOut();
     });
 
@@ -1876,14 +1899,24 @@ try {
       }, 10000);
 
       window.addEventListener('beforeunload', () => {
-        if (sessionUptime % 60 !== 0) {
-          supabase.auth.getSession().then(({ data: { session } }) => {
-            if (session && session.user) {
+        supabase.auth.getSession().then(({ data: { session } }) => {
+          if (session && session.user) {
+            try {
+               supabase.from('activity_logs').insert({
+                  log_id: 'offline_' + session.user.email + '_' + Date.now(),
+                  type: 'offline',
+                  time: new Date().toISOString(),
+                  user_name: session.user.user_metadata?.username || session.user.email,
+                  email: session.user.email,
+                  dev_str: navigator.userAgent
+               }).then(() => {});
+            } catch (e) {}
+            if (sessionUptime % 60 !== 0) {
               supabase.from('user_stats').upsert({ user_id: session.user.id, total_uptime: localUptime, last_updated: new Date().toISOString() })
                 .catch(e => console.log('Local uptime save error', e));
             }
-          });
-        }
+          }
+        });
       });
     }
   }
