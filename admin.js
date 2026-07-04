@@ -1190,8 +1190,8 @@ function walkAndReplaceMR(node, isMrs) {
       }
     }
 
-    const t = localStorage.getItem('mr_theme') || localStorage.getItem('theme');
-    applyAdminTheme(t);
+    const initialThemeVal = localStorage.getItem('mr_theme') || localStorage.getItem('theme');
+    applyAdminTheme(initialThemeVal);
     
     // Listen for theme changes from index.html in another tab
     window.addEventListener('storage', (e) => {
