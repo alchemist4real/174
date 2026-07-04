@@ -339,7 +339,16 @@ export default async function handler(req, res) {
         return { ...u, user_metadata, role: roleRecord ? roleRecord.role : 'user' };
       });
 
-      return res.status(200).json({ success: true, users: usersWithRoles });
+      const statsRes = await fetch(`${supabaseUrl}/rest/v1/global_stats?id=eq.1&select=total_uptime`, {
+        headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
+      });
+      let globalStats = { total_uptime: 0 };
+      if (statsRes.ok) {
+        const statsData = await statsRes.json();
+        if (statsData.length > 0) globalStats = statsData[0];
+      }
+
+      return res.status(200).json({ success: true, users: usersWithRoles, globalStats });
     }
 
     if (action === 'delete_user') {

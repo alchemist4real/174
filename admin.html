@@ -146,9 +146,8 @@
             </button>
           </div>
         </div>
-        <div class="user-filter-container"
+        <div class="user-filter-container" style="padding:8px 24px; display:flex; gap:8px; border-bottom:1px solid var(--border-light); font-family:var(--font-mono);">
           <input type="text" id="searchUsersInput" class="auth-input" placeholder="Search users..." style="width:150px; font-size:11px; padding:4px 8px; margin-right:12px;">
-           style="padding:8px 24px; display:flex; gap:8px; border-bottom:1px solid var(--border-light); font-family:var(--font-mono);">
           <button class="btn user-filter active" data-filter="all" style="font-size:11px; padding:4px 12px;">ALL</button>
           <button class="btn user-filter" data-filter="online" style="font-size:11px; padding:4px 12px;">ONLINE</button>
           <button class="btn user-filter" data-filter="banned" style="font-size:11px; padding:4px 12px;">BANNED</button>
@@ -239,6 +238,9 @@
       <button class="btn" id="contextCancel" style="margin-top:16px; justify-content:center; width:100%;" onclick="document.getElementById('contextModal').classList.add('hidden')">Cancel</button>
     </div>
   </div>
+
+  <!-- Toast Container -->
+  <div id="toastContainer" style="position:fixed; bottom:80px; right:24px; display:flex; flex-direction:column; gap:8px; z-index:9999; pointer-events:none;"></div>
 
   <!-- Bottom Dock Navigation -->
   <div class="bottom-dock">

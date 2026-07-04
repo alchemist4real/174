@@ -31,7 +31,7 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
           }));
           window.renderHybridLogs();
         }
-      } catch(e) {}
+      } catch(e) { console.error("Error formatting hybrid logs:", e); }
     };
     
     window.renderHybridLogs = function() {
@@ -82,7 +82,7 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
                 email: log.email || null,
                 dev_str: log.devStr || null
              });
-          } catch(e) {}
+          } catch(e) { console.error("Error inserting activity log:", e); }
        }
     };
 
@@ -216,18 +216,9 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
                             c.setAttribute('data-online', 'true');
                           }
                         });
-                        
-                        var name = (p.email || p.user || 'Unknown');
-                        window.addHybridLog({
-                           id: 'sync_' + name + '_' + (p.joined_at || Date.now()),
-                           type: 'online',
-                           time: p.joined_at ? new Date(p.joined_at).getTime() : Date.now(),
-                           user: name
-                        });
                       }
                     });
                   });
-                  window.renderHybridLogs();
                 }).on('presence', { event: 'join' }, ({ key, newPresences }) => {
                   console.log('Presence join:', newPresences);
                   newPresences.forEach(function(p) {
@@ -277,6 +268,8 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
                 const updateAndRender = () => {
                   if (window.lastLoadedUsers && window.lastBannedDevs) {
                     renderUsers(window.lastLoadedUsers, window.lastBannedDevs);
+                    const dashTotalUsers = document.getElementById('dashTotalUsers');
+                    if (dashTotalUsers) dashTotalUsers.textContent = window.lastLoadedUsers.length;
                   }
                 };
 
@@ -511,7 +504,7 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
           <div class="file-icon">${icon}</div>
           <div class="file-name" title="${item.name}">${item.name}</div>
           <div class="file-actions">
-            <button class="btn btn-actions" style="font-family:var(--font-mono); font-size:16px; padding:4px 8px; background:transparent; border:none; cursor:pointer;" data-json='${encodeURIComponent(JSON.stringify(item))}'>⋮</button>
+            ${item.type !== 'folder' ? `<button class="btn btn-actions" style="font-family:var(--font-mono); font-size:16px; padding:4px 8px; background:transparent; border:none; cursor:pointer;" data-json='${encodeURIComponent(JSON.stringify(item))}'>⋮</button>` : ''}
           </div>
         `;
 
@@ -611,12 +604,12 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
         const data = await res.json();
         if (data.success) {
           statusText.textContent = `Success: ${action}`;
-          if (action === 'add_admin') {
-            const msg = document.getElementById('adminMsg');
-            msg.textContent = 'Admin added!';
-            msg.style.color = '#4CAF50';
-          } else if (action !== 'get_config' && action !== 'ban_user' && action !== 'delete_user' && action !== 'remove_admin' && action !== 'get_users') {
-            setTimeout(loadTree, 1000);
+          showToast(`Action successful: ${action.replace('_', ' ')}`, 'success');
+          
+          if (['ban_user', 'delete_user', 'add_admin', 'remove_admin'].includes(action)) {
+            setTimeout(loadUsers, 500); // Force UI refresh for user management actions
+          } else if (action !== 'get_config' && action !== 'get_users') {
+            setTimeout(loadTree, 1000); // Reload file tree for file actions
           }
           return data;
         } else {
@@ -746,6 +739,7 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
     let isFullscreen = false;
 
     async function openEditor(item) {
+      window.currentEditorItem = item;
       const rawUrl = `https://raw.githubusercontent.com/alchemist4real/MR-CAPSULES/main/${item.path}`;
       const emodal = document.getElementById('editorModal');
       const emodalContainer = document.getElementById('editorModalContainer');
@@ -769,7 +763,7 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
         window.cmEditor.on("change", () => {
           clearTimeout(editorLiveUpdateTimeout);
           editorLiveUpdateTimeout = setTimeout(() => {
-             if (item.name.endsWith('.html')) {
+             if (window.currentEditorItem && window.currentEditorItem.name.endsWith('.html')) {
                 iframe.srcdoc = window.cmEditor.getValue();
              }
           }, 800);
@@ -905,7 +899,7 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
            if (cfgData && cfgData.success && cfgData.config) {
              bannedDevs = cfgData.config.bannedDevices || [];
            }
-        } catch(e) {}
+        } catch(e) { console.error("Error fetching config for banned devs:", e); }
 
         const res = await fetch('/api/admin', {
           method: 'POST',
@@ -1164,7 +1158,7 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
           var el = document.getElementById('dashTotalUptime');
           if(el) el.textContent = fmtT(data.total_uptime);
         }
-      } catch(e) {}
+      } catch(e) { console.error("Error fetching system logs:", e); }
     }, 15000);
 
 function walkAndReplaceMR(node, isMrs) {
@@ -1208,7 +1202,70 @@ function walkAndReplaceMR(node, isMrs) {
 
 
 
-    function customAlert(msg) { customPrompt('Alert', msg).then(() => {}); }
+    function customAlert(title, msg) {
+      if (!msg) { msg = title; title = 'Alert'; }
+      return new Promise((resolve) => {
+        const modal = document.getElementById('promptModal');
+        const titleEl = document.getElementById('promptTitle');
+        const inputEl = document.getElementById('promptInput');
+        const btnCancel = document.getElementById('promptCancel');
+        const btnConfirm = document.getElementById('promptConfirm');
+
+        titleEl.textContent = title;
+        inputEl.style.display = 'none'; // hide input
+        
+        let msgEl = document.getElementById('promptMessageText');
+        if (!msgEl) {
+           msgEl = document.createElement('div');
+           msgEl.id = 'promptMessageText';
+           msgEl.style.marginBottom = '16px';
+           msgEl.style.fontSize = '14px';
+           inputEl.parentNode.insertBefore(msgEl, inputEl);
+        }
+        msgEl.textContent = msg;
+        msgEl.style.display = 'block';
+
+        btnCancel.style.display = 'none';
+        btnConfirm.textContent = 'OK';
+        modal.classList.remove('hidden');
+
+        const cleanup = () => {
+          modal.classList.add('hidden');
+          msgEl.style.display = 'none';
+          inputEl.style.display = '';
+          btnCancel.style.display = '';
+          btnConfirm.textContent = 'Confirm';
+          btnConfirm.onclick = null;
+        };
+
+        btnConfirm.onclick = () => { cleanup(); resolve(); };
+      });
+    }
+
+    function showToast(msg, type = 'info') {
+      const container = document.getElementById('toastContainer');
+      if (!container) return;
+      const toast = document.createElement('div');
+      toast.className = `toast toast-${type}`;
+      toast.style.background = 'var(--bg-card)';
+      toast.style.border = '1px solid var(--border-light)';
+      if (type === 'error') toast.style.borderLeft = '4px solid var(--danger)';
+      else if (type === 'success') toast.style.borderLeft = '4px solid #4ADE80';
+      else toast.style.borderLeft = '4px solid var(--accent)';
+      toast.style.padding = '12px 16px';
+      toast.style.borderRadius = '4px';
+      toast.style.color = 'var(--text-main)';
+      toast.style.fontFamily = 'var(--font-mono)';
+      toast.style.fontSize = '12px';
+      toast.style.boxShadow = '0 8px 16px rgba(0,0,0,0.2)';
+      toast.style.animation = 'toastIn 0.3s ease forwards';
+      toast.textContent = msg;
+      container.appendChild(toast);
+      setTimeout(() => {
+        toast.style.animation = 'toastOut 0.3s ease forwards';
+        setTimeout(() => toast.remove(), 300);
+      }, 3000);
+    }
     document.addEventListener('DOMContentLoaded', () => {
         const searchInput = document.getElementById('searchUsersInput');
         if (searchInput) {
