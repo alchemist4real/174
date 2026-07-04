@@ -162,7 +162,11 @@
       <div id="viewTasks" class="view-section">
         <div class="toolbar" style="justify-content:space-between;">
           <h2 style="font-size:18px; font-weight:600; margin:0;">Task Board</h2>
-          <div style="display:flex; gap:12px;">
+          <div style="display:flex; gap:12px; align-items:center;">
+            <select id="tasksViewToggle" class="auth-input" style="padding:4px 8px; font-size:13px; width:auto; border-radius:4px;" onchange="toggleTasksView()">
+                <option value="kanban">Kanban View</option>
+                <option value="syllabus">Syllabus View</option>
+            </select>
             <button id="btnCreateTask" class="btn primary" style="display:none;">+ New Task</button>
             <button id="btnRefreshTasks" class="btn">Refresh</button>
           </div>
@@ -189,6 +193,25 @@
              <h3 style="margin-top:0; border-bottom:1px solid var(--border-light); padding-bottom:8px;">Done</h3>
              <div class="task-list" style="display:flex; flex-direction:column; gap:8px; margin-top:12px;"></div>
           </div>
+      </div>
+        <div id="syllabusTableContainer" class="hidden" style="padding:24px; overflow-x:auto; height:calc(100% - 60px);">
+            <div style="background:var(--bg-card); border-radius:8px; border:1px solid var(--border-light); overflow:hidden;">
+                <table style="width:100%; border-collapse:collapse; text-align:left; font-size:13px; min-width:600px;">
+                    <thead>
+                        <tr style="background:var(--bg-main); border-bottom:1px solid var(--border-light); color:var(--text-muted);">
+                            <th style="padding:12px 16px;">Sem/Block</th>
+                            <th style="padding:12px 16px;">Title</th>
+                            <th style="padding:12px 16px;">Category</th>
+                            <th style="padding:12px 16px;">Status</th>
+                            <th style="padding:12px 16px;">Assignee</th>
+                            <th style="padding:12px 16px;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="syllabusTableBody">
+                        <!-- Rows injected by JS -->
+                    </tbody>
+                </table>
+            </div>
         </div>
       </div>
 
@@ -282,14 +305,67 @@
     </div>
   </div>
 
-  <!-- Generic Prompt Modal -->
-  <div id="promptModal" class="custom-modal-overlay hidden">
-    <div class="custom-modal">
-      <div class="modal-title" id="promptTitle">Enter value</div>
-      <input type="text" id="promptInput" class="modal-input" />
-      <div class="modal-actions">
-        <button id="promptCancel" class="btn">Cancel</button>
-        <button id="promptConfirm" class="btn primary">Confirm</button>
+  <!-- Create Task Modal -->
+  <div id="createTaskModal" class="custom-modal-overlay hidden">
+    <div class="custom-modal" style="width:500px; max-width:90%;">
+      <div class="modal-title" style="margin-bottom:16px;">Create New Content Task</div>
+      
+      <div style="display:flex; flex-direction:column; gap:12px;">
+          <div>
+              <label style="font-size:12px; color:var(--text-muted); font-weight:600;">Title</label>
+              <input type="text" id="taskTitle" class="auth-input" placeholder="e.g. Farmakologi Dasar" style="width:100%; box-sizing:border-box;">
+          </div>
+          
+          <div style="display:flex; gap:12px;">
+              <div style="flex:1;">
+                  <label style="font-size:12px; color:var(--text-muted); font-weight:600;">Category</label>
+                  <select id="taskCategory" class="auth-input" style="width:100%; box-sizing:border-box;">
+                      <option value="CBT">CBT</option>
+                      <option value="OSCE">OSCE</option>
+                      <option value="Video">Video</option>
+                      <option value="Summary">Summary</option>
+                  </select>
+              </div>
+              <div style="flex:1;">
+                  <label style="font-size:12px; color:var(--text-muted); font-weight:600;">Priority</label>
+                  <select id="taskPriority" class="auth-input" style="width:100%; box-sizing:border-box;">
+                      <option value="low">Low</option>
+                      <option value="normal" selected>Normal</option>
+                      <option value="high">High</option>
+                      <option value="urgent">Urgent</option>
+                  </select>
+              </div>
+          </div>
+          
+          <div style="display:flex; gap:12px;">
+              <div style="flex:1;">
+                  <label style="font-size:12px; color:var(--text-muted); font-weight:600;">Semester</label>
+                  <select id="taskSemester" class="auth-input" style="width:100%; box-sizing:border-box;">
+                      <option value="1">Semester 1</option>
+                      <option value="2">Semester 2</option>
+                      <option value="3">Semester 3</option>
+                      <option value="4">Semester 4</option>
+                      <option value="5">Semester 5</option>
+                      <option value="6">Semester 6</option>
+                      <option value="7">Semester 7</option>
+                      <option value="8">Semester 8</option>
+                  </select>
+              </div>
+              <div style="flex:1;">
+                  <label style="font-size:12px; color:var(--text-muted); font-weight:600;">Block</label>
+                  <input type="text" id="taskBlock" class="auth-input" placeholder="e.g. Block 1.5" style="width:100%; box-sizing:border-box;">
+              </div>
+          </div>
+          
+          <div>
+              <label style="font-size:12px; color:var(--text-muted); font-weight:600;">Description & Notes</label>
+              <textarea id="taskDescription" class="auth-input" style="width:100%; height:80px; box-sizing:border-box; resize:vertical; font-family:inherit;" placeholder="Add specific instructions for the developer..."></textarea>
+          </div>
+      </div>
+      
+      <div class="modal-actions" style="margin-top:24px;">
+        <button id="taskCancel" class="btn" onclick="document.getElementById('createTaskModal').classList.add('hidden')">Cancel</button>
+        <button id="taskConfirm" class="btn primary">Create Task</button>
       </div>
     </div>
   </div>

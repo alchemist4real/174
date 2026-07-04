@@ -76,6 +76,9 @@ async function loadTasks() {
     const res = await apiCall('tasks', { action: 'list_tasks' });
     if(res.success) {
         renderKanban(res.tasks || []);
+        if (typeof renderTasksAsSyllabus === 'function') {
+            renderTasksAsSyllabus(res.tasks || []);
+        }
     } else {
         showToast('Failed to load tasks: ' + res.error, 'error');
     }
@@ -117,16 +120,19 @@ function renderKanban(tasks) {
 }
 
 async function createNewTaskPrompt() {
-    // Simple prompt for title
-    const modal = document.getElementById('promptModal');
-    const titleEl = document.getElementById('promptTitle');
-    const inputEl = document.getElementById('promptInput');
-    const btnCancel = document.getElementById('promptCancel');
-    const btnConfirm = document.getElementById('promptConfirm');
+    const modal = document.getElementById('createTaskModal');
+    const titleEl = document.getElementById('taskTitle');
+    const catEl = document.getElementById('taskCategory');
+    const prioEl = document.getElementById('taskPriority');
+    const semEl = document.getElementById('taskSemester');
+    const blockEl = document.getElementById('taskBlock');
+    const descEl = document.getElementById('taskDescription');
+    const btnCancel = document.getElementById('taskCancel');
+    const btnConfirm = document.getElementById('taskConfirm');
 
-    titleEl.textContent = 'Create New Content Task';
-    inputEl.value = '';
-    inputEl.placeholder = 'e.g. 1.5 CBT - Farmakologi (Block 2)';
+    titleEl.value = '';
+    descEl.value = '';
+    blockEl.value = '';
     modal.classList.remove('hidden');
 
     return new Promise((resolve) => {
@@ -137,23 +143,87 @@ async function createNewTaskPrompt() {
         };
         btnCancel.onclick = () => { cleanup(); resolve(null); };
         btnConfirm.onclick = async () => {
-            const title = inputEl.value.trim();
+            const title = titleEl.value.trim();
+            if(!title) return showToast('Title is required', 'error');
+            
+            const payload = {
+                action: 'create_task',
+                title: title,
+                category: catEl.value,
+                priority: prioEl.value,
+                semester: semEl.value,
+                block: blockEl.value.trim() || 'General',
+                description: descEl.value.trim()
+            };
             cleanup();
-            if(title) {
-                const res = await apiCall('tasks', {
-                    action: 'create_task', title, priority: 'normal',
-                    semester: 'Unknown', block: 'Unknown'
-                });
-                if(res.success) {
-                    showToast('Task created', 'success');
-                    loadTasks();
-                } else {
-                    showToast(res.error, 'error');
-                }
+            showToast('Creating task...');
+            const res = await apiCall('tasks', payload);
+            if(res.success) {
+                showToast('Task created', 'success');
+                loadTasks();
+            } else {
+                showToast(res.error, 'error');
             }
             resolve();
         };
     });
+}
+
+window.toggleTasksView = function() {
+    const view = document.getElementById('tasksViewToggle').value;
+    if (view === 'kanban') {
+        document.getElementById('taskKanban').classList.remove('hidden');
+        document.getElementById('syllabusTableContainer').classList.add('hidden');
+    } else {
+        document.getElementById('taskKanban').classList.add('hidden');
+        document.getElementById('syllabusTableContainer').classList.remove('hidden');
+    }
+}
+
+function renderTasksAsSyllabus(tasks) {
+    const tbody = document.getElementById('syllabusTableBody');
+    if(!tbody) return;
+    tbody.innerHTML = '';
+    
+    if(tasks.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:24px; color:var(--text-muted);">No tasks found in syllabus.</td></tr>';
+        return;
+    }
+    
+    // Group tasks by Semester and Block
+    const grouped = {};
+    tasks.forEach(t => {
+        const key = `Semester ${t.semester || '-'} / ${t.block || '-'}`;
+        if(!grouped[key]) grouped[key] = [];
+        grouped[key].push(t);
+    });
+    
+    const sortedKeys = Object.keys(grouped).sort();
+    
+    let html = '';
+    sortedKeys.forEach(key => {
+        // Group Header
+        html += `<tr style="background:var(--bg-main);"><td colspan="6" style="padding:8px 16px; font-weight:600; color:var(--accent); border-bottom:1px solid var(--border-light);">${key}</td></tr>`;
+        
+        grouped[key].forEach(t => {
+            const badgeClass = 
+                t.status === 'open' ? '' : 
+                (t.status === 'done' ? 'badge-admin' : 'badge-banned');
+            
+            const assignee = t.assigned_to_user ? t.assigned_to_user.email.split('@')[0] : '<span style="color:var(--text-muted)">Unassigned</span>';
+            
+            html += `<tr style="border-bottom:1px solid var(--border-light); transition:background 0.2s; cursor:pointer;" onclick="openTaskModal(${JSON.stringify(t).replace(/"/g, '&quot;')})" onmouseover="this.style.background='var(--bg-hover)'" onmouseout="this.style.background='transparent'">
+                <td style="padding:12px 16px; color:var(--text-muted);">${t.semester || '-'} / ${t.block || '-'}</td>
+                <td style="padding:12px 16px; font-weight:600;">${t.title}</td>
+                <td style="padding:12px 16px;"><span class="badge" style="background:var(--bg-main); color:var(--text-main);">${t.category || '-'}</span></td>
+                <td style="padding:12px 16px;"><span class="badge ${badgeClass}">${t.status.toUpperCase()}</span></td>
+                <td style="padding:12px 16px;">${assignee}</td>
+                <td style="padding:12px 16px;"><button class="btn-card" style="font-size:10px; padding:4px 8px;">View details</button></td>
+            </tr>`;
+        });
+    });
+    
+    tbody.innerHTML = html;
 }
 
 function openTaskModal(task) {
