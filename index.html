@@ -638,11 +638,11 @@ iframe {
 .guide-step-count { font-size: 11px; opacity: 0.5; letter-spacing: 0.1em; }
 
 /* Intercept Modal */
-#interactionModeModal {
+#interactionModeModal, #usernameSetupModal {
   position: fixed; inset: 0; background: rgba(10,10,10,0.95); z-index: 99999;
   display: none; align-items: center; justify-content: center; flex-direction: column;
 }
-#interactionModeModal.active { display: flex; }
+#interactionModeModal.active, #usernameSetupModal.active { display: flex; }
 
 /* Reset Password Modal */
 #resetPasswordModal {
@@ -780,7 +780,7 @@ iframe {
           </div>
           <div class="stat-divider"></div>
           <div class="stat-item">
-            <span class="stat-label">YOUR SESSION</span>
+            <span class="stat-label">YOUR TOTAL TIME</span>
             <span class="stat-val" id="valLocal">00:00:00</span>
           </div>
           <div class="stat-divider"></div>
@@ -1350,39 +1350,6 @@ try {
           alert('Email link is invalid or expired.');
         } else {
           window.history.replaceState({}, document.title, window.location.pathname);
-          if (authType === 'recovery') {
-            setTimeout(() => {
-              const modal = document.getElementById('resetPasswordModal');
-              if (modal) modal.classList.add('active');
-              
-              document.getElementById('btnSubmitNewPassword').onclick = async () => {
-                const newPassword = document.getElementById('newPasswordInput').value;
-                const msgEl = document.getElementById('resetPasswordMsg');
-                if (newPassword && newPassword.trim() !== '') {
-                  msgEl.style.color = 'var(--text-main)';
-                  msgEl.textContent = 'Updating...';
-                  const { error } = await supabase.auth.updateUser({ password: newPassword });
-                  if (error) {
-                    msgEl.style.color = 'var(--danger)';
-                    msgEl.textContent = "Error: " + error.message;
-                  } else {
-                    msgEl.style.color = 'var(--accent)';
-                    msgEl.textContent = "Password updated successfully!";
-                    setTimeout(() => {
-                      modal.classList.remove('active');
-                      window.location.reload();
-                    }, 1500);
-                  }
-                } else {
-                  msgEl.style.color = 'var(--danger)';
-                  msgEl.textContent = "Please enter a valid password.";
-                }
-              };
-              document.getElementById('btnCancelNewPassword').onclick = () => {
-                modal.classList.remove('active');
-              };
-            }, 500); // Give time for SIGNED_IN state to process
-          }
         }
       });
     }
@@ -1532,13 +1499,13 @@ try {
         syncDeviceId(session);
         authOverlay.classList.add('hidden');
         if (!currentUsername) {
-          document.getElementById('interactionModeModal').classList.add('active');
+          document.getElementById('usernameSetupModal').classList.add('active');
         }
       }
     });
     
     // Always start tracking, even for anonymous lock-screen visitors
-    startTracking();
+    // startTracking() moved to SIGNED_IN state
 
     supabase.auth.onAuthStateChange(async (event, session) => {
       if (event === 'SIGNED_IN') {
@@ -1585,10 +1552,11 @@ try {
           }
         }
         syncDeviceId(session);
+        startTracking();
       }
         authOverlay.classList.add('hidden');
         if (!currentUsername) {
-          document.getElementById('interactionModeModal').classList.add('active');
+          document.getElementById('usernameSetupModal').classList.add('active');
         }
       } else if (event === 'SIGNED_OUT') {
         authOverlay.classList.remove('hidden');
@@ -1626,6 +1594,36 @@ try {
         };
       }
     });
+
+    const setupUsernameInput = document.getElementById('setupUsernameInput');
+    const btnSubmitSetupUsername = document.getElementById('btnSubmitSetupUsername');
+    const setupUsernameMsg = document.getElementById('setupUsernameMsg');
+
+    if (btnSubmitSetupUsername && setupUsernameInput) {
+      btnSubmitSetupUsername.addEventListener('click', async () => {
+        const val = setupUsernameInput.value.trim().toLowerCase();
+        if (val.length < 3 || !/^[a-z0-9_]+$/.test(val)) {
+          setupUsernameMsg.style.color = 'var(--danger)';
+          setupUsernameMsg.textContent = 'Minimum 3 chars, alphanumeric and underscores only.';
+          return;
+        }
+        btnSubmitSetupUsername.textContent = '...';
+        const { error } = await supabase.auth.updateUser({
+          data: { username: val }
+        });
+        if (!error) {
+          currentUsername = val;
+          authUsername.value = currentUsername;
+          updateGreeting();
+          document.getElementById('usernameSetupModal').classList.remove('active');
+          document.getElementById('interactionModeModal').classList.add('active'); // Flow into tour
+        } else {
+          btnSubmitSetupUsername.textContent = 'SAVE & CONTINUE';
+          setupUsernameMsg.style.color = 'var(--danger)';
+          setupUsernameMsg.textContent = error.message;
+        }
+      });
+    }
 
     btnSaveUsername.addEventListener('click', async () => {
       const val = authUsername.value.trim().toLowerCase();
@@ -1976,6 +1974,18 @@ try {
       <button id="btnSubmitNewPassword" class="auth-btn" style="background:var(--text-main, #fff); color:var(--bg-main, #000);">UPDATE PASSWORD</button>
       <button id="btnCancelNewPassword" class="auth-btn" style="background:transparent; color:var(--text-main, #fff); border:1px solid var(--text-main, #fff);">CANCEL</button>
       <div id="resetPasswordMsg" class="auth-msg" style="margin-top:8px;"></div>
+    </div>
+  </div>
+</div>
+<!-- Username Setup Modal -->
+<div id="usernameSetupModal">
+  <div style="background:var(--bg-modal); border:1px solid var(--text-main); padding:32px; max-width:400px; width:90%; text-align:center;">
+    <div style="font-family:var(--font-sans); font-size:24px; color:var(--text-main); margin-bottom:16px;">SET YOUR USERNAME</div>
+    <div style="font-family:var(--font-mono); font-size:12px; color:var(--text-muted); margin-bottom:24px; line-height:1.5;">Welcome to MR CAPSULES! Before you proceed, please choose a username to identify yourself in the sanctuary.</div>
+    <div style="display:flex; flex-direction:column; gap:12px;">
+      <input type="text" id="setupUsernameInput" class="auth-input" placeholder="USERNAME (e.g. Neo)">
+      <button id="btnSubmitSetupUsername" class="auth-btn" style="background:var(--text-main); color:var(--bg-main);">SAVE & CONTINUE</button>
+      <div id="setupUsernameMsg" class="auth-msg" style="margin-top:8px;"></div>
     </div>
   </div>
 </div>
