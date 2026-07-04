@@ -978,6 +978,7 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
         }
         
         var isAdmin = u.role === 'admin';
+        var division = meta.division || '';
 
         var card = document.createElement('div');
         card.className = 'user-card';
@@ -986,6 +987,7 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
         
         var badgesHtml = '';
         if (isAdmin) badgesHtml += '<span class="badge badge-admin">ADMIN</span>';
+        if (division) badgesHtml += '<span class="badge" style="background:var(--accent);color:#000;text-transform:uppercase;">' + division + '</span>';
         if (isBanned) badgesHtml += '<span class="badge badge-banned">BANNED</span>';
 
         // Build devices HTML using string concat to avoid nested template literal issues

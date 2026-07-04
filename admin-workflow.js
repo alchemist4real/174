@@ -211,13 +211,16 @@ async function loadDivisions() {
         const grid = document.getElementById('divisionsGrid');
         grid.innerHTML = '';
         res.divisions.forEach(div => {
+            const membersHtml = (div.members || []).map(m => `<div style="font-size:11px; color:var(--text-main); margin-bottom:4px; padding:4px 8px; background:var(--bg-main); border-radius:4px;">${m.split('@')[0]}</div>`).join('');
             grid.innerHTML += `
                 <div style="background:var(--bg-card); padding:24px; border:1px solid var(--border-light); border-radius:6px; box-shadow:0 4px 6px rgba(0,0,0,0.1);">
                     <h3 style="margin-top:0; color:var(--accent);">${div.name}</h3>
                     <p style="font-size:13px; color:var(--text-muted); min-height:40px;">${div.description}</p>
-                    <div style="margin-top:16px; display:flex; justify-content:space-between; align-items:center;">
-                       <div style="font-size:24px; font-weight:700;">${div.member_count}</div>
-                       <div style="font-size:11px; text-transform:uppercase; font-weight:600; color:var(--text-muted);">Members</div>
+                    <div style="margin-top:16px; margin-bottom:16px; border-top:1px solid var(--border-light); padding-top:16px;">
+                        <div style="font-size:11px; text-transform:uppercase; font-weight:600; color:var(--text-muted); margin-bottom:8px;">Members (${div.member_count})</div>
+                        <div style="max-height:100px; overflow-y:auto; padding-right:8px;">
+                            ${membersHtml || '<div style="font-size:11px; color:var(--text-muted);">No members yet.</div>'}
+                        </div>
                     </div>
                 </div>
             `;
