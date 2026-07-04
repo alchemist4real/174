@@ -56,6 +56,29 @@ export default async function handler(req, res) {
 
   const { action, path, contentBase64, sha } = req.body;
 
+  if (path) {
+    if (path.includes('..') || path.startsWith('/')) {
+      return res.status(400).json({ error: 'Invalid path traversal detected.' });
+    }
+    if (!path.startsWith('content/') && !path.startsWith('cover/')) {
+      return res.status(400).json({ error: 'Invalid path. Must be in content/ or cover/ directory.' });
+    }
+  }
+
+  const { newPath } = req.body;
+  if (newPath) {
+    if (newPath.includes('..') || newPath.startsWith('/')) {
+      return res.status(400).json({ error: 'Invalid newPath traversal detected.' });
+    }
+    if (!newPath.startsWith('content/') && !newPath.startsWith('cover/')) {
+      return res.status(400).json({ error: 'Invalid newPath. Must be in content/ or cover/ directory.' });
+    }
+  }
+
+  if (contentBase64 && contentBase64.length > 10 * 1024 * 1024 * 1.34) { // approx 10MB in base64
+    return res.status(400).json({ error: 'Payload too large. Maximum size is 10MB.' });
+  }
+
   // Helper to make GitHub API calls
   const ghApi = async (method, endpoint, bodyObj) => {
     return fetch(`https://api.github.com/repos/${owner}/${repo}${endpoint}`, {
@@ -146,6 +169,15 @@ export default async function handler(req, res) {
     if (action === 'delete_files') {
       const { files } = req.body; // Array of {path, sha}
       if (!files || !Array.isArray(files)) throw new Error("Missing files array");
+      
+      for (const f of files) {
+        if (f.path.includes('..') || f.path.startsWith('/')) {
+          return res.status(400).json({ error: 'Invalid path traversal detected in bulk delete.' });
+        }
+        if (!f.path.startsWith('content/') && !f.path.startsWith('cover/')) {
+          return res.status(400).json({ error: 'Invalid path. Must be in content/ or cover/ directory.' });
+        }
+      }
       
       const treeItems = files.map(f => ({ path: f.path, mode: '100644', type: 'blob', sha: null }));
       
@@ -277,7 +309,8 @@ export default async function handler(req, res) {
       const sbKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
       if (!sbKey) return res.status(500).json({ error: 'SUPABASE_SERVICE_ROLE_KEY not configured' });
       
-      const sbRes = await fetch(`${supabaseUrl}/auth/v1/admin/users`, {
+      const { page = 1, per_page = 100 } = req.body;
+      const sbRes = await fetch(`${supabaseUrl}/auth/v1/admin/users?page=${page}&per_page=${per_page}`, {
         headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
       });
       if (!sbRes.ok) throw new Error(await sbRes.text());

@@ -29,38 +29,19 @@ export default async function handler(req, res) {
     if (action === 'increment') {
       const inc = parseInt(seconds, 10) || 10;
 
-      // Try to read current value
-      const getRes = await fetch(`${supabaseUrl}/rest/v1/global_stats?id=eq.1&select=total_uptime`, {
-        headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
+      // Atomic increment via RPC
+      const rpcRes = await fetch(`${supabaseUrl}/rest/v1/rpc/increment_uptime`, {
+        method: 'POST',
+        headers: {
+          'apikey': sbKey,
+          'Authorization': `Bearer ${sbKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ inc: inc })
       });
-      const rows = await getRes.json();
-
-      if (rows && rows.length > 0) {
-        const newVal = (parseInt(rows[0].total_uptime, 10) || 0) + inc;
-        await fetch(`${supabaseUrl}/rest/v1/global_stats?id=eq.1`, {
-          method: 'PATCH',
-          headers: {
-            'apikey': sbKey,
-            'Authorization': `Bearer ${sbKey}`,
-            'Content-Type': 'application/json',
-            'Prefer': 'return=representation'
-          },
-          body: JSON.stringify({ total_uptime: newVal })
-        });
-        return res.status(200).json({ success: true, total_uptime: newVal });
-      } else {
-        // Row doesn't exist, create it
-        await fetch(`${supabaseUrl}/rest/v1/global_stats`, {
-          method: 'POST',
-          headers: {
-            'apikey': sbKey,
-            'Authorization': `Bearer ${sbKey}`,
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({ id: 1, total_uptime: inc })
-        });
-        return res.status(200).json({ success: true, total_uptime: inc });
-      }
+      
+      const newVal = await rpcRes.json();
+      return res.status(200).json({ success: true, total_uptime: newVal });
     }
 
     if (action === 'get') {
