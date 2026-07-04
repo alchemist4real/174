@@ -327,8 +327,8 @@ footer{text-align:center;padding-top:36px;font-size:11px;color:var(--text3);font
   </div>
   <div id="qresults" style="display:none">
     <div class="results-wrap">
-      <div class="res-big" id="res-pct">—</div>
-      <div class="res-sub" id="res-sub">—</div>
+      <div class="res-big" id="res-pct"></div>
+      <div class="res-sub" id="res-sub"></div>
       <div class="res-grid" id="res-grid"></div>
       <div style="display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin-bottom:20px">
         <button class="retry-btn" style="margin-bottom:0" onclick="restartQuiz()">Coba Lagi</button>
@@ -341,8 +341,8 @@ footer{text-align:center;padding-top:36px;font-size:11px;color:var(--text3);font
 </div>
 
 <footer>
-  <div>am i fertile? · Analisis Semen · PK Blok 2.3 · FK Unsoed · WHO 6th Ed. 2021</div>
-  <div style="margin-top:5px">crafted by the team · <a href="https://174-three.vercel.app" target="_blank" style="color:var(--text3);text-decoration:none;border-bottom:1px dashed var(--text3);transition:color .18s" onmouseover="this.style.color='var(--blue)'" onmouseout="this.style.color='var(--text3)'">check other quizzes ? 174 archive ?</a></div>
+  <div>am i fertile?  Analisis Semen  PK Blok 2.3  FK Unsoed  WHO 6th Ed. 2021</div>
+  <div style="margin-top:5px">crafted by the team  <a href="https://" target="_blank" style="color:var(--text3);text-decoration:none;border-bottom:1px dashed var(--text3);transition:color .18s" onmouseover="this.style.color='var(--blue)'" onmouseout="this.style.color='var(--text3)'">check other quizzes ? </a></div>
 </footer>
 </div>
 
@@ -371,13 +371,13 @@ function makePicker(pool){let idx=[];return function(){if(idx.length>=pool.lengt
 // 1. PERSIAPAN
 const PERSIAPAN_POOL=[
   {q:'Berapa lama abstinensia yang direkomendasikan sebelum pengambilan semen?',opts:['Min 1 hari, maks 3 hari','Min 2 hari, maks 7 hari','Min 3 hari, maks 5 hari','Min 5 hari, maks 10 hari'],ans:'Min 2 hari, maks 7 hari',exp:'Abstinensia <strong>min 2 hari, maks 7 hari</strong>. Terlalu pendek ? PR ?. Terlalu lama ? warna kekuningan, volume ?.'},
-  {q:'Cara pengambilan sampel semen yang direkomendasikan adalah...',opts:['Koitus interuptus','Kondom khusus non-lateks','Masturbasi','Aspirasi epididimis'],ans:'Masturbasi',exp:'<strong>Masturbasi</strong> adalah cara yang direkomendasikan. Koitus interuptus dan kondom tidak — risiko kehilangan fraksi pertama (konsentrasi sperma tertinggi).'},
+  {q:'Cara pengambilan sampel semen yang direkomendasikan adalah...',opts:['Koitus interuptus','Kondom khusus non-lateks','Masturbasi','Aspirasi epididimis'],ans:'Masturbasi',exp:'<strong>Masturbasi</strong> adalah cara yang direkomendasikan. Koitus interuptus dan kondom tidak  risiko kehilangan fraksi pertama (konsentrasi sperma tertinggi).'},
   {q:'Batas maksimal waktu pengiriman sampel semen ke laboratorium sejak dikeluarkan adalah...',opts:['15 menit','30 menit','50 menit','60 menit'],ans:'50 menit',exp:'Batas pengiriman = <strong>50 menit</strong>. Berbeda dari batas pemeriksaan = <strong>60 menit</strong>. Idealnya dikirim dalam 30 menit.'},
-  {q:'Suhu pengiriman dan penyimpanan sampel semen yang benar adalah...',opts:['4–10°C','20–37°C','37–40°C','Suhu beku -20°C'],ans:'20–37°C',exp:'Sampel harus dijaga pada suhu <strong>20–37°C</strong>. Terlalu dingin atau panas merusak spermatozoa.'},
+  {q:'Suhu pengiriman dan penyimpanan sampel semen yang benar adalah...',opts:['410C','2037C','3740C','Suhu beku -20C'],ans:'2037C',exp:'Sampel harus dijaga pada suhu <strong>2037C</strong>. Terlalu dingin atau panas merusak spermatozoa.'},
   {q:'Batas waktu pemeriksaan semen sejak ejakulasi adalah...',opts:['15 menit','30 menit','60 menit','90 menit'],ans:'60 menit',exp:'Pemeriksaan harus dalam <strong>60 menit</strong> setelah ejakulasi (idealnya 30 menit).'},
   {q:'Yang WAJIB dicantumkan dalam labeling sampel semen adalah...',opts:['Golongan darah penderita','Lamanya abstinensia','Suhu ruangan saat pengambilan','Hasil pemeriksaan fisik sebelumnya'],ans:'Lamanya abstinensia',exp:'Labeling wajib meliputi nama, tgl lahir, no. identitas, <strong>lama abstinensia</strong>, tgl & jam ejakulasi, volume ejakulat.'},
   {q:'Sampel semen harus ditampung dalam...',opts:['Kantong plastik ziplock','Botol kaca bermulut lebar atau plastik non-toksik','Kondom lateks biasa','Tabung EDTA standar'],ans:'Botol kaca bermulut lebar atau plastik non-toksik',exp:'Wadah: <strong>botol/gelas kaca bermulut lebar atau plastik non-toksik terhadap spermatozoa</strong>. Kondom lateks mengandung spermisida.'},
-  {q:'Apa yang wajib dilaporkan penderita terkait spesimen?',opts:['Tidak perlu melaporkan apapun','Dilaporkan jika ada yang tumpah/terbuang','Hanya jika volume &lt;1 mL','Hanya jika warna tidak normal'],ans:'Dilaporkan jika ada yang tumpah/terbuang',exp:'Penderita <strong>wajib melaporkan jika ada yang tumpah/terbuang</strong> — fraksi pertama ejakulat mengandung konsentrasi sperma tertinggi.'},
+  {q:'Apa yang wajib dilaporkan penderita terkait spesimen?',opts:['Tidak perlu melaporkan apapun','Dilaporkan jika ada yang tumpah/terbuang','Hanya jika volume &lt;1 mL','Hanya jika warna tidak normal'],ans:'Dilaporkan jika ada yang tumpah/terbuang',exp:'Penderita <strong>wajib melaporkan jika ada yang tumpah/terbuang</strong>  fraksi pertama ejakulat mengandung konsentrasi sperma tertinggi.'},
   {q:'Abstinensia terlalu lama menyebabkan...',opts:['Warna semen kemerahan','Volume semen kurang','Warna semen sedikit kekuningan','pH semen menurun'],ans:'Warna semen sedikit kekuningan',exp:'Abstinensia terlalu lama ? <strong>warna sedikit kekuningan</strong> dan volume ? (hipervolemia).'},
   {q:'Jika pemeriksaan kultur sperma dilakukan, penampung harus...',opts:['Dilapisi spermisida','Steril','Mengandung formaldehid','Didinginkan sebelumnya'],ans:'Steril',exp:'Untuk <strong>kultur sperma</strong>, penampung harus <strong>steril</strong> agar tidak ada kontaminasi bakteri eksogen.'},
 ];
@@ -395,7 +395,7 @@ function genVolumeQ(){
   const exp={
     Hipovolemia:`Volume <strong>${vol} mL &lt; 1,4 mL = Hipovolemia</strong>. Penyebab: spesimen tidak tepat, abstinensia pendek, obstruksi ductus ejakulatorius.`,
     Normal:`Volume <strong>${vol} mL = 1,4 mL = Normal</strong>.`,
-    Hipervolemia:`Volume <strong>${vol} mL — ke arah Hipervolemia</strong> (jauh di atas normal). Penyebab: abstinensia lama, vesikulitis seminalis, prostatitis.`,
+    Hipervolemia:`Volume <strong>${vol} mL  ke arah Hipervolemia</strong> (jauh di atas normal). Penyebab: abstinensia lama, vesikulitis seminalis, prostatitis.`,
   };
   return{type:'makro_volume',typeName:'Volume Semen',tpColor:'var(--blue)',tpBg:'rgba(26,79,170,.09)',
     scenario:null,rawData:`<div>Volume semen: <span class="dv">${vol} mL</span></div>`,
@@ -428,7 +428,7 @@ function genLikuefaksiQ(){
   const ans=normal?'Normal (mencair = 30 menit)':'Abnormal (perlu tindak lanjut)';
   const exp=normal
     ?`Likuefaksi <strong>${menit} menit = 30 menit = Normal</strong>.`
-    :`Likuefaksi <strong>${menit} menit &gt; 30 menit = Abnormal</strong>, harus dilaporkan. Tindak lanjut: letakkan di 37°C 30 mnt; jika &gt;60 mnt total ? tambah NaCl fisiologis.`;
+    :`Likuefaksi <strong>${menit} menit &gt; 30 menit = Abnormal</strong>, harus dilaporkan. Tindak lanjut: letakkan di 37C 30 mnt; jika &gt;60 mnt total ? tambah NaCl fisiologis.`;
   return{type:'makro_likuefaksi',typeName:'Likuefaksi Semen',tpColor:'var(--purp)',tpBg:'rgba(68,51,160,.09)',
     scenario:null,rawData:`<div>Waktu likuefaksi: <span class="dv">${menit} menit</span><span class="da">(suhu kamar)</span></div>`,
     q:`Semen mencair dalam <strong>${menit} menit</strong> pada suhu kamar. Interpretasinya...`,
@@ -444,8 +444,8 @@ function genViskositasQ(){
   else ans='Hiperviskositas berat';
   const expMap={
     'Normal':`Benang <strong>${cm} cm &lt; 2 cm = Normal</strong>.`,
-    'Hiperviskositas ringan':`Benang <strong>${cm} cm (2–4 cm) = Hiperviskositas ringan</strong>.`,
-    'Hiperviskositas sedang/moderat':`Benang <strong>${cm} cm (4–6 cm) = Hiperviskositas sedang/moderat</strong>.`,
+    'Hiperviskositas ringan':`Benang <strong>${cm} cm (24 cm) = Hiperviskositas ringan</strong>.`,
+    'Hiperviskositas sedang/moderat':`Benang <strong>${cm} cm (46 cm) = Hiperviskositas sedang/moderat</strong>.`,
     'Hiperviskositas berat':`Benang <strong>${cm} cm (&gt;6 cm) = Hiperviskositas berat</strong>.`,
   };
   return{type:'makro_likuefaksi',typeName:'Viskositas Semen',tpColor:'var(--purp)',tpBg:'rgba(68,51,160,.09)',
@@ -455,8 +455,8 @@ function genViskositasQ(){
 }
 // Statis: konsep likuefaksi
 const LIK_KONSEP=[
-  {q:'Tindakan jika semen belum mencair dalam 30 menit adalah...',opts:['Langsung tambah NaCl fisiologis','Letakkan di 37°C dan biarkan 30 menit','Buang dan minta sampel baru','Tambah aquadest lalu aduk'],ans:'Letakkan di 37°C dan biarkan 30 menit',exp:'Belum cair 30 mnt ? <strong>37°C, 30 menit</strong>. Belum cair total 60 mnt ? baru tambah NaCl fisiologis.'},
-  {q:'Tindakan jika semen masih belum mencair setelah total 60 menit adalah...',opts:['Minta sampel baru','Tambahkan NaCl fisiologis','Naikkan suhu ke 42°C','Catat sebagai azoospermia'],ans:'Tambahkan NaCl fisiologis',exp:'Total 60 mnt belum cair ? <strong>tambahkan NaCl fisiologis</strong> untuk keperluan pemeriksaan selanjutnya.'},
+  {q:'Tindakan jika semen belum mencair dalam 30 menit adalah...',opts:['Langsung tambah NaCl fisiologis','Letakkan di 37C dan biarkan 30 menit','Buang dan minta sampel baru','Tambah aquadest lalu aduk'],ans:'Letakkan di 37C dan biarkan 30 menit',exp:'Belum cair 30 mnt ? <strong>37C, 30 menit</strong>. Belum cair total 60 mnt ? baru tambah NaCl fisiologis.'},
+  {q:'Tindakan jika semen masih belum mencair setelah total 60 menit adalah...',opts:['Minta sampel baru','Tambahkan NaCl fisiologis','Naikkan suhu ke 42C','Catat sebagai azoospermia'],ans:'Tambahkan NaCl fisiologis',exp:'Total 60 mnt belum cair ? <strong>tambahkan NaCl fisiologis</strong> untuk keperluan pemeriksaan selanjutnya.'},
   {q:'Likuefaksi WAJIB dilaporkan jika...',opts:['&lt;15 menit','&gt;30 menit','&gt;60 menit','&gt;15 menit'],ans:'&gt;30 menit',exp:'Dilaporkan jika likuefaksi <strong>&gt;30 menit</strong>. Ini batas normal atas.'},
   {q:'Cara pemeriksaan viskositas semen adalah...',opts:['Viskometer standar laboratorium','Membiarkan menetes dari pipet plastik dan amati benang','Menimbang berat semen','Menghitung waktu alir dalam pipet kapiler'],ans:'Membiarkan menetes dari pipet plastik dan amati benang',exp:'Viskositas dinilai dari <strong>panjang benang saat menetes dari pipet plastik non-toksik</strong>.'},
 ];
@@ -474,8 +474,8 @@ function genPHQ(){
   const ph=+(5.8+Math.random()*3.6).toFixed(1);
   let ans,exp;
   if(ph<7){ans='Azoospermia';exp=`pH <strong>${ph} &lt; 7 ? mengarah azoospermia</strong>. Kemungkinan disgenesis vas deferens, vesika seminalis, atau epididimis.`;}
-  else if(ph<7.2){ans='Di bawah normal';exp=`pH <strong>${ph} &lt; 7,2 = di bawah batas bawah normal</strong> (7,2–7,8).`;}
-  else if(ph<=7.8){ans='Normal';exp=`pH <strong>${ph} = Normal</strong> (rentang 7,2–7,8).`;}
+  else if(ph<7.2){ans='Di bawah normal';exp=`pH <strong>${ph} &lt; 7,2 = di bawah batas bawah normal</strong> (7,27,8).`;}
+  else if(ph<=7.8){ans='Normal';exp=`pH <strong>${ph} = Normal</strong> (rentang 7,27,8).`;}
   else{ans='Infeksi / Disfungsi glandula asesori';exp=`pH <strong>${ph} &gt; 7,8 ? infeksi</strong> atau disfungsi glandula asesori.`;}
   return{type:'makro_ph',typeName:'pH Semen',tpColor:'var(--red)',tpBg:'rgba(176,48,48,.09)',
     scenario:null,rawData:`<div>pH semen: <span class="dv">${ph}</span></div>`,
@@ -484,21 +484,21 @@ function genPHQ(){
 }
 // Statis
 const PH_KONSEP=[
-  {q:'pH semen normal adalah...',opts:['6,5–7,2','7,0–7,5','7,2–7,8','7,5–8,0'],ans:'7,2–7,8',exp:'pH normal: <strong>7,2–7,8</strong>. &lt;7 ? azoospermia; &gt;7,8 ? infeksi.'},
+  {q:'pH semen normal adalah...',opts:['6,57,2','7,07,5','7,27,8','7,58,0'],ans:'7,27,8',exp:'pH normal: <strong>7,27,8</strong>. &lt;7 ? azoospermia; &gt;7,8 ? infeksi.'},
   {q:'pH semen &lt; 7 menandakan...',opts:['Normozoospermia','Infeksi berat','Azoospermia','Oligozoospermia'],ans:'Azoospermia',exp:'pH &lt;7 ? <strong>azoospermia</strong>. Kemungkinan disgenesis vas deferens, vesika seminalis, epididimis.'},
   {q:'pH semen &gt; 7,8 mengindikasikan...',opts:['Volume terlalu sedikit','Infeksi atau disfungsi glandula asesori','Abstinensia pendek','Nekrozoospermia'],ans:'Infeksi atau disfungsi glandula asesori',exp:'pH &gt;7,8 ? <strong>infeksi</strong> atau disfungsi glandula asesori.'},
   {q:'Pemeriksaan pH semen dilakukan...',opts:['Segera setelah sampel diterima','Setelah sampel mengalami likuefaksi (~30 menit)','Setelah 60 menit dari ejakulasi','Bersamaan dengan pengukuran volume'],ans:'Setelah sampel mengalami likuefaksi (~30 menit)',exp:'pH diperiksa <strong>setelah likuefaksi (~30 menit)</strong>, dibaca dalam &lt;30 detik.'},
-  {q:'Cara membaca hasil pH semen adalah...',opts:['Setelah 5 menit agar warna stabil','Dalam &lt;30 detik dibandingkan kertas standar','Dengan spektrofotometer','Setelah inkubasi 37°C'],ans:'Dalam &lt;30 detik dibandingkan kertas standar',exp:'Hasil pH dibaca <strong>dalam &lt;30 detik</strong> dengan membandingkan terhadap kertas standar warna.'},
+  {q:'Cara membaca hasil pH semen adalah...',opts:['Setelah 5 menit agar warna stabil','Dalam &lt;30 detik dibandingkan kertas standar','Dengan spektrofotometer','Setelah inkubasi 37C'],ans:'Dalam &lt;30 detik dibandingkan kertas standar',exp:'Hasil pH dibaca <strong>dalam &lt;30 detik</strong> dengan membandingkan terhadap kertas standar warna.'},
 ];
 const pickPHKonsep=makePicker(PH_KONSEP);
 function makePHQ(){
   return Math.random()<0.5?genPHQ():{...pickPHKonsep(),type:'makro_ph',typeName:'pH Semen',tpColor:'var(--red)',tpBg:'rgba(176,48,48,.09)',scenario:null,rawData:null};
 }
 
-// 5. MOTILITAS — PR, NP, IM dipisah, disajikan terpisah
+// 5. MOTILITAS  PR, NP, IM dipisah, disajikan terpisah
 // Generate distribusi PR / NP / IM yang realistis (total=100%)
 function genMotDist(){
-  // PR: 10–60%, NP: 1–20%, IM: sisanya
+  // PR: 1060%, NP: 120%, IM: sisanya
   const pr=Math.round(10+Math.random()*50);
   const np=Math.round(1+Math.random()*18);
   const im=100-pr-np;
@@ -517,7 +517,7 @@ function genMotNormalQ(){
   exp+=total>=42?`Total =42% ?. `:`Total &lt;42% ?. `;
   exp+=d.pr>=32?`PR =32% ?. `:`PR &lt;32% ?. `;
   exp+=`? <strong>${ans}</strong>.`;
-  return{type:'motilitas',typeName:'Motilitas — Interpretasi',tpColor:'var(--gold)',tpBg:'rgba(122,96,16,.09)',
+  return{type:'motilitas',typeName:'Motilitas  Interpretasi',tpColor:'var(--gold)',tpBg:'rgba(122,96,16,.09)',
     scenario:'Analisis semen rutin',
     rawData:`<div>PR (Progresif): <span class="dv">${d.pr}%</span></div><div>NP (Nonprogresif): <span class="dv">${d.np}%</span></div><div>IM (Tidak motil): <span class="dv">${d.im}%</span></div>`,
     q:`Berdasarkan nilai motilitas di atas, interpretasinya adalah...`,
@@ -525,15 +525,15 @@ function genMotNormalQ(){
 }
 // Soal tipe 2: identifikasi kategori gerakan dari deskripsi
 const MOT_KATEGORI=[
-  {q:'Sperma bergerak aktif, lurus, kecepatan <strong>= 25 µm/detik</strong>. Kategorinya adalah...',opts:['PR Cepat','PR Lambat','Nonprogresif (NP)','Tidak Motil (IM)'],ans:'PR Cepat',exp:'<strong>PR Cepat</strong> = aktif, lurus/lingkaran besar, kecepatan <strong>=25 µm/detik</strong>.'},
-  {q:'Sperma bergerak aktif dalam lingkaran besar, kecepatan <strong>5–25 µm/detik</strong>. Kategorinya adalah...',opts:['PR Cepat','PR Lambat','Nonprogresif (NP)','Tidak Motil (IM)'],ans:'PR Lambat',exp:'<strong>PR Lambat</strong> = aktif, lurus/lingkaran besar, kecepatan <strong>5–25 µm/detik</strong>.'},
-  {q:'Sperma bergerak dalam lingkaran kecil, gerakan di tempat, kecepatan <strong>&lt; 5 µm/detik</strong>. Kategorinya adalah...',opts:['PR Cepat','PR Lambat','Nonprogresif (NP)','Tidak Motil (IM)'],ans:'Nonprogresif (NP)',exp:'<strong>NP (Nonprogresif)</strong> = gerak lingkaran kecil, di tempat, gerakan ekor, kecepatan <strong>&lt;5 µm/detik</strong>.'},
+  {q:'Sperma bergerak aktif, lurus, kecepatan <strong>= 25 m/detik</strong>. Kategorinya adalah...',opts:['PR Cepat','PR Lambat','Nonprogresif (NP)','Tidak Motil (IM)'],ans:'PR Cepat',exp:'<strong>PR Cepat</strong> = aktif, lurus/lingkaran besar, kecepatan <strong>=25 m/detik</strong>.'},
+  {q:'Sperma bergerak aktif dalam lingkaran besar, kecepatan <strong>525 m/detik</strong>. Kategorinya adalah...',opts:['PR Cepat','PR Lambat','Nonprogresif (NP)','Tidak Motil (IM)'],ans:'PR Lambat',exp:'<strong>PR Lambat</strong> = aktif, lurus/lingkaran besar, kecepatan <strong>525 m/detik</strong>.'},
+  {q:'Sperma bergerak dalam lingkaran kecil, gerakan di tempat, kecepatan <strong>&lt; 5 m/detik</strong>. Kategorinya adalah...',opts:['PR Cepat','PR Lambat','Nonprogresif (NP)','Tidak Motil (IM)'],ans:'Nonprogresif (NP)',exp:'<strong>NP (Nonprogresif)</strong> = gerak lingkaran kecil, di tempat, gerakan ekor, kecepatan <strong>&lt;5 m/detik</strong>.'},
   {q:'Sperma tidak menunjukkan pergerakan apapun. Kategorinya adalah...',opts:['PR Cepat','PR Lambat','Nonprogresif (NP)','Tidak Motil (IM)'],ans:'Tidak Motil (IM)',exp:'<strong>IM (Immotile)</strong> = tidak ada pergerakan sama sekali.'},
-  {q:'Kecepatan gerak sperma normal (adekuat) adalah...',opts:['&lt;5 µm/detik','5–25 µm/detik','=25 µm/detik','50–100 µm/detik'],ans:'=25 µm/detik',exp:'Kecepatan adekuat = <strong>=25 µm/detik</strong> = 5× panjang kepala = ½× panjang ekor.'},
+  {q:'Kecepatan gerak sperma normal (adekuat) adalah...',opts:['&lt;5 m/detik','525 m/detik','=25 m/detik','50100 m/detik'],ans:'=25 m/detik',exp:'Kecepatan adekuat = <strong>=25 m/detik</strong> = 5 panjang kepala =  panjang ekor.'},
   {q:'Nilai normal PR solo (progresif saja) adalah...',opts:['=20%','=25%','=32%','=42%'],ans:'=32%',exp:'PR solo normal = <strong>=32%</strong>. PR+NP gabungan normal = =42%.'},
   {q:'Kapan pemeriksaan vitalitas dilakukan?',opts:['Selalu dilakukan rutin','Hanya jika motilitas &lt;40%','Hanya jika morfologi &lt;4%','Hanya jika pH &lt;7'],ans:'Hanya jika motilitas &lt;40%',exp:'Vitalitas dilakukan <strong>hanya jika motilitas &lt;40%</strong> untuk memvalidasi apakah sperma yang tidak bergerak masih hidup.'},
-  {q:'Pemeriksaan motilitas dilakukan pada berapa sperma, di berapa lapang pandang?',opts:['100 sperma, 2–3 LP','200 sperma, 4–6 LP','300 sperma, 5–7 LP','400 sperma, 8–10 LP'],ans:'200 sperma, 4–6 LP',exp:'Motilitas diperiksa pada <strong>200 sperma dalam 4–6 lapang pandang</strong>, suhu 18–24°C.'},
-  {q:'Suhu kamar untuk pemeriksaan motilitas sperma adalah...',opts:['15–20°C','18–24°C','25–30°C','32–37°C'],ans:'18–24°C',exp:'Suhu kamar untuk motilitas: <strong>18–24°C</strong>.'},
+  {q:'Pemeriksaan motilitas dilakukan pada berapa sperma, di berapa lapang pandang?',opts:['100 sperma, 23 LP','200 sperma, 46 LP','300 sperma, 57 LP','400 sperma, 810 LP'],ans:'200 sperma, 46 LP',exp:'Motilitas diperiksa pada <strong>200 sperma dalam 46 lapang pandang</strong>, suhu 1824C.'},
+  {q:'Suhu kamar untuk pemeriksaan motilitas sperma adalah...',opts:['1520C','1824C','2530C','3237C'],ans:'1824C',exp:'Suhu kamar untuk motilitas: <strong>1824C</strong>.'},
 ];
 // Soal tipe 3: tentukan apakah ada astenozoospermia dari data lengkap PR/NP/IM + jumlah
 function genMotKlasifQ(){
@@ -547,7 +547,7 @@ function genMotKlasifQ(){
   else if(!abnormalJml&&!abnormalMot){ans='Normozoospermia (perlu cek morfologi)';exp=`Jumlah ${jml} =16 ? | Motilitas ${total}% =42% ? | PR ${d.pr}% =32% ? ? Motilitas dan jumlah normal. Masih perlu cek morfologi.`;}
   else if(abnormalJml&&!abnormalMot){ans='Oligozoospermia (motilitas normal)';exp=`Jumlah ${jml} &lt;16 ? | Motilitas ${total}% =42% ? | PR ${d.pr}% =32% ? ? Jumlah kurang, motilitas normal.`;}
   else{ans='Oligoastenozoospermia';exp=`Jumlah ${jml} &lt;16 ? | Motilitas ${total}% &lt;42% ? ? <strong>Oligoastenozoospermia</strong>.`;}
-  return{type:'motilitas',typeName:'Motilitas — Klasifikasi',tpColor:'var(--gold)',tpBg:'rgba(122,96,16,.09)',
+  return{type:'motilitas',typeName:'Motilitas  Klasifikasi',tpColor:'var(--gold)',tpBg:'rgba(122,96,16,.09)',
     scenario:'Analisis semen, morfologi belum diperiksa',
     rawData:`<div>Jumlah: <span class="dv">${jml} jt/mL</span></div><div>PR: <span class="dv">${d.pr}%</span></div><div>NP: <span class="dv">${d.np}%</span></div><div>IM: <span class="dv">${d.im}%</span></div>`,
     q:`Berdasarkan jumlah dan motilitas (morfologi belum dinilai), yang paling sesuai adalah...`,
@@ -610,7 +610,7 @@ function genLeukositQ(){
   const nPer100=rnd([1,2,3,4,5,6,7,8,9,10,12,15,20]);
   const c=+(nPer100*jml/100).toFixed(2);
   const ans=c>1?'Lekositospermia':'Normal';
-  const exp=`C = (N × S)/100 = (${nPer100} × ${jml})/100 = <strong>${c} jt/mL</strong>. ${c>1?'&gt;1 jt/mL ? <strong>Lekositospermia</strong>.':'=1 jt/mL ? Normal.'}`;
+  const exp=`C = (N  S)/100 = (${nPer100}  ${jml})/100 = <strong>${c} jt/mL</strong>. ${c>1?'&gt;1 jt/mL ? <strong>Lekositospermia</strong>.':'=1 jt/mL ? Normal.'}`;
   // Distractor options
   const w1=+((nPer100*jml/100)*2).toFixed(2);
   const w2=+((nPer100*jml/100)/2).toFixed(2);
@@ -618,8 +618,8 @@ function genLeukositQ(){
     scenario:'Hitung elemen bukan sperma',
     rawData:`<div>N (sel per 100 sperma): <span class="dv">${nPer100}</span></div><div>S (jumlah sperma): <span class="dv">${jml} jt/mL</span></div>`,
     q:`Berapa konsentrasi leukosit dan apakah terjadi lekositospermia?`,
-    opts:shuf([`${c} jt/mL — ${ans}`,`${w1} jt/mL — ${w1>1?'Lekositospermia':'Normal'}`,`${w2} jt/mL — ${w2>1?'Lekositospermia':'Normal'}`,`${nPer100} jt/mL — ${nPer100>1?'Lekositospermia':'Normal'}`]),
-    ans:`${c} jt/mL — ${ans}`,exp};
+    opts:shuf([`${c} jt/mL  ${ans}`,`${w1} jt/mL  ${w1>1?'Lekositospermia':'Normal'}`,`${w2} jt/mL  ${w2>1?'Lekositospermia':'Normal'}`,`${nPer100} jt/mL  ${nPer100>1?'Lekositospermia':'Normal'}`]),
+    ans:`${c} jt/mL  ${ans}`,exp};
 }
 const MORFO_KONSEP=[
   {q:'Nilai normal morfologi sperma adalah...',opts:['=1%','=4%','=14%','=30%'],ans:'=4%',exp:'Morfologi normal: <strong>=4%</strong> dari 200 sperma.'},
@@ -627,8 +627,8 @@ const MORFO_KONSEP=[
   {q:'Reagen fiksasi untuk morfologi sperma adalah...',opts:['Formalin 10%','Metanol 96% selama 15 menit','Etanol 70% selama 10 menit','NaCl fisiologis'],ans:'Metanol 96% selama 15 menit',exp:'Fiksasi: <strong>metanol 96% selama 15 menit</strong>. Lalu cat May Grunwald Giemsa 30 menit.'},
   {q:'Cat untuk morfologi sperma adalah...',opts:['Eosin-Nigrosin','Giemsa saja','May Grunwald Giemsa','Wright stain'],ans:'May Grunwald Giemsa',exp:'Cat morfologi: <strong>May Grunwald Giemsa</strong> selama 30 menit.'},
   {q:'Lekositospermia didefinisikan sebagai leukosit...',opts:['&gt;0,5 jt/mL','&gt;1 jt/mL','&gt;5 jt/mL','&gt;10 jt/mL'],ans:'&gt;1 jt/mL',exp:'<strong>Lekositospermia</strong> = leukosit <strong>&gt;1 juta/mL</strong> semen.'},
-  {q:'Elemen bukan sperma dihitung per berapa sperma?',opts:['50','100','200','1 lapang pandang'],ans:'100',exp:'Dihitung per <strong>100 sperma</strong>. Konversi: C = (N × S)/100.'},
-  {q:'Formula konsentrasi leukosit dalam semen adalah...',opts:['C = N + S','C = (N × S) / 100','C = N / S × 100','C = N × S × 10'],ans:'C = (N × S) / 100',exp:'<strong>C = (N × S) / 100</strong>. C = konsentrasi (jt/mL), N = sel per 100 sperma, S = jumlah sperma (jt/mL).'},
+  {q:'Elemen bukan sperma dihitung per berapa sperma?',opts:['50','100','200','1 lapang pandang'],ans:'100',exp:'Dihitung per <strong>100 sperma</strong>. Konversi: C = (N  S)/100.'},
+  {q:'Formula konsentrasi leukosit dalam semen adalah...',opts:['C = N + S','C = (N  S) / 100','C = N / S  100','C = N  S  10'],ans:'C = (N  S) / 100',exp:'<strong>C = (N  S) / 100</strong>. C = konsentrasi (jt/mL), N = sel per 100 sperma, S = jumlah sperma (jt/mL).'},
 ];
 const pickMorfoKonsep=makePicker(MORFO_KONSEP);
 function makeMorfoQ(){
@@ -656,7 +656,7 @@ function genHitungQ(){
     rawData:`<div>Rata-rata sperma: <span class="dv">${rata}</span></div><div>Kotak dihitung: <span class="dv">${k} kotak sedang</span></div><div>Pengenceran: <span class="dv">${d}</span></div><div>Faktor koreksi: <span class="dv">${fk}</span></div>`,
     q:`Hitung jumlah sperma! Rata-rata <strong>${rata}</strong>, <strong>${k} kotak</strong>, pengenceran <strong>${d}</strong> (FK=${fk}). Hasilnya adalah...`,
     opts:shuf([ans,`${w1} jt/mL`,`${w2} jt/mL`,`${w3} jt/mL`].filter((v,i,a)=>a.indexOf(v)===i).slice(0,4)),ans,
-    exp:`Jumlah = ${rata} ÷ ${fk} × 106 = <strong>${hasil} jt/mL</strong>. ${hasil>=16?'Normal (=16 jt/mL).':'Oligozoospermia (&lt;16 jt/mL).'}`};
+    exp:`Jumlah = ${rata}  ${fk}  106 = <strong>${hasil} jt/mL</strong>. ${hasil>=16?'Normal (=16 jt/mL).':'Oligozoospermia (&lt;16 jt/mL).'}`};
 }
 // Algoritmis tipe B: identifikasi faktor koreksi
 function genFKQ(){
@@ -682,12 +682,12 @@ function genKotakQ(){
     rawData:`<div>Sperma per kotak sedang: <span class="dv">${perKotak}</span></div>`,
     q:`Ditemukan rata-rata <strong>${perKotak} sperma per kotak sedang</strong>. Berapa kotak sedang yang harus dihitung?`,
     opts:shuf(['5 kotak','10 kotak','25 kotak','Semua 400 kotak kecil']),ans,
-    exp:`${perKotak<10?'&lt;10':perKotak<=40?'10–40':'&gt;40'} per kotak sedang ? ${ans}. (&lt;10=25 kotak; 10–40=10 kotak; &gt;40=5 kotak).`};
+    exp:`${perKotak<10?'&lt;10':perKotak<=40?'1040':'&gt;40'} per kotak sedang ? ${ans}. (&lt;10=25 kotak; 1040=10 kotak; &gt;40=5 kotak).`};
 }
 const HITUNG_KONSEP=[
   {q:'Pada prosedur standar, hisap semen sampai angka... lalu hisap NaCl sampai angka...',opts:['0,5 lalu 11 ? 1:20','1,0 lalu 11 ? 1:10','0,5 lalu 10 ? 1:19','0,5 lalu 6 ? 1:11'],ans:'0,5 lalu 11 ? 1:20',exp:'Standar: hisap semen ? <strong>0,5</strong>, NaCl ? <strong>11</strong> ? pengenceran <strong>1:20</strong>.'},
   {q:'Nilai normal hitung jumlah sperma (WHO 6th Ed. 2021) adalah...',opts:['=10 jt/mL','=15 jt/mL','=16 jt/mL','=20 jt/mL'],ans:'=16 jt/mL',exp:'Normal: <strong>=16 jt/mL</strong> sesuai WHO 6th Ed. 2021.'},
-  {q:'Bilik hitung Neubauer Improved kotak tengah terdiri dari...',opts:['16 kotak sedang × 25 kecil','25 kotak sedang × 16 kecil','10 kotak sedang × 10 kecil','20 kotak sedang × 10 kecil'],ans:'25 kotak sedang × 16 kecil',exp:'Kotak tengah NI: <strong>25 kotak sedang</strong>, masing-masing <strong>16 kotak kecil</strong>.'},
+  {q:'Bilik hitung Neubauer Improved kotak tengah terdiri dari...',opts:['16 kotak sedang  25 kecil','25 kotak sedang  16 kecil','10 kotak sedang  10 kecil','20 kotak sedang  10 kecil'],ans:'25 kotak sedang  16 kecil',exp:'Kotak tengah NI: <strong>25 kotak sedang</strong>, masing-masing <strong>16 kotak kecil</strong>.'},
 ];
 const pickHitungKonsep=makePicker(HITUNG_KONSEP);
 function makeHitungQ(){
@@ -801,7 +801,7 @@ function selectAns(chosen,q,clickedBtn){
   const ebox=document.getElementById('expbox');
   ebox.innerHTML=`<div style="margin-bottom:7px;font-weight:700;color:${correct?'var(--blue)':'var(--red)'}">${correct?'? Benar!':'? Kurang tepat.'} Jawaban: <strong>${q.ans}</strong></div>${q.exp}`;
   ebox.style.display='block';setTimeout(()=>ebox.classList.add('show'),10);
-  sessLog.push({idx:sessIdx+1,type:q.typeName,q:q.q.replace(/<[^>]+>/g,'').slice(0,55)+'…',ans:q.ans,correct});
+  sessLog.push({idx:sessIdx+1,type:q.typeName,q:q.q.replace(/<[^>]+>/g,'').slice(0,55)+'',ans:q.ans,correct});
   document.getElementById('qscore').textContent=sessScore;
   document.getElementById('nextbtn').style.display='inline-block';
 }
@@ -861,7 +861,7 @@ function downloadCert(){
   <line x1="420" y1="74" x2="560" y2="74" stroke="#b03030" stroke-width="0.8"/>
 
   <text x="340" y="116" text-anchor="middle" font-size="34" font-weight="bold" fill="#161b2e" font-family="Georgia,serif">Am I Fertile?</text>
-  <text x="340" y="138" text-anchor="middle" font-size="11" fill="#7c85a8" letter-spacing="2" font-family="Georgia,serif">ANALISIS SEMEN · PK BLOK 2.3 · FK UNSOED</text>
+  <text x="340" y="138" text-anchor="middle" font-size="11" fill="#7c85a8" letter-spacing="2" font-family="Georgia,serif">ANALISIS SEMEN  PK BLOK 2.3  FK UNSOED</text>
 
   <line x1="100" y1="152" x2="580" y2="152" stroke="#e0ddd5" stroke-width="1"/>
 
@@ -871,7 +871,7 @@ function downloadCert(){
   <text x="340" y="245" text-anchor="middle" font-size="52" font-weight="bold" fill="${medalColor}" font-family="Georgia,serif">${pct}%</text>
   <text x="340" y="265" text-anchor="middle" font-size="10" fill="${medalColor}" letter-spacing="3" font-family="Georgia,serif">${medal}</text>
 
-  <text x="340" y="300" text-anchor="middle" font-size="12" fill="#384068" font-family="Georgia,serif">${sessScore} soal benar dari ${total} soal · ${dateStr}</text>
+  <text x="340" y="300" text-anchor="middle" font-size="12" fill="#384068" font-family="Georgia,serif">${sessScore} soal benar dari ${total} soal  ${dateStr}</text>
 
   <line x1="100" y1="314" x2="580" y2="314" stroke="#e0ddd5" stroke-width="1"/>
   <text x="340" y="332" text-anchor="middle" font-size="10" fill="#7c85a8" letter-spacing="2" font-family="Georgia,serif">DISTRIBUSI SKOR PER TOPIK</text>
@@ -883,7 +883,7 @@ function downloadCert(){
   </foreignObject>
 
   <line x1="100" y1="472" x2="580" y2="472" stroke="#e0ddd5" stroke-width="1"/>
-  <text x="340" y="490" text-anchor="middle" font-size="10" fill="#7c85a8" font-family="Georgia,serif">174 Archive · 174-three.vercel.app · WHO 6th Ed. 2021</text>
+  <text x="340" y="490" text-anchor="middle" font-size="10" fill="#7c85a8" font-family="Georgia,serif">    WHO 6th Ed. 2021</text>
 </svg>`;
 
   const blob=new Blob([svg],{type:'image/svg+xml'});
