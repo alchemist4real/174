@@ -59,11 +59,15 @@ export default async function handler(req, res) {
   
   const isAdmin = isSuperAdmin || hasAdminRole || hasDivision;
 
+  const { action, path, contentBase64, sha } = req.body;
+
+  if (action === 'check') {
+    return res.status(200).json({ success: true, isSuperAdmin, hasDivision, email: email });
+  }
+
   if (!isAdmin) {
     return res.status(403).json({ error: 'Forbidden. Not an admin or team member.' });
   }
-
-  const { action, path, contentBase64, sha } = req.body;
 
   if (path) {
     if (path.includes('..') || path.startsWith('/')) {
@@ -133,10 +137,6 @@ export default async function handler(req, res) {
   };
 
   try {
-    if (action === 'check') {
-      return res.status(200).json({ success: true, isSuperAdmin, email: email });
-    }
-
     if (action === 'tree') {
       const ghRes = await ghApi('GET', `/git/trees/main?recursive=1`);
       if (!ghRes.ok) throw new Error(`GitHub API Error: ${await ghRes.text()}`);

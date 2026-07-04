@@ -339,6 +339,19 @@
   <!-- Toast Container -->
   <div id="toastContainer" style="position:fixed; bottom:80px; right:24px; display:flex; flex-direction:column; gap:8px; z-index:9999; pointer-events:none;"></div>
 
+  <!-- Division Picker Modal -->
+  <div id="divisionPickerModal" class="custom-modal-overlay hidden" style="z-index:99999;">
+    <div class="custom-modal" style="text-align:center; padding:32px;">
+      <h2 style="margin-top:0;">Pilih Divisi Kamu</h2>
+      <p style="font-size:14px; color:var(--text-muted); margin-bottom:24px;">Kamu wajib bergabung dengan salah satu divisi untuk bisa berkontribusi.</p>
+      <div style="display:flex; flex-direction:column; gap:12px;">
+         <button class="btn primary" onclick="joinDivision('development')" style="justify-content:center;">Development (Pembuat Konten)</button>
+         <button class="btn primary" onclick="joinDivision('review')" style="justify-content:center;">Database Review (Quality Assurance)</button>
+         <button class="btn primary" onclick="joinDivision('management')" style="justify-content:center;">Management (Pengurus & Inovasi)</button>
+      </div>
+    </div>
+  </div>
+
   <!-- Bottom Dock Navigation -->
   <div class="bottom-dock">
     <div class="brand" style="display:flex; flex-direction:row; align-items:center; gap:16px;">

@@ -41,6 +41,9 @@ async function initWorkflow() {
             btnCreateTask.style.display = 'block';
             btnCreateTask.onclick = () => createNewTaskPrompt();
         }
+    } else if (divRes.success && !divRes.division) {
+        // User has no division, show picker
+        document.getElementById('divisionPickerModal').classList.remove('hidden');
     }
 
     // Bind tab events to load data when activated
@@ -53,6 +56,18 @@ async function initWorkflow() {
         });
     });
 }
+
+window.joinDivision = async function(divId) {
+    showToast('Bergabung dengan divisi...');
+    const res = await apiCall('divisions', { action: 'join_division', division_id: divId });
+    if(res.success) {
+        document.getElementById('divisionPickerModal').classList.add('hidden');
+        showToast('Berhasil bergabung!', 'success');
+        setTimeout(() => window.location.reload(), 1000);
+    } else {
+        showToast('Gagal: ' + res.error, 'error');
+    }
+};
 
 // =======================
 // TASKS (KANBAN)

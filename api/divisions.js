@@ -29,6 +29,19 @@ export default async function handler(req, res) {
       return res.status(200).json({ success: true, division: data.length > 0 ? data[0] : null });
     }
 
+    if (action === 'join_division') {
+      if (!division_id || !['management', 'development', 'review'].includes(division_id)) {
+         return res.status(400).json({ error: 'Invalid division_id' });
+      }
+      const postRes = await fetch(`${supabaseUrl}/rest/v1/division_members`, {
+        method: 'POST',
+        headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ user_id: userId, division_id })
+      });
+      if (!postRes.ok) return res.status(400).json({ error: 'Failed to join division' });
+      return res.status(200).json({ success: true });
+    }
+
     if (action === 'get_divisions') {
       const divRes = await fetch(`${supabaseUrl}/rest/v1/divisions?select=*`, {
         headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
