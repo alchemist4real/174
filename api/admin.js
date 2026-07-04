@@ -48,10 +48,19 @@ export default async function handler(req, res) {
   const superAdminEmail = process.env.SUPERADMIN_EMAIL || 'muqorroben@gmail.com';
   const isSuperAdmin = email === superAdminEmail;
   const hasAdminRole = roleData && roleData.length > 0 && roleData[0].role === 'admin';
-  const isAdmin = isSuperAdmin || hasAdminRole;
+  
+  // Check division
+  const divRes = await fetch(`${supabaseUrl}/rest/v1/division_members?user_id=eq.${userData.id}&select=division_id`, {
+    headers: { 'apikey': serviceKey, 'Authorization': `Bearer ${serviceKey}` }
+  });
+  let divData = [];
+  if (divRes.ok) divData = await divRes.json();
+  const hasDivision = divData && divData.length > 0;
+  
+  const isAdmin = isSuperAdmin || hasAdminRole || hasDivision;
 
   if (!isAdmin) {
-    return res.status(403).json({ error: 'Forbidden. Not an admin.' });
+    return res.status(403).json({ error: 'Forbidden. Not an admin or team member.' });
   }
 
   const { action, path, contentBase64, sha } = req.body;
@@ -327,14 +336,23 @@ export default async function handler(req, res) {
       });
       let devicesData = [];
       if (devicesRes.ok) devicesData = await devicesRes.json();
+      
+      const divRes = await fetch(`${supabaseUrl}/rest/v1/division_members?select=*`, {
+        headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
+      });
+      let divData = [];
+      if (divRes.ok) divData = await divRes.json();
 
       const usersWithRoles = (data.users || []).map(u => {
         const roleRecord = rolesData.find(r => r.identifier === u.email || r.identifier === (u.user_metadata || {}).username);
         const userDevices = devicesData.filter(d => d.user_id === u.id).map(d => ({ id: d.device_id, added: d.created_at }));
+        const divRecord = divData.find(d => d.user_id === u.id);
         
         // Ensure user_metadata exists
         const user_metadata = u.user_metadata || {};
         user_metadata.devices = userDevices;
+        user_metadata.division = divRecord ? divRecord.division_id : null;
+        user_metadata.whatsapp = divRecord ? divRecord.whatsapp : null;
 
         return { ...u, user_metadata, role: roleRecord ? roleRecord.role : 'user' };
       });

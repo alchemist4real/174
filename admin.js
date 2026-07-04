@@ -189,9 +189,9 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
         
         if (res.ok && data.success) {
           authOverlay.classList.add('hidden');
+          document.getElementById('adminTabs').style.display = 'flex';
           if (data.isSuperAdmin) {
             window.isSuperAdmin = true;
-            document.getElementById('adminTabs').style.display = 'flex';
             loadUsers();
             fetchHybridLogs();
             

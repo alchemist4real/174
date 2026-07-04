@@ -1501,6 +1501,7 @@ try {
         if (!currentUsername) {
           document.getElementById('usernameSetupModal').classList.add('active');
         }
+        startTracking();
       }
     });
     
@@ -1930,14 +1931,17 @@ try {
       window.supabaseClient.auth.getSession().then(({ data: { session } }) => {
         if (session && session.access_token) {
           checkAdmin(session.access_token);
+          checkContribution(session.access_token);
         }
       });
       window.supabaseClient.auth.onAuthStateChange(async (event, session) => {
         if (session && session.access_token) {
           checkAdmin(session.access_token);
+          checkContribution(session.access_token);
         } else {
           const adminSec = document.getElementById('adminSection');
           if(adminSec) adminSec.style.display = 'none';
+          hideContributionGate();
         }
       });
     } else {
@@ -1960,6 +1964,47 @@ try {
         adminSec.style.display = 'none';
       }
     } catch(e) {}
+  }
+
+  async function checkContribution(token) {
+    try {
+      const res = await fetch('/api/contributions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        body: JSON.stringify({ action: 'check_contribution' })
+      });
+      const data = await res.json();
+      if (res.ok && data.success) {
+        if (!data.has_contributed) {
+           showContributionGate();
+        } else {
+           hideContributionGate();
+        }
+      }
+    } catch(e) {}
+  }
+  
+  function showContributionGate() {
+      let gate = document.getElementById('contributionGate');
+      if(!gate) {
+          gate = document.createElement('div');
+          gate.id = 'contributionGate';
+          gate.style.cssText = 'position:fixed; inset:0; z-index:99999; background:rgba(0,0,0,0.85); backdrop-filter:blur(10px); display:flex; flex-direction:column; justify-content:center; align-items:center; color:#fff; text-align:center; padding:24px; font-family:var(--font-sans);';
+          gate.innerHTML = `
+              <div style="background:#111; padding:40px; border:1px solid #333; border-radius:8px; max-width:500px; width:100%;">
+                  <h2 style="font-size:24px; margin-bottom:16px; color:var(--danger, #ff4444);">Akses Dibekukan</h2>
+                  <p style="font-size:14px; margin-bottom:24px; color:#aaa; line-height:1.5;">Kamu belum berkontribusi selama 30 hari terakhir. Silakan berpartisipasi dalam pembuatan atau review konten melalui Admin Panel untuk membuka kembali akses.</p>
+                  <a href="/admin.html" style="display:inline-block; background:var(--accent, #2563eb); color:#fff; padding:12px 24px; text-decoration:none; border-radius:4px; font-weight:bold;">Buka Admin Panel</a>
+              </div>
+          `;
+          document.body.appendChild(gate);
+      }
+      gate.style.display = 'flex';
+  }
+  
+  function hideContributionGate() {
+      const gate = document.getElementById('contributionGate');
+      if(gate) gate.style.display = 'none';
   }
   
   initAdminCheck();

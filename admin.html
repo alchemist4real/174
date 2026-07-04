@@ -158,6 +158,103 @@
         </div>
       </div>
 
+      <!-- TASKS VIEW -->
+      <div id="viewTasks" class="view-section">
+        <div class="toolbar" style="justify-content:space-between;">
+          <h2 style="font-size:18px; font-weight:600; margin:0;">Task Board</h2>
+          <div style="display:flex; gap:12px;">
+            <button id="btnCreateTask" class="btn primary" style="display:none;">+ New Task</button>
+            <button id="btnRefreshTasks" class="btn">Refresh</button>
+          </div>
+        </div>
+        <div id="taskKanban" style="display:flex; gap:16px; padding:24px; overflow-x:auto; height:calc(100% - 60px);">
+          <!-- Kanban columns -->
+          <div class="kanban-col" id="col-open" style="flex:1; min-width:300px; background:var(--bg-card); padding:16px; border-radius:4px; border:1px solid var(--border-light);">
+             <h3 style="margin-top:0; border-bottom:1px solid var(--border-light); padding-bottom:8px;">Open</h3>
+             <div class="task-list" style="display:flex; flex-direction:column; gap:8px; margin-top:12px;"></div>
+          </div>
+          <div class="kanban-col" id="col-in_progress" style="flex:1; min-width:300px; background:var(--bg-card); padding:16px; border-radius:4px; border:1px solid var(--border-light);">
+             <h3 style="margin-top:0; border-bottom:1px solid var(--border-light); padding-bottom:8px;">In Progress</h3>
+             <div class="task-list" style="display:flex; flex-direction:column; gap:8px; margin-top:12px;"></div>
+          </div>
+          <div class="kanban-col" id="col-developed" style="flex:1; min-width:300px; background:var(--bg-card); padding:16px; border-radius:4px; border:1px solid var(--border-light);">
+             <h3 style="margin-top:0; border-bottom:1px solid var(--border-light); padding-bottom:8px;">Developed (Wait for Review)</h3>
+             <div class="task-list" style="display:flex; flex-direction:column; gap:8px; margin-top:12px;"></div>
+          </div>
+          <div class="kanban-col" id="col-in_review" style="flex:1; min-width:300px; background:var(--bg-card); padding:16px; border-radius:4px; border:1px solid var(--border-light);">
+             <h3 style="margin-top:0; border-bottom:1px solid var(--border-light); padding-bottom:8px;">In Review</h3>
+             <div class="task-list" style="display:flex; flex-direction:column; gap:8px; margin-top:12px;"></div>
+          </div>
+          <div class="kanban-col" id="col-done" style="flex:1; min-width:300px; background:var(--bg-card); padding:16px; border-radius:4px; border:1px solid var(--border-light);">
+             <h3 style="margin-top:0; border-bottom:1px solid var(--border-light); padding-bottom:8px;">Done</h3>
+             <div class="task-list" style="display:flex; flex-direction:column; gap:8px; margin-top:12px;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- DIVISIONS VIEW -->
+      <div id="viewDivisions" class="view-section">
+        <div class="toolbar" style="justify-content:space-between;">
+          <h2 style="font-size:18px; font-weight:600; margin:0;">Divisions Management</h2>
+          <button id="btnRefreshDivisions" class="btn">Refresh</button>
+        </div>
+        
+        <!-- Guide Banner -->
+        <div style="margin:24px; padding:16px; background:var(--accent); color:#fff; border-radius:8px;">
+          <h3 style="margin:0 0 8px 0;">Panduan Divisi MR CAPSULES</h3>
+          <ul style="margin:0; padding-left:20px; font-size:13px; font-family:var(--font-sans);">
+            <li><b>Management & Innovation:</b> Bertugas membagi tugas silabus, evaluasi kinerja, dan merencanakan inovasi.</li>
+            <li><b>Development:</b> Bertugas membuat konten sesuai silabus (HTML) dan mengembangkan inovasi.</li>
+            <li><b>Database Review & QA:</b> Bertugas mengecek jawaban dan soal di HTML menggunakan Scrapper di tab Review Tools.</li>
+          </ul>
+          <div style="margin-top:8px; font-size:12px; opacity:0.9;">* User yang tidak berkontribusi selama 30 hari akan otomatis kehilangan akses ke fitur konten utama.</div>
+        </div>
+
+        <div id="divisionsGrid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:24px; padding:0 24px;">
+           <!-- Division cards will be injected here -->
+        </div>
+      </div>
+
+      <!-- CONTRIBUTIONS VIEW -->
+      <div id="viewContributions" class="view-section">
+        <div class="toolbar">
+          <h2 style="font-size:18px; font-weight:600; margin:0;">Contributions Leaderboard</h2>
+        </div>
+        <div style="display:flex; padding:24px; gap:24px; flex-wrap:wrap; height:100%;">
+          <div style="flex:1; min-width:300px; display:flex; flex-direction:column; gap:16px;">
+             <div style="background:var(--bg-card); padding:24px; border:1px solid var(--border-light);">
+                <div style="font-size:12px; color:var(--text-muted); margin-bottom:8px;">MY POINTS</div>
+                <div id="myPoints" style="font-size:36px; font-weight:700;">-</div>
+                <div id="contributionStatus" style="margin-top:12px; font-size:13px; font-weight:600;"></div>
+             </div>
+          </div>
+          <div style="flex:2; min-width:400px; background:var(--bg-card); border:1px solid var(--border-light); display:flex; flex-direction:column; max-height:calc(100vh - 120px);">
+             <div style="padding:16px 24px; border-bottom:1px solid var(--border-light); font-weight:600;">Top Contributors</div>
+             <div id="leaderboardList" style="flex:1; overflow-y:auto; padding:0; list-style:none;"></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- REVIEW TOOLS VIEW -->
+      <div id="viewReviewTools" class="view-section">
+        <div class="toolbar">
+          <h2 style="font-size:18px; font-weight:600; margin:0;">CBT HTML Scrapper (Review Tools)</h2>
+        </div>
+        <div style="padding:24px; height:calc(100% - 60px); overflow-y:auto;">
+          <div style="display:flex; gap:12px; margin-bottom:24px;">
+             <input type="text" id="reviewFilePath" class="auth-input" placeholder="e.g. content/semester 1/1.2/1.2-2_Overall CBT.html" style="flex:1;">
+             <button id="btnLoadReviewFile" class="btn primary">Load HTML</button>
+          </div>
+          <div id="reviewEditorArea" style="display:none; flex-direction:column; gap:16px;">
+             <div style="display:flex; justify-content:space-between; align-items:center; background:var(--bg-card); padding:16px; border-radius:4px; border:1px solid var(--border-light);">
+                <h3 id="reviewFileName" style="margin:0;">File Name</h3>
+                <button id="btnSaveReview" class="btn primary">Save Changes to GitHub</button>
+             </div>
+             <div id="reviewQuestionsList" style="display:flex; flex-direction:column; gap:24px;"></div>
+          </div>
+        </div>
+      </div>
+
       <div class="status-bar">
         <span id="statusText">Ready</span>
         <span id="itemCount">0 items</span>
@@ -267,6 +364,22 @@
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
         Users
       </div>
+      <div class="tab" data-target="viewTasks" style="display:flex; align-items:center; gap:8px;">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+        Tasks
+      </div>
+      <div class="tab" data-target="viewDivisions" style="display:flex; align-items:center; gap:8px;">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
+        Divisions
+      </div>
+      <div class="tab" data-target="viewContributions" style="display:flex; align-items:center; gap:8px;">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon></svg>
+        Contributions
+      </div>
+      <div class="tab" data-target="viewReviewTools" style="display:flex; align-items:center; gap:8px;">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="9" y1="15" x2="15" y2="15"></line></svg>
+        Review Tools
+      </div>
     </div>
     <div class="user-info" style="display:flex; align-items:center; gap:16px;">
       <span id="userBadge" style="font-size:12px; color:var(--text-muted);"></span>
@@ -280,6 +393,7 @@
 
   
   <script src="/admin.js"></script>
+  <script src="/admin-workflow.js"></script>
 </body>
 </html>
 
