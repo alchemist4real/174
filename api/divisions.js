@@ -104,24 +104,35 @@ export default async function handler(req, res) {
 
     if (!isAdmin) return res.status(403).json({ error: 'Forbidden. Admin only.' });
 
-    if (action === 'assign_member') {
-      // Upsert
-      const resRole = await fetch(`${supabaseUrl}/rest/v1/division_members`, {
-        method: 'POST',
-        headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}`, 'Content-Type': 'application/json', 'Prefer': 'resolution=merge-duplicates' },
-        body: JSON.stringify({ user_id: target_user_id, division_id })
-      });
-      if (!resRole.ok) throw new Error(await resRole.text());
-      return res.status(200).json({ success: true });
-    }
-
-    if (action === 'remove_member') {
-      const resRole = await fetch(`${supabaseUrl}/rest/v1/division_members?user_id=eq.${target_user_id}&division_id=eq.${division_id}`, {
-        method: 'DELETE',
+    if (action === 'assign_member' || action === 'remove_member') {
+      const { target_email } = req.body;
+      if(!target_email) return res.status(400).json({ error: 'Missing target_email' });
+      
+      const sbUsersRes = await fetch(`${supabaseUrl}/auth/v1/admin/users?per_page=1000`, {
         headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
       });
-      if (!resRole.ok) throw new Error(await resRole.text());
-      return res.status(200).json({ success: true });
+      const sbUsers = await sbUsersRes.json();
+      const targetUser = (sbUsers.users || []).find(u => u.email === target_email);
+      if(!targetUser) return res.status(404).json({ error: 'User not found' });
+      
+      if (action === 'assign_member') {
+        const resRole = await fetch(`${supabaseUrl}/rest/v1/division_members`, {
+          method: 'POST',
+          headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}`, 'Content-Type': 'application/json', 'Prefer': 'resolution=merge-duplicates' },
+          body: JSON.stringify({ user_id: targetUser.id, division_id })
+        });
+        if (!resRole.ok) throw new Error(await resRole.text());
+        return res.status(200).json({ success: true });
+      }
+
+      if (action === 'remove_member') {
+        const resRole = await fetch(`${supabaseUrl}/rest/v1/division_members?user_id=eq.${targetUser.id}&division_id=eq.${division_id}`, {
+          method: 'DELETE',
+          headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
+        });
+        if (!resRole.ok) throw new Error(await resRole.text());
+        return res.status(200).json({ success: true });
+      }
     }
 
     return res.status(400).json({ error: 'Unknown action' });

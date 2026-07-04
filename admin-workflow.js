@@ -181,13 +181,36 @@ function openTaskModal(task) {
     let details = `<div style="font-size:12px; margin-bottom:16px; padding:12px; background:var(--bg-card); border-radius:4px;">
         <div><b>Status:</b> ${task.status.toUpperCase()}</div>
         <div><b>Category:</b> ${task.category || '-'}</div>
-        <div><b>Developer:</b> ${task.assigned_to_user ? task.assigned_to_user.email : 'Unassigned'}</div>
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span><b>Developer:</b> ${task.assigned_to_user ? task.assigned_to_user.email : 'Unassigned'}</span>
+            ${task.assigned_to_user && task.assigned_to_user.whatsapp ? `<a href="https://wa.me/${task.assigned_to_user.whatsapp}?text=Hi, regarding MR CAPSULES task '${task.title}'" target="_blank" class="btn-card primary" style="font-size:10px; text-decoration:none;">Contact WA</a>` : ''}
+        </div>
         <div><b>Reviewer:</b> ${task.reviewed_by_user ? task.reviewed_by_user.email : 'Unassigned'}</div>
         <div style="margin-top:12px;"><b>Description:</b><br>${task.description || 'No description provided.'}</div>
+        <div style="margin-top:12px;"><button class="btn-card" style="width:100%; justify-content:center; padding:8px;" onclick="loadTaskLogs('${task.id}')">View Activity Logs</button></div>
+        <div id="taskLogsContainer_${task.id}" style="margin-top:8px; max-height:150px; overflow-y:auto;"></div>
     </div>`;
 
-    acts.innerHTML = details + `<div style="display:flex; gap:8px; justify-content:center;">${actionsHtml}</div>`;
+    acts.innerHTML = details + `<div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">${actionsHtml}</div>`;
     modal.classList.remove('hidden');
+}
+
+window.loadTaskLogs = async function(taskId) {
+    const container = document.getElementById('taskLogsContainer_' + taskId);
+    container.innerHTML = '<div style="text-align:center; color:var(--text-muted); font-size:11px;">Loading logs...</div>';
+    const res = await apiCall('tasks', { action: 'get_task_logs', task_id: taskId });
+    if(res.success) {
+        if(res.logs.length === 0) {
+            container.innerHTML = '<div style="font-size:11px; color:var(--text-muted);">No activity logs found.</div>';
+            return;
+        }
+        container.innerHTML = res.logs.map(l => `<div style="font-size:11px; border-bottom:1px solid var(--border-light); padding:4px 0;">
+            <span style="color:var(--accent)">${l.action.toUpperCase()}</span> by ${l.users ? l.users.email.split('@')[0] : 'User'}
+            <div style="color:var(--text-muted); font-size:10px;">${new Date(l.created_at).toLocaleString()}</div>
+        </div>`).join('');
+    } else {
+        container.innerHTML = `<div style="color:var(--danger); font-size:11px;">Failed to load logs.</div>`;
+    }
 }
 
 window.updateTask = async function(taskId, action) {
@@ -210,23 +233,70 @@ async function loadDivisions() {
     if(res.success) {
         const grid = document.getElementById('divisionsGrid');
         grid.innerHTML = '';
+        
+        // WhatsApp Settings for current user
+        const waContainer = document.createElement('div');
+        waContainer.style.cssText = 'grid-column: 1 / -1; background:var(--bg-card); padding:16px; border:1px solid var(--border-light); border-radius:6px; margin-bottom:16px; display:flex; align-items:center; gap:16px;';
+        waContainer.innerHTML = `
+            <div style="font-weight:600;">Update My WhatsApp Number:</div>
+            <input type="text" id="myWaInput" class="auth-input" placeholder="e.g. 6281234567890" style="width:200px;">
+            <button class="btn primary" id="btnSaveWa">Save</button>
+        `;
+        grid.appendChild(waContainer);
+        
+        waContainer.querySelector('#btnSaveWa').onclick = async () => {
+            const wa = document.getElementById('myWaInput').value;
+            showToast('Saving...');
+            const wRes = await apiCall('divisions', { action: 'update_whatsapp', whatsapp: wa });
+            if(wRes.success) showToast('WhatsApp updated!', 'success');
+            else showToast('Failed: ' + wRes.error, 'error');
+        };
+
         res.divisions.forEach(div => {
-            const membersHtml = (div.members || []).map(m => `<div style="font-size:11px; color:var(--text-main); margin-bottom:4px; padding:4px 8px; background:var(--bg-main); border-radius:4px;">${m.split('@')[0]}</div>`).join('');
-            grid.innerHTML += `
-                <div style="background:var(--bg-card); padding:24px; border:1px solid var(--border-light); border-radius:6px; box-shadow:0 4px 6px rgba(0,0,0,0.1);">
-                    <h3 style="margin-top:0; color:var(--accent);">${div.name}</h3>
-                    <p style="font-size:13px; color:var(--text-muted); min-height:40px;">${div.description}</p>
-                    <div style="margin-top:16px; margin-bottom:16px; border-top:1px solid var(--border-light); padding-top:16px;">
-                        <div style="font-size:11px; text-transform:uppercase; font-weight:600; color:var(--text-muted); margin-bottom:8px;">Members (${div.member_count})</div>
-                        <div style="max-height:100px; overflow-y:auto; padding-right:8px;">
-                            ${membersHtml || '<div style="font-size:11px; color:var(--text-muted);">No members yet.</div>'}
-                        </div>
+            let membersHtml = '';
+            (div.members || []).forEach(m => {
+                membersHtml += `<div style="display:flex; justify-content:space-between; align-items:center; font-size:11px; color:var(--text-main); margin-bottom:4px; padding:4px 8px; background:var(--bg-main); border-radius:4px;">
+                    <span>${m.split('@')[0]}</span>
+                    ${window.isSuperAdmin ? `<button class="btn-card danger" style="padding:2px 6px; font-size:9px;" onclick="removeMember('${m}', '${div.id}')">Remove</button>` : ''}
+                </div>`;
+            });
+            
+            const card = document.createElement('div');
+            card.style.cssText = 'background:var(--bg-card); padding:24px; border:1px solid var(--border-light); border-radius:6px; box-shadow:0 4px 6px rgba(0,0,0,0.1);';
+            card.innerHTML = `
+                <h3 style="margin-top:0; color:var(--accent); display:flex; justify-content:space-between;">
+                   ${div.name}
+                   ${window.isSuperAdmin ? `<button class="btn-card primary" style="font-size:10px; padding:4px 8px;" onclick="promptAddMember('${div.id}')">+ Add Member</button>` : ''}
+                </h3>
+                <p style="font-size:13px; color:var(--text-muted); min-height:40px;">${div.description}</p>
+                <div style="margin-top:16px; margin-bottom:16px; border-top:1px solid var(--border-light); padding-top:16px;">
+                    <div style="font-size:11px; text-transform:uppercase; font-weight:600; color:var(--text-muted); margin-bottom:8px;">Members (${div.member_count})</div>
+                    <div style="max-height:150px; overflow-y:auto; padding-right:8px;">
+                        ${membersHtml || '<div style="font-size:11px; color:var(--text-muted);">No members yet.</div>'}
                     </div>
                 </div>
             `;
+            grid.appendChild(card);
         });
     }
 }
+
+window.promptAddMember = async function(divId) {
+    const email = prompt("Enter member's exact email address:");
+    if(!email) return;
+    showToast('Assigning member...');
+    const res = await apiCall('divisions', { action: 'assign_member', target_email: email, division_id: divId });
+    if(res.success) { showToast('Assigned!', 'success'); loadDivisions(); }
+    else showToast('Failed: ' + res.error, 'error');
+};
+
+window.removeMember = async function(email, divId) {
+    if(!confirm('Remove ' + email + ' from this division?')) return;
+    showToast('Removing...');
+    const res = await apiCall('divisions', { action: 'remove_member', target_email: email, division_id: divId });
+    if(res.success) { showToast('Removed!', 'success'); loadDivisions(); }
+    else showToast('Failed: ' + res.error, 'error');
+};
 
 // =======================
 // CONTRIBUTIONS
