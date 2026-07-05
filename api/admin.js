@@ -32,6 +32,18 @@ export default async function handler(req, res) {
   const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!serviceKey) return res.status(500).json({ error: 'Server config error' });
 
+  const logAdminAction = async (act, details) => {
+    const sbKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+    if (!sbKey) return;
+    try {
+      await fetch(`${supabaseUrl}/rest/v1/admin_action_logs`, {
+        method: 'POST',
+        headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ admin_email: email, action: act, details: details })
+      });
+    } catch(e) {}
+  };
+
   // 2. Check if user is an admin via user_roles table
   const username = userData.user_metadata?.username;
   const encEmail = encodeURIComponent(email);
@@ -174,6 +186,7 @@ export default async function handler(req, res) {
       const newCommitSha = await createCommit(`admin: upload ${path}`, newTreeSha, [commitSha]);
       await updateRef(newCommitSha);
       
+      await logAdminAction('upload', { path: path });
       return res.status(200).json({ success: true });
     }
     
@@ -186,6 +199,7 @@ export default async function handler(req, res) {
       const newCommitSha = await createCommit(`admin: delete ${path}`, newTreeSha, [commitSha]);
       await updateRef(newCommitSha);
       
+      await logAdminAction('delete', { path: path });
       return res.status(200).json({ success: true });
     }
 
@@ -210,6 +224,7 @@ export default async function handler(req, res) {
       const newCommitSha = await createCommit(`admin: bulk delete ${files.length} files`, newTreeSha, [commitSha]);
       await updateRef(newCommitSha);
       
+      await logAdminAction('delete_files', { count: files.length, files: files.map(f => f.path) });
       return res.status(200).json({ success: true });
     }
 
@@ -255,6 +270,8 @@ export default async function handler(req, res) {
         body: JSON.stringify(payload)
       });
       if (!updateRes.ok) throw new Error("Config update failed");
+      
+      await logAdminAction('update_config', payload);
       return res.status(200).json({ success: true, sha: 'supabase_db' });
     }
 
@@ -280,6 +297,7 @@ export default async function handler(req, res) {
       const newCommitSha = await createCommit(`admin: rename ${path} to ${newPath}`, newTreeSha, [commitSha]);
       await updateRef(newCommitSha);
       
+      await logAdminAction('rename_file', { old: path, new: newPath });
       return res.status(200).json({ success: true });
     }
 
@@ -296,6 +314,8 @@ export default async function handler(req, res) {
           body: JSON.stringify({ identifier: identifier, role: 'admin' })
         });
         if (!resRole.ok) throw new Error(await resRole.text());
+        
+        await logAdminAction('add_admin', { target: identifier });
         return res.status(200).json({ success: true });
       }
 
@@ -306,6 +326,8 @@ export default async function handler(req, res) {
           headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
         });
         if (!resRole.ok) throw new Error(await resRole.text());
+        
+        await logAdminAction('remove_admin', { target: identifier });
         return res.status(200).json({ success: true });
       }
 
@@ -323,6 +345,8 @@ export default async function handler(req, res) {
            body: JSON.stringify({ app_metadata: newAppMeta })
          });
          if (!sbRes.ok) throw new Error(await sbRes.text());
+         
+         await logAdminAction(banned ? 'ban_user' : 'unban_user', { target: userData.email });
          return res.status(200).json({ success: true });
       }
     }

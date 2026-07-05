@@ -3,11 +3,17 @@ let currentUserDivision = null;
 let currentUserId = null;
 let isAdminUser = false;
 
-document.addEventListener('DOMContentLoaded', async () => {
-    // Wait a bit for sessionToken to be populated by admin.js auth listener
+document.addEventListener('DOMContentLoaded', () => {
+    // Wait for sessionToken to be populated by admin.js
+    if (window.sessionToken) {
+        initWorkflow();
+    } else {
+        window.addEventListener('adminReady', () => initWorkflow(), { once: true });
+    }
+    // Fallback timeout in case event was missed
     setTimeout(() => {
-        if(sessionToken) initWorkflow();
-    }, 1500);
+        if (window.sessionToken && !window._workflowInitialized) initWorkflow();
+    }, 5000);
 
     // Setup Refresh buttons
     document.getElementById('btnRefreshTasks')?.addEventListener('click', loadTasks);
@@ -29,6 +35,7 @@ async function apiCall(endpoint, payload) {
 }
 
 async function initWorkflow() {
+    window._workflowInitialized = true;
     const { data: { user } } = await supabaseClient.auth.getUser();
     if(user) currentUserId = user.id;
 
@@ -78,6 +85,11 @@ window.joinDivision = async function(divId) {
 // TASKS (KANBAN)
 // =======================
 async function loadTasks() {
+    const cols = ['open', 'in_progress', 'developed', 'in_review', 'done'];
+    cols.forEach(c => {
+        const el = document.querySelector(`#col-${c} .task-list`);
+        if (el) el.innerHTML = '<div style="padding:24px; text-align:center; color:var(--text-muted);">Loading... <div style="display:inline-block; width:16px; height:16px; border:2px solid rgba(255,255,255,0.3); border-radius:50%; border-top-color:#fff; animation:spin 1s ease-in-out infinite; margin-left:8px; vertical-align:middle;"></div></div>';
+    });
     const res = await apiCall('tasks', { action: 'list_tasks' });
     if(res.success) {
         renderKanban(res.tasks || []);
@@ -109,13 +121,33 @@ function renderKanban(tasks) {
         el.className = 'kanban-card';
         el.style.cssText = 'background:var(--bg-main); border:1px solid var(--border-medium); border-left:4px solid var(--accent); padding:12px; border-radius:4px; font-size:12px; cursor:pointer;';
         
+        let displayDesc = task.description || '';
+        let dueDateStr = '';
+        let dueColor = 'var(--text-muted)';
+        const dueMatch = displayDesc.match(/\[Due:\s*([^\]]+)\]/);
+        if (dueMatch) {
+            dueDateStr = dueMatch[1];
+            displayDesc = displayDesc.replace(dueMatch[0], '').trim();
+            const dueTime = new Date(dueDateStr).getTime();
+            const now = Date.now();
+            if (dueTime < now) dueColor = 'var(--danger)';
+            else if (dueTime < now + 86400000 * 3) dueColor = '#ffa500';
+        }
+
         let meta = `<div><span style="color:var(--text-muted)">Sem:</span> ${task.semester || '-'} | <span style="color:var(--text-muted)">Blk:</span> ${task.block || '-'}</div>`;
         if (task.assigned_to_user) {
             meta += `<div style="margin-top:4px;"><span style="color:var(--text-muted)">Dev:</span> ${task.assigned_to_user.email.split('@')[0]}</div>`;
         }
+        if (dueDateStr) {
+            meta += `<div style="margin-top:4px;"><span style="color:var(--text-muted)">Due:</span> <span style="color:${dueColor}; font-weight:bold;">${dueDateStr}</span></div>`;
+        }
+        if (task.target_path) {
+            meta += `<div style="margin-top:4px;"><span style="color:var(--text-muted)">File:</span> <span style="font-family:var(--font-mono); font-size:10px; color:var(--accent);">${task.target_path}</span></div>`;
+        }
 
         el.innerHTML = `
             <div style="font-weight:600; font-size:13px; margin-bottom:4px;">${task.title}</div>
+            <div style="color:var(--text-muted); margin-bottom:8px; line-height:1.4;">${displayDesc}</div>
             ${meta}
         `;
         
@@ -132,12 +164,16 @@ async function createNewTaskPrompt() {
     const semEl = document.getElementById('taskSemester');
     const blockEl = document.getElementById('taskBlock');
     const descEl = document.getElementById('taskDescription');
+    const targetEl = document.getElementById('taskTargetPath');
     const btnCancel = document.getElementById('taskCancel');
     const btnConfirm = document.getElementById('taskConfirm');
 
     titleEl.value = '';
     descEl.value = '';
     blockEl.value = '';
+    if (targetEl) targetEl.value = window._prefilledTaskPath || '';
+    window._prefilledTaskPath = ''; // reset after opening
+    
     modal.classList.remove('hidden');
 
     return new Promise((resolve) => {
@@ -151,6 +187,12 @@ async function createNewTaskPrompt() {
             const title = titleEl.value.trim();
             if(!title) return showToast('Title is required', 'error');
             
+            const dueDateEl = document.getElementById('taskDueDate');
+            let descText = descEl.value.trim();
+            if (dueDateEl && dueDateEl.value) {
+                descText += (descText ? '\n\n' : '') + '[Due: ' + dueDateEl.value + ']';
+            }
+            
             const payload = {
                 action: 'create_task',
                 title: title,
@@ -158,7 +200,8 @@ async function createNewTaskPrompt() {
                 priority: prioEl.value,
                 semester: semEl.value,
                 block: blockEl.value.trim() || 'General',
-                description: descEl.value.trim()
+                description: descText,
+                target_path: targetEl ? targetEl.value.trim() : null
             };
             cleanup();
             showToast('Creating task...');
@@ -261,10 +304,15 @@ function openTaskModal(task) {
             ${task.assigned_to_user && task.assigned_to_user.whatsapp ? `<a href="https://wa.me/${task.assigned_to_user.whatsapp}?text=Hi, regarding MR CAPSULES task '${task.title}'" target="_blank" class="btn-card primary" style="font-size:10px; text-decoration:none;">Contact WA</a>` : ''}
         </div>
         <div><b>Reviewer:</b> ${task.reviewed_by_user ? task.reviewed_by_user.email : 'Unassigned'}</div>
+        ${task.target_path ? `<div style="margin-top:12px;"><b>Target File:</b> <span style="font-family:var(--font-mono); color:var(--accent);">${task.target_path}</span></div>` : ''}
         <div style="margin-top:12px;"><b>Description:</b><br>${task.description || 'No description provided.'}</div>
         <div style="margin-top:12px;"><button class="btn-card" style="width:100%; justify-content:center; padding:8px;" onclick="loadTaskLogs('${task.id}')">View Activity Logs</button></div>
         <div id="taskLogsContainer_${task.id}" style="margin-top:8px; max-height:150px; overflow-y:auto;"></div>
     </div>`;
+
+    if (task.target_path) {
+        actionsHtml = `<button class="btn primary" style="background:#ffa500; border-color:#ffa500; color:#000; font-weight:600; flex:1;" onclick="openTaskFile('${task.target_path}')">Open File in Editor</button>` + actionsHtml;
+    }
 
     acts.innerHTML = details + `<div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">${actionsHtml}</div>`;
     modal.classList.remove('hidden');
@@ -297,6 +345,29 @@ window.updateTask = async function(taskId, action) {
         loadTasks();
     } else {
         showToast('Error: ' + res.error, 'error');
+    }
+};
+
+window.openTaskFile = function(path) {
+    document.getElementById('contextModal').classList.add('hidden');
+    // Switch to Files tab
+    const filesTab = document.querySelector('.tab[data-target="viewFiles"]');
+    if(filesTab) filesTab.click();
+    
+    if (window.currentTree) {
+        const node = window.currentTree.find(n => n.path === path);
+        if (node) {
+            if(window.loadFile) window.loadFile(node);
+        } else {
+            showToast('File not found in tree. Refreshing...', 'warning');
+            if(window.loadTree) {
+                window.loadTree().then(() => {
+                    const retryNode = window.currentTree.find(n => n.path === path);
+                    if(retryNode) window.loadFile(retryNode);
+                    else showToast('File really not found', 'error');
+                });
+            }
+        }
     }
 };
 

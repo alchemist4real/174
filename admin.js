@@ -172,6 +172,7 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
 
     async function verifyAdmin(session) {
       sessionToken = session.access_token;
+      window.dispatchEvent(new CustomEvent('adminReady', { detail: { token: sessionToken } }));
       const badgeEl = document.getElementById('userBadge');
       badgeEl.textContent = session.user.email;
       
@@ -263,10 +264,6 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
                    }
                 });
                 
-                window.sessionRoom.on('broadcast', { event: 'users_changed' }, () => {
-                  // Legacy broadcast handling removed in favor of postgres_changes
-                  // loadUsers();
-                });
 
                 // Real-time Database Subscriptions
                 const updateAndRender = () => {
@@ -364,8 +361,18 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
                 await adminAction('update_config', { allowSignup: isAllowed, maintenanceMode: isMaint });
               };
               
-              toggle.onchange = updateConfig;
+              toggle.onchange = async (e) => {
+                 if (!await customConfirm('Are you sure you want to change allow signup setting?')) {
+                   e.target.checked = !e.target.checked;
+                   return;
+                 }
+                 await updateConfig();
+              };
               toggleMaint.onchange = async (e) => {
+                 if (!await customConfirm('Are you sure you want to toggle maintenance mode?')) {
+                   e.target.checked = !e.target.checked;
+                   return;
+                 }
                  await updateConfig();
                  if (window.sessionRoom) {
                    await window.sessionRoom.send({
@@ -549,6 +556,7 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
       let html = '';
       if (item.type !== 'folder') {
         if (item.name.endsWith('.html')) html += `<button class="btn" id="ctxEdit">Edit Code</button>`;
+        html += `<button class="btn" id="ctxCreateTask" style="border-color:var(--accent); color:var(--accent);">Create Task</button>`;
         html += `<button class="btn" id="ctxDownload">Download</button>`;
         html += `<button class="btn" id="ctxMove">Move</button>`;
         html += `<button class="btn" id="ctxRename">Rename</button>`;
@@ -588,9 +596,34 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
           adminAction('rename_file', { path: item.path, newPath: currentPath + newName }).then(() => loadTree());
         };
       }
+      if (document.getElementById('ctxCreateTask')) {
+        document.getElementById('ctxCreateTask').onclick = () => {
+          modal.classList.add('hidden');
+          window._prefilledTaskPath = item.path;
+          const tasksTab = document.querySelector('.tab[data-target="viewTasks"]');
+          if (tasksTab) tasksTab.click();
+          if (typeof createNewTaskPrompt === 'function') {
+             createNewTaskPrompt();
+          } else {
+             const btnCreate = document.getElementById('btnCreateTask');
+             if (btnCreate) btnCreate.click();
+          }
+        };
+      }
       document.getElementById('ctxDelete').onclick = async () => {
         modal.classList.add('hidden');
-        if(item.type === 'folder') { customAlert('Folder deletion not supported directly.'); return; }
+        if (item.type === 'folder') {
+          const folderFiles = currentTree.filter(f => f.path.startsWith(item.path) && f.type === 'blob');
+          if (folderFiles.length === 0) {
+            customAlert('Folder is already empty.');
+            return;
+          }
+          if (!await customConfirm(`Delete folder "${item.name}" and all ${folderFiles.length} files inside? This cannot be undone.`)) return;
+          const files = folderFiles.map(f => ({ path: f.path }));
+          statusText.textContent = `Deleting ${files.length} files...`;
+          await adminAction('delete_files', { files });
+          return;
+        }
         if(await customConfirm('Delete ' + item.path + '?')) {
           adminAction('delete', { path: item.path, sha: item.sha }).then(() => loadTree());
         }
@@ -618,10 +651,12 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
           return data;
         } else {
           statusText.textContent = `Error: ${data.error}`;
+          customAlert(`Error: ${data.error}`);
           return null;
         }
       } catch(e) {
-        statusText.textContent = `Error: ${e.message}`;
+        statusText.textContent = 'Network error: ' + e.message;
+        customAlert('Network error: ' + e.message);
         return null;
       }
     }
@@ -895,7 +930,7 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
     // Users Logic
     async function loadUsers() {
       const userBrowser = document.getElementById('userBrowser');
-      userBrowser.innerHTML = '<div style="padding:24px; color:#666; text-align:center;">Loading users...</div>';
+      userBrowser.innerHTML = '<div style="padding:48px; color:var(--text-muted); text-align:center; font-size:18px;">Loading users... <div style="display:inline-block; width:20px; height:20px; border:3px solid rgba(255,255,255,0.3); border-radius:50%; border-top-color:#fff; animation:spin 1s ease-in-out infinite; margin-left:10px; vertical-align:middle;"></div></div>';
       try {
         let bannedDevs = [];
         try {
@@ -924,22 +959,24 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
       }
     }
 
+    function fmtTime(sec) {
+      sec = parseInt(sec, 10) || 0;
+      const d = Math.floor(sec / 86400);
+      const h = Math.floor((sec % 86400) / 3600).toString().padStart(2, '0');
+      const m = Math.floor((sec % 3600) / 60).toString().padStart(2, '0');
+      const s = (sec % 60).toString().padStart(2, '0');
+      if (d > 0) return d + 'd ' + h + ':' + m + ':' + s;
+      return h + ':' + m + ':' + s;
+    }
+
     function renderDashboard(users, globalStats) {
       document.getElementById('dashTotalUsers').textContent = users.length;
-      
-      function fmtTime(sec) {
-        sec = parseInt(sec, 10) || 0;
-        const d = Math.floor(sec / 86400);
-        const h = Math.floor((sec % 86400) / 3600).toString().padStart(2, '0');
-        const m = Math.floor((sec % 3600) / 60).toString().padStart(2, '0');
-        const s = (sec % 60).toString().padStart(2, '0');
-        if (d > 0) return d + 'd ' + h + ':' + m + ':' + s;
-        return h + ':' + m + ':' + s;
-      }
       
       // Use globalStats from the backend API (bypasses RLS)
       var uptimeEl = document.getElementById('dashTotalUptime');
       if (globalStats && globalStats.total_uptime !== undefined) {
+        lastKnownUptime = globalStats.total_uptime;
+        lastFetchTime = Date.now();
         uptimeEl.textContent = fmtTime(globalStats.total_uptime);
       } else {
         uptimeEl.textContent = '00:00:00';
@@ -1142,7 +1179,18 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
 
     // User polling removed in favor of Supabase realtime channel (users_changed)
 
-    // Auto-refresh dashboard uptime every 15 seconds
+    let lastKnownUptime = 0;
+    let lastFetchTime = Date.now();
+
+    // Smooth counter - update display every second
+    setInterval(() => {
+      const el = document.getElementById('dashTotalUptime');
+      if (!el || !lastKnownUptime) return;
+      const elapsed = Math.floor((Date.now() - lastFetchTime) / 1000);
+      el.textContent = fmtTime(lastKnownUptime + elapsed);
+    }, 1000);
+
+    // Fetch real value every 30 seconds
     setInterval(async function() {
       try {
         var res = await fetch('/api/uptime', {
@@ -1152,20 +1200,11 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
         });
         var data = await res.json();
         if (data.success && data.total_uptime !== undefined) {
-          function fmtT(sec) {
-            sec = parseInt(sec, 10) || 0;
-            var d = Math.floor(sec / 86400);
-            var h = Math.floor((sec % 86400) / 3600).toString().padStart(2, '0');
-            var m = Math.floor((sec % 3600) / 60).toString().padStart(2, '0');
-            var s = (sec % 60).toString().padStart(2, '0');
-            if (d > 0) return d + 'd ' + h + ':' + m + ':' + s;
-            return h + ':' + m + ':' + s;
-          }
-          var el = document.getElementById('dashTotalUptime');
-          if(el) el.textContent = fmtT(data.total_uptime);
+          lastKnownUptime = data.total_uptime;
+          lastFetchTime = Date.now();
         }
-      } catch(e) { console.error("Error fetching system logs:", e); }
-    }, 15000);
+      } catch(e) { console.error("Error fetching uptime logs:", e); }
+    }, 30000);
 
 function walkAndReplaceMR(node, isMrs) {
       if (node.nodeName === 'SCRIPT' || node.nodeName === 'STYLE') return;

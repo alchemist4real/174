@@ -76,15 +76,28 @@ export default async function handler(req, res) {
       const usersData = await usersRes.json();
       const allUsers = usersData.users || [];
       
+      // Fetch division members to get whatsapp
+      const membersRes = await fetch(`${supabaseUrl}/rest/v1/division_members?select=user_id,whatsapp`, {
+        headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
+      });
+      const membersData = await membersRes.json();
+      
       // Enrich tasks with user emails
       const enriched = tasks.map(t => {
         const createdBy = allUsers.find(u => u.id === t.created_by);
         const assignedTo = allUsers.find(u => u.id === t.assigned_to);
         const reviewedBy = allUsers.find(u => u.id === t.reviewed_by);
+        
+        let assignedWhatsapp = null;
+        if (assignedTo && Array.isArray(membersData)) {
+          const mem = membersData.find(m => m.user_id === t.assigned_to);
+          if (mem && mem.whatsapp) assignedWhatsapp = mem.whatsapp;
+        }
+
         return {
           ...t,
           created_by_user: createdBy ? { email: createdBy.email } : null,
-          assigned_to_user: assignedTo ? { email: assignedTo.email, whatsapp: null } : null,
+          assigned_to_user: assignedTo ? { email: assignedTo.email, whatsapp: assignedWhatsapp } : null,
           reviewed_by_user: reviewedBy ? { email: reviewedBy.email } : null
         };
       });
