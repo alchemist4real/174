@@ -125,6 +125,7 @@ function renderKanban(tasks) {
 
         const el = document.createElement('div');
         el.className = 'kanban-card';
+        el.style.cssText = 'background:var(--bg-main); border:1px solid var(--border-medium); border-left:4px solid var(--accent); padding:12px; border-radius:4px; font-size:12px; cursor:pointer;';
         
         let displayDesc = task.description || '';
         let dueDateStr = '';

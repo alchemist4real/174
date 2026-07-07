@@ -5,8 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Content Manager | MR CAPSULES</title>
   <link rel="icon" type="image/svg+xml" href="/logo.svg">
-    <link rel="stylesheet" href="/admin.css?v=1.1">
-    <link rel="stylesheet" href="/new_styles.css">
+    <link rel="stylesheet" href="/admin.css">
   <!-- CodeMirror -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/codemirror.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.65.13/theme/darcula.min.css">
@@ -307,8 +306,8 @@
   </div>
 
   <!-- Create Task Modal -->
-  <div id="createTaskModal" class="custom-modal-overlay hidden bottom-up">
-    <div class="custom-modal">
+  <div id="createTaskModal" class="custom-modal-overlay hidden">
+    <div class="custom-modal" style="width:500px; max-width:90%;">
       <div class="modal-title" style="margin-bottom:16px;">Create New Content Task</div>
       
       <div style="display:flex; flex-direction:column; gap:12px;">
@@ -435,8 +434,8 @@
   </div>
 
   <!-- Context Actions Modal -->
-  <div id="contextModal" class="custom-modal-overlay hidden bottom-up">
-    <div class="custom-modal">
+  <div id="contextModal" class="custom-modal-overlay hidden">
+    <div class="custom-modal" style="margin-top:auto; margin-bottom:0; width:100%; max-width:100%; border-radius:0;">
       <div class="modal-title" id="contextTitle" style="font-family:var(--font-sans); font-size:24px; font-weight:600; text-align:center; padding-bottom:12px; border-bottom:1px solid var(--border-light); margin-bottom:8px;">File Actions</div>
       <div id="contextActions" style="display:flex; flex-direction:column; gap:8px;"></div>
       <button class="btn" id="contextCancel" style="margin-top:16px; justify-content:center; width:100%;" onclick="document.getElementById('contextModal').classList.add('hidden')">Cancel</button>
@@ -512,8 +511,8 @@
   
 
   
-  <script src="/admin.js?v=1.1"></script>
-  <script src="/admin-workflow.js?v=1.1"></script>
+  <script src="/admin.js"></script>
+  <script src="/admin-workflow.js"></script>
 </body>
 </html>
 
