@@ -1,16 +1,4 @@
 /* --- NEW STYLES --- */
-.bottom-dock {
-  position: fixed !important; bottom: 16px !important; left: 50% !important; transform: translateX(-50%) !important; height: 60px !important;
-  background: rgba(26, 26, 26, 0.7) !important; backdrop-filter: blur(16px) !important;
-  border: 1px solid rgba(255, 255, 255, 0.1) !important; border-radius: 30px !important;
-  box-shadow: 0 8px 32px rgba(0,0,0,0.3) !important;
-  width: 90% !important; max-width: 1000px !important;
-}
-[data-theme="mrs"] .bottom-dock {
-  background: rgba(255, 133, 193, 0.85) !important;
-  border-color: rgba(0,0,0,0.1) !important;
-  box-shadow: 0 8px 32px rgba(139, 0, 0, 0.2) !important;
-}
 
 .kanban-card {
   background: var(--bg-card) !important;
