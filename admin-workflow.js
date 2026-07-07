@@ -45,21 +45,8 @@ async function initWorkflow() {
 
     const divRes = await apiCall('divisions', { action: 'get_my_division' });
     
-    // Always show create task button if admin or superadmin, regardless of division status
-    const btnCreateTask = document.getElementById('btnCreateTask');
-    if (btnCreateTask && isAdminUser) {
-        btnCreateTask.style.display = 'block';
-        btnCreateTask.onclick = () => createNewTaskPrompt();
-    }
-    
     if(divRes.success && divRes.division) {
         currentUserDivision = divRes.division.division_id;
-        
-        // Show create task button if management (and not already shown by admin check)
-        if(btnCreateTask && currentUserDivision === 'management') {
-            btnCreateTask.style.display = 'block';
-            btnCreateTask.onclick = () => createNewTaskPrompt();
-        }
     } else if (divRes.success && !divRes.division) {
         // User has no division, show picker
         if (!isAdminUser) {
@@ -94,6 +81,16 @@ window.joinDivision = async function(divId) {
 // TASKS (KANBAN)
 // =======================
 async function loadTasks() {
+    // Dynamically check admin status here because verifyAdmin in admin.js finishes asynchronously
+    const badge = document.getElementById('userBadge');
+    isAdminUser = badge && (badge.dataset.role === 'admin' || badge.dataset.role === 'superadmin');
+
+    const btnCreateTask = document.getElementById('btnCreateTask');
+    if (btnCreateTask && (isAdminUser || currentUserDivision === 'management')) {
+        btnCreateTask.style.display = 'block';
+        btnCreateTask.onclick = () => createNewTaskPrompt();
+    }
+
     const cols = ['open', 'in_progress', 'developed', 'in_review', 'done'];
     cols.forEach(c => {
         const el = document.querySelector(`#col-${c} .task-list`);
