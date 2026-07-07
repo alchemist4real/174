@@ -44,18 +44,27 @@ async function initWorkflow() {
     isAdminUser = badge && (badge.dataset.role === 'admin' || badge.dataset.role === 'superadmin');
 
     const divRes = await apiCall('divisions', { action: 'get_my_division' });
+    
+    // Always show create task button if admin or superadmin, regardless of division status
+    const btnCreateTask = document.getElementById('btnCreateTask');
+    if (btnCreateTask && isAdminUser) {
+        btnCreateTask.style.display = 'block';
+        btnCreateTask.onclick = () => createNewTaskPrompt();
+    }
+    
     if(divRes.success && divRes.division) {
         currentUserDivision = divRes.division.division_id;
         
-        // Show create task button if management
-        const btnCreateTask = document.getElementById('btnCreateTask');
-        if(btnCreateTask && (currentUserDivision === 'management' || isAdminUser)) {
+        // Show create task button if management (and not already shown by admin check)
+        if(btnCreateTask && currentUserDivision === 'management') {
             btnCreateTask.style.display = 'block';
             btnCreateTask.onclick = () => createNewTaskPrompt();
         }
     } else if (divRes.success && !divRes.division) {
         // User has no division, show picker
-        document.getElementById('divisionPickerModal').classList.remove('hidden');
+        if (!isAdminUser) {
+            document.getElementById('divisionPickerModal').classList.remove('hidden');
+        }
     }
 
     // Bind tab events to load data when activated
