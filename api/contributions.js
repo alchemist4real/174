@@ -26,7 +26,7 @@ export default async function handler(req, res) {
         headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
       });
       const data = await resData.json();
-      return res.status(200).json({ success: true, contributions: data });
+      return res.status(200).json({ success: true, contributions: Array.isArray(data) ? data : [] });
     }
 
     if (action === 'get_leaderboard') {
@@ -34,6 +34,7 @@ export default async function handler(req, res) {
         headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
       });
       const data = await resData.json();
+      const validData = Array.isArray(data) ? data : [];
       
       const usersRes = await fetch(`${supabaseUrl}/auth/v1/admin/users?per_page=1000`, {
         headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
@@ -42,7 +43,7 @@ export default async function handler(req, res) {
       const allUsers = usersData.users || [];
       
       const scores = {};
-      data.forEach(c => {
+      validData.forEach(c => {
          const u = allUsers.find(au => au.id === c.user_id);
          const email = u ? u.email : 'Unknown';
          if (!scores[email]) scores[email] = 0;
