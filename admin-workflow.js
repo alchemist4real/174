@@ -138,8 +138,24 @@ function renderKanban(tasks) {
         if (task.assigned_to_user) {
             meta += `<div style="margin-top:4px;"><span style="color:var(--text-muted)">Dev:</span> ${task.assigned_to_user.email.split('@')[0]}</div>`;
         }
+        if (task.reviewed_by_user) {
+            meta += `<div style="margin-top:4px;"><span style="color:var(--text-muted)">Rev:</span> ${task.reviewed_by_user.email.split('@')[0]}</div>`;
+        }
+        
+        let activeDateLabel = '';
+        let activeDateVal = '';
+        if (task.status === 'open' && task.created_at) { activeDateLabel = 'Created'; activeDateVal = task.created_at; }
+        else if (task.status === 'in_progress' && task.assigned_at) { activeDateLabel = 'Assigned'; activeDateVal = task.assigned_at; }
+        else if (task.status === 'developed' && task.submitted_at) { activeDateLabel = 'Submitted'; activeDateVal = task.submitted_at; }
+        else if (task.status === 'in_review' && task.review_started_at) { activeDateLabel = 'Reviewed'; activeDateVal = task.review_started_at; }
+        else if (task.status === 'done' && task.completed_at) { activeDateLabel = 'Done'; activeDateVal = task.completed_at; }
+        
+        if (activeDateVal) {
+            meta += `<div style="margin-top:4px; font-size:10px;"><span style="color:var(--text-muted)">${activeDateLabel}:</span> <span>${new Date(activeDateVal).toLocaleDateString()}</span></div>`;
+        }
+
         if (dueDateStr) {
-            meta += `<div style="margin-top:4px;"><span style="color:var(--text-muted)">Due:</span> <span style="color:${dueColor}; font-weight:bold;">${dueDateStr}</span></div>`;
+            meta += `<div style="margin-top:4px; font-size:10px;"><span style="color:var(--text-muted)">Due:</span> <span style="color:${dueColor}; font-weight:bold;">${dueDateStr}</span></div>`;
         }
         if (task.target_path) {
             meta += `<div style="margin-top:4px;"><span style="color:var(--text-muted)">File:</span> <span style="font-family:var(--font-mono); font-size:10px; color:var(--accent);">${task.target_path}</span></div>`;
@@ -165,6 +181,7 @@ async function createNewTaskPrompt() {
     const blockEl = document.getElementById('taskBlock');
     const descEl = document.getElementById('taskDescription');
     const targetEl = document.getElementById('taskTargetPath');
+    const assignEl = document.getElementById('taskAssignTo');
     const btnCancel = document.getElementById('taskCancel');
     const btnConfirm = document.getElementById('taskConfirm');
 
@@ -174,6 +191,27 @@ async function createNewTaskPrompt() {
     if (targetEl) targetEl.value = window._prefilledTaskPath || '';
     window._prefilledTaskPath = ''; // reset after opening
     
+    if (assignEl) {
+        assignEl.innerHTML = '<option value="">-- Unassigned --</option>';
+        apiCall('divisions', { action: 'get_divisions' }).then(res => {
+            if (res.success) {
+                const devDiv = res.divisions.find(d => d.id === 'development');
+                if (devDiv && devDiv.members) {
+                    devDiv.members.forEach(m => {
+                        const opt = document.createElement('option');
+                        opt.value = m; // m is email here, wait, API needs user_id or email?
+                        // Let's check api/divisions.js line 65: members: membersList (which are emails).
+                        // If we need to send user_id to tasks.js, maybe it's better to pass email and let tasks.js resolve it,
+                        // OR change api/divisions to return user_id too.
+                        // Actually, tasks.js create_task expects target_user_id or something? No, we will add assigned_to (email or id). Let's send email and resolve in backend.
+                        opt.textContent = m.split('@')[0];
+                        assignEl.appendChild(opt);
+                    });
+                }
+            }
+        });
+    }
+
     modal.classList.remove('hidden');
 
     return new Promise((resolve) => {
@@ -201,7 +239,8 @@ async function createNewTaskPrompt() {
                 semester: semEl.value,
                 block: blockEl.value.trim() || 'General',
                 description: descText,
-                target_path: targetEl ? targetEl.value.trim() : null
+                target_path: targetEl ? targetEl.value.trim() : null,
+                assigned_to_email: assignEl && assignEl.value ? assignEl.value : null
             };
             cleanup();
             showToast('Creating task...');
@@ -303,9 +342,21 @@ function openTaskModal(task) {
             <span><b>Developer:</b> ${task.assigned_to_user ? task.assigned_to_user.email : 'Unassigned'}</span>
             ${task.assigned_to_user && task.assigned_to_user.whatsapp ? `<a href="https://wa.me/${task.assigned_to_user.whatsapp}?text=Hi, regarding MR CAPSULES task '${task.title}'" target="_blank" class="btn-card primary" style="font-size:10px; text-decoration:none;">Contact WA</a>` : ''}
         </div>
-        <div><b>Reviewer:</b> ${task.reviewed_by_user ? task.reviewed_by_user.email : 'Unassigned'}</div>
+        <div><b>Reviewer:</b> ${task.reviewed_by_user ? task.reviewed_by_user.email.split('@')[0] : 'Unassigned'}</div>
         ${task.target_path ? `<div style="margin-top:12px;"><b>Target File:</b> <span style="font-family:var(--font-mono); color:var(--accent);">${task.target_path}</span></div>` : ''}
-        <div style="margin-top:12px;"><b>Description:</b><br>${task.description || 'No description provided.'}</div>
+        <div style="margin-top:12px; padding-top:12px; border-top:1px solid var(--border-light);">
+            <div style="font-size:11px; font-weight:600; color:var(--text-muted); margin-bottom:4px; text-transform:uppercase;">Timeline</div>
+            <div style="display:grid; grid-template-columns:auto 1fr; gap:4px 12px; font-size:11px;">
+                <span style="color:var(--text-muted)">Created:</span> <span>${task.created_at ? new Date(task.created_at).toLocaleString() : '-'}</span>
+                <span style="color:var(--text-muted)">Assigned:</span> <span>${task.assigned_at ? new Date(task.assigned_at).toLocaleString() : '-'}</span>
+                <span style="color:var(--text-muted)">Submitted:</span> <span>${task.submitted_at ? new Date(task.submitted_at).toLocaleString() : '-'}</span>
+                <span style="color:var(--text-muted)">Reviewed:</span> <span>${task.review_started_at ? new Date(task.review_started_at).toLocaleString() : '-'}</span>
+                <span style="color:var(--text-muted)">Completed:</span> <span>${task.completed_at ? new Date(task.completed_at).toLocaleString() : '-'}</span>
+            </div>
+        </div>
+        <div style="margin-top:12px; padding-top:12px; border-top:1px solid var(--border-light);">
+            <b>Description & Notes:</b><br>${task.description || 'No description provided.'}
+        </div>
         <div style="margin-top:12px;"><button class="btn-card" style="width:100%; justify-content:center; padding:8px;" onclick="loadTaskLogs('${task.id}')">View Activity Logs</button></div>
         <div id="taskLogsContainer_${task.id}" style="margin-top:8px; max-height:150px; overflow-y:auto;"></div>
     </div>`;
@@ -327,19 +378,51 @@ window.loadTaskLogs = async function(taskId) {
             container.innerHTML = '<div style="font-size:11px; color:var(--text-muted);">No activity logs found.</div>';
             return;
         }
-        container.innerHTML = res.logs.map(l => `<div style="font-size:11px; border-bottom:1px solid var(--border-light); padding:4px 0;">
-            <span style="color:var(--accent)">${l.action.toUpperCase()}</span> by ${l.user ? l.user.email.split('@')[0] : 'User'}
-            <div style="color:var(--text-muted); font-size:10px;">${new Date(l.created_at).toLocaleString()}</div>
-        </div>`).join('');
+        
+        // Find latest rejection note if task is in progress
+        const isRejected = task && task.status === 'in_progress';
+        let rejectNoteHtml = '';
+        if (isRejected) {
+            const lastReject = res.logs.find(l => l.action === 'rejected');
+            if (lastReject && lastReject.note) {
+                rejectNoteHtml = `<div style="margin-bottom:12px; padding:8px; background:rgba(239,68,68,0.1); border-left:3px solid var(--danger); border-radius:0 4px 4px 0;">
+                    <div style="font-size:10px; font-weight:bold; color:var(--danger); text-transform:uppercase;">Latest Rejection Reason</div>
+                    <div style="font-size:11px; color:var(--text-main); margin-top:4px;">"${lastReject.note}"</div>
+                </div>`;
+            }
+        }
+
+        container.innerHTML = rejectNoteHtml + res.logs.map(l => {
+            let noteHtml = l.note ? `<div style="color:var(--text-main); font-style:italic; margin-top:4px; padding-left:8px; border-left:2px solid var(--border-medium);">"${l.note}"</div>` : '';
+            return `<div style="font-size:11px; border-bottom:1px solid var(--border-light); padding:8px 0;">
+                <div><span style="color:var(--accent); font-weight:600;">${l.action.toUpperCase()}</span> by <b>${l.user ? l.user.email.split('@')[0] : 'System'}</b></div>
+                <div style="color:var(--text-muted); font-size:10px; margin-top:2px;">${new Date(l.created_at).toLocaleString()}</div>
+                ${noteHtml}
+            </div>`;
+        }).join('');
     } else {
         container.innerHTML = `<div style="color:var(--danger); font-size:11px;">Failed to load logs.</div>`;
     }
 }
 
 window.updateTask = async function(taskId, action) {
+    let note = '';
+    
+    if (action === 'reject_task') {
+        note = prompt("Mandatory: Please provide a reason for rejecting this task:");
+        if (!note || !note.trim()) {
+            showToast('Rejection reason is required.', 'error');
+            return;
+        }
+    } else if (action === 'submit_task') {
+        note = prompt("Optional: Any notes for the reviewer?");
+    } else if (action === 'approve_task') {
+        note = prompt("Optional: Any final notes?");
+    }
+
     document.getElementById('contextModal').classList.add('hidden');
     showToast('Updating task...');
-    const res = await apiCall('tasks', { action, task_id: taskId });
+    const res = await apiCall('tasks', { action, task_id: taskId, note: note ? note.trim() : null });
     if(res.success) {
         showToast('Task updated', 'success');
         loadTasks();

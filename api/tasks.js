@@ -20,7 +20,7 @@ export default async function handler(req, res) {
 
   const { 
     action, task_id, title, description, semester, block, category, 
-    target_path, priority, note, status 
+    target_path, priority, note, status, assigned_to_email 
   } = req.body;
 
   try {
@@ -108,18 +108,41 @@ export default async function handler(req, res) {
     if (action === 'create_task') {
       if (!isManagement) return res.status(403).json({ error: 'Management only' });
       
+      let assignedToId = null;
+      let finalStatus = 'open';
+      let assignedAt = null;
+      
+      if (assigned_to_email) {
+        // Resolve email to user_id
+        const usersRes = await fetch(`${supabaseUrl}/auth/v1/admin/users?per_page=1000`, {
+          headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
+        });
+        if (usersRes.ok) {
+           const usersData = await usersRes.json();
+           const u = (usersData.users || []).find(x => x.email === assigned_to_email);
+           if (u) {
+              assignedToId = u.id;
+              finalStatus = 'in_progress';
+              assignedAt = new Date().toISOString();
+           }
+        }
+      }
+
       const fetchRes = await fetch(`${supabaseUrl}/rest/v1/content_tasks`, {
         method: 'POST',
         headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}`, 'Content-Type': 'application/json', 'Prefer': 'return=representation' },
         body: JSON.stringify({
           title, description, semester, block, category, target_path, priority,
-          status: 'open', created_by: userId
+          status: finalStatus, created_by: userId, assigned_to: assignedToId, assigned_at: assignedAt
         })
       });
       if (!fetchRes.ok) throw new Error(await fetchRes.text());
       const data = await fetchRes.json();
       
-      await logAction(data[0].id, 'created', null, 'open', note);
+      await logAction(data[0].id, 'created', null, finalStatus, note);
+      if (assignedToId) {
+         await logAction(data[0].id, 'assigned', 'open', 'in_progress', `Assigned to ${assigned_to_email} by management`);
+      }
       await recordContribution(data[0].id, 'task_created');
       
       return res.status(200).json({ success: true, task: data[0] });
