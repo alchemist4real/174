@@ -328,7 +328,7 @@ function renderTasksAsSyllabus(tasks) {
                 <td style="padding:16px 24px;"><span class="badge" style="background:var(--bg-card); padding:6px 10px; font-size:11px; border:1px solid var(--border-light); color:var(--text-main);">${t.category || '-'}</span></td>
                 <td style="padding:16px 24px;"><span class="badge ${badgeClass}" style="padding:6px 10px; font-size:11px;">${t.status.toUpperCase()}</span></td>
                 <td style="padding:16px 24px; font-size:14px;">${assignee}</td>
-                <td style="padding:16px 24px;"><button class="btn-card" style="font-size:12px; padding:6px 12px;">View details</button></td>
+                <td style="padding:16px 24px;"><button class="btn-card">View details</button></td>
             </tr>`;
         });
     });
@@ -363,7 +363,7 @@ function openTaskModal(task) {
         <div style="margin-bottom:8px;"><b>Category:</b> ${task.category || '-'}</div>
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
             <span><b>Developer:</b> ${task.assigned_to_user ? task.assigned_to_user.email : 'Unassigned'}</span>
-            ${task.assigned_to_user && task.assigned_to_user.whatsapp ? `<a href="https://wa.me/${task.assigned_to_user.whatsapp}?text=Hi, regarding MR CAPSULES task '${task.title}'" target="_blank" class="btn-card primary" style="font-size:12px; text-decoration:none; padding:4px 10px;">Contact WA</a>` : ''}
+            ${task.assigned_to_user && task.assigned_to_user.whatsapp ? `<a href="https://wa.me/${task.assigned_to_user.whatsapp}?text=Hi, regarding MR CAPSULES task '${task.title}'" target="_blank" class="btn-card primary" style="text-decoration:none;">Contact WA</a>` : ''}
         </div>
         <div style="margin-bottom:8px;"><b>Reviewer:</b> ${task.reviewed_by_user ? (task.reviewed_by_user.username || task.reviewed_by_user.email.split('@')[0]) : 'Unassigned'}</div>
         ${task.target_path ? `<div style="margin-top:16px;"><b>Target File:</b> <span style="font-family:var(--font-mono); color:var(--accent);">${task.target_path}</span></div>` : ''}
@@ -381,7 +381,7 @@ function openTaskModal(task) {
             <div style="font-weight:700; margin-bottom:8px;">Description & Notes:</div>
             <div style="white-space:pre-wrap; color:var(--text-main);">${task.description || 'No description provided.'}</div>
         </div>
-        <div style="margin-top:12px;"><button class="btn-card" style="width:100%; justify-content:center; padding:8px;" onclick="loadTaskLogs('${task.id}')">View Activity Logs</button></div>
+        <div style="margin-top:12px;"><button class="btn-card" style="width:100%; justify-content:center;" onclick="loadTaskLogs('${task.id}')">View Activity Logs</button></div>
         <div id="taskLogsContainer_${task.id}" style="margin-top:8px; max-height:150px; overflow-y:auto;"></div>
     </div>`;
 
