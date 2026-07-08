@@ -1363,7 +1363,33 @@ try {
     const btnForgotPwd = document.getElementById('btnForgotPwd');
     const authMsg = document.getElementById('authMsg');
 
-    let fpDeviceId = localStorage.getItem('capsules_device_id') || 'dev_' + Math.random().toString(36).substr(2, 9);
+    function getCookie(name) {
+      let match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
+      if (match) return match[2];
+      return null;
+    }
+
+    function setCookie(name, value, days) {
+      let d = new Date();
+      d.setTime(d.getTime() + 24*60*60*1000*days);
+      document.cookie = name + "=" + value + ";path=/;expires=" + d.toGMTString();
+    }
+
+    let fpDeviceId = localStorage.getItem('capsules_device_id') || 
+                     sessionStorage.getItem('capsules_device_id') || 
+                     getCookie('capsules_device_id');
+
+    if (!fpDeviceId) {
+      fpDeviceId = 'dev_' + Math.random().toString(36).substr(2, 9);
+    }
+
+    function syncToStorages(id) {
+      localStorage.setItem('capsules_device_id', id);
+      sessionStorage.setItem('capsules_device_id', id);
+      setCookie('capsules_device_id', id, 365);
+    }
+    syncToStorages(fpDeviceId);
+
     function getDeviceId() { return fpDeviceId; }
 
     function showDeviceBanError() {
@@ -1375,12 +1401,14 @@ try {
       `;
     }
 
-    import('https://openfpcdn.io/fingerprintjs/v4').then(FingerprintJS => FingerprintJS.load()).then(fp => fp.get()).then(result => {
+    import('./fp.js').then(FingerprintJS => FingerprintJS.load()).then(fp => fp.get()).then(result => {
       fpDeviceId = result.visitorId;
-      localStorage.setItem('capsules_device_id', fpDeviceId);
+      syncToStorages(fpDeviceId);
       if (window.bannedDevicesList && window.bannedDevicesList.includes(fpDeviceId)) {
          showDeviceBanError();
       }
+    }).catch(err => {
+      console.warn("FingerprintJS couldn't be loaded. Using fallback evercookie device ID.", err);
     });
 
     async function syncDeviceId(session) {
