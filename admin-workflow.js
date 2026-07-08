@@ -157,12 +157,12 @@ function renderKanban(tasks) {
             else if (dueTime < now + 86400000 * 3) dueColor = '#ffa500';
         }
 
-        let meta = `<div><span style="color:var(--text-muted)">Sem:</span> ${task.semester || '-'} | <span style="color:var(--text-muted)">Blk:</span> ${task.block || '-'}</div>`;
+        let meta = `<div style="font-size:13px; margin-bottom:6px;"><span style="color:var(--text-muted)">Sem:</span> ${task.semester || '-'} | <span style="color:var(--text-muted)">Blk:</span> ${task.block || '-'}</div>`;
         if (task.assigned_to_user) {
-            meta += `<div style="margin-top:4px;"><span style="color:var(--text-muted)">Dev:</span> ${task.assigned_to_user.username || task.assigned_to_user.email.split('@')[0]}</div>`;
+            meta += `<div style="font-size:13px; margin-bottom:6px;"><span style="color:var(--text-muted)">Dev:</span> ${task.assigned_to_user.username || task.assigned_to_user.email.split('@')[0]}</div>`;
         }
         if (task.reviewed_by_user) {
-            meta += `<div style="margin-top:4px;"><span style="color:var(--text-muted)">Rev:</span> ${task.reviewed_by_user.username || task.reviewed_by_user.email.split('@')[0]}</div>`;
+            meta += `<div style="font-size:13px; margin-bottom:6px;"><span style="color:var(--text-muted)">Rev:</span> ${task.reviewed_by_user.username || task.reviewed_by_user.email.split('@')[0]}</div>`;
         }
         
         let activeDateLabel = '';
@@ -174,19 +174,19 @@ function renderKanban(tasks) {
         else if (task.status === 'done' && task.completed_at) { activeDateLabel = 'Done'; activeDateVal = task.completed_at; }
         
         if (activeDateVal) {
-            meta += `<div style="margin-top:4px; font-size:10px;"><span style="color:var(--text-muted)">${activeDateLabel}:</span> <span>${new Date(activeDateVal).toLocaleDateString()}</span></div>`;
+            meta += `<div style="margin-top:6px; font-size:12px;"><span style="color:var(--text-muted)">${activeDateLabel}:</span> <span>${new Date(activeDateVal).toLocaleDateString()}</span></div>`;
         }
 
         if (dueDateStr) {
-            meta += `<div style="margin-top:4px; font-size:10px;"><span style="color:var(--text-muted)">Due:</span> <span style="color:${dueColor}; font-weight:bold;">${dueDateStr}</span></div>`;
+            meta += `<div style="margin-top:6px; font-size:12px;"><span style="color:var(--text-muted)">Due:</span> <span style="color:${dueColor}; font-weight:bold;">${dueDateStr}</span></div>`;
         }
         if (task.target_path) {
-            meta += `<div style="margin-top:4px;"><span style="color:var(--text-muted)">File:</span> <span style="font-family:var(--font-mono); font-size:10px; color:var(--accent);">${task.target_path}</span></div>`;
+            meta += `<div style="margin-top:6px; font-size:12px;"><span style="color:var(--text-muted)">File:</span> <span style="font-family:var(--font-mono); color:var(--accent);">${task.target_path}</span></div>`;
         }
 
         el.innerHTML = `
-            <div style="font-weight:600; font-size:13px; margin-bottom:4px;">${task.title}</div>
-            <div style="color:var(--text-muted); margin-bottom:8px; line-height:1.4;">${displayDesc}</div>
+            <div style="font-weight:700; font-size:16px; margin-bottom:8px; line-height:1.3; color:var(--text-main);">${task.title}</div>
+            <div style="color:var(--text-muted); font-size:14px; margin-bottom:12px; line-height:1.5;">${displayDesc}</div>
             ${meta}
         `;
         
@@ -323,12 +323,12 @@ function renderTasksAsSyllabus(tasks) {
             const assignee = t.assigned_to_user ? (t.assigned_to_user.username || t.assigned_to_user.email.split('@')[0]) : '<span style="color:var(--text-muted)">Unassigned</span>';
             
             html += `<tr style="border-bottom:1px solid var(--border-light); transition:background 0.2s; cursor:pointer;" onclick="openTaskModal(${JSON.stringify(t).replace(/"/g, '&quot;')})" onmouseover="this.style.background='var(--bg-hover)'" onmouseout="this.style.background='transparent'">
-                <td style="padding:12px 16px; color:var(--text-muted);">${t.semester || '-'} / ${t.block || '-'}</td>
-                <td style="padding:12px 16px; font-weight:600;">${t.title}</td>
-                <td style="padding:12px 16px;"><span class="badge" style="background:var(--bg-main); color:var(--text-main);">${t.category || '-'}</span></td>
-                <td style="padding:12px 16px;"><span class="badge ${badgeClass}">${t.status.toUpperCase()}</span></td>
-                <td style="padding:12px 16px;">${assignee}</td>
-                <td style="padding:12px 16px;"><button class="btn-card" style="font-size:10px; padding:4px 8px;">View details</button></td>
+                <td style="padding:16px 24px; font-size:14px; color:var(--text-muted);">${t.semester || '-'} / ${t.block || '-'}</td>
+                <td style="padding:16px 24px; font-size:15px; font-weight:600;">${t.title}</td>
+                <td style="padding:16px 24px;"><span class="badge" style="background:var(--bg-card); padding:6px 10px; font-size:11px; border:1px solid var(--border-light); color:var(--text-main);">${t.category || '-'}</span></td>
+                <td style="padding:16px 24px;"><span class="badge ${badgeClass}" style="padding:6px 10px; font-size:11px;">${t.status.toUpperCase()}</span></td>
+                <td style="padding:16px 24px; font-size:14px;">${assignee}</td>
+                <td style="padding:16px 24px;"><button class="btn-card" style="font-size:12px; padding:6px 12px;">View details</button></td>
             </tr>`;
         });
     });
@@ -358,18 +358,18 @@ function openTaskModal(task) {
     document.getElementById('contextTitle').textContent = task.title;
     const acts = document.getElementById('contextActions');
     
-    let details = `<div style="font-size:12px; margin-bottom:16px; padding:12px; background:var(--bg-card); border-radius:0;">
-        <div><b>Status:</b> ${task.status.toUpperCase()}</div>
-        <div><b>Category:</b> ${task.category || '-'}</div>
-        <div style="display:flex; justify-content:space-between; align-items:center;">
+    let details = `<div style="font-size:14px; margin-bottom:20px; padding:20px; background:var(--bg-card); border-radius:0; line-height:1.6;">
+        <div style="margin-bottom:8px;"><b>Status:</b> <span class="badge" style="background:var(--bg-main); border:1px solid var(--border-light); padding:4px 8px; margin-left:4px;">${task.status.toUpperCase()}</span></div>
+        <div style="margin-bottom:8px;"><b>Category:</b> ${task.category || '-'}</div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
             <span><b>Developer:</b> ${task.assigned_to_user ? task.assigned_to_user.email : 'Unassigned'}</span>
-            ${task.assigned_to_user && task.assigned_to_user.whatsapp ? `<a href="https://wa.me/${task.assigned_to_user.whatsapp}?text=Hi, regarding MR CAPSULES task '${task.title}'" target="_blank" class="btn-card primary" style="font-size:10px; text-decoration:none;">Contact WA</a>` : ''}
+            ${task.assigned_to_user && task.assigned_to_user.whatsapp ? `<a href="https://wa.me/${task.assigned_to_user.whatsapp}?text=Hi, regarding MR CAPSULES task '${task.title}'" target="_blank" class="btn-card primary" style="font-size:12px; text-decoration:none; padding:4px 10px;">Contact WA</a>` : ''}
         </div>
-        <div><b>Reviewer:</b> ${task.reviewed_by_user ? (task.reviewed_by_user.username || task.reviewed_by_user.email.split('@')[0]) : 'Unassigned'}</div>
-        ${task.target_path ? `<div style="margin-top:12px;"><b>Target File:</b> <span style="font-family:var(--font-mono); color:var(--accent);">${task.target_path}</span></div>` : ''}
-        <div style="margin-top:12px; padding-top:12px; border-top:1px solid var(--border-light);">
-            <div style="font-size:11px; font-weight:600; color:var(--text-muted); margin-bottom:4px; text-transform:uppercase;">Timeline</div>
-            <div style="display:grid; grid-template-columns:auto 1fr; gap:4px 12px; font-size:11px;">
+        <div style="margin-bottom:8px;"><b>Reviewer:</b> ${task.reviewed_by_user ? (task.reviewed_by_user.username || task.reviewed_by_user.email.split('@')[0]) : 'Unassigned'}</div>
+        ${task.target_path ? `<div style="margin-top:16px;"><b>Target File:</b> <span style="font-family:var(--font-mono); color:var(--accent);">${task.target_path}</span></div>` : ''}
+        <div style="margin-top:16px; padding-top:16px; border-top:1px solid var(--border-light);">
+            <div style="font-size:12px; font-weight:700; color:var(--text-muted); margin-bottom:8px; text-transform:uppercase; letter-spacing:1px;">Timeline</div>
+            <div style="display:grid; grid-template-columns:auto 1fr; gap:6px 16px; font-size:13px;">
                 <span style="color:var(--text-muted)">Created:</span> <span>${task.created_at ? new Date(task.created_at).toLocaleString() : '-'}</span>
                 <span style="color:var(--text-muted)">Assigned:</span> <span>${task.assigned_at ? new Date(task.assigned_at).toLocaleString() : '-'}</span>
                 <span style="color:var(--text-muted)">Submitted:</span> <span>${task.submitted_at ? new Date(task.submitted_at).toLocaleString() : '-'}</span>
@@ -377,8 +377,9 @@ function openTaskModal(task) {
                 <span style="color:var(--text-muted)">Completed:</span> <span>${task.completed_at ? new Date(task.completed_at).toLocaleString() : '-'}</span>
             </div>
         </div>
-        <div style="margin-top:12px; padding-top:12px; border-top:1px solid var(--border-light);">
-            <b>Description & Notes:</b><br>${task.description || 'No description provided.'}
+        <div style="margin-top:16px; padding-top:16px; border-top:1px solid var(--border-light);">
+            <div style="font-weight:700; margin-bottom:8px;">Description & Notes:</div>
+            <div style="white-space:pre-wrap; color:var(--text-main);">${task.description || 'No description provided.'}</div>
         </div>
         <div style="margin-top:12px;"><button class="btn-card" style="width:100%; justify-content:center; padding:8px;" onclick="loadTaskLogs('${task.id}')">View Activity Logs</button></div>
         <div id="taskLogsContainer_${task.id}" style="margin-top:8px; max-height:150px; overflow-y:auto;"></div>

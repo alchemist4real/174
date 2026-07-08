@@ -450,8 +450,8 @@
     .kanban-card {
       background: var(--bg-main);
       border: 1px solid var(--border-light);
-      padding: 12px;
-      margin-bottom: 8px;
+      padding: 16px;
+      margin-bottom: 12px;
       cursor: pointer;
       transition: transform 0.2s, box-shadow 0.2s;
     }
