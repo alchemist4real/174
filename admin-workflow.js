@@ -496,7 +496,7 @@ async function loadDivisions() {
                 WhatsApp Number
             </div>
             <input type="text" id="myWaInput" class="auth-input" placeholder="e.g. 6281234567890" style="width:250px; border-radius:0; padding:10px 14px;">
-            <button class="btn primary" id="btnSaveWa" style="border-radius:0; padding:10px 20px;">Update</button>
+            <button class="btn" id="btnSaveWa" style="background:var(--accent); color:var(--text-main); border:none; padding:12px 24px; font-weight:bold;">Update Number</button>
         `;
         grid.appendChild(waContainer);
         
