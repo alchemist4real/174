@@ -1174,7 +1174,6 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
       });
     }
 
-    document.getElementById('btnRefreshUsers').onclick = loadUsers;
     document.getElementById('btnRefreshDashboard').onclick = () => {
       fetchHybridLogs();
       if(window.loadContributions) window.loadContributions();
