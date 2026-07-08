@@ -638,11 +638,11 @@ iframe {
 .guide-step-count { font-size: 11px; opacity: 0.5; letter-spacing: 0.1em; }
 
 /* Intercept Modal */
-#interactionModeModal, #usernameSetupModal {
+#interactionModeModal, #usernameSetupModal, #divisionSetupModal {
   position: fixed; inset: 0; background: rgba(10,10,10,0.95); z-index: 99999;
   display: none; align-items: center; justify-content: center; flex-direction: column;
 }
-#interactionModeModal.active, #usernameSetupModal.active { display: flex; }
+#interactionModeModal.active, #usernameSetupModal.active, #divisionSetupModal.active { display: flex; }
 
 /* Reset Password Modal */
 #resetPasswordModal {
@@ -1486,6 +1486,28 @@ try {
     let sessionUptime = 0;
     let localUptime = 0;
 
+    // Strict Onboarding Logic
+    window.checkOnboarding = function(session) {
+      if (!session || !session.user || !session.user.user_metadata) return;
+      const meta = session.user.user_metadata;
+      
+      const st = document.getElementById('stage');
+      
+      if (!meta.username) {
+        document.getElementById('usernameSetupModal').classList.add('active');
+        if (st) { st.style.opacity = '0'; st.style.pointerEvents = 'none'; }
+      } else if (!meta.division_selected) {
+        document.getElementById('divisionSetupModal').classList.add('active');
+        if (st) { st.style.opacity = '0'; st.style.pointerEvents = 'none'; }
+      } else if (!meta.tour_completed) {
+        document.getElementById('interactionModeModal').classList.add('active');
+        if (st) { st.style.opacity = '0'; st.style.pointerEvents = 'none'; }
+      } else {
+        if (st) { st.style.opacity = '1'; st.style.pointerEvents = 'auto'; }
+      }
+    };
+    const checkOnboarding = window.checkOnboarding;
+
     // Check initial session
     supabase.auth.getSession().then(async ({ data: { session } }) => {
       if (session) {
@@ -1526,9 +1548,7 @@ try {
         }
         syncDeviceId(session);
         authOverlay.classList.add('hidden');
-        if (!currentUsername) {
-          document.getElementById('usernameSetupModal').classList.add('active');
-        }
+        checkOnboarding(session);
         startTracking();
       }
     });
@@ -1584,9 +1604,7 @@ try {
         startTracking();
       }
         authOverlay.classList.add('hidden');
-        if (!currentUsername) {
-          document.getElementById('usernameSetupModal').classList.add('active');
-        }
+        checkOnboarding(session);
       } else if (event === 'SIGNED_OUT') {
         authOverlay.classList.remove('hidden');
         if(isTracking) window.location.reload();
@@ -1645,11 +1663,54 @@ try {
           authUsername.value = currentUsername;
           updateGreeting();
           document.getElementById('usernameSetupModal').classList.remove('active');
-          document.getElementById('interactionModeModal').classList.add('active'); // Flow into tour
+          // Fetch updated session and run checkOnboarding
+          const { data } = await supabase.auth.getSession();
+          if(data.session) checkOnboarding(data.session);
         } else {
           btnSubmitSetupUsername.textContent = 'SAVE & CONTINUE';
           setupUsernameMsg.style.color = 'var(--danger)';
           setupUsernameMsg.textContent = error.message;
+        }
+      });
+    }
+
+    const btnSubmitSetupDivision = document.getElementById('btnSubmitSetupDivision');
+    const setupDivisionSelect = document.getElementById('setupDivisionSelect');
+    const setupWhatsappInput = document.getElementById('setupWhatsappInput');
+    const setupDivisionMsg = document.getElementById('setupDivisionMsg');
+
+    if (btnSubmitSetupDivision) {
+      btnSubmitSetupDivision.addEventListener('click', async () => {
+        const division_id = setupDivisionSelect.value;
+        const whatsapp = setupWhatsappInput.value.trim();
+        if (!division_id) {
+          setupDivisionMsg.style.color = 'var(--danger)';
+          setupDivisionMsg.textContent = 'Please select a division.';
+          return;
+        }
+        btnSubmitSetupDivision.textContent = '...';
+        
+        try {
+          const { data: { session } } = await supabase.auth.getSession();
+          const res = await fetch('/api/divisions', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${session.access_token}` },
+            body: JSON.stringify({ action: 'join_division', division_id, whatsapp })
+          });
+          
+          if (!res.ok) throw new Error('Failed to join division.');
+          
+          // Mark division as selected in user metadata
+          const { error } = await supabase.auth.updateUser({ data: { division_selected: true } });
+          if (error) throw error;
+          
+          document.getElementById('divisionSetupModal').classList.remove('active');
+          const { data: refreshed } = await supabase.auth.getSession();
+          if(refreshed.session) checkOnboarding(refreshed.session);
+        } catch(e) {
+          btnSubmitSetupDivision.textContent = 'SAVE & CONTINUE';
+          setupDivisionMsg.style.color = 'var(--danger)';
+          setupDivisionMsg.textContent = e.message;
         }
       });
     }
@@ -2103,6 +2164,25 @@ try {
   </div>
 </div>
 
+<!-- Division Setup Modal -->
+<div id="divisionSetupModal">
+  <div style="background:var(--bg-modal); border:1px solid var(--text-main); padding:32px; max-width:400px; width:90%; text-align:center;">
+    <div style="font-family:var(--font-sans); font-size:24px; color:var(--text-main); margin-bottom:16px;">CHOOSE DIVISION</div>
+    <div style="font-family:var(--font-mono); font-size:12px; color:var(--text-muted); margin-bottom:24px; line-height:1.5;">Please select your primary division and provide your WhatsApp number for team communications.</div>
+    <div style="display:flex; flex-direction:column; gap:12px;">
+      <select id="setupDivisionSelect" class="auth-input" style="width:100%; padding:8px; background:transparent; color:var(--text-main); border:1px solid var(--border-medium);">
+        <option value="" disabled selected>Select Division...</option>
+        <option value="management">Management</option>
+        <option value="development">Development</option>
+        <option value="review">Review</option>
+      </select>
+      <input type="text" id="setupWhatsappInput" class="auth-input" placeholder="WHATSAPP NUMBER (e.g. 628...)">
+      <button id="btnSubmitSetupDivision" class="auth-btn" style="background:var(--text-main); color:var(--bg-main);">SAVE & CONTINUE</button>
+      <div id="setupDivisionMsg" class="auth-msg" style="margin-top:8px;"></div>
+    </div>
+  </div>
+</div>
+
 <!-- Interaction Mode Intercept -->
 <div id="interactionModeModal">
   <div style="background:var(--bg-modal); border:1px solid var(--text-main); padding:32px; max-width:400px; width:90%; text-align:center;">
@@ -2112,10 +2192,7 @@ try {
       <button class="auth-btn" style="background:var(--text-main); color:var(--bg-main);" onclick="startGuide('keyboard')">[ KEYBOARD & MOUSE ]</button>
       <button class="auth-btn" style="background:transparent; color:var(--text-main); border:1px solid var(--text-main);" onclick="startGuide('touch')">[ TOUCHSCREEN ]</button>
     </div>
-    <div style="font-family:var(--font-mono); font-size:10px; color:var(--text-main); margin-top:24px; opacity: 0.6; line-height: 1.4;">
-      * HINT: This guide will continue to appear on every login until you set your Username.
     </div>
-    <button class="btn-text" style="margin: 16px auto 0 auto; opacity: 0.5;" onclick="skipGuide()">SKIP TOUR</button>
   </div>
 </div>
 
@@ -2138,10 +2215,7 @@ try {
   let currentGuideStep = 0;
   let originalIframeState = false;
   
-  function skipGuide() {
-    document.getElementById('interactionModeModal').classList.remove('active');
-    document.getElementById('settingsModal').classList.add('active'); // prompt for username
-  }
+  // skipGuide removed
   
   function startGuide(mode) {
     originalIframeState = document.getElementById('iframeViewer').classList.contains('active');
@@ -2257,7 +2331,7 @@ try {
     renderGuideStep();
   });
   
-  function endGuide() {
+  async function endGuide() {
     document.getElementById('guideOverlay').classList.remove('active');
     document.getElementById('guideTooltip').classList.remove('visible');
     
@@ -2268,7 +2342,13 @@ try {
     }
     
     updateBackButton(); 
-    document.getElementById('settingsModal').classList.add('active');
+    
+    document.getElementById('btnGuideNext').textContent = '...';
+    try {
+      await window.supabaseClient.auth.updateUser({ data: { tour_completed: true } });
+      const { data } = await window.supabaseClient.auth.getSession();
+      if(data.session && window.checkOnboarding) window.checkOnboarding(data.session);
+    } catch(e) {}
   }
 </script>
 </body>
