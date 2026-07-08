@@ -64,7 +64,7 @@ export default async function handler(req, res) {
     };
 
     if (action === 'list_tasks') {
-      const getRes = await fetch(`${supabaseUrl}/rest/v1/content_tasks?select=*&order=created_at.desc&t=${Date.now()}`, {
+      const getRes = await fetch(`${supabaseUrl}/rest/v1/content_tasks?select=*&order=created_at.desc`, {
         headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}`, 'Cache-Control': 'no-cache' },
         cache: 'no-store'
       });
@@ -264,7 +264,7 @@ export default async function handler(req, res) {
     }
 
     if (action === 'get_task_logs') {
-      const fetchRes = await fetch(`${supabaseUrl}/rest/v1/task_logs?task_id=eq.${task_id}&select=*&order=created_at.desc&t=${Date.now()}`, {
+      const fetchRes = await fetch(`${supabaseUrl}/rest/v1/task_logs?task_id=eq.${task_id}&select=*&order=created_at.desc`, {
         headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}`, 'Cache-Control': 'no-cache' },
         cache: 'no-store'
       });
