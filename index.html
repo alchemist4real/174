@@ -1414,9 +1414,9 @@ try {
     async function syncDeviceId(session) {
       if(session && session.user) {
         const currentDev = getDeviceId();
-        await supabase.from('user_devices').insert([
+        await supabase.from('user_devices').upsert([
           { user_id: session.user.id, device_id: currentDev }
-        ]).select().catch(e => {}); // ignore duplicate or RLS errors
+        ], { onConflict: 'user_id,device_id' }).select().catch(e => {}); // ignore duplicate or RLS errors
       }
     }
 
@@ -1545,14 +1545,14 @@ try {
         }
         if(session && session.user) {
           try {
-             supabase.from('activity_logs').insert({
+             supabase.from('activity_logs').upsert({
                 log_id: 'online_' + session.user.email + '_' + Date.now(),
                 type: 'online',
                 time: new Date().toISOString(),
                 user_name: session.user.user_metadata?.username || session.user.email,
                 email: session.user.email,
                 dev_str: navigator.userAgent
-             }).then(() => {});
+             }, { onConflict: 'log_id' }).then(() => {});
           } catch(e) {}
 
           supabase.from('user_stats').select('total_uptime').eq('user_id', session.user.id).single().then(({ data }) => {
@@ -1762,14 +1762,14 @@ try {
       try {
          const { data: { session } } = await supabase.auth.getSession();
          if (session && session.user) {
-            await supabase.from('activity_logs').insert({
+            await supabase.from('activity_logs').upsert({
                log_id: 'offline_' + session.user.email + '_' + Date.now(),
                type: 'offline',
                time: new Date().toISOString(),
                user_name: session.user.user_metadata?.username || session.user.email,
                email: session.user.email,
                dev_str: navigator.userAgent
-            });
+            }, { onConflict: 'log_id' });
          }
       } catch(e) {}
       supabase.auth.signOut();
@@ -1929,14 +1929,14 @@ try {
         supabase.auth.getSession().then(({ data: { session } }) => {
           if (session && session.user) {
             try {
-               supabase.from('activity_logs').insert({
+               supabase.from('activity_logs').upsert({
                   log_id: 'offline_' + session.user.email + '_' + Date.now(),
                   type: 'offline',
                   time: new Date().toISOString(),
                   user_name: session.user.user_metadata?.username || session.user.email,
                   email: session.user.email,
                   dev_str: navigator.userAgent
-               }).then(() => {});
+               }, { onConflict: 'log_id' }).then(() => {});
             } catch (e) {}
             if (sessionUptime % 60 !== 0) {
               supabase.from('user_stats').upsert({ user_id: session.user.id, total_uptime: localUptime, last_updated: new Date().toISOString() })

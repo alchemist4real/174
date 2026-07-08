@@ -73,15 +73,15 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
           window.hybridLogs.push(log);
           window.hybridLogs.sort(function(a, b) { return b.time - a.time; });
           if (window.hybridLogs.length > 200) window.hybridLogs = window.hybridLogs.slice(0, 200);
-          try {
-             await supabaseClient.from('activity_logs').insert({
+           try {
+             await supabaseClient.from('activity_logs').upsert({
                 log_id: log.id,
                 type: log.type,
                 time: new Date(log.time).toISOString(),
                 user_name: log.user,
                 email: log.email || null,
                 dev_str: log.devStr || null
-             });
+             }, { onConflict: 'log_id' });
           } catch(e) { console.error("Error inserting activity log:", e); }
        }
     };
