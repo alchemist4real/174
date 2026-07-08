@@ -519,14 +519,14 @@ async function loadDivisions() {
             const btn = document.createElement('button');
             btn.className = 'btn btn-div-item';
             btn.setAttribute('data-id', div.id);
-            btn.style.cssText = 'justify-content:space-between; padding:8px 12px; text-align:left; border:none; background:transparent; color:var(--text-main); font-size:13px; font-weight:600; border-radius:4px; margin-bottom:4px;';
+            btn.style.cssText = 'justify-content:space-between; padding:12px 16px; text-align:left; border:none; background:transparent; color:var(--text-main); font-size:15px; font-weight:700; border-radius:4px; margin-bottom:8px;';
             if(window.currentDivisionId === div.id) {
                 btn.style.background = 'rgba(37, 99, 235, 0.1)';
                 btn.style.color = 'var(--accent)';
                 btn.classList.add('active');
             }
             
-            btn.innerHTML = `<span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${div.name}</span> <span style="font-size:11px; opacity:0.7;">${div.member_count}</span>`;
+            btn.innerHTML = `<span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${div.name}</span> <span style="font-size:13px; opacity:0.7; font-family:var(--font-mono);">${div.member_count}</span>`;
             
             btn.onclick = () => window.selectDivision(div.id);
             list.appendChild(btn);
