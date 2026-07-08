@@ -930,7 +930,10 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
     });
 
     // Users Logic
-    async function loadUsers() {
+    window.loadUsers = loadUsers;
+    async function loadUsers(divIdFilter = null) {
+      window.loadUsers = loadUsers; // Export globally
+      const filterToUse = divIdFilter || (window.currentDivisionId && window.currentDivisionId !== 'all' ? window.currentDivisionId : null);
       const userBrowser = document.getElementById('userBrowser');
       userBrowser.innerHTML = '<div style="padding:48px; color:var(--text-muted); text-align:center; font-size:18px;">Loading users... <div style="display:inline-block; width:20px; height:20px; border:3px solid rgba(255,255,255,0.3); border-radius:50%; border-top-color:#fff; animation:spin 1s ease-in-out infinite; margin-left:10px; vertical-align:middle;"></div></div>';
       try {
@@ -949,9 +952,19 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
         });
         const data = await res.json();
         if (data.success) {
-          window.lastLoadedUsers = data.users;
+          let displayUsers = data.users;
+          if (filterToUse && window.divisionData) {
+              const div = window.divisionData.find(d => d.id === filterToUse);
+              if (div && div.members) {
+                  const memberEmails = div.members.map(m => typeof m === 'string' ? m : m.email);
+                  displayUsers = displayUsers.filter(u => memberEmails.includes(u.email));
+              } else {
+                  displayUsers = [];
+              }
+          }
+          window.lastLoadedUsers = displayUsers;
           window.lastBannedDevs = bannedDevs;
-          renderUsers(data.users, bannedDevs);
+          renderUsers(displayUsers, bannedDevs);
           renderDashboard(data.users, data.globalStats);
         } else {
           userBrowser.innerHTML = `<div style="padding:24px; color:var(--danger);">Failed to load users: ${data.error}</div>`;
@@ -1006,7 +1019,7 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
       bannedDevs = bannedDevs || [];
       var userBrowser = document.getElementById('userBrowser');
       userBrowser.innerHTML = '';
-      document.getElementById('itemCount').textContent = users.length + ' users';
+      if(document.getElementById('itemCount')) document.getElementById('itemCount').textContent = users.length + ' users';
 
       users.forEach(function(u) {
         var email = u.email;
@@ -1056,6 +1069,9 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
         // Build card actions
         var actionsHtml = '';
         if (window.isSuperAdmin) {
+          if (window.currentDivisionId && window.currentDivisionId !== 'all') {
+             actionsHtml += '<button class="btn-card danger btn-remove-div" data-email="' + email + '">Remove from Division</button>';
+          }
           if (isAdmin) {
             actionsHtml += '<button class="btn-card btn-revoke" data-target="' + email + '">Revoke Admin</button>';
           } else {

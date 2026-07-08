@@ -488,63 +488,53 @@ async function loadDivisions() {
         
         // WhatsApp Settings for current user
         const waContainer = document.createElement('div');
-        waContainer.style.cssText = 'grid-column: 1 / -1; background:var(--bg-card); padding:20px 24px; border:1px solid var(--border-light); border-radius:0; margin-bottom:24px; display:flex; align-items:center; flex-wrap:wrap; gap:16px;  transition:all 0.2s ease;';
-        waContainer.onmouseover = () => { waContainer.style.transform = 'translateY(-2px)'; waContainer.style.boxShadow = '0 6px 15px rgba(0,0,0,0.1)'; };
-        waContainer.onmouseout = () => { waContainer.style.transform = 'translateY(0)'; waContainer.style.boxShadow = '0 2px 10px rgba(0,0,0,0.05)'; };
-        waContainer.innerHTML = `
-            <div style="font-weight:600; font-size:15px; color:var(--text-main); display:flex; align-items:center; gap:8px;">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#25D366;"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
-                WhatsApp Number
-            </div>
-            <input type="text" id="myWaInput" class="auth-input" placeholder="e.g. 6281234567890" style="width:250px; border-radius:0; padding:10px 14px;">
-            <button class="btn" id="btnSaveWa" style="background:var(--accent); color:var(--text-main); border:none; padding:12px 24px; font-weight:bold;">Update Number</button>
-        `;
-        grid.appendChild(waContainer);
+    if(res.success && res.divisions) {
+        window.divisionData = res.divisions;
+        const list = document.getElementById('divisionSidebarList');
+        if(!list) return; // wait until DOM is ready or exists
         
-        waContainer.querySelector('#btnSaveWa').onclick = async () => {
-            const wa = document.getElementById('myWaInput').value;
-            showToast('Saving...');
-            const wRes = await apiCall('divisions', { action: 'update_whatsapp', whatsapp: wa });
-            if(wRes.success) showToast('WhatsApp updated!', 'success');
-            else showToast('Failed: ' + wRes.error, 'error');
-        };
-
+        // Remove existing dynamic division buttons
+        list.querySelectorAll('.btn-div-item').forEach(el => el.remove());
+        
+        // Show WA Config if superadmin
+        if(window.isSuperAdmin) {
+            const waConfig = document.getElementById('waConfigContainer');
+            if(waConfig) waConfig.style.display = 'block';
+            
+            // Re-bind WA save just in case
+            const btnSaveWa = document.getElementById('btnSaveWa');
+            if(btnSaveWa) {
+                btnSaveWa.onclick = async () => {
+                    const wa = document.getElementById('myWaInput').value;
+                    showToast('Saving...');
+                    const wRes = await apiCall('divisions', { action: 'update_whatsapp', whatsapp: wa });
+                    if(wRes.success) showToast('WhatsApp updated!', 'success');
+                    else showToast('Failed: ' + wRes.error, 'error');
+                };
+            }
+        }
+        
         res.divisions.forEach(div => {
-            let membersHtml = '';
-            (div.members || []).forEach(m => {
-                const memberEmail = typeof m === 'string' ? m : m.email;
-                const memberName = typeof m === 'string' ? m.split('@')[0] : m.username;
-                membersHtml += `<div style="display:flex; justify-content:space-between; align-items:center; font-size:13px; color:var(--text-main); margin-bottom:8px; padding:8px 12px; background:var(--bg-main); border:1px solid rgba(0,0,0,0.03); border-radius:0; transition:all 0.2s ease;" onmouseover="this.style.background='var(--bg-hover)';" onmouseout="this.style.background='var(--bg-main)';">
-                    <span style="display:flex; align-items:center; gap:8px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis;">
-                        <div style="flex-shrink:0; width:24px; height:24px; border-radius:50%; background:var(--accent); color:#fff; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:bold;">${memberName.charAt(0).toUpperCase()}</div>
-                        <span style="overflow:hidden; text-overflow:ellipsis;" title="${memberName}">${memberName}</span>
-                    </span>
-                    ${window.isSuperAdmin ? `<button class="btn danger" style="flex-shrink:0; padding:4px 8px; font-size:11px; border-radius:0; transition:all 0.2s ease;" onclick="removeMember('${memberEmail}', '${div.id}')">Remove</button>` : ''}
-                </div>`;
-            });
+            const btn = document.createElement('button');
+            btn.className = 'btn btn-div-item';
+            btn.setAttribute('data-id', div.id);
+            btn.style.cssText = 'justify-content:space-between; padding:8px 12px; text-align:left; border:none; background:transparent; color:var(--text-main); font-size:13px; font-weight:600; border-radius:4px; margin-bottom:4px;';
+            if(window.currentDivisionId === div.id) {
+                btn.style.background = 'rgba(37, 99, 235, 0.1)';
+                btn.style.color = 'var(--accent)';
+                btn.classList.add('active');
+            }
             
-            const card = document.createElement('div');
-            card.style.cssText = 'background:var(--bg-card); display:flex; flex-direction:column; padding:24px; border:1px solid var(--border-light); border-radius:0;  transition:all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);';
-            card.onmouseover = () => { card.style.transform = 'translateY(-4px)'; card.style.boxShadow = '0 12px 24px rgba(0,0,0,0.08)'; card.style.borderColor = 'var(--accent)'; };
-            card.onmouseout = () => { card.style.transform = 'translateY(0)'; card.style.boxShadow = '0 4px 15px rgba(0,0,0,0.03)'; card.style.borderColor = 'var(--border-light)'; };
+            btn.innerHTML = `<span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${div.name}</span> <span style="font-size:11px; opacity:0.7;">${div.member_count}</span>`;
             
-            card.innerHTML = `
-                <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px; gap:12px;">
-                    <div style="flex:1; min-width:0;">
-                        <h3 style="margin:0; font-size:18px; color:var(--accent); font-weight:700; letter-spacing:-0.3px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${div.name}">${div.name}</h3>
-                        <div style="display:inline-block; margin-top:6px; padding:2px 8px; background:rgba(37, 99, 235, 0.1); color:var(--accent); border-radius:0; font-size:11px; font-weight:600;">${div.member_count} Members</div>
-                    </div>
-                    ${window.isSuperAdmin ? `<button class="btn primary" style="flex-shrink:0; font-size:12px; padding:6px 12px; border-radius:0;" onclick="promptAddMember('${div.id}')">+ Add</button>` : ''}
-                </div>
-                <p style="font-size:13px; color:var(--text-muted); line-height:1.5; min-height:45px; margin-bottom:20px;">${div.description}</p>
-                <div style="flex:1; border-top:1px dashed var(--border-medium); padding-top:16px; display:flex; flex-direction:column; min-height:0;">
-                    <div style="flex:1; overflow-y:auto; padding-right:4px;">
-                        ${membersHtml || '<div style="font-size:13px; color:var(--text-muted); text-align:center; padding:20px 0; background:var(--bg-main); border-radius:0; border:1px dashed var(--border-medium);">No members yet.</div>'}
-                    </div>
-                </div>
-            `;
-            grid.appendChild(card);
+            btn.onclick = () => window.selectDivision(div.id);
+            list.appendChild(btn);
         });
+        
+        // If current division is not 'all', refresh the user view
+        if(window.currentDivisionId !== 'all') {
+            window.selectDivision(window.currentDivisionId);
+        }
     }
 }
 

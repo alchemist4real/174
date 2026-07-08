@@ -138,47 +138,82 @@
 
       </div>
 
-      <!-- USERS VIEW -->
-      <div id="viewUsers" class="view-section">
-        <div class="toolbar" style="justify-content:space-between;">
-          <div style="display:flex; gap:24px; align-items:center; flex-wrap:wrap;">
-            <label class="switch-label">
-              <div class="switch">
-                <input type="checkbox" id="toggleSignup">
-                <span class="slider"></span>
-              </div>
-              Allow Sign Up
-            </label>
-            <label class="switch-label" style="color:var(--danger);">
-              <div class="switch">
-                <input type="checkbox" id="toggleMaintenance">
-                <span class="slider" style="background:transparent; border:1px solid var(--danger);"></span>
-              </div>
-              Maintenance
-            </label>
-          </div>
-          <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
-            <input type="text" id="announcementText" class="auth-input" placeholder="Announcement message..." style="width:200px;">
-            <button id="btnSendAnnouncement" class="btn primary">Broadcast</button>
-            <button id="btnRefreshUsers" class="btn" >
-              <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
-              Refresh
-            </button>
-          </div>
+            <!-- USERS & DIVISIONS VIEW -->
+      <div id="viewUsers" class="view-section" style="flex-direction:row;">
+        <!-- SIDEBAR -->
+        <div style="width:250px; background:var(--bg-main); border-right:1px solid var(--border-light); display:flex; flex-direction:column; flex-shrink:0;">
+            <div style="padding:16px 24px; border-bottom:1px solid var(--border-light); font-weight:700; font-family:var(--font-mono); font-size:16px;">
+                Organization
+            </div>
+            <div id="divisionSidebarList" style="flex:1; overflow-y:auto; padding:16px 12px; display:flex; flex-direction:column; gap:4px;">
+                <button id="btnDivFilterAll" class="btn" style="justify-content:flex-start; padding:8px 12px; text-align:left; border:1px solid var(--border-light); background:var(--accent); color:var(--bg-main);" onclick="window.selectDivision('all')">All Users</button>
+                <div style="font-size:11px; font-weight:700; color:var(--text-muted); margin:24px 0 8px 12px; letter-spacing:1px; font-family:var(--font-mono);">DIVISIONS</div>
+                <!-- Dynamic divisions injected here -->
+            </div>
+            
+            <div id="waConfigContainer" style="padding:16px; border-top:1px solid var(--border-light); display:none; background:var(--bg-card);">
+                <div style="font-size:11px; font-weight:700; color:var(--text-main); margin-bottom:8px; font-family:var(--font-mono);">WhatsApp API</div>
+                <input type="text" id="myWaInput" class="auth-input" placeholder="e.g. 62812..." style="width:100%; margin-bottom:8px; padding:6px; font-size:12px;">
+                <button class="btn" id="btnSaveWa" style="width:100%; background:var(--accent); color:var(--bg-main); border:none; font-weight:700; padding:8px;">Save</button>
+            </div>
         </div>
-        <div class="user-filter-container" style="padding:8px 24px; display:flex; gap:8px; border-bottom:1px solid var(--border-light); font-family:var(--font-mono);">
-          <input type="text" id="searchUsersInput" class="auth-input" placeholder="Search users..." style="width:150px; font-size:11px; padding:4px 8px; margin-right:12px;">
-          <button class="btn user-filter active" data-filter="all" style="font-size:11px; padding:4px 12px;">ALL</button>
-          <button class="btn user-filter" data-filter="online" style="font-size:11px; padding:4px 12px;">ONLINE</button>
-          <button class="btn user-filter" data-filter="banned" style="font-size:11px; padding:4px 12px;">BANNED</button>
-          <button class="btn user-filter" data-filter="admin" style="font-size:11px; padding:4px 12px;">ADMINS</button>
-        </div>
-        <div class="user-grid" id="userBrowser">
-          <!-- User items injected here -->
+        
+        <!-- MAIN CONTENT -->
+        <div style="flex:1; display:flex; flex-direction:column; background:var(--bg-card); min-width:0;">
+            <div class="toolbar" style="border-bottom:1px solid var(--border-light); padding:16px 24px; min-height: 80px; align-items:center;">
+                <div style="display:flex; justify-content:space-between; align-items:center; width:100%;">
+                    <div>
+                        <h2 id="orgViewTitle" style="font-size:24px; font-weight:700; margin:0; letter-spacing:-0.5px;">All Users</h2>
+                        <p id="orgViewDesc" style="font-size:13px; color:var(--text-muted); margin:6px 0 0 0; font-family:var(--font-mono);">Manage all registered members in the system.</p>
+                    </div>
+                    <div style="display:flex; gap:12px;">
+                        <button id="btnAddDivisionMember" class="btn primary" style="display:none;" onclick="window.promptAddMember(window.currentDivisionId)">+ Add Member</button>
+                        <button id="btnRefreshOrganization" class="btn" onclick="if(window.loadUsers) window.loadUsers(); if(window.loadDivisions) window.loadDivisions();">
+                          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+                          Refresh
+                        </button>
+                    </div>
+                </div>
+            </div>
+            
+            <div id="allUsersControls" style="padding:16px 24px; border-bottom:1px solid var(--border-light); display:flex; justify-content:space-between; flex-wrap:wrap; gap:16px; background:var(--bg-main);">
+                <div style="display:flex; gap:24px; align-items:center;">
+                    <label class="switch-label">
+                        <div class="switch">
+                            <input type="checkbox" id="toggleSignup">
+                            <span class="slider"></span>
+                        </div>
+                        Allow Sign Up
+                    </label>
+                    <label class="switch-label" style="color:var(--danger);">
+                        <div class="switch">
+                            <input type="checkbox" id="toggleMaintenance">
+                            <span class="slider" style="background:transparent; border:1px solid var(--danger);"></span>
+                        </div>
+                        Maintenance
+                    </label>
+                </div>
+                <div style="display:flex; gap:12px; align-items:center;">
+                    <input type="text" id="announcementText" class="auth-input" placeholder="Announcement message..." style="width:250px;">
+                    <button id="btnSendAnnouncement" class="btn primary">Broadcast</button>
+                </div>
+            </div>
+            
+            <div class="user-filter-container" style="padding:12px 24px; display:flex; gap:12px; border-bottom:1px solid var(--border-light); font-family:var(--font-mono); background:var(--bg-main);">
+                <input type="text" id="searchUsersInput" class="auth-input" placeholder="Search users..." style="width:200px; font-size:12px; padding:6px 12px; margin-right:12px;">
+                <button class="btn user-filter active" data-filter="all" style="font-size:11px; padding:6px 16px;">ALL</button>
+                <button class="btn user-filter" data-filter="online" style="font-size:11px; padding:6px 16px;">ONLINE</button>
+                <button class="btn user-filter" data-filter="banned" style="font-size:11px; padding:6px 16px;">BANNED</button>
+                <button class="btn user-filter" data-filter="admin" style="font-size:11px; padding:6px 16px;">ADMINS</button>
+            </div>
+            
+            <div class="user-grid" id="userBrowser" style="padding:24px; flex:1; overflow-y:auto; align-content:start;">
+                <!-- User items injected here -->
+            </div>
         </div>
       </div>
 
-      <!-- TASKS VIEW -->
+<!-- TASKS VIEW -->
       <div id="viewTasks" class="view-section">
         <div class="toolbar" style="justify-content:space-between;">
           <h2 style="font-size:22px; font-weight:700; margin:0;">Task Board</h2>
@@ -232,19 +267,6 @@
                     </tbody>
                 </table>
             </div>
-        </div>
-      </div>
-
-      <!-- DIVISIONS VIEW -->
-      <div id="viewDivisions" class="view-section">
-        <div class="toolbar" style="justify-content:space-between;">
-          <h2 style="font-size:22px; font-weight:700; margin:0;">Divisions Management</h2>
-          <button id="btnRefreshDivisions" class="btn">Refresh</button>
-        </div>
-        
-
-        <div id="divisionsGrid" style="display:grid; grid-template-columns:repeat(auto-fit, minmax(300px, 1fr)); gap:24px; padding:0 24px 24px 24px; flex: 1; overflow-y: auto;">
-           <!-- Division cards will be injected here -->
         </div>
       </div>
 
@@ -471,16 +493,13 @@
       </div>
       <div class="tab" data-target="viewUsers" style="display:flex; align-items:center; gap:8px;">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-        Users
+        Team
       </div>
       <div class="tab" data-target="viewTasks" style="display:flex; align-items:center; gap:8px;">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
         Tasks
       </div>
-      <div class="tab" data-target="viewDivisions" style="display:flex; align-items:center; gap:8px;">
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-        Divisions
-      </div>
+      
       <div class="tab" data-target="viewReviewTools" style="display:flex; align-items:center; gap:8px;">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="9" y1="15" x2="15" y2="15"></line></svg>
         Review Tools
