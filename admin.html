@@ -93,9 +93,10 @@
           <h2 style="font-size:22px; font-weight:700; margin:0;">Analytics & Activity Logs</h2>
           <button id="btnRefreshDashboard" class="btn"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg> <span>Refresh</span></button>
         </div>
-        <div class="dashboard-container" style="display:flex; padding:24px; gap:24px; flex-wrap:wrap; overflow-y:auto; flex: 1;">
-          <!-- Analytics Column -->
-          <div style="flex:1; min-width:300px; display:flex; flex-direction:column; gap:24px;">
+                <div class="dashboard-container" style="display:flex; flex-direction:column; padding:24px; gap:24px; overflow-y:auto; flex: 1;">
+          
+          <!-- Analytics Row -->
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap:24px;">
             <div style="background:var(--bg-card); border:1px solid var(--border-light); padding:24px;">
               <div style="font-size:12px; font-family:var(--font-mono); color:var(--text-muted); margin-bottom:8px;">TOTAL USERS</div>
               <div id="dashTotalUsers" style="font-size:36px; font-weight:700;">-</div>
@@ -115,23 +116,25 @@
             </div>
           </div>
 
-          <!-- Activity Logs Column -->
-          <div style="flex:1; min-width:400px; background:var(--bg-card); border:1px solid var(--border-light); display:flex; flex-direction:column; max-height: calc(100vh - 120px);">
-            <div style="padding:16px 24px; border-bottom:1px solid var(--border-light); font-weight:600; font-family:var(--font-mono);">Hybrid Activity Log (Logins & Live)</div>
-            <div id="activityLogList" style="flex:1; overflow-y:auto; padding:0; list-style:none;">
-               <div id="activityPlaceholder" style="padding:24px; color:var(--text-muted); text-align:center;">Waiting for activity...</div>
+          <!-- Logs & Leaderboard Row -->
+          <div style="display:grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap:24px; flex:1;">
+            
+            <!-- Activity Logs Column -->
+            <div style="background:var(--bg-card); border:1px solid var(--border-light); display:flex; flex-direction:column; max-height: calc(100vh - 200px);">
+              <div style="padding:16px 24px; border-bottom:1px solid var(--border-light); font-weight:600; font-family:var(--font-mono);">Hybrid Activity Log (Logins & Live)</div>
+              <div id="activityLogList" style="flex:1; overflow-y:auto; padding:0; list-style:none;">
+                 <div id="activityPlaceholder" style="padding:24px; color:var(--text-muted); text-align:center;">Waiting for activity...</div>
+              </div>
             </div>
+            
+            <!-- Top Contributors Column -->
+            <div style="background:var(--bg-card); border:1px solid var(--border-light); display:flex; flex-direction:column; max-height: calc(100vh - 200px);">
+               <div style="padding:16px 24px; border-bottom:1px solid var(--border-light); font-weight:600; font-family:var(--font-mono);">Top Contributors</div>
+               <div id="leaderboardList" style="flex:1; overflow-y:auto; padding:0; list-style:none;"></div>
+            </div>
+            
           </div>
         </div>
-        </div>
-
-          <!-- Top Contributors Column -->
-          <div style="flex:1; min-width:400px; background:var(--bg-card); border:1px solid var(--border-light); display:flex; flex-direction:column; max-height: calc(100vh - 120px);">
-             <div style="padding:16px 24px; border-bottom:1px solid var(--border-light); font-weight:600; font-family:var(--font-mono);">Top Contributors</div>
-             <div id="leaderboardList" style="flex:1; overflow-y:auto; padding:0; list-style:none;"></div>
-          </div>
-        </div>
-      </div>
 
       <!-- USERS VIEW -->
       <div id="viewUsers" class="view-section">
