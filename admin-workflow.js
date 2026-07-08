@@ -158,10 +158,10 @@ function renderKanban(tasks) {
 
         let meta = `<div><span style="color:var(--text-muted)">Sem:</span> ${task.semester || '-'} | <span style="color:var(--text-muted)">Blk:</span> ${task.block || '-'}</div>`;
         if (task.assigned_to_user) {
-            meta += `<div style="margin-top:4px;"><span style="color:var(--text-muted)">Dev:</span> ${task.assigned_to_user.email.split('@')[0]}</div>`;
+            meta += `<div style="margin-top:4px;"><span style="color:var(--text-muted)">Dev:</span> ${task.assigned_to_user.username || task.assigned_to_user.email.split('@')[0]}</div>`;
         }
         if (task.reviewed_by_user) {
-            meta += `<div style="margin-top:4px;"><span style="color:var(--text-muted)">Rev:</span> ${task.reviewed_by_user.email.split('@')[0]}</div>`;
+            meta += `<div style="margin-top:4px;"><span style="color:var(--text-muted)">Rev:</span> ${task.reviewed_by_user.username || task.reviewed_by_user.email.split('@')[0]}</div>`;
         }
         
         let activeDateLabel = '';
@@ -319,7 +319,7 @@ function renderTasksAsSyllabus(tasks) {
                 t.status === 'open' ? '' : 
                 (t.status === 'done' ? 'badge-admin' : 'badge-banned');
             
-            const assignee = t.assigned_to_user ? t.assigned_to_user.email.split('@')[0] : '<span style="color:var(--text-muted)">Unassigned</span>';
+            const assignee = t.assigned_to_user ? (t.assigned_to_user.username || t.assigned_to_user.email.split('@')[0]) : '<span style="color:var(--text-muted)">Unassigned</span>';
             
             html += `<tr style="border-bottom:1px solid var(--border-light); transition:background 0.2s; cursor:pointer;" onclick="openTaskModal(${JSON.stringify(t).replace(/"/g, '&quot;')})" onmouseover="this.style.background='var(--bg-hover)'" onmouseout="this.style.background='transparent'">
                 <td style="padding:12px 16px; color:var(--text-muted);">${t.semester || '-'} / ${t.block || '-'}</td>
@@ -364,7 +364,7 @@ function openTaskModal(task) {
             <span><b>Developer:</b> ${task.assigned_to_user ? task.assigned_to_user.email : 'Unassigned'}</span>
             ${task.assigned_to_user && task.assigned_to_user.whatsapp ? `<a href="https://wa.me/${task.assigned_to_user.whatsapp}?text=Hi, regarding MR CAPSULES task '${task.title}'" target="_blank" class="btn-card primary" style="font-size:10px; text-decoration:none;">Contact WA</a>` : ''}
         </div>
-        <div><b>Reviewer:</b> ${task.reviewed_by_user ? task.reviewed_by_user.email.split('@')[0] : 'Unassigned'}</div>
+        <div><b>Reviewer:</b> ${task.reviewed_by_user ? (task.reviewed_by_user.username || task.reviewed_by_user.email.split('@')[0]) : 'Unassigned'}</div>
         ${task.target_path ? `<div style="margin-top:12px;"><b>Target File:</b> <span style="font-family:var(--font-mono); color:var(--accent);">${task.target_path}</span></div>` : ''}
         <div style="margin-top:12px; padding-top:12px; border-top:1px solid var(--border-light);">
             <div style="font-size:11px; font-weight:600; color:var(--text-muted); margin-bottom:4px; text-transform:uppercase;">Timeline</div>
@@ -417,7 +417,7 @@ window.loadTaskLogs = async function(taskId) {
         container.innerHTML = rejectNoteHtml + res.logs.map(l => {
             let noteHtml = l.note ? `<div style="color:var(--text-main); font-style:italic; margin-top:4px; padding-left:8px; border-left:2px solid var(--border-medium);">"${l.note}"</div>` : '';
             return `<div style="font-size:11px; border-bottom:1px solid var(--border-light); padding:8px 0;">
-                <div><span style="color:var(--accent); font-weight:600;">${l.action.toUpperCase()}</span> by <b>${l.user ? l.user.email.split('@')[0] : 'System'}</b></div>
+                <div><span style="color:var(--accent); font-weight:600;">${l.action.toUpperCase()}</span> by <b>${l.user ? (l.user.username || l.user.email.split('@')[0]) : 'System'}</b></div>
                 <div style="color:var(--text-muted); font-size:10px; margin-top:2px;">${new Date(l.created_at).toLocaleString()}</div>
                 ${noteHtml}
             </div>`;

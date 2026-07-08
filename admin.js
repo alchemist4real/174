@@ -1068,9 +1068,10 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
         card.setAttribute('data-admin', isAdmin ? 'true' : 'false');
         card.setAttribute('data-online', 'false');
 
+        let displayUsername = username !== '-' ? username : email.split('@')[0];
         card.innerHTML = '<div class="user-card-header">' +
-          '<div><div class="user-email">' + sanitize(email) + '</div>' +
-          '<div class="user-meta">@' + sanitize(username) + ' &bull; ' + new Date(u.created_at).toLocaleDateString() + '</div></div>' +
+          '<div><div class="user-email" style="text-transform: uppercase;">' + sanitize(displayUsername) + '</div>' +
+          '<div class="user-meta">' + sanitize(email) + ' &bull; ' + new Date(u.created_at).toLocaleDateString() + '</div></div>' +
           '<div class="user-badges">' + badgesHtml + '</div></div>' +
           '<div class="card-actions">' + actionsHtml + '</div>' +
           devicesHtml;

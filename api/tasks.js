@@ -101,9 +101,9 @@ export default async function handler(req, res) {
 
         return {
           ...t,
-          created_by_user: createdBy ? { email: createdBy.email } : null,
-          assigned_to_user: assignedTo ? { email: assignedTo.email, whatsapp: assignedWhatsapp } : null,
-          reviewed_by_user: reviewedBy ? { email: reviewedBy.email } : null
+          created_by_user: createdBy ? { email: createdBy.email, username: createdBy.user_metadata?.username } : null,
+          assigned_to_user: assignedTo ? { email: assignedTo.email, username: assignedTo.user_metadata?.username, whatsapp: assignedWhatsapp } : null,
+          reviewed_by_user: reviewedBy ? { email: reviewedBy.email, username: reviewedBy.user_metadata?.username } : null
         };
       });
       
@@ -282,7 +282,7 @@ export default async function handler(req, res) {
       
       const enrichedLogs = logs.map(l => {
         const u = allUsers.find(au => au.id === l.user_id);
-        return { ...l, user: u ? { email: u.email } : null };
+        return { ...l, user: u ? { email: u.email, username: u.user_metadata?.username } : null };
       });
       
       return res.status(200).json({ success: true, logs: enrichedLogs });
