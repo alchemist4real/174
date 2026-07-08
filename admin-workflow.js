@@ -18,6 +18,16 @@ document.addEventListener('DOMContentLoaded', () => {
     // Setup Refresh buttons
     document.getElementById('btnRefreshTasks')?.addEventListener('click', loadTasks);
     document.getElementById('btnRefreshDivisions')?.addEventListener('click', loadDivisions);
+    
+    // Bind tab events to load data when activated
+    document.querySelectorAll('.tab').forEach(t => {
+        t.addEventListener('click', (e) => {
+            const target = e.currentTarget.getAttribute('data-target');
+            if(target === 'viewTasks') loadTasks();
+            if(target === 'viewDivisions') loadDivisions();
+            if(target === 'viewContributions') loadContributions();
+        });
+    });
 });
 
 async function apiCall(endpoint, payload) {
@@ -54,15 +64,6 @@ async function initWorkflow() {
         }
     }
 
-    // Bind tab events to load data when activated
-    document.querySelectorAll('.tab').forEach(t => {
-        t.addEventListener('click', (e) => {
-            const target = e.currentTarget.getAttribute('data-target');
-            if(target === 'viewTasks') loadTasks();
-            if(target === 'viewDivisions') loadDivisions();
-            if(target === 'viewContributions') loadContributions();
-        });
-    });
 
     // Real-time subscription for divisions
     if (window.supabaseClient) {
