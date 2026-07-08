@@ -5,7 +5,7 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
     let sessionToken = null;
     let currentTree = [];
     let currentPath = '';
-    let isGridMode = false;
+    let isGridMode = true;
     let selectedFiles = new Set();
 
     function sanitize(str) {
