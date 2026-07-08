@@ -68,7 +68,9 @@ export default async function handler(req, res) {
         const divisionMems = mems.filter(m => m.division_id === d.id);
         const membersList = divisionMems.map(m => {
            const u = allUsers.find(au => au.id === m.user_id);
-           return u ? u.email : 'Unknown User';
+           const email = u ? u.email : 'Unknown User';
+           const username = u?.user_metadata?.username || (u ? u.email.split('@')[0] : 'Unknown');
+           return { email, username };
         });
         return {
           ...d,

@@ -511,12 +511,14 @@ async function loadDivisions() {
         res.divisions.forEach(div => {
             let membersHtml = '';
             (div.members || []).forEach(m => {
+                const memberEmail = typeof m === 'string' ? m : m.email;
+                const memberName = typeof m === 'string' ? m.split('@')[0] : m.username;
                 membersHtml += `<div style="display:flex; justify-content:space-between; align-items:center; font-size:13px; color:var(--text-main); margin-bottom:8px; padding:8px 12px; background:var(--bg-main); border:1px solid rgba(0,0,0,0.03); border-radius:8px; transition:all 0.2s ease;" onmouseover="this.style.background='var(--bg-hover)';" onmouseout="this.style.background='var(--bg-main)';">
                     <span style="display:flex; align-items:center; gap:8px;">
-                        <div style="width:24px; height:24px; border-radius:50%; background:var(--accent); color:#fff; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:bold;">${m.charAt(0).toUpperCase()}</div>
-                        ${m.split('@')[0]}
+                        <div style="width:24px; height:24px; border-radius:50%; background:var(--accent); color:#fff; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:bold;">${memberName.charAt(0).toUpperCase()}</div>
+                        ${memberName}
                     </span>
-                    ${window.isSuperAdmin ? `<button class="btn-card danger" style="padding:4px 8px; font-size:11px; border-radius:4px; opacity:0.8; transition:all 0.2s ease;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'" onclick="removeMember('${m}', '${div.id}')">Remove</button>` : ''}
+                    ${window.isSuperAdmin ? `<button class="btn-card danger" style="padding:4px 8px; font-size:11px; border-radius:4px; opacity:0.8; transition:all 0.2s ease;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'" onclick="removeMember('${memberEmail}', '${div.id}')">Remove</button>` : ''}
                 </div>`;
             });
             
@@ -596,7 +598,7 @@ async function loadContributions() {
                 <li style="display:flex; justify-content:space-between; padding:12px 24px; border-bottom:1px solid var(--border-light); align-items:center;">
                     <div style="display:flex; gap:16px; align-items:center;">
                         <span style="font-size:16px; font-weight:600; width:24px;">${medal}</span>
-                        <span style="font-size:14px;">${u.email.split('@')[0]}</span>
+                        <span style="font-size:14px;">${u.username || u.email.split('@')[0]}</span>
                     </div>
                     <div style="font-weight:700; color:var(--accent);">${u.points} pts</div>
                 </li>

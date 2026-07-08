@@ -58,15 +58,16 @@ export default async function handler(req, res) {
       }
       
       const scores = {};
-      validData.forEach(c => {
-         const u = allUsers.find(au => au.id === c.user_id);
-         const email = u ? u.email : 'Unknown';
-         if (!scores[email]) scores[email] = 0;
-         scores[email] += c.points;
-      });
-      
-      const leaderboard = Object.keys(scores).map(k => ({ email: k, points: scores[k] }))
-                               .sort((a,b) => b.points - a.points);
+       validData.forEach(c => {
+          const u = allUsers.find(au => au.id === c.user_id);
+          const email = u ? u.email : 'Unknown';
+          const username = u?.user_metadata?.username || (u ? u.email.split('@')[0] : 'Unknown');
+          if (!scores[email]) scores[email] = { points: 0, username };
+          scores[email].points += c.points;
+       });
+       
+       const leaderboard = Object.keys(scores).map(k => ({ email: k, username: scores[k].username, points: scores[k].points }))
+                                .sort((a,b) => b.points - a.points);
                                
       return res.status(200).json({ success: true, leaderboard });
     }

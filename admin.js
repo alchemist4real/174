@@ -174,7 +174,7 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
       sessionToken = session.access_token;
       window.dispatchEvent(new CustomEvent('adminReady', { detail: { token: sessionToken } }));
       const badgeEl = document.getElementById('userBadge');
-      badgeEl.textContent = session.user.email;
+      badgeEl.textContent = session.user.user_metadata?.username || session.user.email;
       
       try {
         const controller = new AbortController();
