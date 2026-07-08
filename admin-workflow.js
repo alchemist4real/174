@@ -581,6 +581,8 @@ async function loadContributions() {
             statusEl.textContent = 'Inactive for 30 days (Access Revoked)';
             statusEl.style.color = 'var(--danger)';
         }
+    } else {
+        showToast('Error getting contributions: ' + (resMe.error || 'Unknown'), 'error');
     }
 
     const resLeader = await apiCall('contributions', { action: 'get_leaderboard' });
@@ -599,6 +601,8 @@ async function loadContributions() {
                 </li>
             `;
         });
+    } else {
+        showToast('Error getting leaderboard: ' + (resLeader.error || 'Unknown'), 'error');
     }
 }
 

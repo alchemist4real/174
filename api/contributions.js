@@ -18,7 +18,11 @@ export default async function handler(req, res) {
   const userData = await userRes.json();
   const userId = userData.id;
 
-  const { action } = req.body;
+  let body = req.body;
+  if (typeof body === 'string') {
+    try { body = JSON.parse(body); } catch(e) {}
+  }
+  const { action } = body;
 
   try {
     if (action === 'get_my_contributions') {
