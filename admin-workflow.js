@@ -612,6 +612,12 @@ async function loadContributions() {
 // CBT REVIEW SCRAPPER
 // =======================
 document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('btnRefreshContributions')?.addEventListener('click', () => {
+        showToast('Refreshing contributions...');
+        loadContributions();
+    });
+});
+document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('btnLoadReviewFile')?.addEventListener('click', async () => {
         const path = document.getElementById('reviewFilePath').value.trim();
         if(!path) return showToast('Please enter a file path', 'error');
