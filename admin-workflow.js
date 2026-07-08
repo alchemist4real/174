@@ -481,6 +481,52 @@ window.openTaskFile = function(path) {
 // =======================
 // DIVISIONS
 // =======================
+window.selectDivision = function(divId) {
+    window.currentDivisionId = divId;
+    
+    document.querySelectorAll('.btn-div-item').forEach(b => {
+        b.classList.remove('active');
+        b.style.background = 'transparent';
+        b.style.color = 'var(--text-main)';
+    });
+    
+    const btnAll = document.getElementById('btnDivFilterAll');
+    if(btnAll) {
+        btnAll.style.background = 'transparent';
+        btnAll.style.color = 'var(--text-main)';
+    }
+
+    if(divId === 'all') {
+        if(btnAll) {
+            btnAll.style.background = 'var(--accent)';
+            btnAll.style.color = 'var(--bg-main)';
+        }
+        if(document.getElementById('orgViewTitle')) document.getElementById('orgViewTitle').textContent = 'All Users';
+        if(document.getElementById('orgViewDesc')) document.getElementById('orgViewDesc').textContent = 'Manage all registered members in the system.';
+        if(document.getElementById('allUsersControls')) document.getElementById('allUsersControls').style.display = 'flex';
+        if(document.getElementById('btnAddDivisionMember')) document.getElementById('btnAddDivisionMember').style.display = 'none';
+    } else {
+        const btn = document.querySelector('.btn-div-item[data-id="' + divId + '"]');
+        if(btn) {
+            btn.classList.add('active');
+            btn.style.background = 'rgba(37, 99, 235, 0.1)';
+            btn.style.color = 'var(--accent)';
+        }
+        
+        const div = window.divisionData ? window.divisionData.find(d => d.id === divId) : null;
+        if(div) {
+            if(document.getElementById('orgViewTitle')) document.getElementById('orgViewTitle').textContent = div.name;
+            if(document.getElementById('orgViewDesc')) document.getElementById('orgViewDesc').textContent = 'Viewing members of ' + div.name;
+        }
+        if(document.getElementById('allUsersControls')) document.getElementById('allUsersControls').style.display = 'none';
+        if(document.getElementById('btnAddDivisionMember')) document.getElementById('btnAddDivisionMember').style.display = 'inline-block';
+    }
+    
+    if(window.loadUsers) {
+        window.loadUsers(divId);
+    }
+};
+
 async function loadDivisions() {
     const res = await apiCall('divisions', { action: 'get_divisions' });
     if(res.success) {
