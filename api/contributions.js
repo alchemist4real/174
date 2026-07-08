@@ -36,11 +36,16 @@ export default async function handler(req, res) {
       const data = await resData.json();
       const validData = Array.isArray(data) ? data : [];
       
-      const usersRes = await fetch(`${supabaseUrl}/auth/v1/admin/users?per_page=1000`, {
+      const usersRes = await fetch(`${supabaseUrl}/auth/v1/admin/users?page=1&per_page=100`, {
         headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
       });
-      const usersData = await usersRes.json();
-      const allUsers = usersData.users || [];
+      let allUsers = [];
+      if (usersRes.ok) {
+         try {
+             const usersData = await usersRes.json();
+             allUsers = usersData.users || [];
+         } catch(e) {}
+      }
       
       const scores = {};
       validData.forEach(c => {

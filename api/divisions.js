@@ -48,11 +48,16 @@ export default async function handler(req, res) {
       });
       const divs = await divRes.json();
       
-      const sbUsersRes = await fetch(`${supabaseUrl}/auth/v1/admin/users?per_page=1000`, {
+      const sbUsersRes = await fetch(`${supabaseUrl}/auth/v1/admin/users?page=1&per_page=100`, {
         headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
       });
-      const sbUsers = await sbUsersRes.json();
-      const allUsers = sbUsers.users || [];
+      let allUsers = [];
+      if (sbUsersRes.ok) {
+         try {
+             const usersData = await sbUsersRes.json();
+             allUsers = usersData.users || [];
+         } catch(e) {}
+      }
 
       const memResDirect = await fetch(`${supabaseUrl}/rest/v1/division_members?select=division_id,user_id`, {
         headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }

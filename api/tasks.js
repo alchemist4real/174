@@ -70,11 +70,16 @@ export default async function handler(req, res) {
       const tasks = await getRes.json();
       
       // Fetch all users to resolve IDs to emails
-      const usersRes = await fetch(`${supabaseUrl}/auth/v1/admin/users?per_page=1000`, {
+      const usersRes = await fetch(`${supabaseUrl}/auth/v1/admin/users?page=1&per_page=100`, {
         headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
       });
-      const usersData = await usersRes.json();
-      const allUsers = usersData.users || [];
+      let allUsers = [];
+      if (usersRes.ok) {
+         try {
+             const usersData = await usersRes.json();
+             allUsers = usersData.users || [];
+         } catch(e) {}
+      }
       
       // Fetch division members to get whatsapp
       const membersRes = await fetch(`${supabaseUrl}/rest/v1/division_members?select=user_id,whatsapp`, {
@@ -114,17 +119,21 @@ export default async function handler(req, res) {
       
       if (assigned_to_email) {
         // Resolve email to user_id
-        const usersRes = await fetch(`${supabaseUrl}/auth/v1/admin/users?per_page=1000`, {
+        const usersRes = await fetch(`${supabaseUrl}/auth/v1/admin/users?page=1&per_page=100`, {
           headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
         });
+        let allUsers = [];
         if (usersRes.ok) {
-           const usersData = await usersRes.json();
-           const u = (usersData.users || []).find(x => x.email === assigned_to_email);
-           if (u) {
-              assignedToId = u.id;
-              finalStatus = 'in_progress';
-              assignedAt = new Date().toISOString();
-           }
+           try {
+               const usersData = await usersRes.json();
+               allUsers = usersData.users || [];
+           } catch(e) {}
+        }
+        const u = allUsers.find(x => x.email === assigned_to_email);
+        if (u) {
+          assignedToId = u.id;
+          finalStatus = 'in_progress';
+          assignedAt = new Date().toISOString();
         }
       }
 
@@ -260,11 +269,16 @@ export default async function handler(req, res) {
       const logs = await fetchRes.json();
       
       // Resolve user IDs to emails
-      const usersRes = await fetch(`${supabaseUrl}/auth/v1/admin/users?per_page=1000`, {
+      const usersRes = await fetch(`${supabaseUrl}/auth/v1/admin/users?page=1&per_page=100`, {
         headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
       });
-      const usersData = await usersRes.json();
-      const allUsers = usersData.users || [];
+      let allUsers = [];
+      if (usersRes.ok) {
+         try {
+             const usersData = await usersRes.json();
+             allUsers = usersData.users || [];
+         } catch(e) {}
+      }
       
       const enrichedLogs = logs.map(l => {
         const u = allUsers.find(au => au.id === l.user_id);
