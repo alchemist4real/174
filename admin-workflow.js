@@ -515,11 +515,11 @@ async function loadDivisions() {
                 const memberEmail = typeof m === 'string' ? m : m.email;
                 const memberName = typeof m === 'string' ? m.split('@')[0] : m.username;
                 membersHtml += `<div style="display:flex; justify-content:space-between; align-items:center; font-size:13px; color:var(--text-main); margin-bottom:8px; padding:8px 12px; background:var(--bg-main); border:1px solid rgba(0,0,0,0.03); border-radius:0; transition:all 0.2s ease;" onmouseover="this.style.background='var(--bg-hover)';" onmouseout="this.style.background='var(--bg-main)';">
-                    <span style="display:flex; align-items:center; gap:8px;">
-                        <div style="width:24px; height:24px; border-radius:50%; background:var(--accent); color:#fff; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:bold;">${memberName.charAt(0).toUpperCase()}</div>
-                        ${memberName}
+                    <span style="display:flex; align-items:center; gap:8px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis;">
+                        <div style="flex-shrink:0; width:24px; height:24px; border-radius:50%; background:var(--accent); color:#fff; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:bold;">${memberName.charAt(0).toUpperCase()}</div>
+                        <span style="overflow:hidden; text-overflow:ellipsis;" title="${memberName}">${memberName}</span>
                     </span>
-                    ${window.isSuperAdmin ? `<button class="btn-card danger" style="padding:4px 8px; font-size:11px; border-radius:0; opacity:0.8; transition:all 0.2s ease;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'" onclick="removeMember('${memberEmail}', '${div.id}')">Remove</button>` : ''}
+                    ${window.isSuperAdmin ? `<button class="btn danger" style="flex-shrink:0; padding:4px 8px; font-size:11px; border-radius:0; transition:all 0.2s ease;" onclick="removeMember('${memberEmail}', '${div.id}')">Remove</button>` : ''}
                 </div>`;
             });
             
@@ -529,16 +529,16 @@ async function loadDivisions() {
             card.onmouseout = () => { card.style.transform = 'translateY(0)'; card.style.boxShadow = '0 4px 15px rgba(0,0,0,0.03)'; card.style.borderColor = 'var(--border-light)'; };
             
             card.innerHTML = `
-                <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
-                    <div>
-                        <h3 style="margin:0; font-size:18px; color:var(--accent); font-weight:700; letter-spacing:-0.3px;">${div.name}</h3>
+                <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px; gap:12px;">
+                    <div style="flex:1; min-width:0;">
+                        <h3 style="margin:0; font-size:18px; color:var(--accent); font-weight:700; letter-spacing:-0.3px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${div.name}">${div.name}</h3>
                         <div style="display:inline-block; margin-top:6px; padding:2px 8px; background:rgba(37, 99, 235, 0.1); color:var(--accent); border-radius:0; font-size:11px; font-weight:600;">${div.member_count} Members</div>
                     </div>
-                    ${window.isSuperAdmin ? `<button class="btn primary" style="font-size:12px; padding:6px 12px; border-radius:0;" onclick="promptAddMember('${div.id}')">+ Add</button>` : ''}
+                    ${window.isSuperAdmin ? `<button class="btn primary" style="flex-shrink:0; font-size:12px; padding:6px 12px; border-radius:0;" onclick="promptAddMember('${div.id}')">+ Add</button>` : ''}
                 </div>
                 <p style="font-size:13px; color:var(--text-muted); line-height:1.5; min-height:45px; margin-bottom:20px;">${div.description}</p>
-                <div style="flex:1; border-top:1px dashed var(--border-medium); padding-top:16px;">
-                    <div style="max-height:220px; overflow-y:auto; padding-right:4px;">
+                <div style="flex:1; border-top:1px dashed var(--border-medium); padding-top:16px; display:flex; flex-direction:column; min-height:0;">
+                    <div style="flex:1; overflow-y:auto; padding-right:4px;">
                         ${membersHtml || '<div style="font-size:13px; color:var(--text-muted); text-align:center; padding:20px 0; background:var(--bg-main); border-radius:0; border:1px dashed var(--border-medium);">No members yet.</div>'}
                     </div>
                 </div>
