@@ -50,27 +50,27 @@
           <div style="font-size:18px; font-weight:600;">Drop files here to upload</div>
         </div>
         <div class="toolbar">
-          <button id="btnUpload" class="btn primary" style="display:flex; align-items:center; gap:6px;">
+          <button id="btnUpload" class="btn primary" >
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
             Upload File
           </button>
           <input type="file" id="fileInput" class="hidden" multiple>
-          <button id="btnNewFolder" class="btn" style="display:flex; align-items:center; gap:6px;">
+          <button id="btnNewFolder" class="btn" >
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path><line x1="12" y1="11" x2="12" y2="17"></line><line x1="9" y1="14" x2="15" y2="14"></line></svg>
             New Folder
           </button>
           
-          <div style="margin-left:auto; display:flex; gap:8px;">
-            <input type="text" id="searchInput" class="auth-input" placeholder="Search files..." style="width: 150px; font-size: 13px;">
+          <div class="toolbar-actions" style="margin-left:auto; display:flex; gap:8px; flex-wrap:wrap;">
+            <input type="text" id="searchInput" class="auth-input search-input" placeholder="Search files...">
             <button id="btnBulkDelete" class="btn danger hidden" style="display:none; align-items:center; gap:6px;">
               <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-              Delete Selected (<span id="bulkCount">0</span>)
+              <span class="hide-text-mobile">Delete Selected</span> (<span id="bulkCount">0</span>)
             </button>
-            <button id="btnToggleView" class="btn" style="display:flex; align-items:center; gap:6px;">
+            <button id="btnToggleView" class="btn" >
               <svg id="iconList" viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
               <span>Toggle</span>
             </button>
-            <button id="btnRefresh" class="btn" style="display:flex; align-items:center; gap:6px;">
+            <button id="btnRefresh" class="btn" >
               <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
               <span>Refresh</span>
             </button>
@@ -91,8 +91,9 @@
       <div id="viewDashboard" class="view-section">
         <div class="toolbar">
           <h2 style="font-size:18px; font-weight:600; margin:0;">Analytics & Activity Logs</h2>
+          <button id="btnRefreshDashboard" class="btn"><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg> <span>Refresh</span></button>
         </div>
-        <div style="display:flex; padding:24px; gap:24px; flex-wrap:wrap; overflow-y:auto; height: 100%;">
+        <div class="dashboard-container" style="display:flex; padding:24px; gap:24px; flex-wrap:wrap; overflow-y:auto; flex: 1;">
           <!-- Analytics Column -->
           <div style="flex:1; min-width:300px; display:flex; flex-direction:column; gap:24px;">
             <div style="background:var(--bg-card); border:1px solid var(--border-light); padding:24px;">
@@ -141,7 +142,7 @@
           <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
             <input type="text" id="announcementText" class="auth-input" placeholder="Announcement message..." style="width:200px;">
             <button id="btnSendAnnouncement" class="btn primary">Broadcast</button>
-            <button id="btnRefreshUsers" class="btn" style="display:flex; align-items:center; gap:6px;">
+            <button id="btnRefreshUsers" class="btn" >
               <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
               Refresh
             </button>
@@ -164,7 +165,7 @@
         <div class="toolbar" style="justify-content:space-between;">
           <h2 style="font-size:18px; font-weight:600; margin:0;">Task Board</h2>
           <div style="display:flex; gap:12px; align-items:center;">
-            <select id="tasksViewToggle" class="auth-input" style="padding:4px 8px; font-size:13px; width:auto; border-radius:4px;" onchange="toggleTasksView()">
+            <select id="tasksViewToggle" class="auth-input" style="padding:4px 8px; font-size:13px; width:auto; border-radius:0;" onchange="toggleTasksView()">
                 <option value="kanban">Kanban View</option>
                 <option value="syllabus">Syllabus View</option>
             </select>
@@ -174,23 +175,23 @@
         </div>
         <div id="taskKanban" style="display:flex; gap:16px; padding:24px; overflow-x:auto; height:calc(100% - 60px);">
           <!-- Kanban columns -->
-          <div class="kanban-col" id="col-open" style="flex:1; min-width:300px; background:var(--bg-card); padding:16px; border-radius:4px; border:1px solid var(--border-light);">
+          <div class="kanban-col" id="col-open" style="flex:1; min-width:300px; background:var(--bg-card); padding:16px; border-radius:0; border:1px solid var(--border-light);">
              <h3 style="margin-top:0; border-bottom:1px solid var(--border-light); padding-bottom:8px;">Open</h3>
              <div class="task-list" style="display:flex; flex-direction:column; gap:8px; margin-top:12px;"></div>
           </div>
-          <div class="kanban-col" id="col-in_progress" style="flex:1; min-width:300px; background:var(--bg-card); padding:16px; border-radius:4px; border:1px solid var(--border-light);">
+          <div class="kanban-col" id="col-in_progress" style="flex:1; min-width:300px; background:var(--bg-card); padding:16px; border-radius:0; border:1px solid var(--border-light);">
              <h3 style="margin-top:0; border-bottom:1px solid var(--border-light); padding-bottom:8px;">In Progress</h3>
              <div class="task-list" style="display:flex; flex-direction:column; gap:8px; margin-top:12px;"></div>
           </div>
-          <div class="kanban-col" id="col-developed" style="flex:1; min-width:300px; background:var(--bg-card); padding:16px; border-radius:4px; border:1px solid var(--border-light);">
+          <div class="kanban-col" id="col-developed" style="flex:1; min-width:300px; background:var(--bg-card); padding:16px; border-radius:0; border:1px solid var(--border-light);">
              <h3 style="margin-top:0; border-bottom:1px solid var(--border-light); padding-bottom:8px;">Developed (Wait for Review)</h3>
              <div class="task-list" style="display:flex; flex-direction:column; gap:8px; margin-top:12px;"></div>
           </div>
-          <div class="kanban-col" id="col-in_review" style="flex:1; min-width:300px; background:var(--bg-card); padding:16px; border-radius:4px; border:1px solid var(--border-light);">
+          <div class="kanban-col" id="col-in_review" style="flex:1; min-width:300px; background:var(--bg-card); padding:16px; border-radius:0; border:1px solid var(--border-light);">
              <h3 style="margin-top:0; border-bottom:1px solid var(--border-light); padding-bottom:8px;">In Review</h3>
              <div class="task-list" style="display:flex; flex-direction:column; gap:8px; margin-top:12px;"></div>
           </div>
-          <div class="kanban-col" id="col-done" style="flex:1; min-width:300px; background:var(--bg-card); padding:16px; border-radius:4px; border:1px solid var(--border-light);">
+          <div class="kanban-col" id="col-done" style="flex:1; min-width:300px; background:var(--bg-card); padding:16px; border-radius:0; border:1px solid var(--border-light);">
              <h3 style="margin-top:0; border-bottom:1px solid var(--border-light); padding-bottom:8px;">Done</h3>
              <div class="task-list" style="display:flex; flex-direction:column; gap:8px; margin-top:12px;"></div>
           </div>
@@ -233,12 +234,12 @@
       <div id="viewContributions" class="view-section">
         <div class="toolbar" style="display:flex; justify-content:space-between; align-items:center;">
           <h2 style="font-size:18px; font-weight:600; margin:0;">Contributions Leaderboard</h2>
-          <button id="btnRefreshContributions" class="btn" style="font-size:12px; display:flex; align-items:center; gap:6px; padding:6px 12px;">
+          <button id="btnRefreshContributions" class="btn" >
             <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
             Refresh
           </button>
         </div>
-        <div style="display:flex; padding:24px; gap:24px; flex-wrap:wrap; height:100%;">
+        <div style="display:flex; padding:24px; gap:24px; flex-wrap:wrap; height:100%; overflow-y:auto; flex:1;">
           <div style="flex:1; min-width:300px; display:flex; flex-direction:column; gap:16px;">
              <div style="background:var(--bg-card); padding:24px; border:1px solid var(--border-light);">
                 <div style="font-size:12px; color:var(--text-muted); margin-bottom:8px;">MY POINTS</div>
@@ -246,7 +247,7 @@
                 <div id="contributionStatus" style="margin-top:12px; font-size:13px; font-weight:600;"></div>
              </div>
           </div>
-          <div style="flex:2; min-width:400px; background:var(--bg-card); border:1px solid var(--border-light); display:flex; flex-direction:column; max-height:calc(100vh - 120px);">
+          <div style="flex:2; min-width:400px; background:var(--bg-card); border:1px solid var(--border-light); display:flex; flex-direction:column; ">
              <div style="padding:16px 24px; border-bottom:1px solid var(--border-light); font-weight:600;">Top Contributors</div>
              <div id="leaderboardList" style="flex:1; overflow-y:auto; padding:0; list-style:none;"></div>
           </div>
@@ -264,7 +265,7 @@
              <button id="btnLoadReviewFile" class="btn primary">Load HTML</button>
           </div>
           <div id="reviewEditorArea" style="display:none; flex-direction:column; gap:16px;">
-             <div style="display:flex; justify-content:space-between; align-items:center; background:var(--bg-card); padding:16px; border-radius:4px; border:1px solid var(--border-light);">
+             <div style="display:flex; justify-content:space-between; align-items:center; background:var(--bg-card); padding:16px; border-radius:0; border:1px solid var(--border-light);">
                 <h3 id="reviewFileName" style="margin:0;">File Name</h3>
                 <button id="btnSaveReview" class="btn primary">Save Changes to GitHub</button>
              </div>
@@ -311,7 +312,7 @@
               <input type="text" id="taskTitle" class="auth-input" placeholder="e.g. Farmakologi Dasar" style="width:100%; box-sizing:border-box;">
           </div>
           
-          <div style="display:flex; gap:12px;">
+          <div style="display:flex; gap:12px; flex-wrap:wrap;">
               <div style="flex:1;">
                   <label style="font-size:12px; color:var(--text-muted); font-weight:600;">Category</label>
                   <select id="taskCategory" class="auth-input" style="width:100%; box-sizing:border-box;">

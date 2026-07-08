@@ -357,7 +357,7 @@ function openTaskModal(task) {
     document.getElementById('contextTitle').textContent = task.title;
     const acts = document.getElementById('contextActions');
     
-    let details = `<div style="font-size:12px; margin-bottom:16px; padding:12px; background:var(--bg-card); border-radius:4px;">
+    let details = `<div style="font-size:12px; margin-bottom:16px; padding:12px; background:var(--bg-card); border-radius:0;">
         <div><b>Status:</b> ${task.status.toUpperCase()}</div>
         <div><b>Category:</b> ${task.category || '-'}</div>
         <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -407,7 +407,7 @@ window.loadTaskLogs = async function(taskId) {
         if (isRejected) {
             const lastReject = res.logs.find(l => l.action === 'rejected');
             if (lastReject && lastReject.note) {
-                rejectNoteHtml = `<div style="margin-bottom:12px; padding:8px; background:rgba(239,68,68,0.1); border-left:3px solid var(--danger); border-radius:0 4px 4px 0;">
+                rejectNoteHtml = `<div style="margin-bottom:12px; padding:8px; background:rgba(239,68,68,0.1); border-left:3px solid var(--danger); border-radius:0;">
                     <div style="font-size:10px; font-weight:bold; color:var(--danger); text-transform:uppercase;">Latest Rejection Reason</div>
                     <div style="font-size:11px; color:var(--text-main); margin-top:4px;">"${lastReject.note}"</div>
                 </div>`;
@@ -487,7 +487,7 @@ async function loadDivisions() {
         
         // WhatsApp Settings for current user
         const waContainer = document.createElement('div');
-        waContainer.style.cssText = 'grid-column: 1 / -1; background:var(--bg-card); padding:20px 24px; border:1px solid var(--border-light); border-radius:12px; margin-bottom:24px; display:flex; align-items:center; flex-wrap:wrap; gap:16px; box-shadow:0 2px 10px rgba(0,0,0,0.05); transition:all 0.2s ease;';
+        waContainer.style.cssText = 'grid-column: 1 / -1; background:var(--bg-card); padding:20px 24px; border:1px solid var(--border-light); border-radius:0; margin-bottom:24px; display:flex; align-items:center; flex-wrap:wrap; gap:16px;  transition:all 0.2s ease;';
         waContainer.onmouseover = () => { waContainer.style.transform = 'translateY(-2px)'; waContainer.style.boxShadow = '0 6px 15px rgba(0,0,0,0.1)'; };
         waContainer.onmouseout = () => { waContainer.style.transform = 'translateY(0)'; waContainer.style.boxShadow = '0 2px 10px rgba(0,0,0,0.05)'; };
         waContainer.innerHTML = `
@@ -495,8 +495,8 @@ async function loadDivisions() {
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#25D366;"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
                 WhatsApp Number
             </div>
-            <input type="text" id="myWaInput" class="auth-input" placeholder="e.g. 6281234567890" style="width:250px; border-radius:6px; padding:10px 14px;">
-            <button class="btn primary" id="btnSaveWa" style="border-radius:6px; padding:10px 20px;">Update</button>
+            <input type="text" id="myWaInput" class="auth-input" placeholder="e.g. 6281234567890" style="width:250px; border-radius:0; padding:10px 14px;">
+            <button class="btn primary" id="btnSaveWa" style="border-radius:0; padding:10px 20px;">Update</button>
         `;
         grid.appendChild(waContainer);
         
@@ -513,17 +513,17 @@ async function loadDivisions() {
             (div.members || []).forEach(m => {
                 const memberEmail = typeof m === 'string' ? m : m.email;
                 const memberName = typeof m === 'string' ? m.split('@')[0] : m.username;
-                membersHtml += `<div style="display:flex; justify-content:space-between; align-items:center; font-size:13px; color:var(--text-main); margin-bottom:8px; padding:8px 12px; background:var(--bg-main); border:1px solid rgba(0,0,0,0.03); border-radius:8px; transition:all 0.2s ease;" onmouseover="this.style.background='var(--bg-hover)';" onmouseout="this.style.background='var(--bg-main)';">
+                membersHtml += `<div style="display:flex; justify-content:space-between; align-items:center; font-size:13px; color:var(--text-main); margin-bottom:8px; padding:8px 12px; background:var(--bg-main); border:1px solid rgba(0,0,0,0.03); border-radius:0; transition:all 0.2s ease;" onmouseover="this.style.background='var(--bg-hover)';" onmouseout="this.style.background='var(--bg-main)';">
                     <span style="display:flex; align-items:center; gap:8px;">
                         <div style="width:24px; height:24px; border-radius:50%; background:var(--accent); color:#fff; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:bold;">${memberName.charAt(0).toUpperCase()}</div>
                         ${memberName}
                     </span>
-                    ${window.isSuperAdmin ? `<button class="btn-card danger" style="padding:4px 8px; font-size:11px; border-radius:4px; opacity:0.8; transition:all 0.2s ease;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'" onclick="removeMember('${memberEmail}', '${div.id}')">Remove</button>` : ''}
+                    ${window.isSuperAdmin ? `<button class="btn-card danger" style="padding:4px 8px; font-size:11px; border-radius:0; opacity:0.8; transition:all 0.2s ease;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'" onclick="removeMember('${memberEmail}', '${div.id}')">Remove</button>` : ''}
                 </div>`;
             });
             
             const card = document.createElement('div');
-            card.style.cssText = 'background:var(--bg-card); display:flex; flex-direction:column; padding:24px; border:1px solid var(--border-light); border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.03); transition:all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);';
+            card.style.cssText = 'background:var(--bg-card); display:flex; flex-direction:column; padding:24px; border:1px solid var(--border-light); border-radius:0;  transition:all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);';
             card.onmouseover = () => { card.style.transform = 'translateY(-4px)'; card.style.boxShadow = '0 12px 24px rgba(0,0,0,0.08)'; card.style.borderColor = 'var(--accent)'; };
             card.onmouseout = () => { card.style.transform = 'translateY(0)'; card.style.boxShadow = '0 4px 15px rgba(0,0,0,0.03)'; card.style.borderColor = 'var(--border-light)'; };
             
@@ -531,14 +531,14 @@ async function loadDivisions() {
                 <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
                     <div>
                         <h3 style="margin:0; font-size:18px; color:var(--accent); font-weight:700; letter-spacing:-0.3px;">${div.name}</h3>
-                        <div style="display:inline-block; margin-top:6px; padding:2px 8px; background:rgba(37, 99, 235, 0.1); color:var(--accent); border-radius:12px; font-size:11px; font-weight:600;">${div.member_count} Members</div>
+                        <div style="display:inline-block; margin-top:6px; padding:2px 8px; background:rgba(37, 99, 235, 0.1); color:var(--accent); border-radius:0; font-size:11px; font-weight:600;">${div.member_count} Members</div>
                     </div>
-                    ${window.isSuperAdmin ? `<button class="btn primary" style="font-size:12px; padding:6px 12px; border-radius:6px;" onclick="promptAddMember('${div.id}')">+ Add</button>` : ''}
+                    ${window.isSuperAdmin ? `<button class="btn primary" style="font-size:12px; padding:6px 12px; border-radius:0;" onclick="promptAddMember('${div.id}')">+ Add</button>` : ''}
                 </div>
                 <p style="font-size:13px; color:var(--text-muted); line-height:1.5; min-height:45px; margin-bottom:20px;">${div.description}</p>
                 <div style="flex:1; border-top:1px dashed var(--border-medium); padding-top:16px;">
                     <div style="max-height:220px; overflow-y:auto; padding-right:4px;">
-                        ${membersHtml || '<div style="font-size:13px; color:var(--text-muted); text-align:center; padding:20px 0; background:var(--bg-main); border-radius:8px; border:1px dashed var(--border-medium);">No members yet.</div>'}
+                        ${membersHtml || '<div style="font-size:13px; color:var(--text-muted); text-align:center; padding:20px 0; background:var(--bg-main); border-radius:0; border:1px dashed var(--border-medium);">No members yet.</div>'}
                     </div>
                 </div>
             `;
@@ -666,7 +666,7 @@ function parseCBTHtml(path, html) {
     const qContainers = doc.querySelectorAll('.soal-container, .card, .question-block, fieldset');
     
     if(qContainers.length === 0) {
-        listEl.innerHTML = '<div style="padding:16px; background:rgba(239,68,68,0.1); color:var(--danger); border-radius:4px;">No standard question blocks found. This scrapper supports specific CBT HTML formats. You can still use the raw HTML editor in the Files tab.</div>';
+        listEl.innerHTML = '<div style="padding:16px; background:rgba(239,68,68,0.1); color:var(--danger); border-radius:0;">No standard question blocks found. This scrapper supports specific CBT HTML formats. You can still use the raw HTML editor in the Files tab.</div>';
         return;
     }
 
@@ -679,11 +679,11 @@ function parseCBTHtml(path, html) {
     qContainers.forEach((q, idx) => {
         const outerHTML = q.outerHTML;
         const block = document.createElement('div');
-        block.style.cssText = 'background:var(--bg-main); padding:16px; border-radius:4px; border:1px solid var(--border-medium);';
+        block.style.cssText = 'background:var(--bg-main); padding:16px; border-radius:0; border:1px solid var(--border-medium);';
         
         block.innerHTML = `
             <div style="font-weight:600; margin-bottom:8px;">Question ${idx + 1}</div>
-            <textarea id="q_edit_${idx}" style="width:100%; height:150px; background:#1e1e1e; color:#d4d4d4; font-family:monospace; font-size:12px; padding:12px; border:1px solid #333; border-radius:4px; resize:vertical;">${outerHTML}</textarea>
+            <textarea id="q_edit_${idx}" style="width:100%; height:150px; background:#1e1e1e; color:#d4d4d4; font-family:monospace; font-size:12px; padding:12px; border:1px solid #333; border-radius:0; resize:vertical;">${outerHTML}</textarea>
             <div style="margin-top:8px; display:flex; justify-content:flex-end;">
                <button class="btn btn-report-issue" data-idx="${idx}" style="border-color:var(--danger); color:var(--danger);">Report Issue</button>
             </div>

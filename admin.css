@@ -110,10 +110,7 @@
       flex: 1; display: flex; flex-direction: column; background: var(--bg-main);
     }
 
-    .toolbar {
-      padding: 16px 24px; border-bottom: 1px solid var(--border-light);
-      display: flex; gap: 12px; align-items: center;
-    }
+    .toolbar { padding: 16px 24px; border-bottom: 1px solid var(--border-light); display: flex; gap: 12px; align-items: center; flex-wrap: wrap; }
 
     .btn {
       background: var(--bg-card); color: var(--text-main); border: 1px solid var(--border-light);
@@ -162,11 +159,7 @@
     .view-section { display: none; flex-direction: column; height: 100%; }
     .view-section.active { display: flex; }
     
-    .toolbar {
-      display: flex; align-items: center; padding: 16px 24px;
-      border-bottom: 1px solid var(--border-light); background: var(--bg-card);
-      gap: 16px; flex-wrap: wrap;
-    }
+    
     
     /* Toggle Switch */
     .switch-label {
@@ -429,9 +422,16 @@
       .card-actions { gap: 6px; }
       .card-actions .btn-card { font-size: 10px; padding: 6px 8px; }
       
+      
+      /* Contributions Mobile Stack */
+      #viewContributions > div { padding: 16px !important; gap: 16px !important; height: auto !important; }
+      #viewContributions > div > div { min-width: 100% !important; flex: none !important; width: 100% !important; max-height: none !important; }
+
+      .task-board-container { padding: 12px !important; }
+      .review-tools-container .btn { flex: 1; justify-content: center; width: 100%; }
       /* Dashboard Mobile Fixes */
       #viewDashboard > div { padding: 16px !important; gap: 16px !important; }
-      #viewDashboard > div > div { min-width: 100% !important; flex: none !important; width: 100% !important; }
+      .dashboard-container > div { min-width: 100% !important; flex: none !important; width: 100% !important; max-height: none !important; }
       
       /* Filter Tabs Mobile */
       .user-filter-container { padding: 8px 16px !important; overflow-x: auto; }
@@ -450,3 +450,24 @@
     /* Utilities */
     .hidden { display: none !important; }@ k e y f r a m e s   t o a s t I n   {   f r o m   {   t r a n s f o r m :   t r a n s l a t e X ( 1 0 0 % ) ;   o p a c i t y :   0 ;   }   t o   {   t r a n s f o r m :   t r a n s l a t e X ( 0 ) ;   o p a c i t y :   1 ;   }   }   @ k e y f r a m e s   t o a s t O u t   {   f r o m   {   t r a n s f o r m :   t r a n s l a t e X ( 0 ) ;   o p a c i t y :   1 ;   }   t o   {   t r a n s f o r m :   t r a n s l a t e X ( 1 0 0 % ) ;   o p a c i t y :   0 ;   }   }  
  
+    .file-browser:not(.grid-mode) .file-checkbox { margin-right: 12px; }
+    .search-input { width: 150px; font-size: 13px; }
+    @media (max-width: 768px) { .search-input { width: 100%; flex: 1; min-width: 0; } }
+    .kanban-card {
+      background: var(--bg-main);
+      border: 1px solid var(--border-light);
+      padding: 12px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .kanban-card:hover {
+      transform: translateY(-2px);
+      border-color: var(--accent);
+    }
+    .kanban-col {
+      display: flex; flex-direction: column; max-height: 100%;
+    }
+    .task-list {
+      overflow-y: auto; flex: 1;
+    }
