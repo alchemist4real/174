@@ -514,32 +514,32 @@ async function loadDivisions() {
             (div.members || []).forEach(m => {
                 const memberEmail = typeof m === 'string' ? m : m.email;
                 const memberName = typeof m === 'string' ? m.split('@')[0] : m.username;
-                membersHtml += `<div style="display:flex; justify-content:space-between; align-items:center; font-size:13px; color:var(--text-main); margin-bottom:8px; padding:8px 12px; background:var(--bg-main); border:1px solid rgba(0,0,0,0.03); border-radius:0; transition:all 0.2s ease;" onmouseover="this.style.background='var(--bg-hover)';" onmouseout="this.style.background='var(--bg-main)';">
-                    <span style="display:flex; align-items:center; gap:8px;">
-                        <div style="width:24px; height:24px; border-radius:50%; background:var(--accent); color:#fff; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:bold;">${memberName.charAt(0).toUpperCase()}</div>
-                        ${memberName}
+                membersHtml += `<div style="display:flex; justify-content:space-between; align-items:center; font-size:14px; color:var(--text-main); margin-bottom:8px; padding:10px 14px; background:var(--bg-main); border:1px solid var(--border-light); border-radius:8px; transition:all 0.2s ease;" onmouseover="this.style.background='var(--bg-hover)';" onmouseout="this.style.background='var(--bg-main)';">
+                    <span style="display:flex; align-items:center; gap:10px; overflow:hidden; white-space:nowrap; text-overflow:ellipsis;">
+                        <div style="flex-shrink:0; width:28px; height:28px; border-radius:50%; background:linear-gradient(135deg, var(--accent), var(--accent-hover)); color:#fff; display:flex; align-items:center; justify-content:center; font-size:13px; font-weight:600; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">${memberName.charAt(0).toUpperCase()}</div>
+                        <span style="overflow:hidden; text-overflow:ellipsis;" title="${memberName}">${memberName}</span>
                     </span>
-                    ${window.isSuperAdmin ? `<button class="btn-card danger" style="padding:4px 8px; font-size:11px; border-radius:0; opacity:0.8; transition:all 0.2s ease;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'" onclick="removeMember('${memberEmail}', '${div.id}')">Remove</button>` : ''}
+                    ${window.isSuperAdmin ? `<button style="flex-shrink:0; padding:6px 12px; font-size:12px; border-radius:6px; background:rgba(239, 68, 68, 0.1); color:var(--danger); border:1px solid rgba(239, 68, 68, 0.2); font-weight:600; cursor:pointer; transition:all 0.2s ease;" onmouseover="this.style.background='var(--danger)'; this.style.color='#fff';" onmouseout="this.style.background='rgba(239, 68, 68, 0.1)'; this.style.color='var(--danger)';" onclick="removeMember('${memberEmail}', '${div.id}')">Remove</button>` : ''}
                 </div>`;
             });
             
             const card = document.createElement('div');
-            card.style.cssText = 'background:var(--bg-card); display:flex; flex-direction:column; padding:24px; border:1px solid var(--border-light); border-radius:0;  transition:all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);';
-            card.onmouseover = () => { card.style.transform = 'translateY(-4px)'; card.style.boxShadow = '0 12px 24px rgba(0,0,0,0.08)'; card.style.borderColor = 'var(--accent)'; };
-            card.onmouseout = () => { card.style.transform = 'translateY(0)'; card.style.boxShadow = '0 4px 15px rgba(0,0,0,0.03)'; card.style.borderColor = 'var(--border-light)'; };
+            card.style.cssText = 'background:var(--bg-card); display:flex; flex-direction:column; padding:24px; border:1px solid var(--border-medium); border-radius:16px; transition:all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03);';
+            card.onmouseover = () => { card.style.transform = 'translateY(-4px)'; card.style.boxShadow = '0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05)'; card.style.borderColor = 'var(--accent)'; };
+            card.onmouseout = () => { card.style.transform = 'translateY(0)'; card.style.boxShadow = '0 4px 6px -1px rgba(0,0,0,0.05), 0 2px 4px -1px rgba(0,0,0,0.03)'; card.style.borderColor = 'var(--border-medium)'; };
             
             card.innerHTML = `
-                <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
-                    <div>
-                        <h3 style="margin:0; font-size:18px; color:var(--accent); font-weight:700; letter-spacing:-0.3px;">${div.name}</h3>
-                        <div style="display:inline-block; margin-top:6px; padding:2px 8px; background:rgba(37, 99, 235, 0.1); color:var(--accent); border-radius:0; font-size:11px; font-weight:600;">${div.member_count} Members</div>
+                <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px; gap:12px;">
+                    <div style="flex:1; min-width:0;">
+                        <h3 style="margin:0; font-size:20px; color:var(--accent); font-weight:700; letter-spacing:-0.5px; line-height:1.2; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;" title="${div.name}">${div.name}</h3>
+                        <div style="display:inline-flex; align-items:center; margin-top:8px; padding:4px 12px; background:var(--accent); color:#fff; border-radius:20px; font-size:12px; font-weight:600; box-shadow: 0 2px 6px rgba(59, 130, 246, 0.3);">${div.member_count} Members</div>
                     </div>
-                    ${window.isSuperAdmin ? `<button class="btn primary" style="font-size:12px; padding:6px 12px; border-radius:0;" onclick="promptAddMember('${div.id}')">+ Add</button>` : ''}
+                    ${window.isSuperAdmin ? `<button class="btn primary" style="flex-shrink:0; font-size:13px; padding:8px 16px; border-radius:20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);" onclick="promptAddMember('${div.id}')">+ Add</button>` : ''}
                 </div>
-                <p style="font-size:13px; color:var(--text-muted); line-height:1.5; min-height:45px; margin-bottom:20px;">${div.description}</p>
-                <div style="flex:1; border-top:1px dashed var(--border-medium); padding-top:16px;">
-                    <div style="max-height:220px; overflow-y:auto; padding-right:4px;">
-                        ${membersHtml || '<div style="font-size:13px; color:var(--text-muted); text-align:center; padding:20px 0; background:var(--bg-main); border-radius:0; border:1px dashed var(--border-medium);">No members yet.</div>'}
+                <p style="font-size:14px; color:var(--text-muted); line-height:1.6; min-height:48px; margin-bottom:24px;">${div.description}</p>
+                <div style="flex:1; border-top:1px solid var(--border-light); padding-top:20px; margin-top:auto;">
+                    <div style="max-height:260px; overflow-y:auto; padding-right:8px; margin-right:-8px; scrollbar-width: thin; scrollbar-color: var(--border-medium) transparent;">
+                        ${membersHtml || '<div style="font-size:14px; color:var(--text-muted); text-align:center; padding:32px 0; background:rgba(0,0,0,0.02); border-radius:12px; border:1px dashed var(--border-medium);">No members yet.</div>'}
                     </div>
                 </div>
             `;
