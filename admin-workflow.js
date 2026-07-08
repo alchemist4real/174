@@ -80,7 +80,7 @@ async function initWorkflow() {
     // If a tab was already clicked before initWorkflow finished, load its data now
     if(document.getElementById('viewTasks')?.classList.contains('active')) loadTasks();
     if(document.getElementById('viewDivisions')?.classList.contains('active')) loadDivisions();
-    if(document.getElementById('viewContributions')?.classList.contains('active')) loadContributions();
+    if(document.getElementById('viewDashboard')?.classList.contains('active')) window.loadContributions();
 }
 
 window.joinDivision = async function(divId) {

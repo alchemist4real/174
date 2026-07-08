@@ -200,6 +200,7 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
             loadUsers();
             fetchHybridLogs();
             if(window.loadContributions) window.loadContributions();
+            if(window.loadContributions) window.loadContributions();
             
             try {
               if (supabaseClient) {
