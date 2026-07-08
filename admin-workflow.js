@@ -582,6 +582,7 @@ async function loadContributions() {
             statusEl.style.color = 'var(--danger)';
         }
     } else {
+        console.error('Failed to get contributions:', resMe);
         showToast('Error getting contributions: ' + (resMe.error || 'Unknown'), 'error');
     }
 
@@ -602,6 +603,7 @@ async function loadContributions() {
             `;
         });
     } else {
+        console.error('Failed to get leaderboard:', resLeader);
         showToast('Error getting leaderboard: ' + (resLeader.error || 'Unknown'), 'error');
     }
 }
