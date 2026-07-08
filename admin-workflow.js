@@ -529,12 +529,6 @@ window.selectDivision = function(divId) {
 
 async function loadDivisions() {
     const res = await apiCall('divisions', { action: 'get_divisions' });
-    if(res.success) {
-        const grid = document.getElementById('divisionsGrid');
-        grid.innerHTML = '';
-        
-        // WhatsApp Settings for current user
-        const waContainer = document.createElement('div');
     if(res.success && res.divisions) {
         window.divisionData = res.divisions;
         const list = document.getElementById('divisionSidebarList');
