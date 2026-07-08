@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const target = e.currentTarget.getAttribute('data-target');
             if(target === 'viewTasks') loadTasks();
             if(target === 'viewDivisions') loadDivisions();
-            if(target === 'viewContributions') loadContributions();
+            if(target === 'viewDashboard') window.loadContributions();
         });
     });
 });
@@ -568,7 +568,7 @@ window.removeMember = async function(email, divId) {
 // =======================
 // CONTRIBUTIONS
 // =======================
-async function loadContributions() {
+window.loadContributions = async function() {
     const resMe = await apiCall('contributions', { action: 'get_my_contributions' });
     if(resMe.success) {
         const total = resMe.contributions.reduce((sum, c) => sum + c.points, 0);
@@ -615,9 +615,8 @@ async function loadContributions() {
 // CBT REVIEW SCRAPPER
 // =======================
 document.addEventListener('DOMContentLoaded', () => {
-    document.getElementById('btnRefreshContributions')?.addEventListener('click', () => {
-        showToast('Refreshing contributions...');
-        loadContributions();
+    document.querySelector('.tab[data-target="viewDashboard"]')?.addEventListener('click', () => {
+        window.loadContributions();
     });
 });
 document.addEventListener('DOMContentLoaded', () => {

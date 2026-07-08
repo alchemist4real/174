@@ -199,6 +199,7 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
             window.isSuperAdmin = true;
             loadUsers();
             fetchHybridLogs();
+            if(window.loadContributions) window.loadContributions();
             
             try {
               if (supabaseClient) {
@@ -1157,6 +1158,10 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
     }
 
     document.getElementById('btnRefreshUsers').onclick = loadUsers;
+    document.getElementById('btnRefreshDashboard').onclick = () => {
+      fetchHybridLogs();
+      if(window.loadContributions) window.loadContributions();
+    };
 
     // User filter tabs
     var currentFilter = 'all';
