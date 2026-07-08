@@ -11,7 +11,8 @@ export default async function handler(req, res) {
   if (!sbKey) return res.status(500).json({ error: 'Server config error' });
 
   const userRes = await fetch(`${supabaseUrl}/auth/v1/user`, {
-    headers: { 'apikey': sbKey, 'Authorization': `Bearer ${token}` }
+    headers: { 'apikey': sbKey, 'Authorization': `Bearer ${token}`, 'Cache-Control': 'no-cache' },
+    cache: 'no-store'
   });
 
   if (!userRes.ok) return res.status(401).json({ error: 'Invalid token' });
@@ -27,21 +28,26 @@ export default async function handler(req, res) {
   try {
     if (action === 'get_my_contributions') {
       const resData = await fetch(`${supabaseUrl}/rest/v1/contributions?user_id=eq.${userId}&order=created_at.desc`, {
-        headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
+        headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}`, 'Cache-Control': 'no-cache' },
+        cache: 'no-store'
       });
       const data = await resData.json();
+      if (!Array.isArray(data)) console.error('get_my_contributions error:', data);
       return res.status(200).json({ success: true, contributions: Array.isArray(data) ? data : [] });
     }
 
     if (action === 'get_leaderboard') {
       const resData = await fetch(`${supabaseUrl}/rest/v1/contributions?select=points,user_id`, {
-        headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
+        headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}`, 'Cache-Control': 'no-cache' },
+        cache: 'no-store'
       });
       const data = await resData.json();
+      if (!Array.isArray(data)) console.error('get_leaderboard error:', data);
       const validData = Array.isArray(data) ? data : [];
       
       const usersRes = await fetch(`${supabaseUrl}/auth/v1/admin/users?page=1&per_page=100`, {
-        headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
+        headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}`, 'Cache-Control': 'no-cache' },
+        cache: 'no-store'
       });
       let allUsers = [];
       if (usersRes.ok) {
@@ -74,8 +80,9 @@ export default async function handler(req, res) {
        
        const rpcRes = await fetch(`${supabaseUrl}/rest/v1/rpc/check_user_contribution`, {
          method: 'POST',
-         headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}`, 'Content-Type': 'application/json' },
-         body: JSON.stringify({ uid: userId })
+         headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}`, 'Content-Type': 'application/json', 'Cache-Control': 'no-cache' },
+         body: JSON.stringify({ uid: userId }),
+         cache: 'no-store'
        });
        if (!rpcRes.ok) throw new Error(await rpcRes.text());
        const hasContributed = await rpcRes.json();
