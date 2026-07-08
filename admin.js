@@ -990,8 +990,8 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
       // Use globalStats from the backend API (bypasses RLS)
       var uptimeEl = document.getElementById('dashTotalUptime');
       if (globalStats && globalStats.total_uptime !== undefined) {
-        lastKnownUptime = globalStats.total_uptime;
-        lastFetchTime = Date.now();
+        window.lastKnownUptime = globalStats.total_uptime;
+        window.window.lastFetchTime = Date.now();
         uptimeEl.textContent = fmtTime(globalStats.total_uptime);
       } else {
         uptimeEl.textContent = '00:00:00';
@@ -1202,15 +1202,15 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
 
     // User polling removed in favor of Supabase realtime channel (users_changed)
 
-    let lastKnownUptime = 0;
-    let lastFetchTime = Date.now();
+    window.lastKnownUptime = window.lastKnownUptime || 0;
+    window.lastFetchTime = window.lastFetchTime || Date.now();
 
     // Smooth counter - update display every second
     setInterval(() => {
       const el = document.getElementById('dashTotalUptime');
-      if (!el || !lastKnownUptime) return;
-      const elapsed = Math.floor((Date.now() - lastFetchTime) / 1000);
-      el.textContent = fmtTime(lastKnownUptime + elapsed);
+      if (!el || !window.lastKnownUptime) return;
+      const elapsed = Math.floor((Date.now() - window.lastFetchTime) / 1000);
+      el.textContent = fmtTime(window.lastKnownUptime + elapsed);
     }, 1000);
 
     // Fetch real value every 30 seconds
@@ -1223,8 +1223,8 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
         });
         var data = await res.json();
         if (data.success && data.total_uptime !== undefined) {
-          lastKnownUptime = data.total_uptime;
-          lastFetchTime = Date.now();
+          window.lastKnownUptime = data.total_uptime;
+          window.lastFetchTime = Date.now();
         }
       } catch(e) { console.error("Error fetching uptime logs:", e); }
     }, 30000);
