@@ -3,8 +3,24 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
     const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
 
     let sessionToken = null;
-    let currentTree = [];
     let currentPath = '';
+    let currentTree = [];
+    let fileCache = {};
+
+    async function fetchFileSecureBlob(path, mimeType = 'application/octet-stream') {
+        const res = await adminAction('download', { path });
+        if (!res.success || !res.contentBase64) throw new Error("Failed to download: " + (res.error || 'Unknown error'));
+        const fetchRes = await fetch(`data:${mimeType};base64,${res.contentBase64}`);
+        return await fetchRes.blob();
+    }
+
+    async function fetchFileSecureText(path) {
+        const res = await adminAction('download', { path });
+        if (!res.success || !res.contentBase64) throw new Error("Failed to download: " + (res.error || 'Unknown error'));
+        const fetchRes = await fetch(`data:application/octet-stream;base64,${res.contentBase64}`);
+        return await fetchRes.text();
+    }
+
     let isGridMode = true;
     let selectedFiles = new Set();
 
@@ -577,15 +593,16 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
       if (document.getElementById('ctxDownload')) {
         document.getElementById('ctxDownload').onclick = async () => {
           modal.classList.add('hidden');
-          const rawUrl = `https://raw.githubusercontent.com/alchemist4real/MR-CAPSULES/main/${item.path}`;
           try {
-            const res = await fetch(rawUrl);
-            const blob = await res.blob();
+            const blob = await fetchFileSecureBlob(item.path);
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a'); a.href = url; a.download = item.name;
             document.body.appendChild(a); a.click(); document.body.removeChild(a);
             window.URL.revokeObjectURL(url);
           } catch(e) {
+            console.error(e);
+            showToast('Download via API failed. Opening fallback...', 'error');
+            const rawUrl = `https://raw.githubusercontent.com/alchemist4real/MR-CAPSULES/main/${item.path}`;
             window.open(rawUrl, '_blank');
           }
         };
@@ -765,13 +782,14 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
       };
       document.getElementById('lightboxBtnDownload').onclick = async () => {
         try {
-          const res = await fetch(rawUrl);
-          const blob = await res.blob();
+          const blob = await fetchFileSecureBlob(item.path);
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement('a'); a.href = url; a.download = item.name;
           document.body.appendChild(a); a.click(); document.body.removeChild(a);
           window.URL.revokeObjectURL(url);
         } catch(e) {
+          console.error(e);
+          showToast('Download via API failed. Opening fallback...', 'error');
           window.open(rawUrl, '_blank');
         }
       };
@@ -783,8 +801,7 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
         txt.textContent = "Loading preview...";
         txt.classList.remove('hidden');
         try {
-          const r = await fetch(rawUrl);
-          const text = await r.text();
+          const text = await fetchFileSecureText(item.path);
           txt.textContent = text;
         } catch(e) {
           txt.textContent = "Failed to load content preview. You can open it in GitHub directly: " + `https://github.com/alchemist4real/MR-CAPSULES/blob/main/${item.path}`;
@@ -861,8 +878,7 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
       }
       
       try {
-        const r = await fetch(rawUrl);
-        const text = await r.text();
+        const text = await fetchFileSecureText(item.path);
         window.cmEditor.setValue(text);
         if (item.name.endsWith('.html')) {
            iframe.srcdoc = text;

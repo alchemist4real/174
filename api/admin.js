@@ -159,8 +159,7 @@ export default async function handler(req, res) {
       });
       if (!fileRes.ok) return res.status(404).json({ error: 'File not found on GitHub' });
       const fileData = await fileRes.json();
-      const content = Buffer.from(fileData.content, 'base64').toString('utf-8');
-      return res.status(200).json({ success: true, content, sha: fileData.sha });
+      return res.status(200).json({ success: true, contentBase64: fileData.content, sha: fileData.sha });
     }
 
     if (action === 'tree') {
