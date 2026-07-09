@@ -219,8 +219,8 @@
           <div style="display:flex; align-items:center; gap:16px;">
             <h2 style="font-size:22px; font-weight:700; margin:0;">Task Board</h2>
             <select id="tasksViewToggle" class="auth-input" style="padding:4px 8px; font-size:13px; width:auto; border-radius:0;" onchange="toggleTasksView()">
+                <option value="syllabus" selected>Syllabus View</option>
                 <option value="kanban">Kanban View</option>
-                <option value="syllabus">Syllabus View</option>
             </select>
           </div>
           <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
@@ -252,7 +252,7 @@
             <button id="btnRefreshTasks" class="btn">Refresh</button>
           </div>
         </div>
-        <div id="taskKanban" style="display:flex; gap:16px; padding:24px; overflow-x:auto; height:calc(100% - 100px);">
+        <div id="taskKanban" class="hidden" style="display:flex; gap:16px; padding:24px; overflow-x:auto; height:calc(100% - 100px);">
           <!-- Kanban columns -->
           <div class="kanban-col" id="col-open" style="flex:1; min-width:300px; background:var(--bg-card); padding:16px; border-radius:0; border:1px solid var(--border-light);">
              <h3 style="margin-top:0; border-bottom:1px solid var(--border-light); padding-bottom:8px;">Open</h3>
@@ -275,7 +275,7 @@
              <div class="task-list" style="display:flex; flex-direction:column; gap:8px; margin-top:12px;"></div>
           </div>
       </div>
-        <div id="syllabusTableContainer" class="hidden" style="padding:24px; overflow-x:auto; height:calc(100% - 60px);">
+        <div id="syllabusTableContainer" style="padding:24px; overflow-x:auto; height:calc(100% - 60px);">
             <div style="background:var(--bg-card); border-radius:8px; border:1px solid var(--border-light); overflow:hidden;">
                 <table style="width:100%; border-collapse:collapse; text-align:left; font-size:13px; min-width:600px;">
                     <thead>
