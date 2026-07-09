@@ -339,6 +339,7 @@ function renderTasksAsSyllabus(tasks) {
 }
 
 function openTaskModal(task) {
+    window.currentOpenedTask = task;
     const isDev = currentUserDivision === 'development' || isAdminUser;
     const isRev = currentUserDivision === 'review' || isAdminUser;
     const isMyTask = task.assigned_to === currentUserId;
@@ -406,7 +407,7 @@ window.loadTaskLogs = async function(taskId) {
         }
         
         // Find latest rejection note if task is in progress
-        const isRejected = task && task.status === 'in_progress';
+        const isRejected = window.currentOpenedTask && window.currentOpenedTask.status === 'in_progress';
         let rejectNoteHtml = '';
         if (isRejected) {
             const lastReject = res.logs.find(l => l.action === 'rejected');
