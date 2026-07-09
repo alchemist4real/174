@@ -215,9 +215,9 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
             window.isSuperAdmin = true;
             loadUsers();
             if(typeof loadDivisions !== 'undefined') loadDivisions(); else if(window.loadDivisions) window.loadDivisions();
+            if(typeof loadTasks !== 'undefined') loadTasks(); else if(window.loadTasks) window.loadTasks();
+            if(window.loadContributions) window.loadContributions();
             fetchHybridLogs();
-            if(window.loadContributions) window.loadContributions();
-            if(window.loadContributions) window.loadContributions();
             
             try {
               if (supabaseClient) {

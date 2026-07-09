@@ -23,11 +23,15 @@ document.addEventListener('DOMContentLoaded', () => {
     document.querySelectorAll('.tab').forEach(t => {
         t.addEventListener('click', (e) => {
             const target = e.currentTarget.getAttribute('data-target');
-            if(target === 'viewTasks') loadTasks();
+            if(target === 'viewTasks') {
+                if(!window.allTasks) loadTasks();
+            }
             if(target === 'viewUsers') {
                 if(!window.divisionData) loadDivisions();
             }
-            if(target === 'viewDashboard') window.loadContributions();
+            if(target === 'viewDashboard') {
+                if(!window.contributionsLoaded) window.loadContributions();
+            }
         });
     });
     
@@ -82,11 +86,15 @@ async function initWorkflow() {
     }
 
     // If a tab was already clicked before initWorkflow finished, load its data now
-    if(document.getElementById('viewTasks')?.classList.contains('active')) loadTasks();
+    if(document.getElementById('viewTasks')?.classList.contains('active')) {
+        if(!window.allTasks) loadTasks();
+    }
     if(document.getElementById('viewUsers')?.classList.contains('active')) {
         if(!window.divisionData) loadDivisions();
     }
-    if(document.getElementById('viewDashboard')?.classList.contains('active')) window.loadContributions();
+    if(document.getElementById('viewDashboard')?.classList.contains('active')) {
+        if(!window.contributionsLoaded) window.loadContributions();
+    }
 }
 
 window.joinDivision = async function(divId) {
@@ -700,6 +708,7 @@ window.removeMember = async function(email, divId) {
 // CONTRIBUTIONS
 // =======================
 window.loadContributions = async function() {
+    window.contributionsLoaded = true;
     const resMe = await apiCall('contributions', { action: 'get_my_contributions' });
     if(resMe.success) {
         const total = resMe.contributions.reduce((sum, c) => sum + c.points, 0);
