@@ -55,7 +55,7 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
             '<div style="font-size:11px; color:var(--text-muted); margin-top:4px;">Devices: ' + sanitize(log.devStr || 'Unknown') + '</div>';
         } else if (log.type === 'online') {
           item.innerHTML = '<div style="font-size:12px; color:var(--text-muted);">' + timeStr + ' - [LIVE PRESENCE]</div>' +
-            '<div style="font-weight:600; color:#4ADE80;">' + sanitize(log.user) + ' came online</div>';
+            '<div style="font-weight:600; color:#000000;">' + sanitize(log.user) + ' came online</div>';
         } else if (log.type === 'offline') {
           item.innerHTML = '<div style="font-size:12px; color:var(--text-muted);">' + timeStr + ' - [LIVE PRESENCE]</div>' +
             '<div style="font-weight:600; color:var(--danger);">' + sanitize(log.user) + ' went offline</div>';
@@ -1344,7 +1344,7 @@ function walkAndReplaceMR(node, isMrs) {
       toast.style.background = 'var(--bg-card)';
       toast.style.border = '1px solid var(--border-light)';
       if (type === 'error') toast.style.borderLeft = '4px solid var(--danger)';
-      else if (type === 'success') toast.style.borderLeft = '4px solid #4ADE80';
+      else if (type === 'success') toast.style.borderLeft = '4px solid #000000';
       else toast.style.borderLeft = '4px solid var(--accent)';
       toast.style.padding = '12px 16px';
       toast.style.borderRadius = '4px';

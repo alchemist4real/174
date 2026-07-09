@@ -408,7 +408,7 @@ window.loadTaskLogs = async function(taskId) {
         if (isRejected) {
             const lastReject = res.logs.find(l => l.action === 'rejected');
             if (lastReject && lastReject.note) {
-                rejectNoteHtml = `<div style="margin-bottom:12px; padding:8px; background:rgba(239,68,68,0.1); border-left:3px solid var(--danger); border-radius:0 4px 4px 0;">
+                rejectNoteHtml = `<div style="margin-bottom:12px; padding:8px; background:rgba(0, 0, 0, 0.1); border-left:3px solid var(--danger); border-radius:0 4px 4px 0;">
                     <div style="font-size:10px; font-weight:bold; color:var(--danger); text-transform:uppercase;">Latest Rejection Reason</div>
                     <div style="font-size:11px; color:var(--text-main); margin-top:4px;">"${lastReject.note}"</div>
                 </div>`;
@@ -493,7 +493,7 @@ async function loadDivisions() {
         waContainer.onmouseout = () => { waContainer.style.transform = 'translateY(0)'; waContainer.style.boxShadow = '0 2px 10px rgba(0,0,0,0.05)'; };
         waContainer.innerHTML = `
             <div style="font-weight:600; font-size:15px; color:var(--text-main); display:flex; align-items:center; gap:8px;">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#25D366;"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#000000;"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
                 WhatsApp Number
             </div>
             <input type="text" id="myWaInput" class="auth-input" placeholder="e.g. 6281234567890" style="width:250px; border-radius:6px; padding:10px 14px;">
@@ -530,7 +530,7 @@ async function loadDivisions() {
                 <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
                     <div>
                         <h3 style="margin:0; font-size:18px; color:var(--accent); font-weight:700; letter-spacing:-0.3px;">${div.name}</h3>
-                        <div style="display:inline-block; margin-top:6px; padding:2px 8px; background:rgba(37, 99, 235, 0.1); color:var(--accent); border-radius:12px; font-size:11px; font-weight:600;">${div.member_count} Members</div>
+                        <div style="display:inline-block; margin-top:6px; padding:2px 8px; background:rgba(0, 0, 0, 0.1); color:var(--accent); border-radius:12px; font-size:11px; font-weight:600;">${div.member_count} Members</div>
                     </div>
                     ${window.isSuperAdmin ? `<button class="btn primary" style="font-size:12px; padding:6px 12px; border-radius:6px;" onclick="promptAddMember('${div.id}')">+ Add</button>` : ''}
                 </div>
@@ -577,7 +577,7 @@ async function loadContributions() {
         const statusEl = document.getElementById('contributionStatus');
         if(hasRecent || isAdminUser) {
             statusEl.textContent = 'Active Contributor (Access Granted)';
-            statusEl.style.color = '#4ADE80';
+            statusEl.style.color = '#000000';
         } else {
             statusEl.textContent = 'Inactive for 30 days (Access Revoked)';
             statusEl.style.color = 'var(--danger)';
@@ -657,7 +657,7 @@ function parseCBTHtml(path, html) {
     const qContainers = doc.querySelectorAll('.soal-container, .card, .question-block, fieldset');
     
     if(qContainers.length === 0) {
-        listEl.innerHTML = '<div style="padding:16px; background:rgba(239,68,68,0.1); color:var(--danger); border-radius:4px;">No standard question blocks found. This scrapper supports specific CBT HTML formats. You can still use the raw HTML editor in the Files tab.</div>';
+        listEl.innerHTML = '<div style="padding:16px; background:rgba(0, 0, 0, 0.1); color:var(--danger); border-radius:4px;">No standard question blocks found. This scrapper supports specific CBT HTML formats. You can still use the raw HTML editor in the Files tab.</div>';
         return;
     }
 

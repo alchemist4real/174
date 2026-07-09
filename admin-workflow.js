@@ -412,7 +412,7 @@ window.loadTaskLogs = async function(taskId) {
         if (isRejected) {
             const lastReject = res.logs.find(l => l.action === 'rejected');
             if (lastReject && lastReject.note) {
-                rejectNoteHtml = `<div style="margin-bottom:12px; padding:8px; background:rgba(239,68,68,0.1); border-left:3px solid var(--danger); border-radius:0;">
+                rejectNoteHtml = `<div style="margin-bottom:12px; padding:8px; background:rgba(0, 0, 0, 0.1); border-left:3px solid var(--danger); border-radius:0;">
                     <div style="font-size:10px; font-weight:bold; color:var(--danger); text-transform:uppercase;">Latest Rejection Reason</div>
                     <div style="font-size:11px; color:var(--text-main); margin-top:4px;">"${lastReject.note}"</div>
                 </div>`;
@@ -512,7 +512,7 @@ window.selectDivision = function(divId) {
         const btn = document.querySelector('.btn-div-item[data-id="' + divId + '"]');
         if(btn) {
             btn.classList.add('active');
-            btn.style.background = 'rgba(37, 99, 235, 0.1)';
+            btn.style.background = 'rgba(0, 0, 0, 0.1)';
             btn.style.color = 'var(--accent)';
         }
         
@@ -562,7 +562,7 @@ async function loadDivisions() {
             btn.setAttribute('data-id', div.id);
             btn.style.cssText = 'justify-content:space-between; padding:12px 16px; text-align:left; border:none; background:transparent; color:var(--text-main); font-size:15px; font-weight:700; border-radius:4px; margin-bottom:8px;';
             if(window.currentDivisionId === div.id) {
-                btn.style.background = 'rgba(37, 99, 235, 0.1)';
+                btn.style.background = 'rgba(0, 0, 0, 0.1)';
                 btn.style.color = 'var(--accent)';
                 btn.classList.add('active');
             }
@@ -611,7 +611,7 @@ window.loadContributions = async function() {
         const statusEl = document.getElementById('contributionStatus');
         if(hasRecent || isAdminUser) {
             statusEl.textContent = 'Active Contributor (Access Granted)';
-            statusEl.style.color = '#4ADE80';
+            statusEl.style.color = '#000000';
         } else {
             statusEl.textContent = 'Inactive for 30 days (Access Revoked)';
             statusEl.style.color = 'var(--danger)';
@@ -698,7 +698,7 @@ function parseCBTHtml(path, html) {
     const qContainers = doc.querySelectorAll('.soal-container, .card, .question-block, fieldset');
     
     if(qContainers.length === 0) {
-        listEl.innerHTML = '<div style="padding:16px; background:rgba(239,68,68,0.1); color:var(--danger); border-radius:0;">No standard question blocks found. This scrapper supports specific CBT HTML formats. You can still use the raw HTML editor in the Files tab.</div>';
+        listEl.innerHTML = '<div style="padding:16px; background:rgba(0, 0, 0, 0.1); color:var(--danger); border-radius:0;">No standard question blocks found. This scrapper supports specific CBT HTML formats. You can still use the raw HTML editor in the Files tab.</div>';
         return;
     }
 

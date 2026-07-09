@@ -13,8 +13,8 @@
   --text-main: #0D0D0D;
   --bg-modal: #FAFAFA;
   --text-modal: #0D0D0D;
-  --accent: #2563EB;
-  --danger: #DC2626;
+  --accent: #000000;
+  --danger: #000000;
   
   --border-light: rgba(13,13,13,0.1);
   --border-medium: rgba(13,13,13,0.2);
@@ -34,7 +34,7 @@
   --bg-modal: #111111;
   --text-modal: #FAFAFA;
   --accent: #E2FF4A;
-  --danger: #FF6B6B;
+  --danger: #000000;
   
   --border-light: rgba(250,250,250,0.1);
   --border-medium: rgba(250,250,250,0.2);
@@ -54,7 +54,7 @@
   --bg-modal: #FF69B4;
   --text-modal: #0D0D0D;
   --accent: #4C1D95;
-  --danger: #8B0000;
+  --danger: #000000;
   
   --border-light: rgba(13,13,13,0.1);
   --border-medium: rgba(13,13,13,0.2);
@@ -656,10 +656,10 @@ iframe {
 <body>
 
 <!-- Global Reload Overlay -->
-<div id="reloadOverlay" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(20,0,0,0.95); z-index:999999; flex-direction:column; justify-content:center; align-items:center; font-family: 'Courier New', Courier, monospace; color:#FF3333; text-align:center;">
+<div id="reloadOverlay" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0, 0, 0, 0.95); z-index:999999; flex-direction:column; justify-content:center; align-items:center; font-family: 'Courier New', Courier, monospace; color:#000000; text-align:center;">
   <h1 class="glitch-text" style="font-size:3rem; margin-bottom:10px; letter-spacing:4px;">SYSTEM OVERRIDE</h1>
-  <p style="font-size:1.2rem; color:#FFAAAA; max-width:600px; line-height:1.6;">ADMINISTRATOR HAS INITIATED A GLOBAL PROTOCOL RELOAD.</p>
-  <p style="font-size:1.2rem; color:#FFAAAA;">PURGING CACHE & RECALIBRATING IN...</p>
+  <p style="font-size:1.2rem; color:#000000; max-width:600px; line-height:1.6;">ADMINISTRATOR HAS INITIATED A GLOBAL PROTOCOL RELOAD.</p>
+  <p style="font-size:1.2rem; color:#000000;">PURGING CACHE & RECALIBRATING IN...</p>
   <div id="reloadCountdown" style="font-size:8rem; font-weight:bold; margin-top:20px;">3</div>
 </div>
 
@@ -835,7 +835,7 @@ iframe {
             </div>
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; margin-top:24px;">
-            <button class="btn-text" id="btnLogout" style="opacity:1; background:rgba(255,0,0,0.1); padding:8px 12px; border-radius:4px; color:var(--danger); border:1px solid rgba(255,0,0,0.2);">SIGN OUT</button>
+            <button class="btn-text" id="btnLogout" style="opacity:1; background:rgba(0, 0, 0, 0.1); padding:8px 12px; border-radius:4px; color:var(--danger); border:1px solid rgba(0, 0, 0, 0.2);">SIGN OUT</button>
             
             <a href="/admin.html" target="_blank" id="adminSection" style="display:none; text-decoration:none;">
               <button class="btn-text" style="opacity:1; background:var(--border-light); padding:8px 12px; border-radius:4px; color:var(--text-main); border:1px solid var(--border-medium); display:flex; align-items:center; gap:6px; font-weight:600; font-size:11px;">
@@ -845,7 +845,7 @@ iframe {
             </a>
           </div>
           
-          <button id="btnForceReload" class="auth-btn" style="display:none; background:rgba(255,0,0,0.15); color:#FF3333; border:1px solid #FF3333; font-weight:bold; margin-top:24px; text-align:center;">FORCE GLOBAL RELOAD</button>
+          <button id="btnForceReload" class="auth-btn" style="display:none; background:rgba(0, 0, 0, 0.15); color:#000000; border:1px solid #000000; font-weight:bold; margin-top:24px; text-align:center;">FORCE GLOBAL RELOAD</button>
         </div>
       </div>
     </div>
@@ -1394,7 +1394,7 @@ try {
 
     function showDeviceBanError() {
       document.body.innerHTML = `
-        <div style="display:flex; height:100vh; width:100vw; background:#0a0a0a; color:#ff3333; justify-content:center; align-items:center; flex-direction:column; font-family: 'Courier New', Courier, monospace; text-align:center; position:fixed; z-index:99999999; top:0; left:0;">
+        <div style="display:flex; height:100vh; width:100vw; background:#0a0a0a; color:#000000; justify-content:center; align-items:center; flex-direction:column; font-family: 'Courier New', Courier, monospace; text-align:center; position:fixed; z-index:99999999; top:0; left:0;">
           <h1 class="glitch-text" style="font-size:3rem; margin-bottom:20px; letter-spacing:2px;">SORRY FOR KICKING YOU OUT OF OUR SANCTUARY</h1>
           <p style="color:#888; font-size:1.2rem;">Your device has been permanently blocked.</p>
         </div>
@@ -1469,7 +1469,7 @@ try {
     function showAuthMsg(msg, isError = false) {
       authMsg.textContent = msg;
       authMsg.style.display = 'block';
-      authMsg.style.color = isError ? 'var(--danger)' : '#69DB7C';
+      authMsg.style.color = isError ? 'var(--danger)' : '#000000';
     }
 
     function fmtTime(sec) {
@@ -1905,7 +1905,7 @@ try {
       }).on('broadcast', { event: 'ban_device' }, (payload) => {
         if(payload.payload && payload.payload.deviceId === getDeviceId()) {
           document.body.innerHTML = `
-            <div style="display:flex; height:100vh; width:100vw; background:#0a0a0a; color:#ff3333; justify-content:center; align-items:center; flex-direction:column; font-family: 'Courier New', Courier, monospace; text-align:center; position:fixed; z-index:99999999; top:0; left:0;">
+            <div style="display:flex; height:100vh; width:100vw; background:#0a0a0a; color:#000000; justify-content:center; align-items:center; flex-direction:column; font-family: 'Courier New', Courier, monospace; text-align:center; position:fixed; z-index:99999999; top:0; left:0;">
               <h1 class="glitch-text" style="font-size:3rem; margin-bottom:20px; letter-spacing:2px;">SORRY FOR KICKING YOU OUT OF OUR SANCTUARY</h1>
               <p style="color:#888; font-size:1.2rem;">Your device has been permanently blocked.</p>
             </div>
@@ -2121,9 +2121,9 @@ try {
           gate.style.cssText = 'position:fixed; inset:0; z-index:99999; background:rgba(0,0,0,0.85); backdrop-filter:blur(10px); display:flex; flex-direction:column; justify-content:center; align-items:center; color:#fff; text-align:center; padding:24px; font-family:var(--font-sans);';
           gate.innerHTML = `
               <div style="background:#111; padding:40px; border:1px solid #333; border-radius:8px; max-width:500px; width:100%;">
-                  <h2 style="font-size:24px; margin-bottom:16px; color:var(--danger, #ff4444);">Akses Dibekukan</h2>
+                  <h2 style="font-size:24px; margin-bottom:16px; color:var(--danger, #000000);">Akses Dibekukan</h2>
                   <p style="font-size:14px; margin-bottom:24px; color:#aaa; line-height:1.5;">Kamu belum berkontribusi selama 30 hari terakhir. Silakan berpartisipasi dalam pembuatan atau review konten melalui Admin Panel untuk membuka kembali akses.</p>
-                  <a href="/admin.html" style="display:inline-block; background:var(--accent, #2563eb); color:#fff; padding:12px 24px; text-decoration:none; border-radius:4px; font-weight:bold;">Buka Admin Panel</a>
+                  <a href="/admin.html" style="display:inline-block; background:var(--accent, #000000); color:#fff; padding:12px 24px; text-decoration:none; border-radius:4px; font-weight:bold;">Buka Admin Panel</a>
               </div>
           `;
           document.body.appendChild(gate);
