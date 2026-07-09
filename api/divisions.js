@@ -33,9 +33,16 @@ export default async function handler(req, res) {
       if (!division_id || !['management', 'development', 'review'].includes(division_id)) {
          return res.status(400).json({ error: 'Invalid division_id' });
       }
+      // Clear existing divisions to prevent multiple rows per user
+      await fetch(`${supabaseUrl}/rest/v1/division_members?user_id=eq.${userId}`, {
+        method: 'DELETE',
+        headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
+      });
+
+      // Insert the new division
       const postRes = await fetch(`${supabaseUrl}/rest/v1/division_members`, {
         method: 'POST',
-        headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}`, 'Content-Type': 'application/json', 'Prefer': 'resolution=merge-duplicates' },
+        headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}`, 'Content-Type': 'application/json' },
         body: JSON.stringify({ user_id: userId, division_id, whatsapp: whatsapp || null })
       });
       if (!postRes.ok) return res.status(400).json({ error: 'Failed to join division' });
