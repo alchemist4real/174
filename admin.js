@@ -1322,8 +1322,32 @@ function walkAndReplaceMR(node, isMrs) {
     window.addEventListener('storage', (e) => {
       if (e.key === 'mr_theme' || e.key === 'theme') {
         applyAdminTheme(e.newValue);
+        if (typeof updateAdminThemeBtns !== 'undefined') updateAdminThemeBtns(e.newValue);
       }
     });
+
+    const adminThemeBtns = document.querySelectorAll('.admin-theme-btn');
+    function updateAdminThemeBtns(val) {
+      if (!val) val = 'light';
+      adminThemeBtns.forEach(b => {
+        if (b.getAttribute('data-theme-val') === val) {
+          b.style.fontWeight = 'bold';
+          b.style.border = '2px solid var(--accent)';
+        } else {
+          b.style.fontWeight = 'normal';
+          b.style.border = '1px solid transparent';
+        }
+      });
+    }
+    adminThemeBtns.forEach(b => {
+      b.addEventListener('click', () => {
+        const v = b.getAttribute('data-theme-val');
+        localStorage.setItem('mr_theme', v);
+        applyAdminTheme(v);
+        updateAdminThemeBtns(v);
+      });
+    });
+    updateAdminThemeBtns(initialThemeVal);
 
 
 
