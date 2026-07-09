@@ -174,7 +174,7 @@
     input:checked + .slider { background-color: var(--accent); border-color: var(--accent); }
     input:checked + .slider:before { transform: translateX(20px); background-color: #000; }
     
-    .auth-input { background: #000; border: 1px solid var(--border-light); color: #fff; padding: 8px 12px; border-radius: 0; outline: none; }
+    .auth-input { background: var(--bg-main); border: 1px solid var(--border-medium); color: var(--text-main); padding: 8px 12px; border-radius: 0; outline: none; }
     .auth-input:focus { border-color: var(--accent); }
 
     .user-grid {
