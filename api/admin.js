@@ -154,9 +154,7 @@ export default async function handler(req, res) {
       if (!path) return res.status(400).json({ error: 'Missing path' });
       const owner = 'alchemist4real';
       const repo = 'MR-CAPSULES';
-      const fileRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${encodeURIComponent(path)}`, {
-        headers: { 'Authorization': `token ${process.env.GH_TOKEN}`, 'Accept': 'application/vnd.github.v3+json' }
-      });
+      const fileRes = await ghApi('GET', `/contents/${encodeURIComponent(path)}`);
       if (!fileRes.ok) return res.status(404).json({ error: 'File not found on GitHub' });
       const fileData = await fileRes.json();
       return res.status(200).json({ success: true, contentBase64: fileData.content, sha: fileData.sha });
