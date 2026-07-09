@@ -24,12 +24,10 @@ document.addEventListener('DOMContentLoaded', () => {
         t.addEventListener('click', (e) => {
             const target = e.currentTarget.getAttribute('data-target');
             if(target === 'viewTasks') loadTasks();
-            if(target === 'viewUsers') loadDivisions();
+            if(target === 'viewDivisions') loadDivisions();
             if(target === 'viewDashboard') window.loadContributions();
         });
     });
-    
-    window.loadDivisions = loadDivisions;
 });
 
 async function apiCall(endpoint, payload) {
@@ -72,7 +70,7 @@ async function initWorkflow() {
         window.supabaseClient
             .channel('public:division_members')
             .on('postgres_changes', { event: '*', schema: 'public', table: 'division_members' }, payload => {
-                if(document.getElementById('viewUsers')?.classList.contains('active')) {
+                if(document.getElementById('viewDivisions')?.classList.contains('active')) {
                     loadDivisions();
                 }
             })
@@ -81,7 +79,7 @@ async function initWorkflow() {
 
     // If a tab was already clicked before initWorkflow finished, load its data now
     if(document.getElementById('viewTasks')?.classList.contains('active')) loadTasks();
-    if(document.getElementById('viewUsers')?.classList.contains('active')) loadDivisions();
+    if(document.getElementById('viewDivisions')?.classList.contains('active')) loadDivisions();
     if(document.getElementById('viewDashboard')?.classList.contains('active')) window.loadContributions();
 }
 
@@ -531,6 +529,12 @@ window.selectDivision = function(divId) {
 
 async function loadDivisions() {
     const res = await apiCall('divisions', { action: 'get_divisions' });
+    if(res.success) {
+        const grid = document.getElementById('divisionsGrid');
+        grid.innerHTML = '';
+        
+        // WhatsApp Settings for current user
+        const waContainer = document.createElement('div');
     if(res.success && res.divisions) {
         window.divisionData = res.divisions;
         const list = document.getElementById('divisionSidebarList');
@@ -549,10 +553,10 @@ async function loadDivisions() {
             if(btnSaveWa) {
                 btnSaveWa.onclick = async () => {
                     const wa = document.getElementById('myWaInput').value;
-                    window.showToast('Saving...');
+                    showToast('Saving...');
                     const wRes = await apiCall('divisions', { action: 'update_whatsapp', whatsapp: wa });
-                    if(wRes.success) window.showToast('WhatsApp updated!', 'success');
-                    else window.showToast('Failed: ' + wRes.error, 'error');
+                    if(wRes.success) showToast('WhatsApp updated!', 'success');
+                    else showToast('Failed: ' + wRes.error, 'error');
                 };
             }
         }
@@ -584,18 +588,18 @@ async function loadDivisions() {
 window.promptAddMember = async function(divId) {
     const email = prompt("Enter member's exact email address:");
     if(!email) return;
-    window.showToast('Assigning member...');
+    showToast('Assigning member...');
     const res = await apiCall('divisions', { action: 'assign_member', target_email: email, division_id: divId });
-    if(res.success) { window.showToast('Assigned!', 'success'); loadDivisions(); }
-    else window.showToast('Failed: ' + res.error, 'error');
+    if(res.success) { showToast('Assigned!', 'success'); loadDivisions(); }
+    else showToast('Failed: ' + res.error, 'error');
 };
 
 window.removeMember = async function(email, divId) {
     if(!confirm('Remove ' + email + ' from this division?')) return;
-    window.showToast('Removing...');
+    showToast('Removing...');
     const res = await apiCall('divisions', { action: 'remove_member', target_email: email, division_id: divId });
-    if(res.success) { window.showToast('Removed!', 'success'); loadDivisions(); }
-    else window.showToast('Failed: ' + res.error, 'error');
+    if(res.success) { showToast('Removed!', 'success'); loadDivisions(); }
+    else showToast('Failed: ' + res.error, 'error');
 };
 
 // =======================
@@ -767,4 +771,6 @@ function parseCBTHtml(path, html) {
             showToast('Save failed: ' + data.error, 'error');
         }
     };
+}
+
 }

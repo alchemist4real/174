@@ -1335,6 +1335,7 @@ function walkAndReplaceMR(node, isMrs) {
       });
     }
 
+    window.showToast = showToast;
     function showToast(msg, type = 'info') {
       const container = document.getElementById('toastContainer');
       if (!container) return;
