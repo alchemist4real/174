@@ -35,7 +35,7 @@ export default async function handler(req, res) {
       }
       const postRes = await fetch(`${supabaseUrl}/rest/v1/division_members`, {
         method: 'POST',
-        headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}`, 'Content-Type': 'application/json' },
+        headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}`, 'Content-Type': 'application/json', 'Prefer': 'resolution=merge-duplicates' },
         body: JSON.stringify({ user_id: userId, division_id, whatsapp: whatsapp || null })
       });
       if (!postRes.ok) return res.status(400).json({ error: 'Failed to join division' });
