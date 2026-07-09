@@ -24,7 +24,9 @@ document.addEventListener('DOMContentLoaded', () => {
         t.addEventListener('click', (e) => {
             const target = e.currentTarget.getAttribute('data-target');
             if(target === 'viewTasks') loadTasks();
-            if(target === 'viewUsers') loadDivisions();
+            if(target === 'viewUsers') {
+                if(!window.divisionData) loadDivisions();
+            }
             if(target === 'viewDashboard') window.loadContributions();
         });
     });
@@ -81,7 +83,9 @@ async function initWorkflow() {
 
     // If a tab was already clicked before initWorkflow finished, load its data now
     if(document.getElementById('viewTasks')?.classList.contains('active')) loadTasks();
-    if(document.getElementById('viewUsers')?.classList.contains('active')) loadDivisions();
+    if(document.getElementById('viewUsers')?.classList.contains('active')) {
+        if(!window.divisionData) loadDivisions();
+    }
     if(document.getElementById('viewDashboard')?.classList.contains('active')) window.loadContributions();
 }
 
