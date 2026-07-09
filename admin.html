@@ -215,18 +215,44 @@
 
 <!-- TASKS VIEW -->
       <div id="viewTasks" class="view-section">
-        <div class="toolbar" style="justify-content:space-between;">
-          <h2 style="font-size:22px; font-weight:700; margin:0;">Task Board</h2>
-          <div style="display:flex; gap:12px; align-items:center;">
+        <div class="toolbar" style="justify-content:space-between; flex-wrap:wrap; gap:16px;">
+          <div style="display:flex; align-items:center; gap:16px;">
+            <h2 style="font-size:22px; font-weight:700; margin:0;">Task Board</h2>
             <select id="tasksViewToggle" class="auth-input" style="padding:4px 8px; font-size:13px; width:auto; border-radius:0;" onchange="toggleTasksView()">
                 <option value="kanban">Kanban View</option>
                 <option value="syllabus">Syllabus View</option>
             </select>
-            <button id="btnCreateTask" class="btn primary" style="display:none;">+ New Task</button>
+          </div>
+          <div style="display:flex; gap:12px; align-items:center; flex-wrap:wrap;">
+            <input type="text" id="filterTaskSearch" class="auth-input" placeholder="Search tasks..." style="padding:4px 8px; font-size:13px; width:150px; border-radius:0;" oninput="if(window.applyTaskFilters) window.applyTaskFilters()">
+            <select id="filterTaskCategory" class="auth-input" style="padding:4px 8px; font-size:13px; width:auto; border-radius:0;" onchange="if(window.applyTaskFilters) window.applyTaskFilters()">
+                <option value="all">All Categories</option>
+                <option value="CBT">CBT</option>
+                <option value="OSCE">OSCE</option>
+                <option value="Video">Video</option>
+                <option value="Summary">Summary</option>
+            </select>
+            <select id="filterTaskSemester" class="auth-input" style="padding:4px 8px; font-size:13px; width:auto; border-radius:0;" onchange="if(window.applyTaskFilters) window.applyTaskFilters()">
+                <option value="all">All Semesters</option>
+                <option value="1">Semester 1</option>
+                <option value="2">Semester 2</option>
+                <option value="3">Semester 3</option>
+                <option value="4">Semester 4</option>
+                <option value="5">Semester 5</option>
+                <option value="6">Semester 6</option>
+                <option value="7">Semester 7</option>
+                <option value="8">Semester 8</option>
+            </select>
+            <select id="filterTaskAssignee" class="auth-input" style="padding:4px 8px; font-size:13px; width:auto; border-radius:0;" onchange="if(window.applyTaskFilters) window.applyTaskFilters()">
+                <option value="all">All Users</option>
+                <option value="me">My Tasks</option>
+                <option value="unassigned">Unassigned</option>
+            </select>
+            <button id="btnCreateTask" class="btn primary" style="display:none; margin-left:8px;">+ New Task</button>
             <button id="btnRefreshTasks" class="btn">Refresh</button>
           </div>
         </div>
-        <div id="taskKanban" style="display:flex; gap:16px; padding:24px; overflow-x:auto; height:calc(100% - 60px);">
+        <div id="taskKanban" style="display:flex; gap:16px; padding:24px; overflow-x:auto; height:calc(100% - 100px);">
           <!-- Kanban columns -->
           <div class="kanban-col" id="col-open" style="flex:1; min-width:300px; background:var(--bg-card); padding:16px; border-radius:0; border:1px solid var(--border-light);">
              <h3 style="margin-top:0; border-bottom:1px solid var(--border-light); padding-bottom:8px;">Open</h3>

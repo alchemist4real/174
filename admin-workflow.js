@@ -118,14 +118,54 @@ async function loadTasks() {
     });
     const res = await apiCall('tasks', { action: 'list_tasks' });
     if(res.success) {
-        renderKanban(res.tasks || []);
-        if (typeof renderTasksAsSyllabus === 'function') {
-            renderTasksAsSyllabus(res.tasks || []);
+        window.allTasks = res.tasks || [];
+        if(window.applyTaskFilters) {
+            window.applyTaskFilters();
+        } else {
+            renderKanban(window.allTasks);
+            if (typeof renderTasksAsSyllabus === 'function') {
+                renderTasksAsSyllabus(window.allTasks);
+            }
         }
     } else {
         showToast('Failed to load tasks: ' + res.error, 'error');
     }
 }
+
+window.applyTaskFilters = function() {
+    if (!window.allTasks) return;
+    let filtered = window.allTasks;
+    
+    const search = (document.getElementById('filterTaskSearch') ? document.getElementById('filterTaskSearch').value.toLowerCase() : '');
+    const category = (document.getElementById('filterTaskCategory') ? document.getElementById('filterTaskCategory').value : 'all');
+    const semester = (document.getElementById('filterTaskSemester') ? document.getElementById('filterTaskSemester').value : 'all');
+    const assignee = (document.getElementById('filterTaskAssignee') ? document.getElementById('filterTaskAssignee').value : 'all');
+    
+    if(search) {
+        filtered = filtered.filter(t => 
+            (t.title && t.title.toLowerCase().includes(search)) || 
+            (t.description && t.description.toLowerCase().includes(search))
+        );
+    }
+    if(category !== 'all') {
+        filtered = filtered.filter(t => t.category === category);
+    }
+    if(semester !== 'all') {
+        filtered = filtered.filter(t => t.semester === parseInt(semester));
+    }
+    if(assignee !== 'all') {
+        if(assignee === 'me') {
+            filtered = filtered.filter(t => t.assigned_to === currentUserId);
+        } else if (assignee === 'unassigned') {
+            filtered = filtered.filter(t => !t.assigned_to);
+        }
+    }
+    
+    renderKanban(filtered);
+    if (typeof renderTasksAsSyllabus === 'function') {
+        renderTasksAsSyllabus(filtered);
+    }
+};
 
 function renderKanban(tasks) {
     const cols = {
