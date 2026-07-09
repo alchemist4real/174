@@ -575,11 +575,19 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
         };
       }
       if (document.getElementById('ctxDownload')) {
-        document.getElementById('ctxDownload').onclick = () => {
+        document.getElementById('ctxDownload').onclick = async () => {
           modal.classList.add('hidden');
           const rawUrl = `https://raw.githubusercontent.com/alchemist4real/MR-CAPSULES/main/${item.path}`;
-          const a = document.createElement('a'); a.href = rawUrl; a.download = item.name; a.target = '_blank';
-          document.body.appendChild(a); a.click(); document.body.removeChild(a);
+          try {
+            const res = await fetch(rawUrl);
+            const blob = await res.blob();
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a'); a.href = url; a.download = item.name;
+            document.body.appendChild(a); a.click(); document.body.removeChild(a);
+            window.URL.revokeObjectURL(url);
+          } catch(e) {
+            window.open(rawUrl, '_blank');
+          }
         };
       }
       if (document.getElementById('ctxMove')) {
@@ -755,9 +763,17 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
       document.getElementById('lightboxBtnNewTab').onclick = () => {
         window.open(rawUrl, '_blank');
       };
-      document.getElementById('lightboxBtnDownload').onclick = () => {
-        const a = document.createElement('a'); a.href = rawUrl; a.download = item.name; a.target = '_blank';
-        document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      document.getElementById('lightboxBtnDownload').onclick = async () => {
+        try {
+          const res = await fetch(rawUrl);
+          const blob = await res.blob();
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a'); a.href = url; a.download = item.name;
+          document.body.appendChild(a); a.click(); document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+        } catch(e) {
+          window.open(rawUrl, '_blank');
+        }
       };
 
       if (isImg) {
