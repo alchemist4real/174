@@ -933,7 +933,7 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
     window.loadUsers = loadUsers;
     async function loadUsers(divIdFilter = null) {
       window.loadUsers = loadUsers; // Export globally
-      const filterToUse = divIdFilter || (window.currentDivisionId && window.currentDivisionId !== 'all' ? window.currentDivisionId : null);
+      const filterToUse = (divIdFilter && divIdFilter !== 'all') ? divIdFilter : (window.currentDivisionId && window.currentDivisionId !== 'all' ? window.currentDivisionId : null);
       const userBrowser = document.getElementById('userBrowser');
       userBrowser.innerHTML = '<div style="padding:48px; color:var(--text-muted); text-align:center; font-size:18px;">Loading users... <div style="display:inline-block; width:20px; height:20px; border:3px solid rgba(255,255,255,0.3); border-radius:50%; border-top-color:#fff; animation:spin 1s ease-in-out infinite; margin-left:10px; vertical-align:middle;"></div></div>';
       try {
@@ -1131,6 +1131,15 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
           };
         }
 
+        if (card.querySelector('.btn-remove-div')) {
+          card.querySelector('.btn-remove-div').onclick = async (e) => {
+             const targetEmail = e.target.getAttribute('data-email');
+             if(window.removeMember) {
+                 window.removeMember(targetEmail, window.currentDivisionId);
+             }
+          };
+        }
+
         const devBtns = card.querySelectorAll('.btn-block-dev');
         devBtns.forEach(btn => {
           btn.onclick = async (e) => {
@@ -1172,6 +1181,7 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
 
         userBrowser.appendChild(card);
       });
+      if (window.applyUserFilters) window.applyUserFilters();
     }
 
     document.getElementById('btnRefreshDashboard').onclick = () => {
@@ -1179,23 +1189,39 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
       if(window.loadContributions) window.loadContributions();
     };
 
+    window.currentFilter = 'all';
+    window.applyUserFilters = function() {
+        const searchInput = document.getElementById('searchUsersInput');
+        const val = searchInput ? searchInput.value.toLowerCase() : '';
+        const cards = document.querySelectorAll('#userBrowser .user-card');
+        
+        cards.forEach(card => {
+            let show = true;
+            
+            if (window.currentFilter === 'banned') show = card.getAttribute('data-banned') === 'true';
+            else if (window.currentFilter === 'admin') show = card.getAttribute('data-admin') === 'true';
+            else if (window.currentFilter === 'online') show = card.getAttribute('data-online') === 'true';
+            
+            if (show && val) {
+                const email = (card.querySelector('.user-email')?.textContent || '').toLowerCase();
+                const meta = (card.querySelector('.user-meta')?.textContent || '').toLowerCase();
+                if (!email.includes(val) && !meta.includes(val)) {
+                    show = false;
+                }
+            }
+            card.style.display = show ? '' : 'none';
+        });
+    };
+
     // User filter tabs
-    var currentFilter = 'all';
     document.querySelectorAll('.user-filter').forEach(function(btn) {
       btn.onclick = function() {
-        document.querySelectorAll('.user-filter').forEach(function(b) { b.classList.remove('active'); b.style.background = ''; });
+        document.querySelectorAll('.user-filter').forEach(function(b) { b.classList.remove('active'); b.style.background = 'transparent'; b.style.color = 'var(--text-main)'; });
         btn.classList.add('active');
         btn.style.background = 'var(--accent)';
-        btn.style.color = '#000';
-        currentFilter = btn.getAttribute('data-filter');
-        var cards = document.querySelectorAll('#userBrowser .user-card');
-        cards.forEach(function(card) {
-          var show = true;
-          if (currentFilter === 'banned') show = card.getAttribute('data-banned') === 'true';
-          else if (currentFilter === 'admin') show = card.getAttribute('data-admin') === 'true';
-          else if (currentFilter === 'online') show = card.getAttribute('data-online') === 'true';
-          card.style.display = show ? '' : 'none';
-        });
+        btn.style.color = 'var(--bg-main)';
+        window.currentFilter = btn.getAttribute('data-filter');
+        if(window.applyUserFilters) window.applyUserFilters();
       };
     });
 
@@ -1336,17 +1362,8 @@ function walkAndReplaceMR(node, isMrs) {
     document.addEventListener('DOMContentLoaded', () => {
         const searchInput = document.getElementById('searchUsersInput');
         if (searchInput) {
-            searchInput.addEventListener('input', (e) => {
-                const val = e.target.value.toLowerCase();
-                document.querySelectorAll('#userBrowser .user-card').forEach(card => {
-                    const email = (card.querySelector('.user-email')?.textContent || '').toLowerCase();
-                    const meta = (card.querySelector('.user-meta')?.textContent || '').toLowerCase();
-                    if (email.includes(val) || meta.includes(val)) {
-                        card.style.display = '';
-                    } else {
-                        card.style.display = 'none';
-                    }
-                });
+            searchInput.addEventListener('input', () => {
+                if(window.applyUserFilters) window.applyUserFilters();
             });
         }
     });
