@@ -270,25 +270,7 @@
         </div>
       </div>
 
-      <!-- REVIEW TOOLS VIEW -->
-      <div id="viewReviewTools" class="view-section">
-        <div class="toolbar">
-          <h2 style="font-size:22px; font-weight:700; margin:0;">CBT HTML Scrapper (Review Tools)</h2>
-        </div>
-        <div style="padding:24px; height:calc(100% - 60px); overflow-y:auto;">
-          <div style="display:flex; gap:12px; margin-bottom:24px;">
-             <input type="text" id="reviewFilePath" class="auth-input" placeholder="e.g. content/semester 1/1.2/1.2-2_Overall CBT.html" style="flex:1;">
-             <button id="btnLoadReviewFile" class="btn primary">Load HTML</button>
-          </div>
-          <div id="reviewEditorArea" style="display:none; flex-direction:column; gap:16px;">
-             <div style="display:flex; justify-content:space-between; align-items:center; background:var(--bg-card); padding:16px; border-radius:0; border:1px solid var(--border-light);">
-                <h3 id="reviewFileName" style="margin:0;">File Name</h3>
-                <button id="btnSaveReview" class="btn primary">Save Changes to GitHub</button>
-             </div>
-             <div id="reviewQuestionsList" style="display:flex; flex-direction:column; gap:24px;"></div>
-          </div>
-        </div>
-      </div>
+
 
       <div class="status-bar">
         <span id="statusText">Ready</span>
@@ -500,10 +482,7 @@
         Tasks
       </div>
       
-      <div class="tab" data-target="viewReviewTools" style="display:flex; align-items:center; gap:8px;">
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="9" y1="15" x2="15" y2="15"></line></svg>
-        Review Tools
-      </div>
+
     </div>
     <div class="user-info" style="display:flex; align-items:center; gap:16px;">
       <span id="userBadge" style="font-size:12px; color:var(--text-muted);"></span>
