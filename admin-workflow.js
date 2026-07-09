@@ -539,22 +539,20 @@ async function loadDivisions() {
         // Remove existing dynamic division buttons
         list.querySelectorAll('.btn-div-item').forEach(el => el.remove());
         
-        // Show WA Config if superadmin
-        if(window.isSuperAdmin) {
-            const waConfig = document.getElementById('waConfigContainer');
-            if(waConfig) waConfig.style.display = 'block';
-            
-            // Re-bind WA save just in case
-            const btnSaveWa = document.getElementById('btnSaveWa');
-            if(btnSaveWa) {
-                btnSaveWa.onclick = async () => {
-                    const wa = document.getElementById('myWaInput').value;
-                    window.showToast('Saving...');
-                    const wRes = await apiCall('divisions', { action: 'update_whatsapp', whatsapp: wa });
-                    if(wRes.success) window.showToast('WhatsApp updated!', 'success');
-                    else window.showToast('Failed: ' + wRes.error, 'error');
-                };
-            }
+        // Show WA Config for all users
+        const waConfig = document.getElementById('waConfigContainer');
+        if(waConfig) waConfig.style.display = 'block';
+        
+        // Re-bind WA save just in case
+        const btnSaveWa = document.getElementById('btnSaveWa');
+        if(btnSaveWa) {
+            btnSaveWa.onclick = async () => {
+                const wa = document.getElementById('myWaInput').value;
+                window.showToast('Saving...');
+                const wRes = await apiCall('divisions', { action: 'update_whatsapp', whatsapp: wa });
+                if(wRes.success) window.showToast('WhatsApp updated!', 'success');
+                else window.showToast('Failed: ' + wRes.error, 'error');
+            };
         }
         
         res.divisions.forEach(div => {
