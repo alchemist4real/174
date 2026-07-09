@@ -119,6 +119,41 @@ async function loadTasks() {
     const res = await apiCall('tasks', { action: 'list_tasks' });
     if(res.success) {
         window.allTasks = res.tasks || [];
+        
+        // Dynamically update category dropdowns
+        const uniqueCategories = new Set(['CBT', 'OSCE', 'Video', 'Summary']);
+        window.allTasks.forEach(t => { if(t.category) uniqueCategories.add(t.category); });
+        
+        const filterCatEl = document.getElementById('filterTaskCategory');
+        if (filterCatEl) {
+            const currentVal = filterCatEl.value;
+            filterCatEl.innerHTML = '<option value="all">All Categories</option>';
+            uniqueCategories.forEach(c => {
+                const opt = document.createElement('option');
+                opt.value = c; opt.textContent = c;
+                filterCatEl.appendChild(opt);
+            });
+            filterCatEl.value = currentVal;
+        }
+        
+        const taskCatEl = document.getElementById('taskCategory');
+        if (taskCatEl) {
+            const currentVal = taskCatEl.value;
+            taskCatEl.innerHTML = '';
+            uniqueCategories.forEach(c => {
+                const opt = document.createElement('option');
+                opt.value = c; opt.textContent = c;
+                taskCatEl.appendChild(opt);
+            });
+            const newOpt = document.createElement('option');
+            newOpt.value = '__NEW__';
+            newOpt.textContent = '+ Add New Category...';
+            newOpt.style.fontWeight = 'bold';
+            taskCatEl.appendChild(newOpt);
+            taskCatEl.value = currentVal;
+            if(!taskCatEl.value) taskCatEl.value = 'CBT';
+        }
+
         if(window.applyTaskFilters) {
             window.applyTaskFilters();
         } else {
@@ -136,8 +171,9 @@ window.applyTaskFilters = function() {
     if (!window.allTasks) return;
     let filtered = window.allTasks;
     
+    const filterCatEl = document.getElementById('filterTaskCategory');
     const search = (document.getElementById('filterTaskSearch') ? document.getElementById('filterTaskSearch').value.toLowerCase() : '');
-    const category = (document.getElementById('filterTaskCategory') ? document.getElementById('filterTaskCategory').value : 'all');
+    const category = (filterCatEl ? filterCatEl.value : 'all');
     const semester = (document.getElementById('filterTaskSemester') ? document.getElementById('filterTaskSemester').value : 'all');
     const assignee = (document.getElementById('filterTaskAssignee') ? document.getElementById('filterTaskAssignee').value : 'all');
     
@@ -255,6 +291,25 @@ async function createNewTaskPrompt() {
     blockEl.value = '';
     if (targetEl) targetEl.value = window._prefilledTaskPath || '';
     window._prefilledTaskPath = ''; // reset after opening
+    
+    // Ensure the new category logic is attached only once
+    if (!catEl.hasAttribute('data-new-cat-bound')) {
+        catEl.addEventListener('change', async (e) => {
+            if (e.target.value === '__NEW__') {
+                const newCat = await customPrompt("Enter new category name:");
+                if (newCat && newCat.trim()) {
+                    const opt = document.createElement('option');
+                    opt.value = newCat.trim();
+                    opt.textContent = newCat.trim();
+                    catEl.insertBefore(opt, catEl.lastElementChild);
+                    catEl.value = newCat.trim();
+                } else {
+                    catEl.value = 'CBT';
+                }
+            }
+        });
+        catEl.setAttribute('data-new-cat-bound', 'true');
+    }
     
     if (assignEl) {
         assignEl.innerHTML = '<option value="">-- Unassigned --</option>';
