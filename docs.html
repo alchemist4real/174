@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documentation | MR CAPSULES</title>
+  <link rel="icon" type="image/svg+xml" href="/logo.svg">
+  <link rel="stylesheet" href="/admin.css?v=1.6">
+  <link rel="stylesheet" href="/new_styles.css">
+  <style>
+    .docs-container {
+      max-width: 800px;
+      margin: 40px auto;
+      padding: 32px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-light);
+      border-radius: 12px;
+      position: relative;
+      z-index: 10;
+    }
+    .docs-title {
+      font-family: var(--font-mono);
+      font-size: 28px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 32px;
+      text-align: center;
+      letter-spacing: 0.05em;
+    }
+    .docs-section {
+      margin-bottom: 40px;
+    }
+    .docs-section h2 {
+      font-family: var(--font-mono);
+      font-size: 18px;
+      color: var(--accent);
+      border-bottom: 1px solid var(--border-light);
+      padding-bottom: 12px;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .docs-section h3 {
+      font-size: 16px;
+      color: var(--text-main);
+      margin-top: 16px;
+      margin-bottom: 8px;
+    }
+    .docs-section p, .docs-section ul {
+      color: var(--text-muted);
+      line-height: 1.7;
+      font-size: 15px;
+    }
+    .docs-section ul {
+      padding-left: 24px;
+      margin-bottom: 16px;
+    }
+    .docs-section li {
+      margin-bottom: 10px;
+    }
+    .docs-section strong {
+      color: var(--text-main);
+    }
+    .back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 24px;
+      color: var(--text-muted);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 600;
+      transition: color 0.2s;
+    }
+    .back-btn:hover {
+      color: var(--accent);
+    }
+    /* Simple custom scrollbar for body */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg-main);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: var(--border-light);
+      border-radius: 4px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="bg"></div>
+  <div class="noise"></div>
+  <div class="scanlines"></div>
+  
+  <div class="content-area" style="overflow-y: auto; height: 100vh; display: block; position: relative;">
+    <div class="docs-container">
+      <a href="/" class="back-btn">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        Kembali ke Beranda
+      </a>
+      
+      <div class="docs-title">DOKUMENTASI MR-CAPSULES</div>
+      
+      <div class="docs-section">
+        <h2>1. Apa Itu MR-CAPSULES?</h2>
+        <p><strong>MR-CAPSULES</strong> adalah platform edukasi non-profit yang didedikasikan untuk melestarikan dan membagikan pengetahuan akademis bagi mahasiswa. Dimulai pada Agustus 2025 dari sekumpulan file HTML sederhana yang dibagikan antar teman, kini MR-CAPSULES telah berkembang menjadi repositori belajar komprehensif.</p>
+        <p>Platform ini mewadahi catatan kuliah, bank soal (CBT), slide presentasi fakultas, dan berbagai sumber belajar akademis lainnya. Lebih dari sekadar arsip, MR-CAPSULES bertujuan menjadi "Tempat Belajar (Learning Sanctuary)" digital di mana mahasiswa dapat belajar, berkolaborasi, dan berkembang bersama.</p>
+      </div>
+
+      <div class="docs-section">
+        <h2>2. Division Management (Manajemen Divisi)</h2>
+        <p>Untuk menjaga kualitas dan keberlangsungan platform, kontribusi dibagi ke dalam beberapa divisi. Pembagian tugas ini dapat diatur melalui <strong>Admin Page</strong>.</p>
+        <ul>
+          <li><strong>Content Division:</strong> Bertanggung jawab mengumpulkan, menyusun, dan memelihara sumber belajar.</li>
+          <li><strong>Correction Division (Review & QA):</strong> Bertanggung jawab meninjau bank soal, kunci jawaban, dan materi akademis.</li>
+          <li><strong>Developer Division:</strong> Bertanggung jawab atas pengembangan platform, optimasi, dan implementasi fitur (HTML, CSS, JS).</li>
+        </ul>
+        <p><strong>Cara Membagi Tugas:</strong> Di halaman Admin, pengurus (Admin) dapat memilih profil pengguna dan menetapkan peran divisi (Division) yang sesuai. Setiap kontributor akan mendapatkan tanda pengenal (badge) sesuai dengan divisinya.</p>
+      </div>
+
+      <div class="docs-section">
+        <h2>3. Division Development (Pengembangan Platform)</h2>
+        <p>Bagi anggota Developer Division, pembuatan dan modifikasi konten sangat mengandalkan HTML, CSS, dan JavaScript murni tanpa framework rumit, untuk menjaga performa (Static Data Architecture).</p>
+        <ul>
+          <li><strong>Membuat HTML Baru:</strong> Gunakan template komponen yang sudah ada (seperti file bank soal CBT atau file notes). Pastikan struktur penamaan file HTML konsisten dan diunggah ke folder yang tepat (misalnya <code>content/</code>).</li>
+          <li><strong>Merapikan Kode:</strong> Pastikan kode selalu rapi dan bersih. Anda bisa memanfaatkan <em>CodeMirror</em> yang terintegrasi di halaman Admin untuk mengedit dan mereview file secara langsung.</li>
+          <li><strong>Alur Kontribusi:</strong> Melalui GitHub (Fork repositori, buat branch baru, lakukan perbaikan/penambahan HTML, dan ajukan Pull Request), atau menggunakan fitur unggah (Upload File) langsung melalui Admin Page bila diberikan akses.</li>
+        </ul>
+      </div>
+
+      <div class="docs-section">
+        <h2>4. Division Review & QA (Koreksi Konten)</h2>
+        <p>Correction Division bertugas menjaga keakuratan materi akademis yang ada di MR-CAPSULES. Kualitas pembelajaran sangat bergantung pada kebenaran konten.</p>
+        <ul>
+          <li><strong>Review Konten HTML:</strong> Lakukan simulasi pengerjaan soal di mode CBT atau baca ulang materi catatan (Notes). Pastikan setiap penjelasan dan kunci jawaban sesuai dengan referensi perkuliahan yang valid.</li>
+          <li><strong>Koreksi Kesalahan:</strong> Jika terdapat kesalahan (<em>typo</em>, referensi usang, atau salah konsep), catat nama file dan lokasi barisnya. Lakukan koreksi langsung melalui editor (jika memiliki hak akses) atau laporkan masalah ke tim terkait.</li>
+          <li><strong>Kontak Developer Terkait:</strong> Jika terjadi masalah sistemik (bug UI, soal gagal dimuat, tampilan rusak di mobile, atau fitur tidak responsif), segera hubungi <strong>Developer Division</strong> melalui grup koordinasi untuk mendapat penanganan cepat.</li>
+        </ul>
+      </div>
+      
+    </div>
+  </div>
+  
+  <script>
+    // simple script to initialize theme from localStorage if exist
+    const savedTheme = localStorage.getItem('capsules_theme');
+    if (savedTheme) {
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    } else {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+  </script>
+</body>
+</html>
