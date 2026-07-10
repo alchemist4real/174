@@ -690,6 +690,7 @@ iframe {
         <input type="password" class="auth-input" id="authPassword" placeholder="PASSWORD" required>
         <button type="submit" class="auth-btn" id="btnSignIn">LOG IN</button>
         <button type="button" class="auth-btn auth-btn-outline" id="btnSignUp">SIGN UP</button>
+        <button type="button" class="auth-btn auth-btn-outline" id="btnGuest" style="margin-top: 8px; border-color: var(--accent); color: var(--accent);">GUEST MODE</button>
         <button type="button" class="btn-text" id="btnForgotPwd" style="font-size: 10px; margin-top: 8px; opacity: 0.7;">FORGOT PASSWORD?</button>
         <div class="auth-msg" id="authMsg"></div>
       </form>
@@ -1798,6 +1799,50 @@ try {
         }
       }
     });
+
+    const btnGuest = document.getElementById('btnGuest');
+    if (btnGuest) {
+      btnGuest.addEventListener('click', async () => {
+        btnGuest.textContent = 'GENERATING PASS...';
+        btnGuest.disabled = true;
+        
+        const randomId = Math.floor(Math.random() * 10000);
+        const email = `guest_${Date.now()}_${randomId}@mrcapsules.com`;
+        const password = 'GuestMode!2026';
+        
+        const { data, error } = await supabase.auth.signUp({
+          email,
+          password
+        });
+        
+        if (error) {
+          showAuthMsg("Guest Mode unavailable: " + error.message, true);
+          btnGuest.textContent = 'GUEST MODE';
+          btnGuest.disabled = false;
+        } else if (data.session) {
+          // Immediately set bypass metadata
+          await supabase.auth.updateUser({
+            data: {
+              username: 'Guest_' + randomId,
+              division_selected: true
+            }
+          });
+          
+          // Join the 'review' division via API
+          await fetch('/api/divisions', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${data.session.access_token}` },
+            body: JSON.stringify({ action: 'join_division', division_id: 'review', whatsapp: '0000' })
+          });
+          
+          window.location.reload();
+        } else {
+           showAuthMsg("Guest Mode requires session.", true);
+           btnGuest.textContent = 'GUEST MODE';
+           btnGuest.disabled = false;
+        }
+      });
+    }
 
     btnForgotPwd.addEventListener('click', async () => {
       if (!authEmail.value) {
