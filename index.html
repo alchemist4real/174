@@ -2085,14 +2085,14 @@ try {
       window.supabaseClient.auth.getSession().then(({ data: { session } }) => {
         if (session && session.access_token) {
           checkAdmin(session.access_token);
-          checkContribution(session.access_token);
+          checkContribution(session);
           trackPresence(session);
         }
       });
       window.supabaseClient.auth.onAuthStateChange(async (event, session) => {
         if (session && session.access_token) {
           checkAdmin(session.access_token);
-          checkContribution(session.access_token);
+          checkContribution(session);
           trackPresence(session);
         } else {
           const adminSec = document.getElementById('adminSection');
@@ -2122,11 +2122,15 @@ try {
     } catch(e) {}
   }
 
-  async function checkContribution(token) {
+  async function checkContribution(session) {
+    if (session.user && session.user.email && session.user.email.startsWith('guest_')) {
+      hideContributionGate();
+      return;
+    }
     try {
       const res = await fetch('/api/contributions', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${token}` },
+        headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${session.access_token}` },
         body: JSON.stringify({ action: 'check_contribution' })
       });
       const data = await res.json();
