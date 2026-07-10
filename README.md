@@ -45,12 +45,12 @@ To build an accessible academic ecosystem where educational resources can be pre
 
 MR-CAPSULES currently provides access to:
 
-- Lecture Notes
-- Question Banks
-- Previous-Year Study Materials
-- Faculty Presentation Slides
+- **Soal Tahun Kemarin**: Disajikan menjadi HTML pilihan ganda interaktif.
+- **Praktikum (Practicum)**: Dijadikan HTML pilihan ganda pool.
+- **Lecture (Materi Kuliah)**: Dijadikan HTML pilihan ganda pool.
+- Faculty Presentation Slides (PPT/PDF)
 - Academic References
-- Learning Resources Across Multiple Subjects
+- Community Contributions
 
 ---
 
