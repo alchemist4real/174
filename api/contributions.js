@@ -78,6 +78,12 @@ export default async function handler(req, res) {
        if (isSuperAdmin) {
           return res.status(200).json({ success: true, has_contributed: true });
        }
+       // Allow guest users to bypass
+       const isGuest = (userData.email && userData.email.match(/^guest_\d+_\d+@mrcapsules\.com$/)) ||
+                       (userData.user_metadata && userData.user_metadata.is_guest);
+       if (isGuest) {
+          return res.status(200).json({ success: true, has_contributed: true });
+       }
        
        const rpcRes = await fetch(`${supabaseUrl}/rest/v1/rpc/check_user_contribution`, {
          method: 'POST',

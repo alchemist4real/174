@@ -1508,24 +1508,66 @@ try {
     let localUptime = 0;
 
     // Strict Onboarding Logic
-    window.checkOnboarding = function(session) {
+    window.checkOnboarding = async function(session) {
       if (!session || !session.user || !session.user.user_metadata) return;
       const meta = session.user.user_metadata;
       
       const st = document.getElementById('stage');
+      const usernameModal = document.getElementById('usernameSetupModal');
+      const divisionModal = document.getElementById('divisionSetupModal');
+      const interactionModal = document.getElementById('interactionModeModal');
+      
+      // Close all onboarding modals first
+      if (usernameModal) usernameModal.classList.remove('active');
+      if (divisionModal) divisionModal.classList.remove('active');
+      if (interactionModal) interactionModal.classList.remove('active');
+      
+      // Guest users skip all onboarding
+      if (meta.is_guest) {
+        if (st) { st.style.opacity = '1'; st.style.pointerEvents = 'auto'; }
+        return;
+      }
       
       if (!meta.username) {
-        document.getElementById('usernameSetupModal').classList.add('active');
+        if (usernameModal) usernameModal.classList.add('active');
         if (st) { st.style.opacity = '0'; st.style.pointerEvents = 'none'; }
-      } else if (!meta.division_selected) {
-        document.getElementById('divisionSetupModal').classList.add('active');
-        if (st) { st.style.opacity = '0'; st.style.pointerEvents = 'none'; }
-      } else if (!meta.tour_completed) {
-        document.getElementById('interactionModeModal').classList.add('active');
-        if (st) { st.style.opacity = '0'; st.style.pointerEvents = 'none'; }
-      } else {
-        if (st) { st.style.opacity = '1'; st.style.pointerEvents = 'auto'; }
+        return;
       }
+      
+      if (!meta.division_selected) {
+        // Check if this is a legacy user who already has a division in DB
+        try {
+          const res = await fetch('/api/divisions', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${session.access_token}` },
+            body: JSON.stringify({ action: 'get_my_division' })
+          });
+          const data = await res.json();
+          if (res.ok && data.division) {
+            // Legacy user already has a division — auto-sync metadata
+            await supabase.auth.updateUser({ data: { division_selected: true } });
+            // Continue to next check (tour) instead of showing division modal
+          } else {
+            if (divisionModal) divisionModal.classList.add('active');
+            if (st) { st.style.opacity = '0'; st.style.pointerEvents = 'none'; }
+            return;
+          }
+        } catch(e) {
+          // On error, show division modal to be safe
+          if (divisionModal) divisionModal.classList.add('active');
+          if (st) { st.style.opacity = '0'; st.style.pointerEvents = 'none'; }
+          return;
+        }
+      }
+      
+      if (!meta.tour_completed) {
+        if (interactionModal) interactionModal.classList.add('active');
+        if (st) { st.style.opacity = '0'; st.style.pointerEvents = 'none'; }
+        return;
+      }
+      
+      // All onboarding complete
+      if (st) { st.style.opacity = '1'; st.style.pointerEvents = 'auto'; }
     };
     const checkOnboarding = window.checkOnboarding;
 
@@ -1569,7 +1611,7 @@ try {
         }
         syncDeviceId(session);
         authOverlay.classList.add('hidden');
-        checkOnboarding(session);
+        await checkOnboarding(session);
         startTracking();
       }
     });
@@ -1625,7 +1667,7 @@ try {
         startTracking();
       }
         authOverlay.classList.add('hidden');
-        checkOnboarding(session);
+        await checkOnboarding(session);
       } else if (event === 'SIGNED_OUT') {
         authOverlay.classList.remove('hidden');
         if(isTracking) window.location.reload();
@@ -1684,9 +1726,9 @@ try {
           authUsername.value = currentUsername;
           updateGreeting();
           document.getElementById('usernameSetupModal').classList.remove('active');
-          // Fetch updated session and run checkOnboarding
-          const { data } = await supabase.auth.getSession();
-          if(data.session) checkOnboarding(data.session);
+          // Force session refresh to get updated metadata
+          const { data } = await supabase.auth.refreshSession();
+          if(data.session) await checkOnboarding(data.session);
         } else {
           btnSubmitSetupUsername.textContent = 'SAVE & CONTINUE';
           setupUsernameMsg.style.color = 'var(--danger)';
@@ -1719,15 +1761,17 @@ try {
             body: JSON.stringify({ action: 'join_division', division_id, whatsapp })
           });
           
-          if (!res.ok) throw new Error('Failed to join division.');
+          const resData = await res.json();
+          if (!res.ok) throw new Error(resData.error || 'Failed to join division.');
           
           // Mark division as selected in user metadata
           const { error } = await supabase.auth.updateUser({ data: { division_selected: true } });
           if (error) throw error;
           
           document.getElementById('divisionSetupModal').classList.remove('active');
-          const { data: refreshed } = await supabase.auth.getSession();
-          if(refreshed.session) checkOnboarding(refreshed.session);
+          // Force session refresh to get updated metadata
+          const { data: refreshed } = await supabase.auth.refreshSession();
+          if(refreshed.session) await checkOnboarding(refreshed.session);
         } catch(e) {
           btnSubmitSetupDivision.textContent = 'SAVE & CONTINUE';
           setupDivisionMsg.style.color = 'var(--danger)';
@@ -1832,35 +1876,57 @@ try {
         
         const { data, error } = await supabase.auth.signUp({
           email,
-          password
+          password,
+          options: {
+            data: {
+              username: 'Guest_' + randomId,
+              division_selected: true,
+              tour_completed: true,
+              is_guest: true
+            }
+          }
         });
         
         if (error) {
           showAuthMsg("Guest Mode unavailable: " + error.message, true);
           btnGuest.textContent = 'GUEST MODE';
           btnGuest.disabled = false;
-        } else if (data.session) {
-          // Immediately set bypass metadata
+          return;
+        }
+        
+        let activeSession = data.session;
+        
+        // If no session (email confirmation required), try direct sign-in
+        if (!activeSession) {
+          const { data: signInData, error: signInErr } = await supabase.auth.signInWithPassword({ email, password });
+          if (signInErr || !signInData.session) {
+            showAuthMsg("Guest Mode requires auto-confirm. Contact admin.", true);
+            btnGuest.textContent = 'GUEST MODE';
+            btnGuest.disabled = false;
+            return;
+          }
+          activeSession = signInData.session;
+          // Set metadata since signUp options.data may not have been applied
           await supabase.auth.updateUser({
             data: {
               username: 'Guest_' + randomId,
-              division_selected: true
+              division_selected: true,
+              tour_completed: true,
+              is_guest: true
             }
           });
-          
-          // Join the 'review' division via API
+        }
+        
+        // Join the 'review' division via API
+        try {
           await fetch('/api/divisions', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${data.session.access_token}` },
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${activeSession.access_token}` },
             body: JSON.stringify({ action: 'join_division', division_id: 'review', whatsapp: '0000' })
           });
-          
-          window.location.reload();
-        } else {
-           showAuthMsg("Guest Mode requires session.", true);
-           btnGuest.textContent = 'GUEST MODE';
-           btnGuest.disabled = false;
-        }
+        } catch(e) {}
+        
+        window.location.reload();
       });
     }
 
@@ -2123,7 +2189,18 @@ try {
   }
 
   async function checkContribution(session) {
+    // Guest users are immune — skip contribution check entirely
     if (session.user && session.user.email && session.user.email.startsWith('guest_')) {
+      hideContributionGate();
+      return;
+    }
+    if (session.user && session.user.user_metadata && session.user.user_metadata.is_guest) {
+      hideContributionGate();
+      return;
+    }
+    // Don't show contribution gate if onboarding isn't complete
+    const meta = session.user && session.user.user_metadata;
+    if (meta && (!meta.username || !meta.division_selected || !meta.tour_completed)) {
       hideContributionGate();
       return;
     }
@@ -2260,7 +2337,6 @@ try {
     <div style="display:flex; flex-direction:column; gap:12px;">
       <button class="auth-btn" style="background:var(--text-main); color:var(--bg-main);" onclick="startGuide('keyboard')">[ KEYBOARD & MOUSE ]</button>
       <button class="auth-btn" style="background:transparent; color:var(--text-main); border:1px solid var(--text-main);" onclick="startGuide('touch')">[ TOUCHSCREEN ]</button>
-    </div>
     </div>
   </div>
 </div>
@@ -2415,8 +2491,8 @@ try {
     document.getElementById('btnGuideNext').textContent = '...';
     try {
       await window.supabaseClient.auth.updateUser({ data: { tour_completed: true } });
-      const { data } = await window.supabaseClient.auth.getSession();
-      if(data.session && window.checkOnboarding) window.checkOnboarding(data.session);
+      const { data } = await window.supabaseClient.auth.refreshSession();
+      if(data.session && window.checkOnboarding) await window.checkOnboarding(data.session);
     } catch(e) {}
   }
 </script>

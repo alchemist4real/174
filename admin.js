@@ -1222,6 +1222,38 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
       if(window.loadContributions) window.loadContributions();
     };
 
+    const btnGuestCleanup = document.getElementById('btnGuestCleanup');
+    if (btnGuestCleanup) {
+      btnGuestCleanup.onclick = async () => {
+        const resultEl = document.getElementById('guestCleanupResult');
+        btnGuestCleanup.disabled = true;
+        btnGuestCleanup.textContent = 'Cleaning...';
+        resultEl.textContent = 'Processing...';
+        resultEl.style.color = 'var(--text-muted)';
+        try {
+          const { data: { session } } = await supabase.auth.getSession();
+          const res = await fetch('/api/guest-cleanup', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${session.access_token}` },
+            body: JSON.stringify({ max_age_hours: 24 })
+          });
+          const data = await res.json();
+          if (res.ok) {
+            resultEl.style.color = '#4caf50';
+            resultEl.textContent = `✓ Deleted ${data.deleted}/${data.total_guests_found} guests`;
+          } else {
+            resultEl.style.color = '#f44336';
+            resultEl.textContent = `✗ ${data.error}`;
+          }
+        } catch(e) {
+          resultEl.style.color = '#f44336';
+          resultEl.textContent = `✗ ${e.message}`;
+        }
+        btnGuestCleanup.disabled = false;
+        btnGuestCleanup.textContent = '🗑️ Clean Guests (24h+)';
+      };
+    }
+
     window.currentFilter = 'all';
     window.applyUserFilters = function() {
         const searchInput = document.getElementById('searchUsersInput');
