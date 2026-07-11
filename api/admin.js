@@ -353,7 +353,7 @@ export default async function handler(req, res) {
       const sbKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
       if (!sbKey) return res.status(500).json({ error: 'SUPABASE_SERVICE_ROLE_KEY not configured' });
       
-      const { page = 1, per_page = 100 } = req.body;
+      const { page = 1, per_page = 1000 } = req.body;
       const sbRes = await fetch(`${supabaseUrl}/auth/v1/admin/users?page=${page}&per_page=${per_page}`, {
         headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
       });

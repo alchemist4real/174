@@ -55,7 +55,7 @@ export default async function handler(req, res) {
       });
       const divs = await divRes.json();
       
-      const sbUsersRes = await fetch(`${supabaseUrl}/auth/v1/admin/users?page=1&per_page=100`, {
+      const sbUsersRes = await fetch(`${supabaseUrl}/auth/v1/admin/users?page=1&per_page=1000`, {
         headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
       });
       let allUsers = [];

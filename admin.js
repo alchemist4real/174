@@ -121,6 +121,7 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
     });
 
     // Custom Modals Logic
+    window.customPrompt = customPrompt;
     function customPrompt(title, defaultValue = '') {
       return new Promise((resolve) => {
         const modal = document.getElementById('promptModal');
@@ -146,6 +147,7 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
       });
     }
 
+    window.customConfirm = customConfirm;
     function customConfirm(title) {
       return new Promise((resolve) => {
         const modal = document.getElementById('promptModal');
@@ -231,15 +233,18 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
                   if(el) el.textContent = count;
                   // Mark online user cards
                   var cards = document.querySelectorAll('#userBrowser .user-card');
-                  cards.forEach(function(c) { c.setAttribute('data-online', 'false'); });
+                  // Build email-to-card map for O(1) lookup instead of O(n×m)
+                  var emailMap = new Map();
+                  cards.forEach(function(c) {
+                    c.setAttribute('data-online', 'false');
+                    var emailEl = c.querySelector('.user-email');
+                    if (emailEl) emailMap.set(emailEl.textContent, c);
+                  });
                   Object.values(state).forEach(function(presences) {
                     presences.forEach(function(p) {
-                      if(p.user) {
-                        cards.forEach(function(c) {
-                          if(c.querySelector('.user-email') && c.querySelector('.user-email').textContent === p.email) {
-                            c.setAttribute('data-online', 'true');
-                          }
-                        });
+                      if(p.user && p.email) {
+                        var card = emailMap.get(p.email);
+                        if (card) card.setAttribute('data-online', 'true');
                       }
                     });
                   });
@@ -965,19 +970,22 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
     // Users Logic
     window.loadUsers = loadUsers;
     async function loadUsers(divIdFilter = null) {
-      window.loadUsers = loadUsers; // Export globally
       const filterToUse = (divIdFilter && divIdFilter !== 'all') ? divIdFilter : (window.currentDivisionId && window.currentDivisionId !== 'all' ? window.currentDivisionId : null);
       const userBrowser = document.getElementById('userBrowser');
       userBrowser.innerHTML = '<div style="padding:48px; color:var(--text-muted); text-align:center; font-size:18px;">Loading users... <div style="display:inline-block; width:20px; height:20px; border:3px solid rgba(255,255,255,0.3); border-radius:50%; border-top-color:#fff; animation:spin 1s ease-in-out infinite; margin-left:10px; vertical-align:middle;"></div></div>';
-      try {
-        let bannedDevs = [];
-        try {
-           const cfgData = await adminAction('get_config');
-           if (cfgData && cfgData.success && cfgData.config) {
-             bannedDevs = cfgData.config.bannedDevices || [];
-           }
-        } catch(e) { console.error("Error fetching config for banned devs:", e); }
+        // Use cached banned devices to avoid redundant API calls on every loadUsers
+        let bannedDevs = window._cachedBannedDevices || [];
+        if (!window._cachedBannedDevices) {
+          try {
+             const cfgData = await adminAction('get_config');
+             if (cfgData && cfgData.success && cfgData.config) {
+               bannedDevs = cfgData.config.bannedDevices || [];
+               window._cachedBannedDevices = bannedDevs;
+             }
+          } catch(e) { console.error("Error fetching config for banned devs:", e); }
+        }
 
+      try {
         const res = await fetch('/api/admin', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionToken}` },
@@ -1024,28 +1032,32 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
       var uptimeEl = document.getElementById('dashTotalUptime');
       if (globalStats && globalStats.total_uptime !== undefined) {
         window.lastKnownUptime = globalStats.total_uptime;
-        window.window.lastFetchTime = Date.now();
+        window.lastFetchTime = Date.now();
         uptimeEl.textContent = fmtTime(globalStats.total_uptime);
       } else {
         uptimeEl.textContent = '00:00:00';
       }
       
-      users.forEach(function(u) {
-        if (!u.last_sign_in_at) return;
-        var meta = u.user_metadata || {};
-        var devArr = Array.isArray(meta.devices) ? meta.devices : [];
-        var devStr = devArr.length > 0 ? devArr.map(function(d){ return d.id.substr(0,10); }).join(', ') : (meta.deviceId || 'Unknown');
-        
-        window.addHybridLog({
-           id: 'login_' + u.id + '_' + u.last_sign_in_at,
-           type: 'login',
-           time: new Date(u.last_sign_in_at).getTime(),
-           user: (meta.username || 'Unknown'),
-           email: u.email,
-           devStr: devStr
+      // Only populate hybrid logs on the first dashboard render to avoid N+1 DB upserts
+      if (!window._dashboardLogsPopulated) {
+        window._dashboardLogsPopulated = true;
+        users.forEach(function(u) {
+          if (!u.last_sign_in_at) return;
+          var meta = u.user_metadata || {};
+          var devArr = Array.isArray(meta.devices) ? meta.devices : [];
+          var devStr = devArr.length > 0 ? devArr.map(function(d){ return d.id.substr(0,10); }).join(', ') : (meta.deviceId || 'Unknown');
+          
+          window.addHybridLog({
+             id: 'login_' + u.id + '_' + u.last_sign_in_at,
+             type: 'login',
+             time: new Date(u.last_sign_in_at).getTime(),
+             user: (meta.username || 'Unknown'),
+             email: u.email,
+             devStr: devStr
+          });
         });
-      });
-      window.renderHybridLogs();
+        window.renderHybridLogs();
+      }
     }
 
     function renderUsers(users, bannedDevs) {
@@ -1196,6 +1208,7 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
                 }
                 
                 await adminAction('update_config', { bannedDevices: arr });
+                window._cachedBannedDevices = arr; // Update cache immediately
                 
                 if (window.sessionRoom) {
                    if (!currentlyBanned) {
@@ -1231,7 +1244,7 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
         resultEl.textContent = 'Processing...';
         resultEl.style.color = 'var(--text-muted)';
         try {
-          const { data: { session } } = await supabase.auth.getSession();
+          const { data: { session } } = await supabaseClient.auth.getSession();
           const res = await fetch('/api/guest-cleanup', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${session.access_token}` },
@@ -1384,6 +1397,7 @@ function walkAndReplaceMR(node, isMrs) {
 
 
 
+    window.customAlert = customAlert;
     function customAlert(title, msg) {
       if (!msg) { msg = title; title = 'Alert'; }
       return new Promise((resolve) => {

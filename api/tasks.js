@@ -71,7 +71,7 @@ export default async function handler(req, res) {
       const tasks = await getRes.json();
       
       // Fetch all users to resolve IDs to emails
-      const usersRes = await fetch(`${supabaseUrl}/auth/v1/admin/users?page=1&per_page=100`, {
+      const usersRes = await fetch(`${supabaseUrl}/auth/v1/admin/users?page=1&per_page=1000`, {
         headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
       });
       let allUsers = [];
@@ -120,7 +120,7 @@ export default async function handler(req, res) {
       
       if (assigned_to_email) {
         // Resolve email to user_id
-        const usersRes = await fetch(`${supabaseUrl}/auth/v1/admin/users?page=1&per_page=100`, {
+        const usersRes = await fetch(`${supabaseUrl}/auth/v1/admin/users?page=1&per_page=1000`, {
           headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
         });
         let allUsers = [];
@@ -271,7 +271,7 @@ export default async function handler(req, res) {
       const logs = await fetchRes.json();
       
       // Resolve user IDs to emails
-      const usersRes = await fetch(`${supabaseUrl}/auth/v1/admin/users?page=1&per_page=100`, {
+      const usersRes = await fetch(`${supabaseUrl}/auth/v1/admin/users?page=1&per_page=1000`, {
         headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
       });
       let allUsers = [];

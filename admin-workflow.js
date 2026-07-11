@@ -331,12 +331,10 @@ async function createNewTaskPrompt() {
                 if (devDiv && devDiv.members) {
                     devDiv.members.forEach(m => {
                         const opt = document.createElement('option');
-                        opt.value = m; // m is email here, wait, API needs user_id or email?
-                        // Let's check api/divisions.js line 65: members: membersList (which are emails).
-                        // If we need to send user_id to tasks.js, maybe it's better to pass email and let tasks.js resolve it,
-                        // OR change api/divisions to return user_id too.
-                        // Actually, tasks.js create_task expects target_user_id or something? No, we will add assigned_to (email or id). Let's send email and resolve in backend.
-                        opt.textContent = m.split('@')[0];
+                        const email = typeof m === 'string' ? m : m.email;
+                        const username = typeof m === 'string' ? m.split('@')[0] : (m.username || m.email.split('@')[0]);
+                        opt.value = email; 
+                        opt.textContent = username;
                         assignEl.appendChild(opt);
                     });
                 }
@@ -543,15 +541,15 @@ window.updateTask = async function(taskId, action) {
     let note = '';
     
     if (action === 'reject_task') {
-        note = prompt("Mandatory: Please provide a reason for rejecting this task:");
+        note = await customPrompt("Mandatory: Please provide a reason for rejecting this task:");
         if (!note || !note.trim()) {
             showToast('Rejection reason is required.', 'error');
             return;
         }
     } else if (action === 'submit_task') {
-        note = prompt("Optional: Any notes for the reviewer?");
+        note = await customPrompt("Optional: Any notes for the reviewer?");
     } else if (action === 'approve_task') {
-        note = prompt("Optional: Any final notes?");
+        note = await customPrompt("Optional: Any final notes?");
     }
 
     document.getElementById('contextModal').classList.add('hidden');
@@ -688,7 +686,7 @@ async function loadDivisions() {
 }
 
 window.promptAddMember = async function(divId) {
-    const email = prompt("Enter member's exact email address:");
+    const email = await customPrompt("Enter member's exact email address:");
     if(!email) return;
     window.showToast('Assigning member...');
     const res = await apiCall('divisions', { action: 'assign_member', target_email: email, division_id: divId });
@@ -697,7 +695,7 @@ window.promptAddMember = async function(divId) {
 };
 
 window.removeMember = async function(email, divId) {
-    if(!confirm('Remove ' + email + ' from this division?')) return;
+    if(!await customConfirm('Remove ' + email + ' from this division?')) return;
     window.showToast('Removing...');
     const res = await apiCall('divisions', { action: 'remove_member', target_email: email, division_id: divId });
     if(res.success) { window.showToast('Removed!', 'success'); loadDivisions(); }
@@ -831,7 +829,7 @@ function parseCBTHtml(path, html) {
         listEl.appendChild(block);
 
         block.querySelector('.btn-report-issue').addEventListener('click', async () => {
-            const issue = prompt('Describe the issue with this question:');
+            const issue = await customPrompt('Describe the issue with this question:');
             if(!issue) return;
             showToast('Reporting issue...');
             const r = await apiCall('review-tools', { 

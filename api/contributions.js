@@ -45,7 +45,7 @@ export default async function handler(req, res) {
       if (!Array.isArray(data)) console.error('get_leaderboard error:', data);
       const validData = Array.isArray(data) ? data : [];
       
-      const usersRes = await fetch(`${supabaseUrl}/auth/v1/admin/users?page=1&per_page=100`, {
+      const usersRes = await fetch(`${supabaseUrl}/auth/v1/admin/users?page=1&per_page=1000`, {
         headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}`, 'Cache-Control': 'no-cache' },
         cache: 'no-store'
       });
