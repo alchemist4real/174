@@ -1583,7 +1583,7 @@ try {
         }
 
         if(session.user) {
-          supabase.from('user_stats').select('total_uptime').eq('user_id', session.user.id).single().then(({ data }) => {
+          supabase.from('user_stats').select('total_uptime').eq('user_id', session.user.id).maybeSingle().then(({ data }) => {
             if (data) {
               baseUptime = data.total_uptime || 0;
               localUptime = baseUptime + sessionUptime;
@@ -1640,7 +1640,7 @@ try {
              }, { onConflict: 'log_id' }).then(() => {});
           } catch(e) {}
 
-          supabase.from('user_stats').select('total_uptime').eq('user_id', session.user.id).single().then(({ data }) => {
+          supabase.from('user_stats').select('total_uptime').eq('user_id', session.user.id).maybeSingle().then(({ data }) => {
             if (data) {
               baseUptime = data.total_uptime || 0;
               localUptime = baseUptime + sessionUptime;
