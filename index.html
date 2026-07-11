@@ -1435,9 +1435,11 @@ try {
     async function syncDeviceId(session) {
       if(session && session.user) {
         const currentDev = getDeviceId();
-        await supabase.from('user_devices').upsert([
-          { user_id: session.user.id, device_id: currentDev }
-        ], { onConflict: 'user_id,device_id' }).select().catch(e => {}); // ignore duplicate or RLS errors
+        try {
+          await supabase.from('user_devices').upsert([
+            { user_id: session.user.id, device_id: currentDev }
+          ], { onConflict: 'user_id,device_id' }).select();
+        } catch (e) {} // ignore duplicate or RLS errors
       }
     }
 
