@@ -40,14 +40,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function apiCall(endpoint, payload) {
     if(!sessionToken) return { error: 'No session' };
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), 30000);
     try {
         const res = await fetch(`/api/${endpoint}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionToken}` },
-            body: JSON.stringify(payload)
+            body: JSON.stringify(payload),
+            signal: controller.signal
         });
+        clearTimeout(timeoutId);
         return await res.json();
     } catch (e) {
+        clearTimeout(timeoutId);
+        if (e.name === 'AbortError') return { error: 'Request timed out (30s)' };
         return { error: e.message };
     }
 }
@@ -73,13 +79,16 @@ async function initWorkflow() {
     }
 
 
-    // Real-time subscription for divisions
+    // Real-time subscription for divisions (debounced)
     if (window.supabaseClient) {
+        let divReloadTimer = null;
         window.supabaseClient
             .channel('public:division_members')
             .on('postgres_changes', { event: '*', schema: 'public', table: 'division_members' }, payload => {
                 if(document.getElementById('viewUsers')?.classList.contains('active')) {
-                    loadDivisions();
+                    // Debounce: wait 500ms before reloading to batch rapid changes
+                    clearTimeout(divReloadTimer);
+                    divReloadTimer = setTimeout(() => loadDivisions(), 500);
                 }
             })
             .subscribe();
@@ -388,12 +397,18 @@ async function createNewTaskPrompt() {
 
 window.toggleTasksView = function() {
     const view = document.getElementById('tasksViewToggle').value;
+    const kanban = document.getElementById('taskKanban');
+    const syllabus = document.getElementById('syllabusTableContainer');
     if (view === 'kanban') {
-        document.getElementById('taskKanban').classList.remove('hidden');
-        document.getElementById('syllabusTableContainer').classList.add('hidden');
+        kanban.classList.remove('hidden');
+        kanban.style.display = 'flex';
+        syllabus.classList.add('hidden');
+        syllabus.style.display = '';
     } else {
-        document.getElementById('taskKanban').classList.add('hidden');
-        document.getElementById('syllabusTableContainer').classList.remove('hidden');
+        kanban.classList.add('hidden');
+        kanban.style.display = '';
+        syllabus.classList.remove('hidden');
+        syllabus.style.display = '';
     }
 }
 
@@ -429,7 +444,8 @@ function renderTasksAsSyllabus(tasks) {
             
             const assignee = t.assigned_to_user ? (t.assigned_to_user.username || t.assigned_to_user.email.split('@')[0]) : '<span style="color:var(--text-muted)">Unassigned</span>';
             
-            html += `<tr style="border-bottom:1px solid var(--border-light); transition:background 0.2s; cursor:pointer;" onclick="openTaskModal(${JSON.stringify(t).replace(/"/g, '&quot;')})" onmouseover="this.style.background='var(--bg-hover)'" onmouseout="this.style.background='transparent'">
+            // Use data-task-id instead of inline onclick with JSON to prevent XSS
+            html += `<tr class="syllabus-row" data-task-id="${t.id}" style="border-bottom:1px solid var(--border-light); transition:background 0.2s; cursor:pointer;" onmouseover="this.style.background='var(--bg-hover)'" onmouseout="this.style.background='transparent'">
                 <td style="padding:16px 24px; font-size:14px; color:var(--text-muted);">${t.semester || '-'} / ${t.block || '-'}</td>
                 <td style="padding:16px 24px; font-size:15px; font-weight:600;">${t.title}</td>
                 <td style="padding:16px 24px;"><span class="badge" style="background:var(--bg-card); padding:6px 10px; font-size:11px; border:1px solid var(--border-light); color:var(--text-main);">${t.category || '-'}</span></td>
@@ -441,6 +457,15 @@ function renderTasksAsSyllabus(tasks) {
     });
     
     tbody.innerHTML = html;
+    
+    // Bind click handlers programmatically (safe, no XSS)
+    tbody.querySelectorAll('.syllabus-row').forEach(row => {
+        row.addEventListener('click', () => {
+            const taskId = row.getAttribute('data-task-id');
+            const task = tasks.find(t => t.id === taskId);
+            if (task) openTaskModal(task);
+        });
+    });
 }
 
 function openTaskModal(task) {
@@ -572,16 +597,26 @@ window.openTaskFile = function(path) {
     if (window.currentTree) {
         const node = window.currentTree.find(n => n.path === path);
         if (node) {
-            if(window.loadFile) window.loadFile(node);
-        } else {
-            showToast('File not found in tree. Refreshing...', 'warning');
-            if(window.loadTree) {
-                window.loadTree().then(() => {
-                    const retryNode = window.currentTree.find(n => n.path === path);
-                    if(retryNode) window.loadFile(retryNode);
-                    else showToast('File really not found', 'error');
-                });
+            // Navigate to the file's parent directory first
+            const parts = path.split('/');
+            parts.pop(); // remove filename
+            window.currentPath = parts.length > 0 ? parts.join('/') + '/' : '';
+            if (window.renderBrowser) window.renderBrowser();
+            
+            // Open the file using the editor or preview
+            const isImg = node.path.match(/\.(jpg|jpeg|png|gif|webp)$/i);
+            const isCode = node.path.match(/\.(html|css|js)$/i);
+            const item = { name: node.path.split('/').pop(), path: node.path, sha: node.sha, type: 'file' };
+            
+            if (isCode && window.openEditor) {
+                window.openEditor(item);
+            } else if (window.showPreview) {
+                window.showPreview(item, !!isImg);
+            } else {
+                showToast('File found: ' + path, 'info');
             }
+        } else {
+            showToast('File not found in tree. Try refreshing Files tab.', 'error');
         }
     }
 };
@@ -752,12 +787,13 @@ window.loadContributions = async function() {
 // =======================
 // CBT REVIEW SCRAPPER
 // =======================
+// CBT Review - bound inside the main DOMContentLoaded at line 6
+// (listeners merged into the main DOMContentLoaded above)
 document.addEventListener('DOMContentLoaded', () => {
     document.querySelector('.tab[data-target="viewDashboard"]')?.addEventListener('click', () => {
         window.loadContributions();
     });
-});
-document.addEventListener('DOMContentLoaded', () => {
+    
     document.getElementById('btnLoadReviewFile')?.addEventListener('click', async () => {
         const path = document.getElementById('reviewFilePath').value.trim();
         if(!path) return showToast('Please enter a file path', 'error');
@@ -857,7 +893,7 @@ function parseCBTHtml(path, html) {
         });
 
         const finalHtml = doc.documentElement.outerHTML;
-        const base64 = btoa(unescape(encodeURIComponent(finalHtml)));
+        const base64 = utf8ToBase64(finalHtml);
 
         showToast('Saving to GitHub...');
         const res = await fetch('/api/admin', {

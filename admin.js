@@ -1,11 +1,26 @@
-const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
-    const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhkaHZybGtpem9yc2N2ZWh0dHpkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyNjMwNzIsImV4cCI6MjA5MjgzOTA3Mn0.m6L3oEVAfyp2TjYmBCfDRo_30rdsWLEsGVZzRZIy3MU';
-    const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+let supabaseClient = null;
+Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient; }, set(v) { supabaseClient = v; } });
+
+    // GitHub raw content base URL
+    const GITHUB_RAW_BASE = 'https://raw.githubusercontent.com/alchemist4real/MR-CAPSULES/main';
+
+    // UTF-8 safe base64 encoding
+    function utf8ToBase64(str) {
+      const bytes = new TextEncoder().encode(str);
+      let binary = '';
+      for (let i = 0; i < bytes.length; i++) binary += String.fromCharCode(bytes[i]);
+      return btoa(binary);
+    }
 
     let sessionToken = null;
     let currentPath = '';
     let currentTree = [];
     let fileCache = {};
+    
+    // Expose to window for cross-script access (admin-workflow.js)
+    Object.defineProperty(window, 'currentPath', { get() { return currentPath; }, set(v) { currentPath = v; } });
+    Object.defineProperty(window, 'currentTree', { get() { return currentTree; }, set(v) { currentTree = v; } });
+    Object.defineProperty(window, 'sessionToken', { get() { return sessionToken; }, set(v) { sessionToken = v; } });
 
     async function fetchFileSecureBlob(path, mimeType = 'application/octet-stream') {
         const res = await adminAction('download', { path });
@@ -57,7 +72,7 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
       
       var sorted = window.hybridLogs.slice().sort(function(a, b) { return b.time - a.time; });
       
-      sorted.slice(0, 100).forEach(function(log) {
+      sorted.forEach(function(log) {
         var item = document.createElement('div');
         item.style.padding = '12px 24px';
         item.style.borderBottom = '1px solid var(--border-light)';
@@ -172,21 +187,32 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
     }
 
     // Init Auth
-    supabaseClient.auth.getSession().then(({ data: { session } }) => {
-      if (session) {
-        verifyAdmin(session);
-      } else {
-        redirectToHome("Not logged in. Redirecting...");
-      }
-    }).catch(err => {
-      redirectToHome("Session error: " + err.message);
-    });
+    (async function initSupabaseAndAuth() {
+        try {
+            const envRes = await fetch('/api/env');
+            const env = await envRes.json();
+            supabaseClient = window.supabase.createClient(env.url, env.key);
+            
+            supabaseClient.auth.getSession().then(({ data: { session } }) => {
+              if (session) {
+                verifyAdmin(session);
+              } else {
+                redirectToHome("Not logged in. Redirecting...");
+              }
+            }).catch(err => {
+              redirectToHome("Session error: " + err.message);
+            });
 
-    supabaseClient.auth.onAuthStateChange((event, session) => {
-      if (event === 'SIGNED_OUT') {
-        redirectToHome("Signed out. Redirecting...");
-      }
-    });
+            supabaseClient.auth.onAuthStateChange((event, session) => {
+              if (event === 'SIGNED_OUT') {
+                redirectToHome("Signed out. Redirecting...");
+              }
+            });
+        } catch (e) {
+            console.error("Failed to load environment or initialize Supabase", e);
+            redirectToHome("Initialization failed. Check connection.");
+        }
+    })();
 
     async function verifyAdmin(session) {
       sessionToken = session.access_token;
@@ -336,11 +362,13 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
                      updateAndRender();
                   })
                   .on('postgres_changes', { event: '*', schema: 'public', table: 'user_devices' }, payload => {
-                     // For simplicity, we just trigger a full reload when devices change, 
-                     // or we can optimize if needed. Full reload is safer for complex nested arrays.
-                     loadUsers();
+                     // Debounce device changes - these are rare but can come in bursts during signup
+                     clearTimeout(window._deviceChangeTimer);
+                     window._deviceChangeTimer = setTimeout(() => loadUsers(), 800);
                   })
                   .on('postgres_changes', { event: '*', schema: 'public', table: 'app_settings' }, payload => {
+                     // Invalidate banned devices cache when settings change
+                     window._cachedBannedDevices = null;
                      loadUsers();
                   })
                   .subscribe();
@@ -428,15 +456,20 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
     };
 
     // Load Data
+    window.loadTree = loadTree;
     async function loadTree() {
       statusText.textContent = 'Fetching repository...';
       fileBrowser.innerHTML = '';
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 30000);
       try {
         const res = await fetch('/api/admin', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionToken}` },
-          body: JSON.stringify({ action: 'tree' })
+          body: JSON.stringify({ action: 'tree' }),
+          signal: controller.signal
         });
+        clearTimeout(timeoutId);
         const data = await res.json();
         if (data.success && data.tree) {
           currentTree = data.tree.filter(i => i.path.startsWith('content/') || i.path.startsWith('cover/'));
@@ -446,10 +479,12 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
           statusText.textContent = 'Failed to load tree: ' + data.error;
         }
       } catch(e) {
-        statusText.textContent = 'Error: ' + e.message;
+        clearTimeout(timeoutId);
+        statusText.textContent = e.name === 'AbortError' ? 'Loading timed out (30s). Try refreshing.' : 'Error: ' + e.message;
       }
     }
 
+    window.renderBrowser = renderBrowser;
     function renderBrowser() {
       fileBrowser.innerHTML = '';
       
@@ -608,8 +643,7 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
           } catch(e) {
             console.error(e);
             showToast('Download via API failed. Opening fallback...', 'error');
-            const rawUrl = `https://raw.githubusercontent.com/alchemist4real/MR-CAPSULES/main/${item.path}`;
-            window.open(rawUrl, '_blank');
+            window.open(`${GITHUB_RAW_BASE}/${item.path}`, '_blank');
           }
         };
       }
@@ -665,22 +699,25 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
 
     async function adminAction(action, payload) {
       statusText.textContent = `Processing ${action}...`;
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 30000);
       try {
         const res = await fetch('/api/admin', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionToken}` },
-          body: JSON.stringify({ action, ...payload })
+          body: JSON.stringify({ action, ...payload }),
+          signal: controller.signal
         });
+        clearTimeout(timeoutId);
         const data = await res.json();
         if (data.success) {
           statusText.textContent = `Success: ${action}`;
           showToast(`Action successful: ${action.replace('_', ' ')}`, 'success');
           
-          if (['ban_user', 'delete_user', 'add_admin', 'remove_admin'].includes(action)) {
-            setTimeout(loadUsers, 500); // Force UI refresh for user management actions
-          } else if (action !== 'get_config' && action !== 'get_users') {
-            setTimeout(loadTree, 1000); // Reload file tree for file actions
-          }
+          // NOTE: Removed redundant setTimeout(loadUsers/loadTree) here.
+          // Real-time Supabase subscriptions on profiles/user_roles/user_devices
+          // already trigger loadUsers automatically, and callers like uploadFilesSequential
+          // already call loadTree after completion. The old code caused double API calls.
           return data;
         } else {
           statusText.textContent = `Error: ${data.error}`;
@@ -688,8 +725,14 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
           return null;
         }
       } catch(e) {
-        statusText.textContent = 'Network error: ' + e.message;
-        customAlert('Network error: ' + e.message);
+        clearTimeout(timeoutId);
+        if (e.name === 'AbortError') {
+          statusText.textContent = `Timeout: ${action} took too long (30s)`;
+          customAlert(`Request timed out after 30 seconds: ${action}`);
+        } else {
+          statusText.textContent = 'Network error: ' + e.message;
+          customAlert('Network error: ' + e.message);
+        }
         return null;
       }
     }
@@ -765,6 +808,7 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
       }
     }
 
+    window.showPreview = showPreview;
     async function showPreview(item, isImg) {
       if (!isImg && (item.name.endsWith('.html') || item.name.endsWith('.css') || item.name.endsWith('.js'))) {
         openEditor(item);
@@ -778,7 +822,7 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
       img.classList.add('hidden');
       txt.classList.add('hidden');
 
-      const rawUrl = `https://raw.githubusercontent.com/alchemist4real/MR-CAPSULES/main/${item.path}`;
+      const rawUrl = `${GITHUB_RAW_BASE}/${item.path}`;
 
       // Update Header
       document.getElementById('lightboxFilename').textContent = item.name;
@@ -818,9 +862,10 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
     let editorLiveUpdateTimeout = null;
     let isFullscreen = false;
 
+    window.openEditor = openEditor;
     async function openEditor(item) {
       window.currentEditorItem = item;
-      const rawUrl = `https://raw.githubusercontent.com/alchemist4real/MR-CAPSULES/main/${item.path}`;
+      const rawUrl = `${GITHUB_RAW_BASE}/${item.path}`;
       const emodal = document.getElementById('editorModal');
       const emodalContainer = document.getElementById('editorModalContainer');
       document.getElementById('editorTitle').textContent = `Editing: ${item.name}`;
@@ -911,7 +956,7 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
       document.getElementById('editorSave').onclick = async (ev) => {
         ev.target.textContent = 'Saving...';
         const content = window.cmEditor.getValue();
-        const base64 = btoa(unescape(encodeURIComponent(content)));
+        const base64 = utf8ToBase64(content);
         await adminAction('upload', { path: item.path, contentBase64: base64, sha: item.sha });
         ev.target.textContent = 'Save Changes';
         emodal.classList.add('hidden');
@@ -985,12 +1030,16 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
           } catch(e) { console.error("Error fetching config for banned devs:", e); }
         }
 
+      const userController = new AbortController();
+      const userTimeoutId = setTimeout(() => userController.abort(), 30000);
       try {
         const res = await fetch('/api/admin', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionToken}` },
-          body: JSON.stringify({ action: 'get_users' })
+          body: JSON.stringify({ action: 'get_users' }),
+          signal: userController.signal
         });
+        clearTimeout(userTimeoutId);
         const data = await res.json();
         if (data.success) {
           let displayUsers = data.users;
@@ -1011,7 +1060,8 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
           userBrowser.innerHTML = `<div style="padding:24px; color:var(--danger);">Failed to load users: ${data.error}</div>`;
         }
       } catch(e) {
-        userBrowser.innerHTML = `<div style="padding:24px; color:var(--danger);">Error: ${e.message}</div>`;
+        clearTimeout(userTimeoutId);
+        userBrowser.innerHTML = `<div style="padding:24px; color:var(--danger);">${e.name === 'AbortError' ? 'Loading timed out (30s). Try refreshing.' : 'Error: ' + e.message}</div>`;
       }
     }
 
@@ -1038,7 +1088,8 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
         uptimeEl.textContent = '00:00:00';
       }
       
-      // Only populate hybrid logs on the first dashboard render to avoid N+1 DB upserts
+      // Populate hybrid logs from user data (local only, no DB upserts)
+      // Only do this once to avoid re-processing on every renderDashboard call
       if (!window._dashboardLogsPopulated) {
         window._dashboardLogsPopulated = true;
         users.forEach(function(u) {
@@ -1047,15 +1098,20 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
           var devArr = Array.isArray(meta.devices) ? meta.devices : [];
           var devStr = devArr.length > 0 ? devArr.map(function(d){ return d.id.substr(0,10); }).join(', ') : (meta.deviceId || 'Unknown');
           
-          window.addHybridLog({
+          var logEntry = {
              id: 'login_' + u.id + '_' + u.last_sign_in_at,
              type: 'login',
              time: new Date(u.last_sign_in_at).getTime(),
              user: (meta.username || 'Unknown'),
              email: u.email,
              devStr: devStr
-          });
+          };
+          // Push directly to the array WITHOUT calling addHybridLog (which does DB upsert)
+          var exists = window.hybridLogs.find(function(l) { return l.id === logEntry.id; });
+          if (!exists) window.hybridLogs.push(logEntry);
         });
+        window.hybridLogs.sort(function(a, b) { return b.time - a.time; });
+        if (window.hybridLogs.length > 200) window.hybridLogs = window.hybridLogs.slice(0, 200);
         window.renderHybridLogs();
       }
     }
@@ -1332,19 +1388,31 @@ const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
       } catch(e) { console.error("Error fetching uptime logs:", e); }
     }, 30000);
 
-function walkAndReplaceMR(node, isMrs) {
-      if (node.nodeName === 'SCRIPT' || node.nodeName === 'STYLE') return;
-      if (node.nodeType === 3) {
+// Optimized: uses TreeWalker instead of recursive DOM walk (avoids stack overflow on deep DOMs)
+    function walkAndReplaceMR(rootNode, isMrs) {
+      const walker = document.createTreeWalker(
+        rootNode,
+        NodeFilter.SHOW_TEXT,
+        {
+          acceptNode(node) {
+            const parent = node.parentNode;
+            if (parent && (parent.nodeName === 'SCRIPT' || parent.nodeName === 'STYLE')) {
+              return NodeFilter.FILTER_REJECT;
+            }
+            return NodeFilter.FILTER_ACCEPT;
+          }
+        }
+      );
+      while (walker.nextNode()) {
+        const textNode = walker.currentNode;
         if (isMrs) {
-          if (node.originalValue === undefined) node.originalValue = node.nodeValue;
-          if (node.originalValue.includes('MR') || node.originalValue.includes('mr')) {
-             node.nodeValue = node.originalValue.replace(/\bMR\b/g, 'MRS').replace(/\bmr\b/g, 'mrs');
+          if (textNode.originalValue === undefined) textNode.originalValue = textNode.nodeValue;
+          if (textNode.originalValue.includes('MR') || textNode.originalValue.includes('mr')) {
+            textNode.nodeValue = textNode.originalValue.replace(/\bMR\b/g, 'MRS').replace(/\bmr\b/g, 'mrs');
           }
         } else {
-          if (node.originalValue !== undefined) node.nodeValue = node.originalValue;
+          if (textNode.originalValue !== undefined) textNode.nodeValue = textNode.originalValue;
         }
-      } else if (node.nodeType === 1) {
-        node.childNodes.forEach(child => walkAndReplaceMR(child, isMrs));
       }
     }
 
