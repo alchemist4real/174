@@ -25,7 +25,7 @@
   --active-art-bg: #222222;
   
   --noise-op: 0.05;
-  --scanline-c: var(--scanline-c);
+  --scanline-c: rgba(13,13,13,0.025);
 }
 
 [data-theme="dark"] {
@@ -93,7 +93,8 @@ html,body{
   opacity:var(--noise-op);
   mix-blend-mode:multiply;
   background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  animation:noiseShift 0.4s steps(2) infinite;
+  animation:noiseShift 0.8s steps(2) infinite;
+  will-change:transform;
 }
 @keyframes noiseShift{
   0%{transform:translate(0,0)}
@@ -240,10 +241,10 @@ html,body{
 .card.type-semester:not(.card-active):hover { box-shadow: 0 12px 24px rgba(0,0,0,0.15); }
 .card.type-semester:not(.card-active):hover .art { transform: translateY(-4px) scale(1.02); }
 
-.card.type-block { border: 1.5px dashed rgba(13,13,13,0.5); }
+.card.type-block { border: 1.5px dashed var(--border-heavy); }
 .card.type-block:not(.card-active):hover .art { transform: scale(1.04); transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275); }
 
-.card.type-category { border: 1px solid rgba(13,13,13,0.1); border-left: 4px solid var(--text-main); }
+.card.type-category { border: 1px solid var(--border-light); border-left: 4px solid var(--text-main); }
 .card.type-category:not(.card-active):hover .art { transform: perspective(400px) rotateY(-5deg) rotateX(2deg) scale(1.02); }
 
 .card.type-file { border: 1.5px solid var(--text-main); }
@@ -425,10 +426,11 @@ html,body{
 .settings-overlay {
   position: fixed; inset: 0; z-index: 300;
   background: rgba(13,13,13,0.85); backdrop-filter: blur(4px);
-  display: none; align-items: center; justify-content: center;
-  opacity: 0; transition: opacity 0.3s;
+  display: flex; align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none; visibility: hidden;
+  transition: opacity 0.3s, visibility 0.3s;
 }
-.settings-overlay.active { display: flex; opacity: 1; }
+.settings-overlay.active { opacity: 1; pointer-events: auto; visibility: visible; }
 .settings-box {
   background:var(--bg-main); color:var(--text-modal); border: 1px solid var(--border-medium);
   width: 90%; max-width: 480px; max-height: 90vh; border-radius: 8px;
@@ -612,9 +614,9 @@ iframe {
 /* Guide Overlay */
 #guideOverlay {
   position: fixed; inset: 0; background: transparent; z-index: 99990;
-  display: none; transition: opacity 0.3s ease; overflow: hidden;
+  opacity: 0; pointer-events: none; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s; overflow: hidden;
 }
-#guideOverlay.active { display: block; }
+#guideOverlay.active { opacity: 1; pointer-events: auto; visibility: visible; }
 #guideOverlay.active ~ #iframeViewer { animation: none !important; }
 
 .guide-highlight {
@@ -640,16 +642,18 @@ iframe {
 /* Intercept Modal */
 #interactionModeModal, #usernameSetupModal, #divisionSetupModal {
   position: fixed; inset: 0; background: rgba(10,10,10,0.95); z-index: 99999;
-  display: none; align-items: center; justify-content: center; flex-direction: column;
+  display: flex; align-items: center; justify-content: center; flex-direction: column;
+  opacity: 0; pointer-events: none; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s;
 }
-#interactionModeModal.active, #usernameSetupModal.active, #divisionSetupModal.active { display: flex; }
+#interactionModeModal.active, #usernameSetupModal.active, #divisionSetupModal.active { opacity: 1; pointer-events: auto; visibility: visible; }
 
 /* Reset Password Modal */
 #resetPasswordModal {
   position: fixed; inset: 0; background: rgba(10,10,10,0.95); z-index: 99999;
-  display: none; align-items: center; justify-content: center; flex-direction: column;
+  display: flex; align-items: center; justify-content: center; flex-direction: column;
+  opacity: 0; pointer-events: none; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s;
 }
-#resetPasswordModal.active { display: flex; }
+#resetPasswordModal.active { opacity: 1; pointer-events: auto; visibility: visible; }
 
 </style>
 </head>
@@ -688,7 +692,7 @@ iframe {
       <form class="auth-form" id="authForm" onsubmit="return false;">
         <input type="email" class="auth-input" id="authEmail" placeholder="EMAIL ADDRESS" required>
         <input type="password" class="auth-input" id="authPassword" placeholder="PASSWORD" required>
-        <button type="submit" class="auth-btn" id="btnSignIn">LOG IN</button>
+        <button type="button" class="auth-btn" id="btnSignIn">LOG IN</button>
         <button type="button" class="auth-btn auth-btn-outline" id="btnSignUp">SIGN UP</button>
         <button type="button" class="auth-btn auth-btn-outline" id="btnGuest" style="margin-top: 8px; border-color: var(--accent); color: var(--accent);">GUEST MODE</button>
         <button type="button" class="btn-text" id="btnForgotPwd" style="font-size: 10px; margin-top: 8px; opacity: 0.7;">FORGOT PASSWORD?</button>
@@ -1068,10 +1072,10 @@ async function backgroundSync() {
     const res = await fetch('/api/content');
     if (res.ok) {
       const freshData = await res.json();
-      if (document.getElementById('iframeViewer').classList.contains('active') === false) {
+      rawData = freshData;
+      // Only build if we don't have anything shown yet
+      if (!catalog || catalog.length === 0) {
         applyData(freshData);
-      } else {
-        rawData = freshData;
       }
     }
   } catch(e) {
@@ -1080,10 +1084,18 @@ async function backgroundSync() {
 }
 
 function loadCatalog(newCatalog, restoreIndex = -1) {
-  catalog = newCatalog;
+  catalog = [...newCatalog];
   catalog.sort((a,b) => a.title.localeCompare(b.title, undefined, { numeric: true, sensitivity: 'base' }));
   
-  let shuffledCovers = [...covers].sort(() => 0.5 - Math.random());
+  // Fisher-Yates shuffle for unbiased randomization
+  function shuffleArray(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+  }
+  let shuffledCovers = shuffleArray([...covers]);
   let coverIndex = 0;
 
   catalog.forEach(item => {
@@ -1093,7 +1105,7 @@ function loadCatalog(newCatalog, restoreIndex = -1) {
       item.cover = shuffledCovers[coverIndex];
       coverIndex++;
       if (coverIndex >= shuffledCovers.length) {
-        shuffledCovers = [...covers].sort(() => 0.5 - Math.random());
+        shuffledCovers = shuffleArray([...covers]);
         coverIndex = 0;
       }
     } else {
@@ -1598,18 +1610,18 @@ try {
               baseUptime = Math.max(baseUptime, parseInt(session.user.user_metadata.uptime, 10) || 0);
             }
             if (session.user.user_metadata.username) {
-            currentUsername = session.user.user_metadata.username;
-            authUsername.value = currentUsername;
-            updateGreeting();
-          }
-          if (session.user.user_metadata.low_perf_mode !== undefined) {
-            const pref = session.user.user_metadata.low_perf_mode ? 'on' : 'off';
-            try { localStorage.setItem('mr_low_perf', pref); } catch(e) {}
-            if (isLowPerfMode !== session.user.user_metadata.low_perf_mode) {
-              applyPerfMode(pref, false);
+              currentUsername = session.user.user_metadata.username;
+              authUsername.value = currentUsername;
+              updateGreeting();
+            }
+            if (session.user.user_metadata.low_perf_mode !== undefined) {
+              const pref = session.user.user_metadata.low_perf_mode ? 'on' : 'off';
+              try { localStorage.setItem('mr_low_perf', pref); } catch(e) {}
+              if (isLowPerfMode !== session.user.user_metadata.low_perf_mode) {
+                applyPerfMode(pref, false);
+              }
             }
           }
-        }
         }
         syncDeviceId(session);
         authOverlay.classList.add('hidden');
@@ -1652,22 +1664,22 @@ try {
             if (session.user.user_metadata.uptime !== undefined) {
               baseUptime = Math.max(baseUptime, parseInt(session.user.user_metadata.uptime, 10) || 0);
             }
-          if (session.user.user_metadata.username) {
-            currentUsername = session.user.user_metadata.username;
-            authUsername.value = currentUsername;
-            updateGreeting();
-          }
-          if (session.user.user_metadata.low_perf_mode !== undefined) {
-            const pref = session.user.user_metadata.low_perf_mode ? 'on' : 'off';
-            try { localStorage.setItem('mr_low_perf', pref); } catch(e) {}
-            if (isLowPerfMode !== session.user.user_metadata.low_perf_mode) {
-              applyPerfMode(pref, false);
+            if (session.user.user_metadata.username) {
+              currentUsername = session.user.user_metadata.username;
+              authUsername.value = currentUsername;
+              updateGreeting();
+            }
+            if (session.user.user_metadata.low_perf_mode !== undefined) {
+              const pref = session.user.user_metadata.low_perf_mode ? 'on' : 'off';
+              try { localStorage.setItem('mr_low_perf', pref); } catch(e) {}
+              if (isLowPerfMode !== session.user.user_metadata.low_perf_mode) {
+                applyPerfMode(pref, false);
+              }
             }
           }
+          syncDeviceId(session);
+          startTracking();
         }
-        syncDeviceId(session);
-        startTracking();
-      }
         authOverlay.classList.add('hidden');
         await checkOnboarding(session);
       } else if (event === 'SIGNED_OUT') {
@@ -1685,7 +1697,7 @@ try {
             msgEl.textContent = 'Updating...';
             const { error } = await supabase.auth.updateUser({ password: newPassword });
             if (error) {
-              msgEl.style.color = 'var(--error)';
+              msgEl.style.color = 'var(--danger)';
               msgEl.textContent = "Error: " + error.message;
             } else {
               msgEl.style.color = 'var(--accent)';
@@ -1696,7 +1708,7 @@ try {
               }, 1500);
             }
           } else {
-            msgEl.style.color = 'var(--error)';
+            msgEl.style.color = 'var(--danger)';
             msgEl.textContent = "Please enter a valid password.";
           }
         };
@@ -2019,7 +2031,8 @@ try {
           if(tContainer) {
             const toast = document.createElement('div');
             toast.style.cssText = 'background:var(--accent); color:#000; padding:12px 24px; font-weight:bold; box-shadow:0 4px 12px rgba(0,0,0,0.5); transform:translateY(-20px); opacity:0; transition:0.3s; pointer-events:auto; font-family:var(--font-mono); font-size:14px;';
-            toast.textContent = "📢 " + msg;
+            // Use textContent to prevent XSS from broadcast payloads
+            toast.textContent = "\uD83D\uDCE2 " + String(msg);
             tContainer.appendChild(toast);
             requestAnimationFrame(() => { toast.style.transform = 'translateY(0)'; toast.style.opacity = '1'; });
             setTimeout(() => {
@@ -2038,7 +2051,7 @@ try {
       }).on('broadcast', { event: 'ban_device' }, (payload) => {
         if(payload.payload && payload.payload.deviceId === getDeviceId()) {
           document.body.innerHTML = `
-            <div style="display:flex; height:100vh; width:100vw; background:#0a0a0a; color:#000000; justify-content:center; align-items:center; flex-direction:column; font-family: 'Courier New', Courier, monospace; text-align:center; position:fixed; z-index:99999999; top:0; left:0;">
+            <div style="display:flex; height:100vh; width:100vw; background:#0a0a0a; color:#ff3333; justify-content:center; align-items:center; flex-direction:column; font-family: 'Courier New', Courier, monospace; text-align:center; position:fixed; z-index:99999999; top:0; left:0;">
               <h1 class="glitch-text" style="font-size:3rem; margin-bottom:20px; letter-spacing:2px;">SORRY FOR KICKING YOU OUT OF OUR SANCTUARY</h1>
               <p style="color:#888; font-size:1.2rem;">Your device has been permanently blocked.</p>
             </div>
@@ -2087,57 +2100,87 @@ try {
         .catch(e => { valGlobal.textContent = '00:00:00'; });
       }).catch(e => { valGlobal.textContent = '00:00:00'; });
       
+      // Cache session token to avoid calling getSession() every 10s
+      let cachedUptimeToken = uptimeToken;
+      let cachedUserId = null;
+      supabase.auth.getSession().then(s => {
+        if (s.data && s.data.session) {
+          cachedUptimeToken = s.data.session.access_token;
+          cachedUserId = s.data.session.user?.id;
+        }
+      });
+      // Refresh cached token on auth state change
+      supabase.auth.onAuthStateChange((event, session) => {
+        if (session) {
+          cachedUptimeToken = session.access_token;
+          cachedUserId = session.user?.id;
+        }
+      });
+
       setInterval(async () => {
         sessionUptime += 10;
         localUptime = baseUptime + sessionUptime;
         valLocal.textContent = fmtTime(localUptime);
         
-        if (sessionUptime % 60 === 0) {
-          supabase.auth.getSession().then(({ data: { session } }) => {
-            if (session && session.user) {
-              supabase.from('user_stats').upsert({ user_id: session.user.id, total_uptime: localUptime, last_updated: new Date().toISOString() })
-                .catch(e => console.log('Local uptime save error', e));
-            }
-          });
+        // Save local uptime every 60s
+        if (sessionUptime % 60 === 0 && cachedUserId) {
+          supabase.from('user_stats').upsert({ user_id: cachedUserId, total_uptime: localUptime, last_updated: new Date().toISOString() })
+            .catch(e => console.log('Local uptime save error', e));
         }
         
-        var uptimeToken = '';
-        supabase.auth.getSession().then(async (s) => {
-          if (s.data && s.data.session) uptimeToken = s.data.session.access_token;
-          if (!uptimeToken) return;
+        // Global uptime sync using cached token
+        if (!cachedUptimeToken) return;
+        try {
           var res = await fetch('/api/uptime', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + uptimeToken },
+            headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + cachedUptimeToken },
             body: JSON.stringify({ action: 'increment', seconds: 10 })
           });
           var data = await res.json();
           if (data.success) {
             valGlobal.textContent = fmtTime(data.total_uptime);
           }
-        }).catch(e => {
+        } catch(e) {
           console.log('Global uptime sync error', e);
-        });
+        }
       }, 10000);
 
+      // Cache session info for beforeunload (async calls get killed by browser)
+      let cachedSessionForUnload = null;
+      supabase.auth.getSession().then(({ data: { session } }) => {
+        cachedSessionForUnload = session;
+      });
+      supabase.auth.onAuthStateChange((event, session) => {
+        cachedSessionForUnload = session;
+      });
+
       window.addEventListener('beforeunload', () => {
-        supabase.auth.getSession().then(({ data: { session } }) => {
-          if (session && session.user) {
-            try {
-               supabase.from('activity_logs').upsert({
-                  log_id: 'offline_' + session.user.email + '_' + Date.now(),
-                  type: 'offline',
-                  time: new Date().toISOString(),
-                  user_name: session.user.user_metadata?.username || session.user.email,
-                  email: session.user.email,
-                  dev_str: navigator.userAgent
-               }, { onConflict: 'log_id' }).then(() => {});
-            } catch (e) {}
-            if (sessionUptime % 60 !== 0) {
-              supabase.from('user_stats').upsert({ user_id: session.user.id, total_uptime: localUptime, last_updated: new Date().toISOString() })
-                .catch(e => console.log('Local uptime save error', e));
-            }
+        const session = cachedSessionForUnload;
+        if (session && session.user) {
+          // Use sendBeacon for reliable delivery during page unload
+          const offlinePayload = JSON.stringify({
+            log_id: 'offline_' + session.user.email + '_' + Date.now(),
+            type: 'offline',
+            time: new Date().toISOString(),
+            user_name: session.user.user_metadata?.username || session.user.email,
+            email: session.user.email,
+            dev_str: navigator.userAgent
+          });
+          const beaconHeaders = new Blob([offlinePayload], { type: 'application/json' });
+          try {
+            navigator.sendBeacon(
+              `https://hdhvrlkizorscvehttzd.supabase.co/rest/v1/activity_logs`,
+              beaconHeaders
+            );
+          } catch(e) {
+            // Fallback: try supabase client (may or may not complete)
+            supabase.from('activity_logs').upsert(JSON.parse(offlinePayload), { onConflict: 'log_id' }).then(() => {});
           }
-        });
+          if (sessionUptime % 60 !== 0 && cachedUserId) {
+            supabase.from('user_stats').upsert({ user_id: cachedUserId, total_uptime: localUptime, last_updated: new Date().toISOString() })
+              .catch(e => console.log('Local uptime save error', e));
+          }
+        }
       });
     }
   }
@@ -2225,40 +2268,11 @@ try {
   
   let _presenceTracked = false;
   function trackPresence(session) {
-    if (!window.supabaseClient || _presenceTracked) return;
-    _presenceTracked = true;
-    const presenceChannel = window.supabaseClient.channel('online-users');
-    presenceChannel.subscribe(async (status) => {
-      if (status === 'SUBSCRIBED') {
-        await presenceChannel.track({
-          user: 'end-user',
-          email: session.user.email,
-          joined_at: new Date().toISOString()
-        });
-      }
-    });
-
-    presenceChannel.on('broadcast', { event: 'announcement' }, (payload) => {
-      const banner = document.createElement('div');
-      banner.className = 'announcement-banner';
-      banner.innerHTML = `
-        <div style="position:fixed;top:0;left:0;right:0;z-index:9999;background:var(--accent,#FFD700);color:#000;padding:12px 20px;text-align:center;font-weight:600;font-size:14px;display:flex;align-items:center;justify-content:center;gap:8px;">
-          <span>📢</span>
-          <span>${payload.payload.message}</span>
-          <button onclick="this.parentElement.remove()" style="background:none;border:none;font-size:18px;cursor:pointer;margin-left:12px;">✕</button>
-        </div>
-      `;
-      document.body.prepend(banner);
-      setTimeout(() => banner.remove(), 15000);
-    });
-
-    presenceChannel.on('broadcast', { event: 'maintenance_on' }, () => {
-      document.body.innerHTML = '<div style="display:flex;align-items:center;justify-content:center;height:100vh;font-size:24px;font-weight:bold;">🔧 System Under Maintenance</div>';
-    });
-
-    presenceChannel.on('broadcast', { event: 'maintenance_off' }, () => {
-      window.location.reload();
-    });
+    // Presence is already tracked by startTracking() via the 'online-users' channel.
+    // This function was creating a DUPLICATE subscription to the same channel,
+    // causing conflicts and double event handlers. Now it's a no-op.
+    // All presence + broadcast handling is consolidated in startTracking().
+    return;
   }
   
   function showContributionGate() {

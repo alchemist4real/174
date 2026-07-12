@@ -126,6 +126,8 @@ export default async function handler(req, res) {
       covers: covers
     };
 
+    // Cache for 5 minutes to reduce GitHub API rate limit consumption
+    res.setHeader('Cache-Control', 's-maxage=300, stale-while-revalidate=600');
     return res.status(200).json(result);
   } catch (error) {
     return res.status(500).json({ message: error.message });
