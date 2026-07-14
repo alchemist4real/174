@@ -29,6 +29,11 @@
       </div>
       <!-- Tab tambahan di masa depan dapat ditambahkan di sini -->
     </div>
+    <div id="adminThemeToggles" style="display:flex; gap:4px; margin-left:auto; align-items:center;">
+      <button class="btn-unified admin-theme-btn-unified" data-theme-val="light" style="padding:4px 8px; font-size:10px;">LIGHT</button>
+      <button class="btn-unified admin-theme-btn-unified" data-theme-val="dark" style="padding:4px 8px; font-size:10px;">DARK</button>
+      <button class="btn-unified admin-theme-btn-unified" data-theme-val="mrs" style="padding:4px 8px; font-size:10px;">MRS</button>
+    </div>
   </div>
   
   <div class="docs-content-area">
@@ -85,6 +90,29 @@
     } else {
       document.documentElement.setAttribute('data-theme', 'dark');
     }
+
+    const themeButtons = document.querySelectorAll('.admin-theme-btn-unified');
+    function updateActiveThemeBtn(val) {
+      themeButtons.forEach(b => {
+        if (b.getAttribute('data-theme-val') === val) {
+          b.classList.add('active');
+        } else {
+          b.classList.remove('active');
+        }
+      });
+    }
+
+    themeButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const v = btn.getAttribute('data-theme-val');
+        document.documentElement.setAttribute('data-theme', v);
+        localStorage.setItem('capsules_theme', v);
+        updateActiveThemeBtn(v);
+      });
+    });
+
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+    updateActiveThemeBtn(currentTheme);
   </script>
 </body>
 </html>

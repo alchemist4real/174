@@ -1207,44 +1207,53 @@ body { margin: 0; overflow: hidden; }
   font-family: var(--font-sans);
   font-size: 28px;
   font-weight: 700;
-  color: var(--c3);
+  color: var(--text-main);
   margin-bottom: 32px;
   text-align: center;
   letter-spacing: 0.05em;
 }
 
 .docs-section {
-  margin-bottom: 40px;
+  background: var(--bg-card);
+  border: var(--border-main);
+  border-radius: var(--radius-card);
+  padding: 24px;
+  margin-bottom: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .docs-section h2 {
   font-family: var(--font-sans);
   font-size: 18px;
-  color: var(--c3);
+  color: var(--text-main);
   border-bottom: var(--border-main);
   padding-bottom: 12px;
-  margin-bottom: 16px;
+  margin-top: 0;
+  margin-bottom: 0;
   text-transform: uppercase;
   letter-spacing: 0.05em;
 }
 
 .docs-section h3 {
   font-family: var(--font-sans);
-  font-size: 15px;
-  color: var(--c3);
-  margin-top: 24px;
-  margin-bottom: 8px;
+  font-size: 16px;
+  color: var(--text-main);
+  margin-top: 8px;
+  margin-bottom: 0;
 }
 
 .docs-section p, .docs-section ul {
-  color: color-mix(in srgb, var(--c3) 60%, transparent);
+  font-family: var(--font-mono);
+  color: var(--text-muted);
   line-height: 1.7;
   font-size: 15px;
+  margin: 0;
 }
 
 .docs-section ul {
   padding-left: 24px;
-  margin-bottom: 16px;
 }
 
 .docs-section li {
