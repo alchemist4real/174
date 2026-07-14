@@ -86,7 +86,7 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
             '<div style="font-size:11px; color:var(--text-muted); margin-top:4px;">Devices: ' + sanitize(log.devStr || 'Unknown') + '</div>';
         } else if (log.type === 'online') {
           item.innerHTML = '<div style="font-size:12px; color:var(--text-muted);">' + timeStr + ' - [LIVE PRESENCE]</div>' +
-            '<div style="font-weight:600; color:#000000;">' + sanitize(log.user) + ' came online</div>';
+            '<div style="font-weight:600; color:var(--text-main);">' + sanitize(log.user) + ' came online</div>';
         } else if (log.type === 'offline') {
           item.innerHTML = '<div style="font-size:12px; color:var(--text-muted);">' + timeStr + ' - [LIVE PRESENCE]</div>' +
             '<div style="font-weight:600; color:var(--danger);">' + sanitize(log.user) + ' went offline</div>';
@@ -557,7 +557,7 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
       itemCount.textContent = `${sortedItems.length} items`;
 
       if (sortedItems.length === 0 && currentPath !== '') {
-        fileBrowser.innerHTML = '<div style="padding:24px; color:#666; text-align:center;">Folder is empty</div>';
+        fileBrowser.innerHTML = '<div style="padding:24px; color:var(--text-muted); text-align:center;">Folder is empty</div>';
       }
 
       sortedItems.forEach(item => {
@@ -944,7 +944,7 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
         if (item.name.endsWith('.html')) {
            iframe.srcdoc = text;
         } else {
-           iframe.srcdoc = `<html><body style="font-family:monospace; padding:20px; color:#666;">Preview not available for this file type.</body></html>`;
+           iframe.srcdoc = `<html><body style="font-family:'Courier New', Courier, monospace; padding:20px;">Preview not available for this file type.</body></html>`;
         }
       } catch(e) {
         window.cmEditor.setValue("Error loading file: " + e.message);
@@ -1027,7 +1027,7 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
     async function loadUsers(divIdFilter = null) {
       const filterToUse = (divIdFilter && divIdFilter !== 'all') ? divIdFilter : (window.currentDivisionId && window.currentDivisionId !== 'all' ? window.currentDivisionId : null);
       const userBrowser = document.getElementById('userBrowser');
-      userBrowser.innerHTML = '<div style="padding:48px; color:var(--text-muted); text-align:center; font-size:18px;">Loading users... <div style="display:inline-block; width:20px; height:20px; border:3px solid rgba(255,255,255,0.3); border-radius:50%; border-top-color:#fff; animation:spin 1s ease-in-out infinite; margin-left:10px; vertical-align:middle;"></div></div>';
+      userBrowser.innerHTML = '<div style="padding:48px; color:var(--text-muted); text-align:center; font-size:18px;">Loading users... <div style="display:inline-block; width:20px; height:20px; border:3px solid var(--border-light); border-radius:50%; border-top-color:var(--text-main); animation:spin 1s ease-in-out infinite; margin-left:10px; vertical-align:middle;"></div></div>';
         // Use cached banned devices to avoid redundant API calls on every loadUsers
         let bannedDevs = window._cachedBannedDevices || [];
         if (!window._cachedBannedDevices) {
@@ -1154,7 +1154,7 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
         
         var badgesHtml = '';
         if (isAdmin) badgesHtml += '<span class="badge badge-admin">ADMIN</span>';
-        if (division) badgesHtml += '<span class="badge" style="background:var(--accent);color:#000;text-transform:uppercase;">' + division + '</span>';
+        if (division) badgesHtml += '<span class="badge" style="background:var(--accent);color:var(--c1);text-transform:uppercase;">' + division + '</span>';
         if (isBanned) badgesHtml += '<span class="badge badge-banned">BANNED</span>';
 
         // Build devices HTML using string concat to avoid nested template literal issues
@@ -1318,14 +1318,14 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
           });
           const data = await res.json();
           if (res.ok) {
-            resultEl.style.color = '#4caf50';
+            resultEl.style.color = 'var(--text-main)';
             resultEl.textContent = `[SUCCESS] Deleted ${data.deleted}/${data.total_guests_found} guests`;
           } else {
-            resultEl.style.color = '#f44336';
+            resultEl.style.color = 'var(--danger)';
             resultEl.textContent = `[ERROR] ${data.error}`;
           }
         } catch(e) {
-          resultEl.style.color = '#f44336';
+          resultEl.style.color = 'var(--danger)';
           resultEl.textContent = `[ERROR] ${e.message}`;
         }
         btnGuestCleanup.disabled = false;
@@ -1536,7 +1536,7 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
       toast.style.color = 'var(--text-main)';
       toast.style.fontFamily = 'var(--font-mono)';
       toast.style.fontSize = '12px';
-      toast.style.boxShadow = '0 8px 16px rgba(0,0,0,0.2)';
+      toast.style.boxShadow = '0 8px 16px var(--border-light)';
       toast.style.animation = 'toastIn 0.3s ease forwards';
       toast.textContent = msg;
       container.appendChild(toast);

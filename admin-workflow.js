@@ -135,7 +135,7 @@ async function loadTasks() {
     const cols = ['open', 'in_progress', 'developed', 'in_review', 'done'];
     cols.forEach(c => {
         const el = document.querySelector(`#col-${c} .task-list`);
-        if (el) el.innerHTML = '<div style="padding:24px; text-align:center; color:var(--text-muted);">Loading... <div style="display:inline-block; width:16px; height:16px; border:2px solid rgba(255,255,255,0.3); border-radius:50%; border-top-color:#fff; animation:spin 1s ease-in-out infinite; margin-left:8px; vertical-align:middle;"></div></div>';
+        if (el) el.innerHTML = '<div style="padding:24px; text-align:center; color:var(--text-muted);">Loading... <div style="display:inline-block; width:16px; height:16px; border:2px solid var(--border-light); border-radius:50%; border-top-color:var(--text-main); animation:spin 1s ease-in-out infinite; margin-left:8px; vertical-align:middle;"></div></div>';
     });
     const res = await apiCall('tasks', { action: 'list_tasks' });
     if(res.success) {
@@ -253,7 +253,7 @@ function renderKanban(tasks) {
             const dueTime = new Date(dueDateStr).getTime();
             const now = Date.now();
             if (dueTime < now) dueColor = 'var(--danger)';
-            else if (dueTime < now + 86400000 * 3) dueColor = '#ffa500';
+            else if (dueTime < now + 86400000 * 3) dueColor = 'var(--accent)';
         }
 
         let meta = `<div style="font-size:13px; margin-bottom:6px;"><span style="color:var(--text-muted)">Sem:</span> ${task.semester || '-'} | <span style="color:var(--text-muted)">Blk:</span> ${task.block || '-'}</div>`;
@@ -542,7 +542,7 @@ window.loadTaskLogs = async function(taskId) {
         if (isRejected) {
             const lastReject = res.logs.find(l => l.action === 'rejected');
             if (lastReject && lastReject.note) {
-                rejectNoteHtml = `<div style="margin-bottom:12px; padding:8px; background:transparent; border:1.5px solid var(--danger); border-radius:0;">
+                rejectNoteHtml = `<div style="margin-bottom:12px; padding:8px; background:transparent; border:1.5px solid var(--danger); border-radius:var(--radius-card);">
                     <div style="font-size:10px; font-weight:bold; color:var(--danger); text-transform:uppercase;">Latest Rejection Reason</div>
                     <div style="font-size:11px; color:var(--text-main); margin-top:4px;">"${lastReject.note}"</div>
                 </div>`;
@@ -700,9 +700,9 @@ async function loadDivisions() {
             const btn = document.createElement('button');
             btn.className = 'btn btn-div-item';
             btn.setAttribute('data-id', div.id);
-            btn.style.cssText = 'justify-content:space-between; padding:12px 16px; text-align:left; border:none; background:transparent; color:var(--text-main); font-size:15px; font-weight:700; border-radius:4px; margin-bottom:8px;';
+            btn.style.cssText = 'justify-content:space-between; padding:12px 16px; text-align:left; border:none; background:transparent; color:var(--text-main); font-size:15px; font-weight:700; border-radius:var(--radius-pill); margin-bottom:8px;';
             if(window.currentDivisionId === div.id) {
-                btn.style.background = 'rgba(0, 0, 0, 0.1)';
+                btn.style.background = 'var(--border-light)';
                 btn.style.color = 'var(--accent)';
                 btn.classList.add('active');
             }
@@ -752,7 +752,7 @@ window.loadContributions = async function() {
         const statusEl = document.getElementById('contributionStatus');
         if(hasRecent || isAdminUser) {
             statusEl.textContent = 'Active Contributor (Access Granted)';
-            statusEl.style.color = '#000000';
+            statusEl.style.color = 'var(--text-main)';
         } else {
             statusEl.textContent = 'Inactive for 30 days (Access Revoked)';
             statusEl.style.color = 'var(--danger)';
@@ -840,7 +840,7 @@ function parseCBTHtml(path, html) {
     const qContainers = doc.querySelectorAll('.soal-container, .card, .question-block, fieldset');
     
     if(qContainers.length === 0) {
-        listEl.innerHTML = '<div style="padding:16px; background:transparent; color:var(--danger); border:1.5px solid var(--danger); border-radius:var(--radius-card); border:var(--border-main);">No standard question blocks found. This scrapper supports specific CBT HTML formats. You can still use the raw HTML editor in the Files tab.</div>';
+        listEl.innerHTML = '<div style="padding:16px; background:transparent; color:var(--danger); border:1.5px solid var(--danger); border-radius:var(--radius-card);">No standard question blocks found. This scrapper supports specific CBT HTML formats. You can still use the raw HTML editor in the Files tab.</div>';
         return;
     }
 
@@ -857,7 +857,7 @@ function parseCBTHtml(path, html) {
         
         block.innerHTML = `
             <div style="font-weight:600; margin-bottom:8px;">Question ${idx + 1}</div>
-            <textarea id="q_edit_${idx}" style="width:100%; height:150px; background:#1e1e1e; color:#d4d4d4; font-family:var(--font-mono); font-size:12px; padding:12px; border:var(--border-main); border-radius:var(--radius-card); resize:vertical;">${outerHTML}</textarea>
+            <textarea id="q_edit_${idx}" style="width:100%; height:150px; background:var(--c2); color:var(--text-main); font-family:var(--font-mono); font-size:12px; padding:12px; border:var(--border-main); border-radius:var(--radius-card); resize:vertical;">${outerHTML}</textarea>
             <div style="margin-top:8px; display:flex; justify-content:flex-end;">
                <button class="btn btn-report-issue" data-idx="${idx}" style="border-color:var(--danger); color:var(--danger);">Report Issue</button>
             </div>
