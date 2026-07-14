@@ -74,7 +74,7 @@ async function initWorkflow() {
     } else if (divRes.success && !divRes.division) {
         // User has no division, show picker
         if (!isAdminUser) {
-            document.getElementById('divisionPickerModal').classList.remove('hidden');
+            document.getElementById('divisionPickerModal').classList.add('active');
         }
     }
 
@@ -110,7 +110,7 @@ window.joinDivision = async function(divId) {
     showToast('Bergabung dengan divisi...');
     const res = await apiCall('divisions', { action: 'join_division', division_id: divId });
     if(res.success) {
-        document.getElementById('divisionPickerModal').classList.add('hidden');
+        document.getElementById('divisionPickerModal').classList.remove('active');
         showToast('Berhasil bergabung!', 'success');
         setTimeout(() => window.location.reload(), 1000);
     } else {
@@ -351,11 +351,11 @@ async function createNewTaskPrompt() {
         });
     }
 
-    modal.classList.remove('hidden');
+    modal.classList.add('active');
 
     return new Promise((resolve) => {
         const cleanup = () => {
-            modal.classList.add('hidden');
+            modal.classList.remove('active');
             btnCancel.onclick = null;
             btnConfirm.onclick = null;
         };
@@ -523,7 +523,7 @@ function openTaskModal(task) {
     }
 
     acts.innerHTML = details + `<div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">${actionsHtml}</div>`;
-    modal.classList.remove('hidden');
+    modal.classList.add('active');
 }
 
 window.loadTaskLogs = async function(taskId) {
@@ -577,7 +577,7 @@ window.updateTask = async function(taskId, action) {
         note = await customPrompt("Optional: Any final notes?");
     }
 
-    document.getElementById('contextModal').classList.add('hidden');
+    document.getElementById('contextModal').classList.remove('active');
     showToast('Updating task...');
     const res = await apiCall('tasks', { action, task_id: taskId, note: note ? note.trim() : null });
     if(res.success) {
@@ -589,7 +589,7 @@ window.updateTask = async function(taskId, action) {
 };
 
 window.openTaskFile = function(path) {
-    document.getElementById('contextModal').classList.add('hidden');
+    document.getElementById('contextModal').classList.remove('active');
     // Switch to Files tab
     const filesTab = document.querySelector('.tab[data-target="viewFiles"]');
     if(filesTab) filesTab.click();
@@ -767,7 +767,7 @@ window.loadContributions = async function() {
         const list = document.getElementById('leaderboardList');
         list.innerHTML = '';
         resLeader.leaderboard.forEach((u, i) => {
-            const medal = i === 0 ? '🥇' : (i === 1 ? '🥈' : (i === 2 ? '🥉' : `${i+1}.`));
+            const medal = i === 0 ? '1st' : (i === 1 ? '2nd' : (i === 2 ? '3rd' : `${i+1}.`));
             list.innerHTML += `
                 <li style="display:flex; justify-content:space-between; padding:12px 24px; border-bottom:1px solid var(--border-light); align-items:center;">
                     <div style="display:flex; gap:16px; align-items:center;">
@@ -840,7 +840,7 @@ function parseCBTHtml(path, html) {
     const qContainers = doc.querySelectorAll('.soal-container, .card, .question-block, fieldset');
     
     if(qContainers.length === 0) {
-        listEl.innerHTML = '<div style="padding:16px; background:rgba(0, 0, 0, 0.1); color:var(--danger); border-radius:0;">No standard question blocks found. This scrapper supports specific CBT HTML formats. You can still use the raw HTML editor in the Files tab.</div>';
+        listEl.innerHTML = '<div style="padding:16px; background:rgba(0, 0, 0, 0.1); color:var(--danger); border-radius:var(--radius-card); border:var(--border-main);">No standard question blocks found. This scrapper supports specific CBT HTML formats. You can still use the raw HTML editor in the Files tab.</div>';
         return;
     }
 
@@ -853,11 +853,11 @@ function parseCBTHtml(path, html) {
     qContainers.forEach((q, idx) => {
         const outerHTML = q.outerHTML;
         const block = document.createElement('div');
-        block.style.cssText = 'background:var(--bg-main); padding:16px; border-radius:0; border:1px solid var(--border-medium);';
+        block.style.cssText = 'background:var(--bg-main); padding:16px; border-radius:var(--radius-card); border:var(--border-main);';
         
         block.innerHTML = `
             <div style="font-weight:600; margin-bottom:8px;">Question ${idx + 1}</div>
-            <textarea id="q_edit_${idx}" style="width:100%; height:150px; background:#1e1e1e; color:#d4d4d4; font-family:monospace; font-size:12px; padding:12px; border:1px solid #333; border-radius:0; resize:vertical;">${outerHTML}</textarea>
+            <textarea id="q_edit_${idx}" style="width:100%; height:150px; background:#1e1e1e; color:#d4d4d4; font-family:var(--font-mono); font-size:12px; padding:12px; border:var(--border-main); border-radius:var(--radius-card); resize:vertical;">${outerHTML}</textarea>
             <div style="margin-top:8px; display:flex; justify-content:flex-end;">
                <button class="btn btn-report-issue" data-idx="${idx}" style="border-color:var(--danger); color:var(--danger);">Report Issue</button>
             </div>

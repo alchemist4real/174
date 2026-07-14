@@ -6,671 +6,22 @@
 <title>MR CAPSULES</title>
 <link rel="icon" type="image/svg+xml" href="/logo.svg">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<style>
-
-:root {
-  --bg-main: #FAFAFA;
-  --text-main: #0D0D0D;
-  --bg-modal: #FAFAFA;
-  --text-modal: #0D0D0D;
-  --accent: #000000;
-  --danger: #000000;
-  
-  --border-light: rgba(13,13,13,0.1);
-  --border-medium: rgba(13,13,13,0.2);
-  --border-heavy: rgba(13,13,13,0.5);
-  
-  --card-bg: #EAEAEA;
-  --card-hover: #F0F0F0;
-  --active-art-bg: #222222;
-  
-  --noise-op: 0.05;
-  --scanline-c: rgba(13,13,13,0.025);
-}
-
-[data-theme="dark"] {
-  --bg-main: #0D0D0D;
-  --text-main: #FAFAFA;
-  --bg-modal: #111111;
-  --text-modal: #FAFAFA;
-  --accent: #E2FF4A;
-  --danger: #000000;
-  
-  --border-light: rgba(250,250,250,0.1);
-  --border-medium: rgba(250,250,250,0.2);
-  --border-heavy: rgba(250,250,250,0.5);
-  
-  --card-bg: #1A1A1A;
-  --card-hover: #222222;
-  --active-art-bg: #EAEAEA;
-  
-  --noise-op: 0.02;
-  --scanline-c: rgba(250,250,250,0.025);
-}
-
-[data-theme="mrs"] {
-  --bg-main: #F63490;
-  --text-main: #FFFFFF;
-  --bg-modal: #FA4B9C;
-  --text-modal: #FFFFFF;
-  --accent: #2AA3C9;
-  --danger: #145385;
-  
-  --border-light: rgba(255, 255, 255, 0.25);
-  --border-medium: rgba(255, 255, 255, 0.5);
-  --border-heavy: rgba(255, 255, 255, 0.8);
-  
-  --card-bg: #FA4B9C;
-  --card-hover: #2AA3C9;
-  --active-art-bg: #FFFFFF;
-  
-  --noise-op: 0.04;
-  --scanline-c: rgba(255, 255, 255, 0.1);
-}
-
-[data-theme="dark"] img[src="/logo.svg"] {
-  content: url("/logo-white.svg");
-}
-
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html,body{
-  width:100%;height:100%;overflow:hidden;
-  background:var(--bg-main);
-  color:var(--text-main);
-  font-family:'Courier New', Courier, monospace;
-  user-select:none;
-}
-
-.bg{
-  position:fixed;inset:0;z-index:0;
-  background:var(--bg-main);
-}
-
-/* ══ SVG NOISE OVERLAY ══ */
-.noise{
-  position:fixed;inset:0;z-index:50;
-  pointer-events:none;
-  opacity:var(--noise-op);
-  mix-blend-mode:multiply;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 200 200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-  animation:noiseShift 0.8s steps(2) infinite;
-  will-change:transform;
-}
-@keyframes noiseShift{
-  0%{transform:translate(0,0)}
-  25%{transform:translate(-1%,1%)}
-  50%{transform:translate(1%,-1%)}
-  75%{transform:translate(-1%,-1%)}
-  100%{transform:translate(0,0)}
-}
-
-/* ══ SCANLINES ══ */
-.scanlines{
-  position:fixed;inset:0;z-index:49;
-  pointer-events:none;
-  background:repeating-linear-gradient(
-    to bottom,
-    var(--scanline-c) 0px,
-    var(--scanline-c) 1px,
-    transparent 1px,
-    transparent 3px
-  );
-}
-
-/* ══ FLICKER ══ */
-@keyframes flicker{
-  0%,100%{opacity:1}
-  92%{opacity:1}
-  93%{opacity:0.82}
-  94%{opacity:1}
-  95%{opacity:0.92}
-  96%{opacity:1}
-}
-.stage{animation:flicker 6s infinite}
-
-/* ══ GLITCH ══ */
-@keyframes glitchShift{
-  0%,100%{transform:translate(0,0)}
-  96%{transform:translate(0,0)}
-  96.5%{transform:translate(-2px,1px)}
-  97%{transform:translate(2px,-1px)}
-  97.5%{transform:translate(-1px,0)}
-  98%{transform:translate(0,0)}
-}
-.now-title .t-s{
-  animation:glitchShift 8s infinite;
-  position:relative;
-}
-.now-title .t-s::before,
-.now-title .t-s::after{
-  content:attr(data-text);
-  position:absolute;left:0;top:0;width:100%;
-  pointer-events:none;
-  opacity:0;
-}
-.now-title .t-s::before{
-  color:var(--text-main);
-  animation:glitchTop 8s infinite;
-  clip-path:inset(0 0 60% 0);
-}
-.now-title .t-s::after{
-  color:var(--text-main);
-  animation:glitchBottom 8s infinite;
-  clip-path:inset(60% 0 0 0);
-}
-@keyframes glitchTop{
-  0%,100%{opacity:0;transform:translate(0,0)}
-  96%{opacity:0;transform:translate(0,0)}
-  96.5%{opacity:0.7;transform:translate(3px,0)}
-  97%{opacity:0;transform:translate(0,0)}
-  97.5%{opacity:0.7;transform:translate(-3px,0)}
-  98%{opacity:0;transform:translate(0,0)}
-}
-@keyframes glitchBottom{
-  0%,100%{opacity:0;transform:translate(0,0)}
-  96%{opacity:0;transform:translate(0,0)}
-  96.5%{opacity:0.7;transform:translate(-3px,0)}
-  97%{opacity:0;transform:translate(0,0)}
-  97.5%{opacity:0.7;transform:translate(3px,0)}
-  98%{opacity:0;transform:translate(0,0)}
-}
-
-/* ══ STAGE ══ */
-.stage{
-  position:relative;z-index:1;
-  width:100%;height:100%;
-  display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  gap:16px;
-}
-
-/* ══ BRAND ══ */
-.brand{
-  display:flex;flex-direction:column;align-items:center;gap:6px;
-  margin-bottom:-6px; z-index:10;
-}
-.brand img{height:34px;opacity:1}
-.brand span{
-  font-family:'Courier New', Courier, monospace;font-size:22px;font-weight:700;
-  letter-spacing:0.08em;color:var(--text-main);
-}
-.greeting {
-  font-family: 'Courier New', Courier, monospace; font-size: 11px; color:var(--text-main);
-  opacity: 0.5; letter-spacing: 0.05em; margin-top: 0px; margin-bottom: -10px;
-  z-index: 10;
-}
-
-/* ══ COVERFLOW ══ */
-.cf-wrap{
-  width:100%;height:400px;
-  perspective:1100px;perspective-origin:50% 50%;
-  position:relative;
-  display:flex;align-items:center;justify-content:center;
-  overflow:visible;
-}
-#cf{width:100%;height:100%;position:relative;transform-style:preserve-3d}
-
-/* ── CARD ── */
-.card{
-  position:absolute;
-  width:260px;height:330px;
-  top:50%;left:50%;
-  margin-top:-165px;margin-left:-130px;
-  border-radius:8px;
-  overflow:hidden;
-  cursor:pointer;
-  will-change:transform,opacity;
-
-  background:var(--bg-main);
-  border:1.5px solid var(--text-main);
-
-  transition:
-    transform 0.55s cubic-bezier(0.34,1.10,0.64,1),
-    opacity   0.44s ease,
-    filter    0.35s ease;
-}
-
-.card.animating{
-  transition:
-    transform 0.55s cubic-bezier(0.34,1.10,0.64,1),
-    opacity   0.44s ease;
-}
-
-/* TYPE-SPECIFIC STYLES (Monochrome & Structural) */
-.card.type-semester { border: 2px solid var(--text-main); }
-.card.type-semester:not(.card-active):hover { box-shadow: 0 12px 24px rgba(0,0,0,0.15); }
-.card.type-semester:not(.card-active):hover .art { transform: translateY(-4px) scale(1.02); }
-
-.card.type-block { border: 1.5px dashed var(--border-heavy); }
-.card.type-block:not(.card-active):hover .art { transform: scale(1.04); transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275); }
-
-.card.type-category { border: 1px solid var(--border-light); border-left: 4px solid var(--text-main); }
-.card.type-category:not(.card-active):hover .art { transform: perspective(400px) rotateY(-5deg) rotateX(2deg) scale(1.02); }
-
-.card.type-file { border: 1.5px solid var(--text-main); }
-
-/* ACTIVE card */
-.card-active{
-  background: var(--text-main) !important;
-  border: 1.5px solid var(--text-main) !important;
-}
-.card-active .art-name,
-.card-active .art-icon{
-  color: var(--bg-main) !important;
-}
-.card-active .card-label .s { color: var(--bg-main) !important; }
-.card-active .card-label .a { color: var(--bg-main) !important; opacity: 0.7; }
-
-.card:not(.card-active):hover{
-  filter:none;
-  background:var(--card-hover);
-}
-
-/* card content */
-.art{
-  position:absolute;
-  top:12px; left:12px; right:12px; height:248px;
-  display:flex;flex-direction:column;
-  align-items:center;justify-content:center;
-  z-index:1;
-  border-radius:4px;
-  overflow:hidden;
-  border: 1px solid var(--border-light);
-  background:var(--card-bg);
-  transition: transform 0.3s ease, filter 0.3s ease;
-}
-.card-active .art {
-  border-color:var(--border-light);
-  background: var(--active-art-bg);
-}
-.art-bg{
-  width:100%; height:100%; object-fit:cover;
-  opacity: 1; transition: filter 0.3s;
-  background-color: var(--border-light);
-}
-.card-active .art-bg { filter: brightness(0.6); }
-
-.art-icon{
-  position:absolute;
-  font-size:54px;line-height:1;
-  filter:grayscale(100%) contrast(1.2);
-  z-index:2;
-}
-.art-dot-grid {
-  position: absolute; width: 100%; height: 100%; z-index: 1;
-  background-image: radial-gradient(var(--text-main) 1.5px, transparent 1.5px);
-  background-size: 14px 14px; opacity: 0.35;
-  transition: opacity 0.3s, background-image 0.3s;
-}
-.card-active .art-dot-grid {
-  background-image: radial-gradient(var(--bg-main) 1.5px, transparent 1.5px);
-  opacity: 0.6;
-}
-.art-name{
-  font-family:'Courier New', Courier, monospace;
-  font-size:10px;font-weight:500;
-  letter-spacing:0.13em;text-transform:uppercase;
-  color:var(--text-main);
-  position:relative;z-index:2;
-}
-
-.card-label{
-  position:absolute;bottom:0;left:0;right:0;
-  padding:12px 14px 15px;
-  z-index:10;
-  background:transparent;
-}
-.card-label .s{font-family:'Times New Roman', Times, serif;font-size:17px;font-weight:600;color:var(--text-main);line-height:1.3;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.card-label .a{font-family:'Courier New', Courier, monospace;font-size:11px;color:#666;margin-top:4px}
-
-/* ══ NOW PLAYING ══ */
-.now-title{text-align:center}
-.now-title .t-s{font-family:'Times New Roman', Times, serif;font-size:32px;font-weight:600;font-style:italic;color:var(--text-main);letter-spacing:-0.01em}
-.now-title .t-a{font-family:'Courier New', Courier, monospace;font-size:13px;color:#888;margin-top:6px;font-weight:400;letter-spacing:0.05em}
-
-/* ══ PLAYER BAR ══ */
-.player-bar{
-  width:calc(100% - 48px);
-  max-width:680px;
-  position:relative;
-  border-radius:99px;
-  padding:8px 16px;
-  display:grid; grid-template-columns: minmax(0,1fr) auto minmax(0,1fr); align-items:center;
-
-  background:var(--bg-main);
-  border:1.5px solid var(--text-main);
-}
-
-.player-bar > *{position:relative;z-index:1}
-
-.left-ctrl { display:flex; align-items:center; gap:12px; justify-content:flex-start; min-width:0; }
-.right-ctrl { display:flex; align-items:center; justify-content:flex-end; }
-.transport{display:flex;align-items:center;gap:4px;justify-content:center;}
-
-.btn{
-  width:36px;height:36px;
-  display:flex;align-items:center;justify-content:center;
-  border:none;
-  background:transparent;
-  cursor:pointer;border-radius:50%;
-  color:var(--text-main);
-  transition:background 0.18s,transform 0.12s,color 0.18s;
-  flex-shrink:0;
-}
-.btn:hover{
-  background:var(--bg-main);
-  color:var(--text-modal);
-}
-.btn:active{transform:scale(0.85)}
-.btn svg{width:19px;height:19px;fill:currentColor}
-.btn.play svg{width:22px;height:22px}
-
-/* ── MINI THUMB ── */
-.mini-thumb{
-  width:36px;height:36px;
-  border-radius:8px;
-  flex-shrink:0;
-  display:flex;align-items:center;justify-content:center;
-  font-size:20px;
-  position:relative;
-  overflow:hidden;
-  background:var(--bg-main);
-  border:1.5px solid var(--text-main);
-  transition:none;
-}
-.mini-thumb img{width:100%;height:100%;object-fit:cover;filter:grayscale(100%) invert(1) contrast(1.4)}
-
-/* ── INFO ── */
-.mini-info{display:flex;flex-direction:column;gap:1px;min-width:0;flex:1}
-.mini-s{font-family:'Times New Roman', Times, serif;font-size:14px;font-weight:600;color:var(--text-main);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.mini-a{font-family:'Courier New', Courier, monospace;font-size:9px;color:#888;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;letter-spacing:0.03em}
-
-/* ── RIGHT CONTROLS ── */
-.btn.sm{width:30px;height:30px}
-.btn.sm svg{width:17px;height:17px}
-
-/* ══ RESPONSIVE ══ */
-@media(max-width:600px){
-  .card{width:180px;height:240px;margin-top:-120px;margin-left:-90px;border-radius:6px}
-  .art{height:168px}
-  .art-icon{font-size:40px}
-  .brand img{height:22px}
-  .brand span{font-size:16px}
-  .player-bar{width:calc(100% - 24px);padding:6px 12px; grid-template-columns: minmax(0,1fr) auto auto;}
-  .left-ctrl { gap: 6px; }
-  .mini-s{font-size:12px}
-  .mini-a{font-size:8px}
-  .now-title .t-s{font-size:22px}
-  .mini-thumb{width:28px;height:28px;font-size:14px}
-  .btn{width:32px;height:32px}
-  .btn.play svg{width:20px;height:20px}
-  .track-container{bottom:12px;right:12px}
-  .btn-top-back { top: 16px; left: 16px; padding: 6px 12px; font-size: 10px; }
-  .btn-top-back svg { width: 14px; height: 14px; }
-}
-
-/* ══ TOP BACK BUTTON ══ */
-.btn-top-back {
-  position: absolute; top: 24px; left: 24px; display: none;
-  align-items: center; gap: 8px; background: var(--bg-main);
-  border: 1.5px solid var(--text-main); color: var(--text-main);
-  padding: 8px 16px; border-radius: 99px; cursor: pointer;
-  font-family: 'Courier New', Courier, monospace; font-size: 12px; font-weight: 600;
-  z-index: 200; transition: background 0.2s, color 0.2s, transform 0.1s;
-}
-.btn-top-back:hover { background: var(--text-main); color: var(--bg-main); }
-.btn-top-back:active { transform: scale(0.95); }
-.btn-top-back svg { width: 16px; height: 16px; fill: currentColor; }
-
-/* ══ SETTINGS MODAL ══ */
-.settings-overlay {
-  position: fixed; inset: 0; z-index: 300;
-  background: rgba(13,13,13,0.85); backdrop-filter: blur(4px);
-  display: flex; align-items: center; justify-content: center;
-  opacity: 0; pointer-events: none; visibility: hidden;
-  transition: opacity 0.3s, visibility 0.3s;
-}
-.settings-overlay.active { opacity: 1; pointer-events: auto; visibility: visible; }
-.settings-box {
-  background:var(--bg-main); color:var(--text-modal); border: 1px solid var(--border-medium);
-  width: 90%; max-width: 480px; max-height: 90vh; border-radius: 8px;
-  display: flex; flex-direction: column; overflow: hidden;
-  transform: translateY(20px) scale(0.95); transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-}
-.settings-overlay.active .settings-box { transform: translateY(0) scale(1); }
-.settings-header {
-  padding: 16px 20px; border-bottom: 1px solid var(--border-light);
-  display: flex; justify-content: space-between; align-items: center;
-  font-family: 'Courier New', Courier, monospace; font-size: 13px; font-weight: 600; letter-spacing: 0.1em;
-}
-.settings-body { padding: 24px 20px; display: flex; flex-direction: column; gap: 24px; overflow-y: auto; }
-.settings-section-title {
-  font-family: 'Courier New', Courier, monospace; font-size: 10px; color: var(--text-modal); opacity: 0.5;
-  text-transform: uppercase; letter-spacing: 0.15em; margin-bottom: 12px;
-}
-.stat-block {
-  display: grid; grid-template-columns: 1fr; gap: 12px;
-  background: transparent; border: 1px solid var(--border-light);
-  border-radius: 6px; padding: 16px;
-}
-.stat-item { display: flex; justify-content: space-between; align-items: center; }
-.stat-label { font-family: 'Courier New', Courier, monospace; font-size: 11px; opacity: 0.7; }
-.stat-val { font-family: 'Courier New', Courier, monospace; font-size: 14px; font-weight: 500; }
-.stat-divider { height: 1px; background: rgba(250,250,250,0.08); width: 100%; margin: 4px 0; }
-
-/* ══ TOGGLE SWITCH ══ */
-.toggle-switch { position: relative; display: inline-block; width: 40px; height: 22px; flex-shrink: 0; }
-.toggle-switch input { opacity: 0; width: 0; height: 0; }
-.toggle-switch .slider {
-  position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0;
-  background-color: transparent; border: 1.5px solid var(--border-heavy);
-  border-radius: 22px; transition: .3s;
-}
-.toggle-switch .slider:before {
-  position: absolute; content: ""; height: 12px; width: 12px;
-  left: 3px; bottom: 3px; background-color: var(--border-heavy);
-  border-radius: 50%; transition: .3s;
-}
-.toggle-switch input:checked + .slider { background-color: var(--text-main); border-color: var(--text-main); }
-.toggle-switch input:checked + .slider:before { transform: translateX(19px); background-color: var(--bg-main); }
-
-/* ══ AUTH OVERLAY ══ */
-.auth-overlay {
-  position: fixed; inset: 0; z-index: 500;
-  background:var(--bg-main);
-  display: flex; align-items: center; justify-content: center;
-  transition: opacity 0.4s ease, visibility 0.4s;
-}
-.auth-overlay.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
-
-.auth-container {
-  display: flex; flex-direction: row; gap: 80px; align-items: center; justify-content: center;
-  max-width: 1000px; width: 100%; padding: 40px;
-}
-.auth-brand-left {
-  display: flex; flex-direction: column; align-items: flex-start; gap: 8px;
-  flex: 1; text-align: left;
-}
-@keyframes authLogoFloat {
-  0% { transform: translateY(0); }
-  50% { transform: translateY(-8px); }
-  100% { transform: translateY(0); }
-}
-.auth-brand-left img { height: 75px; opacity: 0.95; margin-bottom: 8px; animation: authLogoFloat 4s ease-in-out infinite; }
-.auth-brand-left .auth-brand-title {
-  font-family: 'Courier New', Courier, monospace; font-size: 52px; font-weight: 700;
-  color:var(--text-modal); letter-spacing: 0.12em; line-height: 1.1;
-}
-.auth-brand-left .auth-brand-subtitle {
-  font-family: 'Courier New', Courier, monospace; font-size: 14px; font-weight: 300;
-  color: var(--text-modal); opacity: 0.4; letter-spacing: 0.25em; margin-top: 4px;
-}
-
-.auth-box {
-  width: 100%; max-width: 360px; max-height: 90vh; overflow-y: auto;
-  background: var(--bg-main); border: 1.5px solid var(--text-main); border-radius: 6px;
-  padding: 40px 32px; display: flex; flex-direction: column; gap: 20px;
-  box-shadow: none;
-  text-align: center;
-}
-.auth-title { font-family: 'Courier New', Courier, monospace; font-size: 18px; font-weight: 600; color:var(--text-modal); letter-spacing: 0.1em; margin-bottom: 8px; }
-.auth-subtitle { font-family: 'Courier New', Courier, monospace; font-size: 11px; color: var(--text-modal); opacity: 0.5; }
-.auth-form { display: flex; flex-direction: column; gap: 12px; margin-top: 8px; }
-.auth-input {
-  background: transparent; border: 1px solid var(--border-light); color:var(--text-modal);
-  font-family: 'Courier New', Courier, monospace; font-size: 13px; padding: 10px 12px; border-radius: 4px;
-  outline: none; transition: border-color 0.2s;
-}
-.auth-input:focus { border-color: var(--border-heavy); }
-.auth-btn {
-  background: var(--text-main); color: var(--bg-main); border: none; font-family: 'Courier New', Courier, monospace;
-  font-weight: 600; font-size: 13px; padding: 10px; border-radius: 4px; cursor: pointer;
-  transition: opacity 0.2s;
-}
-.auth-btn:hover { opacity: 0.8; }
-.auth-btn-outline { background: transparent; color: var(--text-modal); border: 1px solid var(--border-medium); }
-.auth-msg { font-family: 'Courier New', Courier, monospace; font-size: 11px; color: var(--text-modal); opacity: 0.8; margin-top: 8px; display: none; }
-
-.theme-btn.active {
-  background: var(--text-modal);
-  color: var(--bg-modal);
-}
-
-.credit-footer {
-  position: absolute;
-  bottom: 16px;
-  width: 100%;
-  text-align: center;
-  font-family: 'Courier New', Courier, monospace;
-  font-size: 9px;
-  color: var(--text-main);
-  opacity: 0.5;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  z-index: 100;
-  pointer-events: none;
-}
-.credit-footer a {
-  color: var(--text-main);
-  text-decoration: underline;
-  pointer-events: auto;
-}
-.auth-overlay .credit-footer {
-  color: var(--text-modal);
-}
-.auth-overlay .credit-footer a {
-  color: var(--text-modal);
-}
-
-@media(max-width: 768px){
-  .auth-container { flex-direction: column; gap: 40px; text-align: center; }
-  .auth-brand-left { align-items: center; text-align: center; }
-  .auth-brand-left img { height: 50px; }
-  .auth-brand-left .auth-brand-title { font-size: 36px; }
-  .auth-box { width: 100%; }
-}
-
-/* ══ IFRAME VIEWER ══ */
-.iframe-overlay {
-  position: fixed; inset: 0; background: var(--bg-main); z-index: 1000;
-  display: none; flex-direction: column;
-}
-.iframe-overlay.active { display: flex; animation: slideUp 0.3s ease; }
-@keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-
-.iframe-header {
-  height: 34px; background:var(--bg-main); color:var(--text-modal);
-  display: flex; align-items: center; padding: 0 16px;
-  justify-content: space-between; position: relative;
-  border-bottom: 1px solid var(--border-light);
-}
-
-.btn-text {
-  background: none; border: none; color:var(--text-modal); cursor: pointer;
-  font-family: 'Courier New', Courier, monospace; font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.1em;
-  display: flex; align-items: center; gap: 6px; opacity: 0.5; transition: opacity 0.2s; padding: 0;
-}
-.btn-text:hover { opacity: 1; }
-.btn-text svg { width: 14px; height: 14px; fill: currentColor; }
-
-.iframe-title {
-  font-family: 'Courier New', Courier, monospace; font-size: 11px; font-weight: 600; letter-spacing: 0.15em; opacity: 0.8;
-  flex: 1; text-align: center; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; padding: 0 16px; pointer-events: none;
-}
-
-iframe {
-  flex: 1; border: none; width: 100%; height: 100%; background: var(--bg-main);
-}
-@keyframes glitch {
-  0% { transform: translate(0) }
-  20% { transform: translate(-2px, 2px) }
-  40% { transform: translate(-2px, -2px) }
-  60% { transform: translate(2px, 2px) }
-  80% { transform: translate(2px, -2px) }
-  100% { transform: translate(0) }
-}
-.glitch-text { animation: glitch 0.2s infinite; }
-
-/* Guide Overlay */
-#guideOverlay {
-  position: fixed; inset: 0; background: transparent; z-index: 99990;
-  opacity: 0; pointer-events: none; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s; overflow: hidden;
-}
-#guideOverlay.active { opacity: 1; pointer-events: auto; visibility: visible; }
-#guideOverlay.active ~ #iframeViewer { animation: none !important; }
-
-.guide-highlight {
-  position: absolute; border: 2px solid var(--text-main); 
-  box-shadow: 0 0 0 9999px rgba(10,10,10,0.8);
-  border-radius: 4px; pointer-events: none; transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
-  background: transparent;
-}
-
-.guide-tooltip {
-  position: absolute; width: 300px; max-width: 90vw; background: var(--bg-modal);
-  border: 1px solid var(--text-main); padding: 16px; border-radius: 4px;
-  color: var(--text-main); font-family: var(--font-mono); font-size: 13px; line-height: 1.5;
-  transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1); opacity: 0; transform: translateY(10px);
-  pointer-events: auto;
-}
-.guide-tooltip.visible { opacity: 1; transform: translateY(0); }
-.guide-header { font-family: var(--font-sans); font-size: 18px; font-weight: bold; margin-bottom: 8px; color: var(--text-main); }
-.guide-body { margin-bottom: 16px; color: var(--text-muted); }
-.guide-footer { display: flex; justify-content: space-between; align-items: center; }
-.guide-step-count { font-size: 11px; opacity: 0.5; letter-spacing: 0.1em; }
-
-/* Intercept Modal */
-#interactionModeModal, #usernameSetupModal, #divisionSetupModal {
-  position: fixed; inset: 0; background: rgba(10,10,10,0.95); z-index: 99999;
-  display: flex; align-items: center; justify-content: center; flex-direction: column;
-  opacity: 0; pointer-events: none; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s;
-}
-#interactionModeModal.active, #usernameSetupModal.active, #divisionSetupModal.active { opacity: 1; pointer-events: auto; visibility: visible; }
-
-/* Reset Password Modal */
-#resetPasswordModal {
-  position: fixed; inset: 0; background: rgba(10,10,10,0.95); z-index: 99999;
-  display: flex; align-items: center; justify-content: center; flex-direction: column;
-  opacity: 0; pointer-events: none; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s;
-}
-#resetPasswordModal.active { opacity: 1; pointer-events: auto; visibility: visible; }
-
-</style>
+<link rel="stylesheet" href="/global-styles.css">
 </head>
 <body>
 
 <!-- Global Reload Overlay -->
-<div id="reloadOverlay" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(0, 0, 0, 0.95); z-index:999999; flex-direction:column; justify-content:center; align-items:center; font-family: 'Courier New', Courier, monospace; color:#000000; text-align:center;">
+<div id="reloadOverlay" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:var(--scrim); z-index:999999; flex-direction:column; justify-content:center; align-items:center;  color:var(--c3); text-align:center;">
   <h1 class="glitch-text" style="font-size:3rem; margin-bottom:10px; letter-spacing:4px;">SYSTEM OVERRIDE</h1>
-  <p style="font-size:1.2rem; color:#000000; max-width:600px; line-height:1.6;">ADMINISTRATOR HAS INITIATED A GLOBAL PROTOCOL RELOAD.</p>
-  <p style="font-size:1.2rem; color:#000000;">PURGING CACHE & RECALIBRATING IN...</p>
+  <p style="font-size:1.2rem; color:var(--c3); max-width:600px; line-height:1.6;">ADMINISTRATOR HAS INITIATED A GLOBAL PROTOCOL RELOAD.</p>
+  <p style="font-size:1.2rem; color:var(--c3);">PURGING CACHE & RECALIBRATING IN...</p>
   <div id="reloadCountdown" style="font-size:8rem; font-weight:bold; margin-top:20px;">3</div>
 </div>
 
 <!-- Maintenance Overlay -->
-<div id="maintenanceOverlay" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:rgba(10,10,10,0.98); z-index:9999999; flex-direction:column; justify-content:center; align-items:center; font-family: 'Courier New', Courier, monospace; color:var(--danger); text-align:center;">
+<div id="maintenanceOverlay" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:var(--scrim); z-index:9999999; flex-direction:column; justify-content:center; align-items:center;  color:var(--danger); text-align:center;">
   <h1 style="font-size:3rem; margin-bottom:10px; letter-spacing:2px;">MAINTENANCE MODE</h1>
-  <p style="font-size:1.2rem; color:#888; max-width:600px; line-height:1.6;">The system is currently undergoing scheduled maintenance.<br>Please check back later.</p>
+  <p style="font-size:1.2rem; color:var(--text-muted); max-width:600px; line-height:1.6;">The system is currently undergoing scheduled maintenance.<br>Please check back later.</p>
 </div>
 
 <!-- Global Toast Container -->
@@ -711,7 +62,7 @@ iframe {
 
 <div class="stage" id="stage">
   <button id="btnTopBack" class="btn-top-back">
-    <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+    <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
     BACK
   </button>
   <div class="brand">
@@ -739,33 +90,33 @@ iframe {
     </div>
 
     <div class="transport">
-      <button class="btn" id="btnToggleMode" title="Toggle List Mode">
-        <svg viewBox="0 0 24 24"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
+      <button class="btn" id="btnToggleMode" title="Toggle List Mode" aria-label="Toggle List Mode">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 6h16v2H4zm0 5h16v2H4zm0 5h16v2H4z"/></svg>
       </button>
-      <button class="btn" id="btnPrev">
-        <svg viewBox="0 0 24 24"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
+      <button class="btn" id="btnPrev" aria-label="Previous">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 6h2v12H6zm3.5 6 8.5 6V6z"/></svg>
       </button>
-      <button class="btn play" id="btnPlay">
-        <svg viewBox="0 0 24 24"><path id="pp" d="M8 5v14l11-7z"/></svg>
+      <button class="btn play" id="btnPlay" aria-label="Play">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path id="pp" d="M8 5v14l11-7z"/></svg>
       </button>
-      <button class="btn" id="btnNext">
-        <svg viewBox="0 0 24 24"><path d="M6 18l8.5-6L6 6v12zM16 6h2v12h-2z"/></svg>
+      <button class="btn" id="btnNext" aria-label="Next">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 18l8.5-6L6 6v12zM16 6h2v12h-2z"/></svg>
       </button>
     </div>
 
     <div class="right-ctrl" style="gap:12px;">
       <!-- DOCS BUTTON -->
-      <a href="/docs.html" target="_blank" class="btn sm" title="Documentation" style="text-decoration:none; display:flex; align-items:center; justify-content:center;">
-        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+      <a href="/docs.html" target="_blank" class="btn sm" title="Documentation" aria-label="Documentation" style="text-decoration:none; display:flex; align-items:center; justify-content:center;">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
       </a>
       <!-- SETTINGS BUTTON -->
-      <button class="btn sm" title="Settings" id="btnSettings">
-        <svg viewBox="0 0 24 24"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.06-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.73,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.06,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.43-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.49-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/></svg>
+      <button class="btn sm" title="Settings" id="btnSettings" aria-label="Settings">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.06-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.73,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.06,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.43-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.49-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/></svg>
       </button>
 
       <!-- BACK BUTTON -->
-      <button class="btn sm" title="Back" id="btnBack">
-        <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
+      <button class="btn sm" title="Back" id="btnBack" aria-label="Back">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg>
       </button>
     </div>
   </div>
@@ -778,7 +129,7 @@ iframe {
     <div class="settings-header">
       <span>SETTINGS & STATUS</span>
       <button class="btn-text" id="btnSettingsClose">
-        <svg viewBox="0 0 24 24"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg> CLOSE
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg> CLOSE
       </button>
     </div>
     <div class="settings-body">
@@ -835,7 +186,7 @@ iframe {
             <span class="stat-label">MR-CAPSULES DOCS<br><span style="opacity:0.5; font-size:9px;">VIEW GUIDE & INFO</span></span>
             <a href="/docs.html" target="_blank" style="text-decoration:none;">
               <button class="auth-btn auth-btn-outline" style="padding:6px 12px; font-size:10px; display:flex; align-items:center; gap:4px;">
-                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
+                <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
                 OPEN
               </button>
             </a>
@@ -860,17 +211,17 @@ iframe {
             </div>
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; margin-top:24px;">
-            <button class="btn-text" id="btnLogout" style="opacity:1; background:rgba(0, 0, 0, 0.1); padding:8px 12px; border-radius:4px; color:var(--danger); border:1px solid rgba(0, 0, 0, 0.2);">SIGN OUT</button>
+            <button class="btn-text" id="btnLogout" style="opacity:1; background:color-mix(in srgb, var(--c4) 10%, transparent); padding:8px 12px; border-radius:4px; color:var(--danger); border:1px solid var(--border-medium);">SIGN OUT</button>
             
             <a href="/admin.html" target="_blank" id="adminSection" style="display:none; text-decoration:none;">
               <button class="btn-text" style="opacity:1; background:var(--border-light); padding:8px 12px; border-radius:4px; color:var(--text-main); border:1px solid var(--border-medium); display:flex; align-items:center; gap:6px; font-weight:600; font-size:11px;">
-                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
+                <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
                 ADMIN
               </button>
             </a>
           </div>
           
-          <button id="btnForceReload" class="auth-btn" style="display:none; background:rgba(0, 0, 0, 0.15); color:#000000; border:1px solid #000000; font-weight:bold; margin-top:24px; text-align:center;">FORCE GLOBAL RELOAD</button>
+          <button id="btnForceReload" class="auth-btn" style="display:none; background:color-mix(in srgb, var(--c3) 12%, transparent); color:var(--c3); border:1px solid var(--c3); font-weight:bold; margin-top:24px; text-align:center;">FORCE GLOBAL RELOAD</button>
         </div>
       </div>
     </div>
@@ -881,14 +232,14 @@ iframe {
 <div class="iframe-overlay" id="iframeViewer">
   <div class="iframe-header">
     <button class="btn-text" id="btnIframeBack">
-      <svg viewBox="0 0 24 24"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg> Back
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 11H7.83l5.59-5.59L12 4l-8 8 8 8 1.41-1.41L7.83 13H20v-2z"/></svg> Back
     </button>
     <div class="iframe-title" id="iframeTitle">VIEWER</div>
     <div style="display:flex; align-items:center; gap:16px;">
       <button class="btn-text" id="btnIframeNext" style="display:none; color:var(--text-main); opacity:0.8;">
       </button>
-      <button class="btn-text" id="btnIframeFullscreen" title="Fullscreen">
-        <svg viewBox="0 0 24 24"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
+      <button class="btn-text" id="btnIframeFullscreen" title="Fullscreen" aria-label="Fullscreen">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/></svg>
       </button>
     </div>
   </div>
@@ -1339,7 +690,7 @@ function updateNextFileButton() {
     btnNext.style.display = 'flex';
     let t = catalog[nextIndex].title;
     if (t.length > 25) t = t.substring(0, 22) + '...';
-    btnNext.innerHTML = '<span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width: 120px; display:inline-block;">NEXT: ' + t + '</span> <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:4px; flex-shrink:0;"><polyline points="9 18 15 12 9 6"></polyline></svg>';
+    btnNext.innerHTML = '<span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap; max-width: 120px; display:inline-block;">NEXT: ' + t + '</span> <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left:4px; flex-shrink:0;" aria-hidden="true"><polyline points="9 18 15 12 9 6"></polyline></svg>';
     btnNext.onclick = () => {
       diveIn(nextIndex);
     };
@@ -1427,9 +778,9 @@ try {
 
     function showDeviceBanError() {
       document.body.innerHTML = `
-        <div style="display:flex; height:100vh; width:100vw; background:#0a0a0a; color:#000000; justify-content:center; align-items:center; flex-direction:column; font-family: 'Courier New', Courier, monospace; text-align:center; position:fixed; z-index:99999999; top:0; left:0;">
+        <div style="display:flex; height:100vh; width:100vw; background:var(--c1); color:var(--c3); justify-content:center; align-items:center; flex-direction:column;  text-align:center; position:fixed; z-index:99999999; top:0; left:0;">
           <h1 class="glitch-text" style="font-size:3rem; margin-bottom:20px; letter-spacing:2px;">SORRY FOR KICKING YOU OUT OF OUR SANCTUARY</h1>
-          <p style="color:#888; font-size:1.2rem;">Your device has been permanently blocked.</p>
+          <p style="color:var(--text-muted); font-size:1.2rem;">Your device has been permanently blocked.</p>
         </div>
       `;
     }
@@ -1504,7 +855,7 @@ try {
     function showAuthMsg(msg, isError = false) {
       authMsg.textContent = msg;
       authMsg.style.display = 'block';
-      authMsg.style.color = isError ? 'var(--danger)' : '#000000';
+      authMsg.style.color = isError ? 'var(--danger)' : 'var(--c3)';
     }
 
     function fmtTime(sec) {
@@ -2030,7 +1381,7 @@ try {
           const tContainer = document.getElementById('toastContainer');
           if(tContainer) {
             const toast = document.createElement('div');
-            toast.style.cssText = 'background:var(--accent); color:#000; padding:12px 24px; font-weight:bold; box-shadow:0 4px 12px rgba(0,0,0,0.5); transform:translateY(-20px); opacity:0; transition:0.3s; pointer-events:auto; font-family:var(--font-mono); font-size:14px;';
+            toast.style.cssText = 'background:var(--accent); color:var(--c1); padding:12px 24px; font-weight:bold; box-shadow:0 4px 12px color-mix(in srgb, var(--c3) 40%, transparent); transform:translateY(-20px); opacity:0; transition:0.3s; pointer-events:auto;  font-size:14px;';
             // Use textContent to prevent XSS from broadcast payloads
             toast.textContent = "\uD83D\uDCE2 " + String(msg);
             tContainer.appendChild(toast);
@@ -2051,9 +1402,9 @@ try {
       }).on('broadcast', { event: 'ban_device' }, (payload) => {
         if(payload.payload && payload.payload.deviceId === getDeviceId()) {
           document.body.innerHTML = `
-            <div style="display:flex; height:100vh; width:100vw; background:#0a0a0a; color:#ff3333; justify-content:center; align-items:center; flex-direction:column; font-family: 'Courier New', Courier, monospace; text-align:center; position:fixed; z-index:99999999; top:0; left:0;">
+            <div style="display:flex; height:100vh; width:100vw; background:var(--c1); color:var(--c4); justify-content:center; align-items:center; flex-direction:column;  text-align:center; position:fixed; z-index:99999999; top:0; left:0;">
               <h1 class="glitch-text" style="font-size:3rem; margin-bottom:20px; letter-spacing:2px;">SORRY FOR KICKING YOU OUT OF OUR SANCTUARY</h1>
-              <p style="color:#888; font-size:1.2rem;">Your device has been permanently blocked.</p>
+              <p style="color:var(--text-muted); font-size:1.2rem;">Your device has been permanently blocked.</p>
             </div>
           `;
         }
@@ -2280,12 +1631,12 @@ try {
       if(!gate) {
           gate = document.createElement('div');
           gate.id = 'contributionGate';
-          gate.style.cssText = 'position:fixed; inset:0; z-index:99999; background:rgba(0,0,0,0.85); backdrop-filter:blur(10px); display:flex; flex-direction:column; justify-content:center; align-items:center; color:#fff; text-align:center; padding:24px; font-family:var(--font-sans);';
+          gate.style.cssText = 'position:fixed; inset:0; z-index:99999; background:var(--scrim); backdrop-filter:blur(10px); display:flex; flex-direction:column; justify-content:center; align-items:center; color:var(--c3); text-align:center; padding:24px; ';
           gate.innerHTML = `
-              <div style="background:#111; padding:40px; border:1px solid #333; border-radius:8px; max-width:500px; width:100%;">
-                  <h2 style="font-size:24px; margin-bottom:16px; color:var(--danger, #000000);">Akses Dibekukan</h2>
-                  <p style="font-size:14px; margin-bottom:24px; color:#aaa; line-height:1.5;">Kamu belum berkontribusi selama 30 hari terakhir. Silakan berpartisipasi dalam pembuatan atau review konten melalui Admin Panel untuk membuka kembali akses.</p>
-                  <a href="/admin.html" style="display:inline-block; background:var(--accent, #000000); color:#fff; padding:12px 24px; text-decoration:none; border-radius:4px; font-weight:bold;">Buka Admin Panel</a>
+              <div style="background:var(--c2); padding:40px; border:1.5px solid var(--c3); border-radius:8px; max-width:500px; width:100%;">
+                  <h2 style="font-size:24px; margin-bottom:16px; color:var(--danger);">Akses Dibekukan</h2>
+                  <p style="font-size:14px; margin-bottom:24px; color:var(--text-muted); line-height:1.5;">Kamu belum berkontribusi selama 30 hari terakhir. Silakan berpartisipasi dalam pembuatan atau review konten melalui Admin Panel untuk membuka kembali akses.</p>
+                  <a href="/admin.html" style="display:inline-block; background:var(--accent); color:var(--c1); padding:12px 24px; text-decoration:none; border-radius:4px; font-weight:bold;">Buka Admin Panel</a>
               </div>
           `;
           document.body.appendChild(gate);
@@ -2302,13 +1653,13 @@ try {
 </script>
 <!-- Reset Password Modal -->
 <div id="resetPasswordModal">
-  <div style="background:var(--bg-modal, #0a0a0a); border:1px solid var(--text-main, #fff); padding:32px; max-width:400px; width:90%; text-align:center;">
-    <div style="font-family:var(--font-sans); font-size:24px; color:var(--text-main, #fff); margin-bottom:16px;">RESET PASSWORD</div>
-    <div style="font-family:var(--font-mono); font-size:12px; color:var(--text-muted, #888); margin-bottom:24px; line-height:1.5;">Please enter your new password below.</div>
+  <div style="background:var(--bg-modal); border:1.5px solid var(--text-main); padding:32px; max-width:400px; width:90%; text-align:center;">
+    <div style=" font-size:24px; color:var(--text-main); margin-bottom:16px;">RESET PASSWORD</div>
+    <div style=" font-size:12px; color:var(--text-muted); margin-bottom:24px; line-height:1.5;">Please enter your new password below.</div>
     <div style="display:flex; flex-direction:column; gap:12px;">
       <input type="password" id="newPasswordInput" class="auth-input" placeholder="NEW PASSWORD">
-      <button id="btnSubmitNewPassword" class="auth-btn" style="background:var(--text-main, #fff); color:var(--bg-main, #000);">UPDATE PASSWORD</button>
-      <button id="btnCancelNewPassword" class="auth-btn" style="background:transparent; color:var(--text-main, #fff); border:1px solid var(--text-main, #fff);">CANCEL</button>
+      <button id="btnSubmitNewPassword" class="auth-btn" style="background:var(--text-main); color:var(--c1);">UPDATE PASSWORD</button>
+      <button id="btnCancelNewPassword" class="auth-btn" style="background:transparent; color:var(--text-main); border:1px solid var(--text-main);">CANCEL</button>
       <div id="resetPasswordMsg" class="auth-msg" style="margin-top:8px;"></div>
     </div>
   </div>
@@ -2316,8 +1667,8 @@ try {
 <!-- Username Setup Modal -->
 <div id="usernameSetupModal">
   <div style="background:var(--bg-modal); border:1px solid var(--text-main); padding:32px; max-width:400px; width:90%; text-align:center;">
-    <div style="font-family:var(--font-sans); font-size:24px; color:var(--text-main); margin-bottom:16px;">SET YOUR USERNAME</div>
-    <div style="font-family:var(--font-mono); font-size:12px; color:var(--text-muted); margin-bottom:24px; line-height:1.5;">Welcome to MR CAPSULES! Before you proceed, please choose a username to identify yourself in the sanctuary.</div>
+    <div style=" font-size:24px; color:var(--text-main); margin-bottom:16px;">SET YOUR USERNAME</div>
+    <div style=" font-size:12px; color:var(--text-muted); margin-bottom:24px; line-height:1.5;">Welcome to MR CAPSULES! Before you proceed, please choose a username to identify yourself in the sanctuary.</div>
     <div style="display:flex; flex-direction:column; gap:12px;">
       <input type="text" id="setupUsernameInput" class="auth-input" placeholder="USERNAME (e.g. Neo)">
       <button id="btnSubmitSetupUsername" class="auth-btn" style="background:var(--text-main); color:var(--bg-main);">SAVE & CONTINUE</button>
@@ -2329,8 +1680,8 @@ try {
 <!-- Division Setup Modal -->
 <div id="divisionSetupModal">
   <div style="background:var(--bg-modal); border:1px solid var(--text-main); padding:32px; max-width:400px; width:90%; text-align:center;">
-    <div style="font-family:var(--font-sans); font-size:24px; color:var(--text-main); margin-bottom:16px;">CHOOSE DIVISION</div>
-    <div style="font-family:var(--font-mono); font-size:12px; color:var(--text-muted); margin-bottom:24px; line-height:1.5;">Please select your primary division and provide your WhatsApp number for team communications.</div>
+    <div style=" font-size:24px; color:var(--text-main); margin-bottom:16px;">CHOOSE DIVISION</div>
+    <div style=" font-size:12px; color:var(--text-muted); margin-bottom:24px; line-height:1.5;">Please select your primary division and provide your WhatsApp number for team communications.</div>
     <div style="display:flex; flex-direction:column; gap:12px;">
       <select id="setupDivisionSelect" class="auth-input" style="width:100%; padding:8px; background:transparent; color:var(--text-main); border:1px solid var(--border-medium);">
         <option value="" disabled selected>Select Division...</option>
@@ -2348,8 +1699,8 @@ try {
 <!-- Interaction Mode Intercept -->
 <div id="interactionModeModal">
   <div style="background:var(--bg-modal); border:1px solid var(--text-main); padding:32px; max-width:400px; width:90%; text-align:center;">
-    <div style="font-family:var(--font-sans); font-size:24px; color:var(--text-main); margin-bottom:16px;">WELCOME TO MR CAPSULES</div>
-    <div style="font-family:var(--font-mono); font-size:12px; color:var(--text-muted); margin-bottom:24px; line-height:1.5;">To personalize your guided tour, please select your primary interaction mode:</div>
+    <div style=" font-size:24px; color:var(--text-main); margin-bottom:16px;">WELCOME TO MR CAPSULES</div>
+    <div style=" font-size:12px; color:var(--text-muted); margin-bottom:24px; line-height:1.5;">To personalize your guided tour, please select your primary interaction mode:</div>
     <div style="display:flex; flex-direction:column; gap:12px;">
       <button class="auth-btn" style="background:var(--text-main); color:var(--bg-main);" onclick="startGuide('keyboard')">[ KEYBOARD & MOUSE ]</button>
       <button class="auth-btn" style="background:transparent; color:var(--text-main); border:1px solid var(--text-main);" onclick="startGuide('touch')">[ TOUCHSCREEN ]</button>

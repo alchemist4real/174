@@ -5,212 +5,44 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Documentation | MR CAPSULES</title>
   <link rel="icon" type="image/svg+xml" href="/logo.svg">
-  <link rel="stylesheet" href="/admin.css?v=1.6">
-  <link rel="stylesheet" href="/new_styles.css">
-  <style>
-    body { margin: 0; overflow: hidden; }
-    
-    /* Top Navigation Tabs */
-    .top-nav {
-      display: flex;
-      align-items: center;
-      background: var(--bg-main);
-      border-bottom: 1px solid var(--border-light);
-      padding: 0 24px;
-      height: 60px;
-      z-index: 100;
-      position: relative;
-    }
-    
-    .top-nav .brand {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-      margin-right: 32px;
-    }
-    
-    .top-nav .brand img {
-      height: 24px;
-    }
-    
-    .top-nav .tabs {
-      display: flex;
-      gap: 8px;
-      height: 100%;
-    }
-    
-    .top-nav .tab {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 0 16px;
-      height: 100%;
-      font-family: var(--font-mono);
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-muted);
-      cursor: pointer;
-      border-bottom: 2px solid transparent;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-    
-    .top-nav .tab:hover {
-      color: var(--text-main);
-      background: rgba(255,255,255,0.02);
-    }
-    
-    .top-nav .tab.active {
-      color: var(--accent);
-      border-bottom: 2px solid var(--accent);
-      background: rgba(255,255,255,0.05);
-    }
-    
-    .content-area {
-      height: calc(100vh - 60px);
-      overflow-y: auto;
-      position: relative;
-      padding: 0 24px;
-    }
-
-    .docs-container {
-      max-width: 800px;
-      width: 100%;
-      margin: 40px auto 80px auto;
-      position: relative;
-      z-index: 10;
-    }
-    
-    .docs-title {
-      font-family: var(--font-mono);
-      font-size: 28px;
-      font-weight: 700;
-      color: var(--text-main);
-      margin-bottom: 32px;
-      text-align: center;
-      letter-spacing: 0.05em;
-    }
-    
-    .docs-section {
-      margin-bottom: 40px;
-    }
-    
-    .docs-section h2 {
-      font-family: var(--font-mono);
-      font-size: 18px;
-      color: var(--accent);
-      border-bottom: 1px solid var(--border-light);
-      padding-bottom: 12px;
-      margin-bottom: 16px;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-    }
-    
-    .docs-section h3 {
-      font-family: var(--font-mono);
-      font-size: 15px;
-      color: var(--text-main);
-      margin-top: 24px;
-      margin-bottom: 8px;
-    }
-    
-    .docs-section p, .docs-section ul {
-      color: var(--text-muted);
-      line-height: 1.7;
-      font-size: 15px;
-    }
-    
-    .docs-section ul {
-      padding-left: 24px;
-      margin-bottom: 16px;
-    }
-    
-    .docs-section li {
-      margin-bottom: 10px;
-    }
-    
-    .docs-section strong {
-      color: var(--text-main);
-    }
-    
-    .alert-box {
-      background: rgba(255,255,255,0.03);
-      border-left: 3px solid var(--accent);
-      padding: 12px 16px;
-      margin-top: 12px;
-      margin-bottom: 12px;
-      border-radius: 0 4px 4px 0;
-      font-style: italic;
-    }
-    
-    .btn-back-home {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      width: 32px;
-      height: 32px;
-      border-radius: 6px;
-      color: var(--text-muted);
-      transition: all 0.2s;
-    }
-    .btn-back-home:hover {
-      background: var(--border-light);
-      color: var(--text-main);
-    }
-    
-    ::-webkit-scrollbar {
-      width: 8px;
-    }
-    ::-webkit-scrollbar-track {
-      background: var(--bg-main);
-    }
-    ::-webkit-scrollbar-thumb {
-      background: var(--border-light);
-      border-radius: 4px;
-    }
-    ::-webkit-scrollbar-thumb:hover {
-      background: var(--text-muted);
-    }
-  </style>
+  <link rel="stylesheet" href="/global-styles.css">
 </head>
 <body>
   <div class="bg"></div>
-  <div class="noise"></div>
-  <div class="scanlines"></div>
   
   <div class="top-nav">
     <div class="brand">
       <a href="/" class="btn-back-home" title="Kembali ke Beranda">
-        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
       </a>
       <img src="/logo.svg" alt="logo">
       <div style="display:flex; flex-direction:column; gap:2px;">
-        <div style="font-family:var(--font-mono); font-size:16px; font-weight:700; letter-spacing:0.08em; line-height:1; color:var(--text-main);">MR CAPSULES</div>
-        <div style="font-family:var(--font-mono); font-size:9px; font-weight:600; letter-spacing:0.15em; color:var(--accent); text-transform:uppercase;">Documentation</div>
+        <div style=" font-size:16px; font-weight:700; letter-spacing:0.08em; line-height:1; color:var(--text-main);">MR CAPSULES</div>
+        <div style=" font-size:9px; font-weight:600; letter-spacing:0.15em; color:var(--accent); text-transform:uppercase;">Documentation</div>
       </div>
     </div>
     
     <div class="tabs">
       <div class="tab active" data-target="docsGeneral">
-        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
         General Guide
       </div>
       <!-- Tab tambahan di masa depan dapat ditambahkan di sini -->
     </div>
   </div>
   
-  <div class="content-area">
+  <div class="docs-content-area">
     <div class="docs-container" id="docsGeneral">
       
       <div class="docs-title">DOKUMENTASI SISTEM</div>
       
       <div class="docs-section">
-        <h2>1. Pengantar MR-CAPSULES</h2>
+        <h2 >1. Pengantar MR-CAPSULES</h2>
         <p><strong>MR-CAPSULES</strong> adalah platform edukasi open-source yang didedikasikan untuk melestarikan dan mendistribusikan sumber belajar mahasiswa kedokteran/kesehatan secara terpusat. Platform ini mengubah materi kuliah, praktikum, dan soal tahun lalu menjadi basis data HTML pilihan ganda yang interaktif (CBT pool).</p>
       </div>
 
       <div class="docs-section">
-        <h2>2. Pengenalan Admin Panel</h2>
+        <h2 >2. Pengenalan Admin Panel</h2>
         <p>Seluruh kontributor akan bekerja menggunakan <strong>Admin Panel</strong> yang memiliki 4 fitur utama:</p>
         <ul>
           <li><strong>Dashboard:</strong> Melacak analitik aplikasi (Uptime, Total Pengguna, Member Online), log aktivitas hybrid, serta melihat papan peringkat kontributor (Leaderboard).</li>
@@ -221,7 +53,7 @@
       </div>
 
       <div class="docs-section">
-        <h2>3. Pembagian Divisi Kontributor</h2>
+        <h2 >3. Pembagian Divisi Kontributor</h2>
         <p>Kontribusi dalam MR-CAPSULES dibagi menjadi beberapa divisi utama. Anda dapat mendaftar tanpa rasa ragu, karena sistem ini didesain agar mudah dipelajari oleh siapa saja.</p>
         
         <div class="alert-box">
@@ -233,7 +65,7 @@
 
         <h3>B. Division Development (Pembuat Konten)</h3>
         <p>Bertugas meracik materi mentah menjadi file HTML/CBT yang interaktif. Mengambil tugas di <em>Task Board</em>, mengerjakannya, lalu memindahkannya ke kolom <strong>Developed (Wait for Review)</strong>.</p>
-        <p style="color:var(--text-main); font-weight:bold; background:rgba(255,255,255,0.05); padding:8px 12px; border-radius:4px; margin-top:8px;">
+        <p style="color:var(--text-main); font-weight:bold; background:color-mix(in srgb, var(--c3) 5%, transparent); padding:8px 12px; border-radius:4px; margin-top:8px;">
           Catatan Teknis: KITA TIDAK MELAKUKAN CODING ASLI / MANUAL.
         </p>
         <p>Pembuatan dan perbaikan kode seluruhnya menggunakan <strong>Viebo Code</strong> (istilah untuk men-<em>generate</em> kode menggunakan AI seperti <strong>Claude</strong> atau <strong>Antigravity</strong>). Peran developer lebih sebagai <em>Prompt Engineer</em>: menyuruh AI membuatkan soal dengan <em>template</em> yang sudah ada, lalu memasukkannya ke <em>HTML Editor</em> di tab <strong>Files</strong>.</p>

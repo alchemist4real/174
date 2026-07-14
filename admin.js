@@ -144,21 +144,26 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
         const inputEl = document.getElementById('promptInput');
         const btnCancel = document.getElementById('promptCancel');
         const btnConfirm = document.getElementById('promptConfirm');
+        const btnHeaderCancel = document.getElementById('promptHeaderCancel');
 
         titleEl.textContent = title;
         inputEl.value = defaultValue;
         inputEl.style.display = 'block';
-        modal.classList.remove('hidden');
+        modal.classList.add('active');
         inputEl.focus();
 
         const cleanup = () => {
-          modal.classList.add('hidden');
+          modal.classList.remove('active');
           btnCancel.onclick = null;
           btnConfirm.onclick = null;
+          if (btnHeaderCancel) btnHeaderCancel.onclick = null;
         };
 
         btnCancel.onclick = () => { cleanup(); resolve(null); };
         btnConfirm.onclick = () => { cleanup(); resolve(inputEl.value); };
+        if (btnHeaderCancel) {
+          btnHeaderCancel.onclick = () => { cleanup(); resolve(null); };
+        }
       });
     }
 
@@ -170,19 +175,24 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
         const inputEl = document.getElementById('promptInput');
         const btnCancel = document.getElementById('promptCancel');
         const btnConfirm = document.getElementById('promptConfirm');
+        const btnHeaderCancel = document.getElementById('promptHeaderCancel');
 
         titleEl.textContent = title;
         inputEl.style.display = 'none';
-        modal.classList.remove('hidden');
+        modal.classList.add('active');
 
         const cleanup = () => {
-          modal.classList.add('hidden');
+          modal.classList.remove('active');
           btnCancel.onclick = null;
           btnConfirm.onclick = null;
+          if (btnHeaderCancel) btnHeaderCancel.onclick = null;
         };
 
         btnCancel.onclick = () => { cleanup(); resolve(false); };
         btnConfirm.onclick = () => { cleanup(); resolve(true); };
+        if (btnHeaderCancel) {
+          btnHeaderCancel.onclick = () => { cleanup(); resolve(false); };
+        }
       });
     }
 
@@ -557,11 +567,11 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
         let icon = '';
         const isImg = item.name.match(/\.(jpg|jpeg|png|gif|webp)$/i);
         if (item.type === 'folder') {
-          icon = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>';
+          icon = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>';
         } else if (isImg) {
-          icon = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>';
+          icon = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>';
         } else {
-          icon = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>';
+          icon = '<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9z"></path><polyline points="13 2 13 9 20 9"></polyline></svg>';
         }
         
         let cbHtml = '';
@@ -623,17 +633,17 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
       html += `<button class="btn danger" id="ctxDelete">Delete</button>`;
       container.innerHTML = html;
       
-      modal.classList.remove('hidden');
+      modal.classList.add('active');
       
       if (document.getElementById('ctxEdit')) {
         document.getElementById('ctxEdit').onclick = async () => {
-          modal.classList.add('hidden');
+          modal.classList.remove('active');
           openEditor(item);
         };
       }
       if (document.getElementById('ctxDownload')) {
         document.getElementById('ctxDownload').onclick = async () => {
-          modal.classList.add('hidden');
+          modal.classList.remove('active');
           try {
             const blob = await fetchFileSecureBlob(item.path);
             const url = window.URL.createObjectURL(blob);
@@ -649,7 +659,7 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
       }
       if (document.getElementById('ctxMove')) {
         document.getElementById('ctxMove').onclick = async (e) => {
-          modal.classList.add('hidden');
+          modal.classList.remove('active');
           const newDir = await customPrompt("Enter new directory path (e.g. content/semester 1/):", currentPath);
           if (!newDir || newDir === currentPath) return;
           adminAction('rename_file', { path: item.path, newPath: newDir.replace(/\/$/, '') + '/' + item.name }).then(() => loadTree());
@@ -657,7 +667,7 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
       }
       if (document.getElementById('ctxRename')) {
         document.getElementById('ctxRename').onclick = async () => {
-          modal.classList.add('hidden');
+          modal.classList.remove('active');
           const newName = await customPrompt("Enter new file name:", item.name);
           if (!newName || newName === item.name) return;
           adminAction('rename_file', { path: item.path, newPath: currentPath + newName }).then(() => loadTree());
@@ -665,7 +675,7 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
       }
       if (document.getElementById('ctxCreateTask')) {
         document.getElementById('ctxCreateTask').onclick = () => {
-          modal.classList.add('hidden');
+          modal.classList.remove('active');
           window._prefilledTaskPath = item.path;
           const tasksTab = document.querySelector('.tab[data-target="viewTasks"]');
           if (tasksTab) tasksTab.click();
@@ -678,7 +688,7 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
         };
       }
       document.getElementById('ctxDelete').onclick = async () => {
-        modal.classList.add('hidden');
+        modal.classList.remove('active');
         if (item.type === 'folder') {
           const folderFiles = currentTree.filter(f => f.path.startsWith(item.path) && f.type === 'blob');
           if (folderFiles.length === 0) {
@@ -869,7 +879,7 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
       const emodal = document.getElementById('editorModal');
       const emodalContainer = document.getElementById('editorModalContainer');
       document.getElementById('editorTitle').textContent = `Editing: ${item.name}`;
-      emodal.classList.remove('hidden');
+      emodal.classList.add('active');
       
       const iframe = document.getElementById('editorPreview');
       
@@ -951,15 +961,15 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
          setTimeout(() => window.cmEditor.refresh(), 100);
       };
 
-      document.getElementById('editorClose').onclick = () => emodal.classList.add('hidden');
-      document.getElementById('editorCancel').onclick = () => emodal.classList.add('hidden');
+      document.getElementById('editorClose').onclick = () => emodal.classList.remove('active');
+      document.getElementById('editorCancel').onclick = () => emodal.classList.remove('active');
       document.getElementById('editorSave').onclick = async (ev) => {
         ev.target.textContent = 'Saving...';
         const content = window.cmEditor.getValue();
         const base64 = utf8ToBase64(content);
         await adminAction('upload', { path: item.path, contentBase64: base64, sha: item.sha });
         ev.target.textContent = 'Save Changes';
-        emodal.classList.add('hidden');
+        emodal.classList.remove('active');
         loadTree();
       };
     }
@@ -1309,17 +1319,17 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
           const data = await res.json();
           if (res.ok) {
             resultEl.style.color = '#4caf50';
-            resultEl.textContent = `✓ Deleted ${data.deleted}/${data.total_guests_found} guests`;
+            resultEl.textContent = `[SUCCESS] Deleted ${data.deleted}/${data.total_guests_found} guests`;
           } else {
             resultEl.style.color = '#f44336';
-            resultEl.textContent = `✗ ${data.error}`;
+            resultEl.textContent = `[ERROR] ${data.error}`;
           }
         } catch(e) {
           resultEl.style.color = '#f44336';
-          resultEl.textContent = `✗ ${e.message}`;
+          resultEl.textContent = `[ERROR] ${e.message}`;
         }
         btnGuestCleanup.disabled = false;
-        btnGuestCleanup.textContent = '🗑️ Clean Guests (24h+)';
+        btnGuestCleanup.textContent = 'Clean Guests (24h+)';
       };
     }
 
@@ -1440,7 +1450,7 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
       }
     });
 
-    const adminThemeBtns = document.querySelectorAll('.admin-theme-btn');
+    const adminThemeBtns = document.querySelectorAll('.admin-theme-btn-unified');
     function updateAdminThemeBtns(val) {
       if (!val) val = 'light';
       adminThemeBtns.forEach(b => {
@@ -1474,6 +1484,7 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
         const inputEl = document.getElementById('promptInput');
         const btnCancel = document.getElementById('promptCancel');
         const btnConfirm = document.getElementById('promptConfirm');
+        const btnHeaderCancel = document.getElementById('promptHeaderCancel');
 
         titleEl.textContent = title;
         inputEl.style.display = 'none'; // hide input
@@ -1491,18 +1502,22 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
 
         btnCancel.style.display = 'none';
         btnConfirm.textContent = 'OK';
-        modal.classList.remove('hidden');
+        modal.classList.add('active');
 
         const cleanup = () => {
-          modal.classList.add('hidden');
+          modal.classList.remove('active');
           msgEl.style.display = 'none';
           inputEl.style.display = '';
           btnCancel.style.display = '';
           btnConfirm.textContent = 'Confirm';
           btnConfirm.onclick = null;
+          if (btnHeaderCancel) btnHeaderCancel.onclick = null;
         };
 
         btnConfirm.onclick = () => { cleanup(); resolve(); };
+        if (btnHeaderCancel) {
+          btnHeaderCancel.onclick = () => { cleanup(); resolve(); };
+        }
       });
     }
 
@@ -1511,14 +1526,13 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
       const container = document.getElementById('toastContainer');
       if (!container) return;
       const toast = document.createElement('div');
+      toast.setAttribute('role', 'status');
+      toast.setAttribute('aria-live', 'polite');
       toast.className = `toast toast-${type}`;
       toast.style.background = 'var(--bg-card)';
-      toast.style.border = '1px solid var(--border-light)';
-      if (type === 'error') toast.style.borderLeft = '4px solid var(--danger)';
-      else if (type === 'success') toast.style.borderLeft = '4px solid #000000';
-      else toast.style.borderLeft = '4px solid var(--accent)';
+      toast.style.border = 'var(--border-main)';
       toast.style.padding = '12px 16px';
-      toast.style.borderRadius = '4px';
+      toast.style.borderRadius = 'var(--radius-card)';
       toast.style.color = 'var(--text-main)';
       toast.style.fontFamily = 'var(--font-mono)';
       toast.style.fontSize = '12px';

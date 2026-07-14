@@ -50,7 +50,7 @@ async function initWorkflow() {
     } else if (divRes.success && !divRes.division) {
         // User has no division, show picker
         if (!isAdminUser) {
-            document.getElementById('divisionPickerModal').classList.remove('hidden');
+            document.getElementById('divisionPickerModal').classList.add('active');
         }
     }
 
@@ -86,7 +86,7 @@ window.joinDivision = async function(divId) {
     showToast('Bergabung dengan divisi...');
     const res = await apiCall('divisions', { action: 'join_division', division_id: divId });
     if(res.success) {
-        document.getElementById('divisionPickerModal').classList.add('hidden');
+        document.getElementById('divisionPickerModal').classList.remove('active');
         showToast('Berhasil bergabung!', 'success');
         setTimeout(() => window.location.reload(), 1000);
     } else {
@@ -142,7 +142,6 @@ function renderKanban(tasks) {
 
         const el = document.createElement('div');
         el.className = 'kanban-card';
-        el.style.cssText = 'background:var(--bg-main); border:1px solid var(--border-medium); border-left:4px solid var(--accent); padding:12px; border-radius:4px; font-size:12px; cursor:pointer;';
         
         let displayDesc = task.description || '';
         let dueDateStr = '';
@@ -235,11 +234,11 @@ async function createNewTaskPrompt() {
         });
     }
 
-    modal.classList.remove('hidden');
+    modal.classList.add('active');
 
     return new Promise((resolve) => {
         const cleanup = () => {
-            modal.classList.add('hidden');
+            modal.classList.remove('active');
             btnCancel.onclick = null;
             btnConfirm.onclick = null;
         };
@@ -343,22 +342,22 @@ function openTaskModal(task) {
 
     let actionsHtml = '';
     if (task.status === 'open' && isDev) {
-        actionsHtml += `<button class="btn primary" onclick="updateTask('${task.id}', 'claim_task')">Claim Task</button>`;
+        actionsHtml += `<button class="btn-unified primary" onclick="updateTask('${task.id}', 'claim_task')">Claim Task</button>`;
     } else if (task.status === 'in_progress' && isMyTask) {
-        actionsHtml += `<button class="btn" onclick="updateTask('${task.id}', 'unclaim_task')">Unclaim</button>`;
-        actionsHtml += `<button class="btn primary" onclick="updateTask('${task.id}', 'submit_task')">Submit for Review</button>`;
+        actionsHtml += `<button class="btn-unified" onclick="updateTask('${task.id}', 'unclaim_task')">Unclaim</button>`;
+        actionsHtml += `<button class="btn-unified primary" onclick="updateTask('${task.id}', 'submit_task')">Submit for Review</button>`;
     } else if (task.status === 'developed' && isRev) {
-        actionsHtml += `<button class="btn primary" onclick="updateTask('${task.id}', 'start_review')">Start Review</button>`;
+        actionsHtml += `<button class="btn-unified primary" onclick="updateTask('${task.id}', 'start_review')">Start Review</button>`;
     } else if (task.status === 'in_review' && isRev) {
-        actionsHtml += `<button class="btn" onclick="updateTask('${task.id}', 'reject_task')" style="border-color:var(--danger); color:var(--danger)">Reject</button>`;
-        actionsHtml += `<button class="btn primary" onclick="updateTask('${task.id}', 'approve_task')">Approve (Done)</button>`;
+        actionsHtml += `<button class="btn-unified danger" onclick="updateTask('${task.id}', 'reject_task')">Reject</button>`;
+        actionsHtml += `<button class="btn-unified primary" onclick="updateTask('${task.id}', 'approve_task')">Approve (Done)</button>`;
     }
 
     const modal = document.getElementById('contextModal');
     document.getElementById('contextTitle').textContent = task.title;
     const acts = document.getElementById('contextActions');
     
-    let details = `<div style="font-size:12px; margin-bottom:16px; padding:12px; background:var(--bg-card); border-radius:4px;">
+    let details = `<div style="font-size:12px; margin-bottom:16px; padding:12px; background:var(--bg-card); border:var(--border-main); border-radius:var(--radius-card);">
         <div><b>Status:</b> ${task.status.toUpperCase()}</div>
         <div><b>Category:</b> ${task.category || '-'}</div>
         <div style="display:flex; justify-content:space-between; align-items:center;">
@@ -385,11 +384,11 @@ function openTaskModal(task) {
     </div>`;
 
     if (task.target_path) {
-        actionsHtml = `<button class="btn primary" style="background:#ffa500; border-color:#ffa500; color:#000; font-weight:600; flex:1;" onclick="openTaskFile('${task.target_path}')">Open File in Editor</button>` + actionsHtml;
+        actionsHtml = `<button class="btn-unified primary" style="background:#ffa500; border-color:#ffa500; color:#000; font-weight:600; flex:1;" onclick="openTaskFile('${task.target_path}')">Open File in Editor</button>` + actionsHtml;
     }
 
     acts.innerHTML = details + `<div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">${actionsHtml}</div>`;
-    modal.classList.remove('hidden');
+    modal.classList.add('active');
 }
 
 window.loadTaskLogs = async function(taskId) {
@@ -443,7 +442,7 @@ window.updateTask = async function(taskId, action) {
         note = prompt("Optional: Any final notes?");
     }
 
-    document.getElementById('contextModal').classList.add('hidden');
+    document.getElementById('contextModal').classList.remove('active');
     showToast('Updating task...');
     const res = await apiCall('tasks', { action, task_id: taskId, note: note ? note.trim() : null });
     if(res.success) {
@@ -455,7 +454,7 @@ window.updateTask = async function(taskId, action) {
 };
 
 window.openTaskFile = function(path) {
-    document.getElementById('contextModal').classList.add('hidden');
+    document.getElementById('contextModal').classList.remove('active');
     // Switch to Files tab
     const filesTab = document.querySelector('.tab[data-target="viewFiles"]');
     if(filesTab) filesTab.click();
@@ -488,16 +487,16 @@ async function loadDivisions() {
         
         // WhatsApp Settings for current user
         const waContainer = document.createElement('div');
-        waContainer.style.cssText = 'grid-column: 1 / -1; background:var(--bg-card); padding:20px 24px; border:1px solid var(--border-light); border-radius:12px; margin-bottom:24px; display:flex; align-items:center; flex-wrap:wrap; gap:16px; box-shadow:0 2px 10px rgba(0,0,0,0.05); transition:all 0.2s ease;';
+        waContainer.style.cssText = 'grid-column: 1 / -1; background:var(--bg-card); padding:20px 24px; border:var(--border-main); border-radius:var(--radius-card); margin-bottom:24px; display:flex; align-items:center; flex-wrap:wrap; gap:16px; box-shadow:0 2px 10px rgba(0,0,0,0.05); transition:all 0.2s ease;';
         waContainer.onmouseover = () => { waContainer.style.transform = 'translateY(-2px)'; waContainer.style.boxShadow = '0 6px 15px rgba(0,0,0,0.1)'; };
         waContainer.onmouseout = () => { waContainer.style.transform = 'translateY(0)'; waContainer.style.boxShadow = '0 2px 10px rgba(0,0,0,0.05)'; };
         waContainer.innerHTML = `
             <div style="font-weight:600; font-size:15px; color:var(--text-main); display:flex; align-items:center; gap:8px;">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#000000;"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#000000;" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
                 WhatsApp Number
             </div>
             <input type="text" id="myWaInput" class="auth-input" placeholder="e.g. 6281234567890" style="width:250px; border-radius:6px; padding:10px 14px;">
-            <button class="btn primary" id="btnSaveWa" style="border-radius:6px; padding:10px 20px;">Update</button>
+            <button class="btn-unified primary" id="btnSaveWa" style="padding:10px 20px;">Update</button>
         `;
         grid.appendChild(waContainer);
         
@@ -512,32 +511,32 @@ async function loadDivisions() {
         res.divisions.forEach(div => {
             let membersHtml = '';
             (div.members || []).forEach(m => {
-                membersHtml += `<div style="display:flex; justify-content:space-between; align-items:center; font-size:13px; color:var(--text-main); margin-bottom:8px; padding:8px 12px; background:var(--bg-main); border:1px solid rgba(0,0,0,0.03); border-radius:8px; transition:all 0.2s ease;" onmouseover="this.style.background='var(--bg-hover)';" onmouseout="this.style.background='var(--bg-main)';">
+                membersHtml += `<div style="display:flex; justify-content:space-between; align-items:center; font-size:13px; color:var(--text-main); margin-bottom:8px; padding:8px 12px; background:var(--bg-main); border:var(--border-main); border-radius:var(--radius-card); transition:all 0.2s ease;" onmouseover="this.style.background='var(--bg-hover)';" onmouseout="this.style.background='var(--bg-main)';">
                     <span style="display:flex; align-items:center; gap:8px;">
                         <div style="width:24px; height:24px; border-radius:50%; background:var(--accent); color:#fff; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:bold;">${m.charAt(0).toUpperCase()}</div>
                         ${m.split('@')[0]}
                     </span>
-                    ${window.isSuperAdmin ? `<button class="btn-card danger" style="padding:4px 8px; font-size:11px; border-radius:4px; opacity:0.8; transition:all 0.2s ease;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'" onclick="removeMember('${m}', '${div.id}')">Remove</button>` : ''}
+                    ${window.isSuperAdmin ? `<button class="btn-card danger" style="padding:4px 8px; font-size:11px; opacity:0.8; transition:all 0.2s ease;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'" onclick="removeMember('${m}', '${div.id}')">Remove</button>` : ''}
                 </div>`;
             });
             
             const card = document.createElement('div');
-            card.style.cssText = 'background:var(--bg-card); display:flex; flex-direction:column; padding:24px; border:1px solid var(--border-light); border-radius:12px; box-shadow:0 4px 15px rgba(0,0,0,0.03); transition:all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);';
+            card.style.cssText = 'background:var(--bg-card); display:flex; flex-direction:column; padding:24px; border:var(--border-main); border-radius:var(--radius-card); box-shadow:0 4px 15px rgba(0,0,0,0.03); transition:all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);';
             card.onmouseover = () => { card.style.transform = 'translateY(-4px)'; card.style.boxShadow = '0 12px 24px rgba(0,0,0,0.08)'; card.style.borderColor = 'var(--accent)'; };
-            card.onmouseout = () => { card.style.transform = 'translateY(0)'; card.style.boxShadow = '0 4px 15px rgba(0,0,0,0.03)'; card.style.borderColor = 'var(--border-light)'; };
+            card.onmouseout = () => { card.style.transform = 'translateY(0)'; card.style.boxShadow = '0 4px 15px rgba(0,0,0,0.03)'; card.style.borderColor = 'var(--text-main)'; };
             
             card.innerHTML = `
                 <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
                     <div>
-                        <h3 style="margin:0; font-size:18px; color:var(--accent); font-weight:700; letter-spacing:-0.3px;">${div.name}</h3>
+                        <h3 style="margin:0; font-size:18px; color:var(--accent); font-weight:700; letter-spacing:-0.3px; font-family:var(--font-sans);">${div.name}</h3>
                         <div style="display:inline-block; margin-top:6px; padding:2px 8px; background:rgba(0, 0, 0, 0.1); color:var(--accent); border-radius:12px; font-size:11px; font-weight:600;">${div.member_count} Members</div>
                     </div>
-                    ${window.isSuperAdmin ? `<button class="btn primary" style="font-size:12px; padding:6px 12px; border-radius:6px;" onclick="promptAddMember('${div.id}')">+ Add</button>` : ''}
+                    ${window.isSuperAdmin ? `<button class="btn-unified primary" style="font-size:12px; padding:6px 12px;" onclick="promptAddMember('${div.id}')">+ Add</button>` : ''}
                 </div>
                 <p style="font-size:13px; color:var(--text-muted); line-height:1.5; min-height:45px; margin-bottom:20px;">${div.description}</p>
                 <div style="flex:1; border-top:1px dashed var(--border-medium); padding-top:16px;">
                     <div style="max-height:220px; overflow-y:auto; padding-right:4px;">
-                        ${membersHtml || '<div style="font-size:13px; color:var(--text-muted); text-align:center; padding:20px 0; background:var(--bg-main); border-radius:8px; border:1px dashed var(--border-medium);">No members yet.</div>'}
+                        ${membersHtml || '<div style="font-size:13px; color:var(--text-muted); text-align:center; padding:20px 0; background:var(--bg-main); border-radius:var(--radius-card); border:1.5px dashed var(--text-main);">No members yet.</div>'}
                     </div>
                 </div>
             `;
@@ -591,11 +590,11 @@ async function loadContributions() {
         const list = document.getElementById('leaderboardList');
         list.innerHTML = '';
         resLeader.leaderboard.forEach((u, i) => {
-            const medal = i === 0 ? '🥇' : (i === 1 ? '🥈' : (i === 2 ? '🥉' : `${i+1}.`));
+            const medal = i === 0 ? '1st' : (i === 1 ? '2nd' : (i === 2 ? '3rd' : `${i+1}.`));
             list.innerHTML += `
                 <li style="display:flex; justify-content:space-between; padding:12px 24px; border-bottom:1px solid var(--border-light); align-items:center;">
                     <div style="display:flex; gap:16px; align-items:center;">
-                        <span style="font-size:16px; font-weight:600; width:24px;">${medal}</span>
+                        <span style="font-size:16px; font-weight:600; width:36px;">${medal}</span>
                         <span style="font-size:14px;">${u.email.split('@')[0]}</span>
                     </div>
                     <div style="font-weight:700; color:var(--accent);">${u.points} pts</div>
@@ -657,7 +656,7 @@ function parseCBTHtml(path, html) {
     const qContainers = doc.querySelectorAll('.soal-container, .card, .question-block, fieldset');
     
     if(qContainers.length === 0) {
-        listEl.innerHTML = '<div style="padding:16px; background:rgba(0, 0, 0, 0.1); color:var(--danger); border-radius:4px;">No standard question blocks found. This scrapper supports specific CBT HTML formats. You can still use the raw HTML editor in the Files tab.</div>';
+        listEl.innerHTML = '<div style="padding:16px; background:rgba(0, 0, 0, 0.1); color:var(--danger); border-radius:var(--radius-card); border:var(--border-main);">No standard question blocks found. This scrapper supports specific CBT HTML formats. You can still use the raw HTML editor in the Files tab.</div>';
         return;
     }
 
@@ -670,13 +669,13 @@ function parseCBTHtml(path, html) {
     qContainers.forEach((q, idx) => {
         const outerHTML = q.outerHTML;
         const block = document.createElement('div');
-        block.style.cssText = 'background:var(--bg-main); padding:16px; border-radius:4px; border:1px solid var(--border-medium);';
+        block.style.cssText = 'background:var(--bg-main); padding:16px; border-radius:var(--radius-card); border:var(--border-main);';
         
         block.innerHTML = `
             <div style="font-weight:600; margin-bottom:8px;">Question ${idx + 1}</div>
-            <textarea id="q_edit_${idx}" style="width:100%; height:150px; background:#1e1e1e; color:#d4d4d4; font-family:monospace; font-size:12px; padding:12px; border:1px solid #333; border-radius:4px; resize:vertical;">${outerHTML}</textarea>
+            <textarea id="q_edit_${idx}" style="width:100%; height:150px; background:#1e1e1e; color:#d4d4d4; font-family:monospace; font-size:12px; padding:12px; border:var(--border-main); border-radius:var(--radius-card); resize:vertical;">${outerHTML}</textarea>
             <div style="margin-top:8px; display:flex; justify-content:flex-end;">
-               <button class="btn btn-report-issue" data-idx="${idx}" style="border-color:var(--danger); color:var(--danger);">Report Issue</button>
+               <button class="btn-unified danger btn-report-issue" data-idx="${idx}">Report Issue</button>
             </div>
         `;
         listEl.appendChild(block);
