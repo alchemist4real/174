@@ -762,7 +762,7 @@ iframe {
     .file-item:hover .file-actions { opacity: 1; }
 
     .status-bar {
-  position: fixed; bottom: 80px; left: 24px; z-index: 900;
+  position: fixed; bottom: 24px; right: 24px; z-index: 9998;
   background: var(--c1); border: var(--border-main); border-radius: var(--radius-card);
   padding: 8px 16px; font-size: 12px; color: var(--c3); font-family: var(--font-mono);
   display: flex; gap: 16px; align-items: center; justify-content: space-between;
