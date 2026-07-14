@@ -19,9 +19,11 @@
 </div>
 
 <!-- Maintenance Overlay -->
-<div id="maintenanceOverlay" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:var(--scrim); z-index:9999999; flex-direction:column; justify-content:center; align-items:center;  color:var(--danger); text-align:center;">
-  <h1 style="font-size:3rem; margin-bottom:10px; letter-spacing:2px;">MAINTENANCE MODE</h1>
-  <p style="font-size:1.2rem; color:var(--text-muted); max-width:600px; line-height:1.6;">The system is currently undergoing scheduled maintenance.<br>Please check back later.</p>
+<div id="maintenanceOverlay" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background:var(--scrim); z-index:9999999; flex-direction:column; justify-content:center; align-items:center;">
+  <div style="background:var(--bg-modal); border:1.5px solid var(--text-main); border-radius:var(--radius-card); padding:40px; max-width:500px; width:90%; text-align:center; color:var(--text-main);">
+    <h1 style="font-size:3rem; margin-bottom:10px; letter-spacing:2px; font-family:var(--font-sans);">MAINTENANCE MODE</h1>
+    <p style="font-size:1.2rem; color:var(--text-muted); line-height:1.6;">The system is currently undergoing scheduled maintenance.<br>Please check back later.</p>
+  </div>
 </div>
 
 <!-- Global Toast Container -->
