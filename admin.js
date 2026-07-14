@@ -119,10 +119,32 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
 
     const authOverlay = document.getElementById('authOverlay');
     const authMessage = document.getElementById('authMessage');
-    const statusText = document.getElementById('statusText');
+    const _statusTextEl = document.getElementById('statusText');
+    const _statusBarEl = document.querySelector('.status-bar');
+    let _statusTimeout;
+    const statusText = {
+      set textContent(val) {
+        if(_statusTextEl) _statusTextEl.textContent = val;
+        if(_statusBarEl) {
+          _statusBarEl.classList.add('active');
+          clearTimeout(_statusTimeout);
+          _statusTimeout = setTimeout(() => _statusBarEl.classList.remove('active'), 3000);
+        }
+      }
+    };
     const fileBrowser = document.getElementById('fileBrowser');
     const pathBreadcrumbs = document.getElementById('pathBreadcrumbs');
-    const itemCount = document.getElementById('itemCount');
+    const _itemCountEl = document.getElementById('itemCount');
+    const itemCount = {
+      set textContent(val) {
+        if(_itemCountEl) _itemCountEl.textContent = val;
+        if(_statusBarEl) {
+          _statusBarEl.classList.add('active');
+          clearTimeout(_statusTimeout);
+          _statusTimeout = setTimeout(() => _statusBarEl.classList.remove('active'), 3000);
+        }
+      }
+    };
     const fileInput = document.getElementById('fileInput');
 
     // Search Filter Logic
