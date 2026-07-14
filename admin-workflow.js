@@ -476,15 +476,15 @@ function openTaskModal(task) {
 
     let actionsHtml = '';
     if (task.status === 'open' && isDev) {
-        actionsHtml += `<button class="btn primary" onclick="updateTask('${task.id}', 'claim_task')">Claim Task</button>`;
-    } else if (task.status === 'in_progress' && isMyTask) {
-        actionsHtml += `<button class="btn" onclick="updateTask('${task.id}', 'unclaim_task')">Unclaim</button>`;
-        actionsHtml += `<button class="btn primary" onclick="updateTask('${task.id}', 'submit_task')">Submit for Review</button>`;
+        actionsHtml += `<button class="btn-unified primary" onclick="updateTask('${task.id}', 'claim_task')">Claim Task</button>`;
+      } else if (task.status === 'in_progress' && isMyTask) {
+        actionsHtml += `<button class="btn-unified" onclick="updateTask('${task.id}', 'unclaim_task')">Unclaim</button>`;
+        actionsHtml += `<button class="btn-unified primary" onclick="updateTask('${task.id}', 'submit_task')">Submit for Review</button>`;
     } else if (task.status === 'developed' && isRev) {
-        actionsHtml += `<button class="btn primary" onclick="updateTask('${task.id}', 'start_review')">Start Review</button>`;
+        actionsHtml += `<button class="btn-unified primary" onclick="updateTask('${task.id}', 'start_review')">Start Review</button>`;
     } else if (task.status === 'in_review' && isRev) {
-        actionsHtml += `<button class="btn" onclick="updateTask('${task.id}', 'reject_task')" style="border-color:var(--danger); color:var(--danger)">Reject</button>`;
-        actionsHtml += `<button class="btn primary" onclick="updateTask('${task.id}', 'approve_task')">Approve (Done)</button>`;
+        actionsHtml += `<button class="btn-unified" onclick="updateTask('${task.id}', 'reject_task')" style="border-color:var(--danger); color:var(--danger)">Reject</button>`;
+        actionsHtml += `<button class="btn-unified primary" onclick="updateTask('${task.id}', 'approve_task')">Approve (Done)</button>`;
     }
 
     const modal = document.getElementById('contextModal');
@@ -698,9 +698,9 @@ async function loadDivisions() {
         
         res.divisions.forEach(div => {
             const btn = document.createElement('button');
-            btn.className = 'btn btn-div-item';
+            btn.className = 'btn-div-item';
             btn.setAttribute('data-id', div.id);
-            btn.style.cssText = 'justify-content:space-between; padding:12px 16px; text-align:left; border:none; background:transparent; color:var(--text-main); font-size:15px; font-weight:700; border-radius:var(--radius-pill); margin-bottom:8px;';
+            btn.style.cssText = 'display:flex; width:100%; justify-content:space-between; align-items:center; padding:12px 16px; text-align:left; border:none; background:transparent; color:var(--text-main); font-size:15px; font-weight:700; border-radius:var(--radius-pill); cursor:pointer; transition:0.2s;';
             if(window.currentDivisionId === div.id) {
                 btn.style.background = 'var(--border-light)';
                 btn.style.color = 'var(--accent)';
