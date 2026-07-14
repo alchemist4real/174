@@ -762,9 +762,12 @@ iframe {
     .file-item:hover .file-actions { opacity: 1; }
 
     .status-bar {
-      padding: 8px 24px; font-size: 12px; color: color-mix(in srgb, var(--c3) 60%, transparent); border-top: 1.5px solid var(--c3);
-      display: flex; justify-content: space-between;
-    }
+  position: fixed; bottom: 80px; left: 24px; z-index: 900;
+  background: var(--c1); border: var(--border-main); border-radius: var(--radius-card);
+  padding: 8px 16px; font-size: 12px; color: var(--c3); font-family: var(--font-mono);
+  display: flex; gap: 16px; align-items: center; justify-content: space-between;
+  box-shadow: 4px 4px 0 var(--border-medium);
+}
 
     #superAdminSection {
       padding: 16px 24px; border-top: 1.5px solid var(--c3); background: var(--c2);

@@ -1381,9 +1381,9 @@ try {
           const tContainer = document.getElementById('toastContainer');
           if(tContainer) {
             const toast = document.createElement('div');
-            toast.style.cssText = 'background:var(--accent); color:var(--c1); padding:12px 24px; font-weight:bold; box-shadow:0 4px 12px color-mix(in srgb, var(--c3) 40%, transparent); transform:translateY(-20px); opacity:0; transition:0.3s; pointer-events:auto;  font-size:14px;';
+            toast.style.cssText = 'background:var(--bg-main); color:var(--text-main); border:var(--border-main); border-radius:var(--radius-card); padding:12px 24px; font-weight:bold; box-shadow:4px 4px 0 var(--border-medium); transform:translateY(-20px); opacity:0; transition:0.3s; pointer-events:auto; font-size:14px;';
             // Use textContent to prevent XSS from broadcast payloads
-            toast.textContent = "\uD83D\uDCE2 " + String(msg);
+            toast.textContent = "[BROADCAST] " + String(msg);
             tContainer.appendChild(toast);
             requestAnimationFrame(() => { toast.style.transform = 'translateY(0)'; toast.style.opacity = '1'; });
             setTimeout(() => {

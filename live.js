@@ -384,7 +384,7 @@ function openTaskModal(task) {
     </div>`;
 
     if (task.target_path) {
-        actionsHtml = `<button class="btn-unified primary" style="background:#ffa500; border-color:#ffa500; color:#000; font-weight:600; flex:1;" onclick="openTaskFile('${task.target_path}')">Open File in Editor</button>` + actionsHtml;
+        actionsHtml = `<button class="btn-unified primary" style="background:var(--c3); border-color:var(--c3); color:var(--c1); border-radius:var(--radius-pill); font-weight:600; flex:1;" onclick="openTaskFile('${task.target_path}')">Open File in Editor</button>` + actionsHtml;
     }
 
     acts.innerHTML = details + `<div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">${actionsHtml}</div>`;
@@ -407,7 +407,7 @@ window.loadTaskLogs = async function(taskId) {
         if (isRejected) {
             const lastReject = res.logs.find(l => l.action === 'rejected');
             if (lastReject && lastReject.note) {
-                rejectNoteHtml = `<div style="margin-bottom:12px; padding:8px; background:rgba(0, 0, 0, 0.1); border-left:3px solid var(--danger); border-radius:0 4px 4px 0;">
+                rejectNoteHtml = `<div style="margin-bottom:12px; padding:8px; background:transparent; border:1.5px solid var(--danger); border-radius:var(--radius-card);">
                     <div style="font-size:10px; font-weight:bold; color:var(--danger); text-transform:uppercase;">Latest Rejection Reason</div>
                     <div style="font-size:11px; color:var(--text-main); margin-top:4px;">"${lastReject.note}"</div>
                 </div>`;
@@ -656,7 +656,7 @@ function parseCBTHtml(path, html) {
     const qContainers = doc.querySelectorAll('.soal-container, .card, .question-block, fieldset');
     
     if(qContainers.length === 0) {
-        listEl.innerHTML = '<div style="padding:16px; background:rgba(0, 0, 0, 0.1); color:var(--danger); border-radius:var(--radius-card); border:var(--border-main);">No standard question blocks found. This scrapper supports specific CBT HTML formats. You can still use the raw HTML editor in the Files tab.</div>';
+        listEl.innerHTML = '<div style="padding:16px; background:transparent; color:var(--danger); border:1.5px solid var(--danger); border-radius:var(--radius-card); border:var(--border-main);">No standard question blocks found. This scrapper supports specific CBT HTML formats. You can still use the raw HTML editor in the Files tab.</div>';
         return;
     }
 
@@ -673,7 +673,7 @@ function parseCBTHtml(path, html) {
         
         block.innerHTML = `
             <div style="font-weight:600; margin-bottom:8px;">Question ${idx + 1}</div>
-            <textarea id="q_edit_${idx}" style="width:100%; height:150px; background:#1e1e1e; color:#d4d4d4; font-family:monospace; font-size:12px; padding:12px; border:var(--border-main); border-radius:var(--radius-card); resize:vertical;">${outerHTML}</textarea>
+            <textarea id="q_edit_${idx}" style="width:100%; height:150px; background:var(--c2); color:var(--c3); font-family:var(--font-mono); font-size:12px; padding:12px; border:var(--border-main); border-radius:var(--radius-card); resize:vertical;">${outerHTML}</textarea>
             <div style="margin-top:8px; display:flex; justify-content:flex-end;">
                <button class="btn-unified danger btn-report-issue" data-idx="${idx}">Report Issue</button>
             </div>

@@ -491,7 +491,7 @@ function openTaskModal(task) {
     document.getElementById('contextTitle').textContent = task.title;
     const acts = document.getElementById('contextActions');
     
-    let details = `<div style="font-size:14px; margin-bottom:20px; padding:20px; background:var(--bg-card); border-radius:0; line-height:1.6;">
+    let details = `<div style="font-size:14px; margin-bottom:20px; padding:20px; background:var(--c1); border:var(--border-main); border-radius:var(--radius-card); line-height:1.6;">
         <div style="margin-bottom:8px;"><b>Status:</b> <span class="badge" style="background:var(--bg-main); border:1px solid var(--border-light); padding:4px 8px; margin-left:4px;">${task.status.toUpperCase()}</span></div>
         <div style="margin-bottom:8px;"><b>Category:</b> ${task.category || '-'}</div>
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
@@ -519,7 +519,7 @@ function openTaskModal(task) {
     </div>`;
 
     if (task.target_path) {
-        actionsHtml = `<button class="btn primary" style="background:#ffa500; border-color:#ffa500; color:#000; font-weight:600; flex:1;" onclick="openTaskFile('${task.target_path}')">Open File in Editor</button>` + actionsHtml;
+        actionsHtml = `<button class="btn primary" style="background:var(--c3); border-color:var(--c3); color:var(--c1); border-radius:var(--radius-pill); font-weight:600; flex:1;" onclick="openTaskFile('${task.target_path}')">Open File in Editor</button>` + actionsHtml;
     }
 
     acts.innerHTML = details + `<div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">${actionsHtml}</div>`;
@@ -542,7 +542,7 @@ window.loadTaskLogs = async function(taskId) {
         if (isRejected) {
             const lastReject = res.logs.find(l => l.action === 'rejected');
             if (lastReject && lastReject.note) {
-                rejectNoteHtml = `<div style="margin-bottom:12px; padding:8px; background:rgba(0, 0, 0, 0.1); border-left:3px solid var(--danger); border-radius:0;">
+                rejectNoteHtml = `<div style="margin-bottom:12px; padding:8px; background:transparent; border:1.5px solid var(--danger); border-radius:0;">
                     <div style="font-size:10px; font-weight:bold; color:var(--danger); text-transform:uppercase;">Latest Rejection Reason</div>
                     <div style="font-size:11px; color:var(--text-main); margin-top:4px;">"${lastReject.note}"</div>
                 </div>`;
@@ -840,7 +840,7 @@ function parseCBTHtml(path, html) {
     const qContainers = doc.querySelectorAll('.soal-container, .card, .question-block, fieldset');
     
     if(qContainers.length === 0) {
-        listEl.innerHTML = '<div style="padding:16px; background:rgba(0, 0, 0, 0.1); color:var(--danger); border-radius:var(--radius-card); border:var(--border-main);">No standard question blocks found. This scrapper supports specific CBT HTML formats. You can still use the raw HTML editor in the Files tab.</div>';
+        listEl.innerHTML = '<div style="padding:16px; background:transparent; color:var(--danger); border:1.5px solid var(--danger); border-radius:var(--radius-card); border:var(--border-main);">No standard question blocks found. This scrapper supports specific CBT HTML formats. You can still use the raw HTML editor in the Files tab.</div>';
         return;
     }
 
