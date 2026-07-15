@@ -267,7 +267,7 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
         
         if (res.ok && data.success) {
           authOverlay.classList.add('hidden');
-          document.getElementById('adminTabs').style.display = 'flex';
+          document.getElementById('adminTabs').classList.remove('hidden');
           
           badgeEl.dataset.role = data.isSuperAdmin ? 'superadmin' : (data.isAdmin ? 'admin' : 'user');
 
