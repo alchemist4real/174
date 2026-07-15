@@ -627,22 +627,17 @@ window.openTaskFile = function(path) {
 window.selectDivision = function(divId) {
     window.currentDivisionId = divId;
     
+    // Clear active class from all sidebar buttons
+    const btnAll = document.getElementById('btnDivFilterAll');
+    if(btnAll) btnAll.classList.remove('active');
+    
     document.querySelectorAll('.btn-div-item').forEach(b => {
         b.classList.remove('active');
-        b.style.background = 'transparent';
-        b.style.color = 'var(--text-main)';
     });
-    
-    const btnAll = document.getElementById('btnDivFilterAll');
-    if(btnAll) {
-        btnAll.style.background = 'transparent';
-        btnAll.style.color = 'var(--text-main)';
-    }
 
     if(divId === 'all') {
         if(btnAll) {
-            btnAll.style.background = 'var(--accent)';
-            btnAll.style.color = 'var(--bg-main)';
+            btnAll.classList.add('active');
         }
         if(document.getElementById('orgViewTitle')) document.getElementById('orgViewTitle').textContent = 'All Users';
         if(document.getElementById('orgViewDesc')) document.getElementById('orgViewDesc').textContent = 'Manage all registered members in the system.';
@@ -652,8 +647,6 @@ window.selectDivision = function(divId) {
         const btn = document.querySelector('.btn-div-item[data-id="' + divId + '"]');
         if(btn) {
             btn.classList.add('active');
-            btn.style.background = 'rgba(0, 0, 0, 0.1)';
-            btn.style.color = 'var(--accent)';
         }
         
         const div = window.divisionData ? window.divisionData.find(d => d.id === divId) : null;
@@ -700,14 +693,12 @@ async function loadDivisions() {
             const btn = document.createElement('button');
             btn.className = 'btn-div-item';
             btn.setAttribute('data-id', div.id);
-            btn.style.cssText = 'display:flex; width:100%; justify-content:space-between; align-items:center; padding:12px 16px; text-align:left; border:none; background:transparent; color:var(--text-main); font-size:15px; font-weight:700; border-radius:var(--radius-pill); cursor:pointer; transition:0.2s;';
+            btn.setAttribute('data-initials', div.name.substring(0, 2).toUpperCase());
             if(window.currentDivisionId === div.id) {
-                btn.style.background = 'var(--border-light)';
-                btn.style.color = 'var(--accent)';
                 btn.classList.add('active');
             }
             
-            btn.innerHTML = `<span style="overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${div.name}</span> <span style="font-size:13px; opacity:0.7; font-family:var(--font-mono);">${div.member_count}</span>`;
+            btn.innerHTML = `<span class="div-name">${div.name}</span> <span class="div-count" style="font-size:13px; opacity:0.7; font-family:var(--font-mono);">${div.member_count}</span>`;
             
             btn.onclick = () => window.selectDivision(div.id);
             list.appendChild(btn);

@@ -1,31 +1,32 @@
-# BRIEFING — 2026-07-14T02:33:00Z
+# BRIEFING — 2026-07-14T18:47:57+07:00
 
 ## Mission
-Refactor the MR CAPSULES frontend to use a single unified CSS file, aligning subpages structurally while excluding landing page effects.
+Audit and align docs.html styling with index.html, eliminate inline styles, align borders/typography, and update AGENTS.md.
 
 ## 🔒 My Identity
 - Archetype: sentinel
 - Working directory: d:\DOWNLOAD\MR-CAPSULES-main\.agents\sentinel
-- Orchestrator: 54017874-89d3-44b6-b391-ff9679f081f4
-- Victory Auditor: f27c349e-f19f-4376-afe3-64f55557095f
-
+- Orchestrator: 1bc4c61f-0ace-4ce7-8f88-0a55dcfd2195
+- Victory Auditor: TBD
 
 ## 🔒 Key Constraints
 - No technical decisions — relay only
 - Victory Audit is MANDATORY before reporting completion
 
 ## User Context
-- **Last user request**: Refactor the MR CAPSULES frontend to use a single unified CSS file for all components, matching structural aesthetic of main page while excluding landing page FX.
+- **Last user request**: Aesthetic audit and alignment of docs.html with index.html, eliminate inline styles, and update AGENTS.md design rules.
 - **Pending clarifications**: none
 - **Delivered results**: none
 
 ## Project Status
-- **Phase**: complete
+- **Phase**: in progress
 
 ## Victory Audit Status
-- **Triggered**: yes
-- **Verdict**: VICTORY CONFIRMED
+- **Triggered**: no
+- **Verdict**: pending
 - **Retry count**: 0
 
 ## Artifact Index
-- ORIGINAL_REQUEST.md — Authoritative record of the user's initial request.
+- ORIGINAL_REQUEST.md — Verbatim user request.
+- .agents/ORIGINAL_REQUEST.md — Chronological user request logs.
+- .agents/AGENTS.md — Persisted design guidelines.
