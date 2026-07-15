@@ -1038,7 +1038,7 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
       t.onclick = (e) => {
         const targetTab = e.currentTarget;
         document.querySelectorAll('.tab').forEach(tx => tx.classList.remove('active'));
-        document.querySelectorAll('.view-section').forEach(vx => vx.classList.remove('active'));
+        document.querySelectorAll('.view-section, .view-section-row').forEach(vx => vx.classList.remove('active'));
         targetTab.classList.add('active');
         document.getElementById(targetTab.getAttribute('data-target')).classList.add('active');
       }
