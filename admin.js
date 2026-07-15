@@ -1439,8 +1439,12 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
         const textNode = walker.currentNode;
         if (isMrs) {
           if (textNode.originalValue === undefined) textNode.originalValue = textNode.nodeValue;
-          if (textNode.originalValue.includes('MR') || textNode.originalValue.includes('mr')) {
-            textNode.nodeValue = textNode.originalValue.replace(/\bMR\b/g, 'MRS').replace(/\bmr\b/g, 'mrs');
+          if (/mr/i.test(textNode.originalValue)) {
+            textNode.nodeValue = textNode.originalValue
+              .replace(/\bMr\./g, 'Mrs.')
+              .replace(/\bMR\b/g, 'MRS')
+              .replace(/\bMr\b/g, 'Mrs')
+              .replace(/\bmr\b/g, 'mrs');
           }
         } else {
           if (textNode.originalValue !== undefined) textNode.nodeValue = textNode.originalValue;

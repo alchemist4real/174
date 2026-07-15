@@ -496,7 +496,7 @@ function openTaskModal(task) {
         <div style="margin-bottom:8px;"><b>Category:</b> ${task.category || '-'}</div>
         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
             <span><b>Developer:</b> ${task.assigned_to_user ? task.assigned_to_user.email : 'Unassigned'}</span>
-            ${task.assigned_to_user && task.assigned_to_user.whatsapp ? `<a href="https://wa.me/${task.assigned_to_user.whatsapp}?text=Hi, regarding MR CAPSULES task '${task.title}'" target="_blank" class="btn-card primary" style="text-decoration:none;">Contact WA</a>` : ''}
+            ${task.assigned_to_user && task.assigned_to_user.whatsapp ? `<a href="https://wa.me/${task.assigned_to_user.whatsapp}?text=Hi, regarding Mr. Capsules task '${task.title}'" target="_blank" class="btn-card primary" style="text-decoration:none;">Contact WA</a>` : ''}
         </div>
         <div style="margin-bottom:8px;"><b>Reviewer:</b> ${task.reviewed_by_user ? (task.reviewed_by_user.username || task.reviewed_by_user.email.split('@')[0]) : 'Unassigned'}</div>
         ${task.target_path ? `<div style="margin-top:16px;"><b>Target File:</b> <span style="font-family:var(--font-mono); color:var(--accent);">${task.target_path}</span></div>` : ''}

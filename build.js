@@ -15,7 +15,7 @@ function walkDir(dir, fileList = []) {
 }
 
 function build() {
-  console.log('Building MR CAPSULES catalog...');
+  console.log('Building Mr. Capsules catalog...');
   try {
     const contentDir = path.join(process.cwd(), 'content');
     const coversDir = path.join(process.cwd(), 'cover');

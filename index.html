@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>MR CAPSULES</title>
+<title>Mr. Capsules</title>
 <link rel="icon" type="image/svg+xml" href="/logo.svg">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <link rel="stylesheet" href="/global-styles.css">
@@ -34,7 +34,7 @@
   <div class="auth-container">
     <div class="auth-brand-left">
       <img src="/logo.svg" alt="logo">
-      <div class="auth-brand-title">MR CAPSULES</div>
+      <div class="auth-brand-title">Mr. Capsules</div>
       <div class="auth-brand-subtitle">OPEN SOURCE LEARNING CENTER</div>
     </div>
     <div class="auth-box">
@@ -162,7 +162,7 @@
             <div style="display:flex; width:100%; gap:4px;" id="themeToggles">
               <button class="auth-btn auth-btn-outline theme-btn active" data-theme-val="light" style="flex:1; padding:6px; font-size:10px;">LIGHT</button>
               <button class="auth-btn auth-btn-outline theme-btn" data-theme-val="dark" style="flex:1; padding:6px; font-size:10px;">DARK</button>
-              <button class="auth-btn auth-btn-outline theme-btn" data-theme-val="mrs" style="flex:1; padding:6px; font-size:10px;">MRS</button>
+              <button class="auth-btn auth-btn-outline theme-btn" data-theme-val="mrs" style="flex:1; padding:6px; font-size:10px;">Mrs.</button>
               <button class="auth-btn auth-btn-outline theme-btn" data-theme-val="device" style="flex:1; padding:6px; font-size:10px;">DEVICE</button>
             </div>
           </div>
@@ -262,8 +262,12 @@ function walkAndReplaceMR(node, isMrs) {
   if (node.nodeType === 3) {
     if (isMrs) {
       if (node.originalValue === undefined) node.originalValue = node.nodeValue;
-      if (node.originalValue.includes('MR') || node.originalValue.includes('mr')) {
-         node.nodeValue = node.originalValue.replace(/\bMR\b/g, 'MRS').replace(/\bmr\b/g, 'mrs');
+      if (/mr/i.test(node.originalValue)) {
+         node.nodeValue = node.originalValue
+           .replace(/\bMr\./g, 'Mrs.')
+           .replace(/\bMR\b/g, 'MRS')
+           .replace(/\bMr\b/g, 'Mrs')
+           .replace(/\bmr\b/g, 'mrs');
       }
     } else {
       if (node.originalValue !== undefined) node.nodeValue = node.originalValue;
