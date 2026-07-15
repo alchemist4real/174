@@ -2,6 +2,7 @@
 let currentUserDivision = null;
 let currentUserId = null;
 let isAdminUser = false;
+window.currentDivisionId = 'all';
 
 document.addEventListener('DOMContentLoaded', () => {
     // Wait for sessionToken to be populated by admin.js
