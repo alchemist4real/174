@@ -1551,25 +1551,84 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
     function showToast(msg, type = 'info') {
       const container = document.getElementById('toastContainer');
       if (!container) return;
+
       const toast = document.createElement('div');
       toast.setAttribute('role', 'status');
       toast.setAttribute('aria-live', 'polite');
       toast.className = `toast toast-${type}`;
-      toast.style.background = 'var(--bg-card)';
-      toast.style.border = 'var(--border-main)';
-      toast.style.padding = '12px 16px';
-      toast.style.borderRadius = 'var(--radius-card)';
-      toast.style.color = 'var(--text-main)';
-      toast.style.fontFamily = 'var(--font-mono)';
-      toast.style.fontSize = '12px';
-      toast.style.boxShadow = '0 8px 16px var(--border-light)';
-      toast.style.animation = 'toastIn 0.3s ease forwards';
-      toast.textContent = msg;
+
+      // Create SVG Icons based on type (zero-emoji compliance)
+      let iconSvg = '';
+      if (type === 'success') {
+        iconSvg = `<svg class="toast-icon toast-icon-success" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
+      } else if (type === 'error') {
+        iconSvg = `<svg class="toast-icon toast-icon-error" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
+      } else if (type === 'warning') {
+        iconSvg = `<svg class="toast-icon toast-icon-warning" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>`;
+      } else {
+        iconSvg = `<svg class="toast-icon toast-icon-info" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>`;
+      }
+
+      toast.innerHTML = `
+        <div class="toast-content">
+          <span class="toast-icon-container">${iconSvg}</span>
+          <span class="toast-message">${msg}</span>
+        </div>
+        <button class="toast-close" aria-label="Close toast">&times;</button>
+        <div class="toast-progress"></div>
+      `;
+
       container.appendChild(toast);
-      setTimeout(() => {
+
+      const duration = 3000;
+      let remaining = duration;
+      let startTime = Date.now();
+      let timeoutId = null;
+
+      // Set animation duration on progress bar
+      const progress = toast.querySelector('.toast-progress');
+      if (progress) {
+        progress.style.animationDuration = `${duration}ms`;
+      }
+
+      function dismiss() {
         toast.style.animation = 'toastOut 0.3s ease forwards';
         setTimeout(() => toast.remove(), 300);
-      }, 3000);
+      }
+
+      function startTimer() {
+        startTime = Date.now();
+        timeoutId = setTimeout(dismiss, remaining);
+      }
+
+      function pauseTimer() {
+        clearTimeout(timeoutId);
+        remaining -= Date.now() - startTime;
+        if (remaining < 0) remaining = 0;
+      }
+
+      // Close button handler
+      const closeBtn = toast.querySelector('.toast-close');
+      if (closeBtn) {
+        closeBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          dismiss();
+        });
+      }
+
+      // Hover behavior: pause/resume progress & timer
+      toast.addEventListener('mouseenter', () => {
+        pauseTimer();
+        if (progress) progress.style.animationPlayState = 'paused';
+      });
+
+      toast.addEventListener('mouseleave', () => {
+        startTimer();
+        if (progress) progress.style.animationPlayState = 'running';
+      });
+
+      // Start timer initially
+      startTimer();
     }
     document.addEventListener('DOMContentLoaded', () => {
         const searchInput = document.getElementById('searchUsersInput');
