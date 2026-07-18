@@ -110,7 +110,7 @@ async function loadTasks() {
 
     const cols = ['open', 'in_progress', 'developed', 'in_review', 'done'];
     cols.forEach(c => {
-        const el = document.querySelector(`#col-${c} .task-list`);
+        const el = document.querySelector(`#col-${c} .kanban-task-list`);
         if (el) el.innerHTML = '<div style="padding:24px; text-align:center; color:var(--text-muted);">Loading... <div style="display:inline-block; width:16px; height:16px; border:2px solid rgba(255,255,255,0.3); border-radius:50%; border-top-color:#fff; animation:spin 1s ease-in-out infinite; margin-left:8px; vertical-align:middle;"></div></div>';
     });
     const res = await apiCall('tasks', { action: 'list_tasks' });
@@ -126,11 +126,11 @@ async function loadTasks() {
 
 function renderKanban(tasks) {
     const cols = {
-        'open': document.querySelector('#col-open .task-list'),
-        'in_progress': document.querySelector('#col-in_progress .task-list'),
-        'developed': document.querySelector('#col-developed .task-list'),
-        'in_review': document.querySelector('#col-in_review .task-list'),
-        'done': document.querySelector('#col-done .task-list')
+        'open': document.querySelector('#col-open .kanban-task-list'),
+        'in_progress': document.querySelector('#col-in_progress .kanban-task-list'),
+        'developed': document.querySelector('#col-developed .kanban-task-list'),
+        'in_review': document.querySelector('#col-in_review .kanban-task-list'),
+        'done': document.querySelector('#col-done .kanban-task-list')
     };
 
     // Clear columns
