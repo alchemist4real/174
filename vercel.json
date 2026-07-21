@@ -1,5 +1,6 @@
 {
   "routes": [
+    { "handle": "filesystem" },
     { "src": "/api/mcp/token", "dest": "/api/token.js" },
     { "src": "/api/mcp/authorize", "dest": "/api/authorize.js" },
     { "src": "/api/mcp/register", "dest": "/api/register.js" },
