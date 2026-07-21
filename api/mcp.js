@@ -1,6 +1,6 @@
 // api/mcp.js
-// MCP/API Gateway — supports both JWT auth and API key auth
-// Exposes 27 methods for AI assistants to interact with MR-CAPSULES
+// MCP/API Gateway v1.0.1 — supports both JWT auth, API key auth, and OAuth 2.0 PKCE Bearer tokens
+// Exposes 28 methods (with underscore naming for Claude regex ^[a-zA-Z0-9_-]{1,64}$)
 
 export default async function handler(req, res) {
   // ── CORS — Required for Claude.ai web, Claude Code, and other MCP clients ──
