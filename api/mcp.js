@@ -126,16 +126,21 @@ export default async function handler(req, res) {
       return res.status(202).end();
     }
 
-    // MCP tools/list — respond with tool list, no auth needed for discovery
+    // MCP tools/list — respond with static + dynamic custom tool list
     if (method === 'tools/list') {
-      const tools = getMcpToolsList().map(t => ({
+      const staticTools = getMcpToolsList().map(t => ({
         ...t,
         name: t.name.replace(/\./g, '_')
+      }));
+      const customTools = (await getActiveCustomTools(SUPABASE_URL, SB_SERVICE_KEY)).map(ct => ({
+        name: ct.name,
+        description: `[Custom Tool] ${ct.description}`,
+        inputSchema: ct.inputSchema || { type: 'object', properties: {} }
       }));
       return res.status(200).json({
         jsonrpc: '2.0',
         id: mcpRequestId,
-        result: { tools }
+        result: { tools: [...staticTools, ...customTools] }
       });
     }
 
@@ -346,6 +351,9 @@ function getMcpToolsList() {
     { name: 'codebase_delete_file', description: 'Delete any codebase file from the repository (SuperAdmin only)', inputSchema: { type: 'object', properties: { path: { type: 'string' }, commitMessage: { type: 'string' } }, required: ['path'] } },
     { name: 'codebase_search', description: 'Search text or code across the codebase repository (SuperAdmin only)', inputSchema: { type: 'object', properties: { query: { type: 'string' } }, required: ['query'] } },
     { name: 'codebase_git_history', description: 'Get recent git commit history for the codebase repository (SuperAdmin only)', inputSchema: { type: 'object', properties: { limit: { type: 'number' } } } },
+    { name: 'mcp_create_tool', description: 'Dynamically create and register a new custom MCP tool at runtime (SuperAdmin/Admin only).', inputSchema: { type: 'object', properties: { name: { type: 'string', description: 'Unique tool name, e.g. custom_quiz_parser' }, description: { type: 'string', description: 'Description of what the tool does' }, inputSchema: { type: 'object', description: 'JSON Schema object for inputs' }, handler: { type: 'string', description: 'JavaScript code snippet returning a result object' }, minRole: { type: 'string', enum: ['superadmin', 'admin', 'reviewer', 'developer', 'authenticated'] } }, required: ['name', 'description', 'handler'] } },
+    { name: 'mcp_delete_tool', description: 'Delete/unregister a custom MCP tool created at runtime (SuperAdmin/Admin only).', inputSchema: { type: 'object', properties: { name: { type: 'string', description: 'Name of custom tool to delete' } }, required: ['name'] } },
+    { name: 'mcp_list_custom_tools', description: 'List all active custom dynamic MCP tools registered at runtime.', inputSchema: { type: 'object', properties: {} } },
   ];
 }
 
@@ -867,9 +875,23 @@ async function routeMethod(method, params, auth, roles, cfg) {
     if (!params.query) throw err400('Missing params.query');
     return codebaseSearch(params.query, gt, go, gr);
   }
-  if (m === 'codebase_git_history') {
-    if (!roles.isSuperAdmin) throw err403('SuperAdmin only');
-    return codebaseGitHistory(params.limit || 10, gt, go, gr);
+  if (m === 'mcp_create_tool') {
+    if (!roles.isAdmin) throw err403('Admin or SuperAdmin only to create custom MCP tools');
+    return mcpCreateTool(params, auth.email, su, sk);
+  }
+  if (m === 'mcp_delete_tool') {
+    if (!roles.isAdmin) throw err403('Admin or SuperAdmin only to delete custom MCP tools');
+    return mcpDeleteTool(params, auth.email, su, sk);
+  }
+  if (m === 'mcp_list_custom_tools') {
+    return mcpListCustomTools(su, sk);
+  }
+
+  // Check if requested method matches a dynamic custom tool created at runtime
+  const activeCustomTools = await getActiveCustomTools(su, sk);
+  const customTool = activeCustomTools.find(ct => ct.name === m);
+  if (customTool) {
+    return executeCustomTool(customTool, params, auth, roles, su, sk, gt);
   }
 
   throw err400(`Unknown method: ${method}`);
@@ -957,6 +979,101 @@ async function codebaseGitHistory(limit, githubToken, owner, repo) {
     date: c.commit && c.commit.author ? c.commit.author.date : ''
   }));
   return { limit, commits };
+}
+
+// ═══════════════════════════════════════════════════════════════
+// DYNAMIC CUSTOM MCP TOOLS ENGINE
+// ═══════════════════════════════════════════════════════════════
+const customMcpToolsMap = new Map();
+
+async function getActiveCustomTools(su, sk) {
+  try {
+    const res = await fetch(`${su}/rest/v1/admin_action_logs?action=eq.mcp_custom_tool_def&order=time.asc`, {
+      headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}` }
+    });
+    if (!res.ok) return Array.from(customMcpToolsMap.values());
+    const logs = await res.json();
+    const activeTools = {};
+    (logs || []).forEach(log => {
+      const details = log.details || {};
+      if (details.deleted) {
+        delete activeTools[details.name];
+        customMcpToolsMap.delete(details.name);
+      } else if (details.name && details.handler) {
+        activeTools[details.name] = details;
+        customMcpToolsMap.set(details.name, details);
+      }
+    });
+    return Object.values(activeTools);
+  } catch (e) {
+    return Array.from(customMcpToolsMap.values());
+  }
+}
+
+async function mcpCreateTool(params, adminEmail, su, sk) {
+  const { name, description, inputSchema, handler, minRole = 'admin' } = params;
+  if (!name || !description || !handler) throw err400('Missing required fields: name, description, handler');
+  
+  const cleanName = name.trim().toLowerCase().replace(/[^a-z0-9_]/g, '_');
+  
+  const toolDef = {
+    name: cleanName,
+    description,
+    inputSchema: inputSchema || { type: 'object', properties: {} },
+    handler,
+    minRole,
+    createdBy: adminEmail,
+    createdAt: new Date().toISOString()
+  };
+
+  customMcpToolsMap.set(cleanName, toolDef);
+  await logAction(adminEmail, 'mcp_custom_tool_def', toolDef, su, sk);
+
+  return {
+    success: true,
+    name: cleanName,
+    message: `Dynamic MCP tool "${cleanName}" created and registered successfully!`
+  };
+}
+
+async function mcpDeleteTool(params, adminEmail, su, sk) {
+  const { name } = params;
+  if (!name) throw err400('Missing tool name');
+
+  customMcpToolsMap.delete(name);
+  await logAction(adminEmail, 'mcp_custom_tool_def', { name, deleted: true }, su, sk);
+
+  return { success: true, name, message: `Custom MCP tool "${name}" deleted.` };
+}
+
+async function mcpListCustomTools(su, sk) {
+  const tools = await getActiveCustomTools(su, sk);
+  return { count: tools.length, tools };
+}
+
+async function executeCustomTool(toolDef, params, auth, roles, su, sk, gt) {
+  const roleRank = { superadmin: 4, admin: 3, reviewer: 2, developer: 2, authenticated: 1 };
+  const requiredRank = roleRank[toolDef.minRole || 'admin'] || 3;
+  let userRank = 1;
+  if (roles.isSuperAdmin) userRank = 4;
+  else if (roles.isAdmin) userRank = 3;
+  else if (roles.isReviewer || roles.isDeveloper) userRank = 2;
+
+  if (userRank < requiredRank) {
+    throw err403(`Permission denied: Tool "${toolDef.name}" requires ${toolDef.minRole} role.`);
+  }
+
+  try {
+    const fn = new Function('params', 'auth', 'su', 'sk', 'gt', 'fetch', `
+      return (async () => {
+        ${toolDef.handler}
+      })();
+    `);
+    const result = await fn(params, auth, su, sk, gt, fetch);
+    return { success: true, tool: toolDef.name, result };
+  } catch (err) {
+    throw new Error(`Execution error in custom tool "${toolDef.name}": ${err.message}`);
+  }
 }
 
 // ═══════════════════════════════════════════════════════════════

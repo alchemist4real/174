@@ -122,11 +122,12 @@
           <strong>CATATAN:</strong> Penggunaan API Key dibatasi maksimum 5 kunci aktif per pengguna dengan batasan <em>rate limit</em> 60 request/menit untuk mencegah penyalahgunaan.
         </div>
 
-        <h3>C. Ringkasan Kemampuan MCP Tools (67 Method)</h3>
+        <h3>C. Ringkasan Kemampuan MCP Tools (70 Method)</h3>
         <p>AI Assistant yang terhubung dapat mengeksekusi fungsi-fungsi berikut secara langsung:</p>
         <ul>
           <li><strong>Materi, Cover &amp; Upload File Besar:</strong> <code>content_list</code>, <code>content_get</code>, <code>content_tree</code>, <code>content_upload</code>, <code>upload_init</code>, <code>upload_chunk</code>, <code>upload_commit</code>, <code>upload_status</code>, <code>upload_cancel</code>, <code>content_delete</code>, <code>content_delete_files</code>, <code>content_rename</code>, <code>cover_list</code>, <code>cover_upload</code>, <code>cover_delete</code></li>
           <li><strong>Pengelolaan Codebase (SuperAdmin):</strong> <code>codebase_read_file</code>, <code>codebase_write_file</code>, <code>codebase_delete_file</code>, <code>codebase_search</code>, <code>codebase_git_history</code></li>
+          <li><strong>Meta-Tools (Pembuatan Tool MCP Dinamis):</strong> <code>mcp_create_tool</code>, <code>mcp_delete_tool</code>, <code>mcp_list_custom_tools</code></li>
           <li><strong>Task Board &amp; Workflow:</strong> <code>tasks_list</code>, <code>tasks_create</code>, <code>tasks_claim</code>, <code>tasks_unclaim</code>, <code>tasks_submit</code>, <code>tasks_start_review</code>, <code>tasks_approve</code>, <code>tasks_reject</code>, <code>tasks_add_note</code>, <code>tasks_delete</code>, <code>tasks_logs</code></li>
           <li><strong>Review &amp; QA:</strong> <code>review_issues</code>, <code>review_report</code>, <code>review_resolve</code>, <code>review_delete_issue</code></li>
           <li><strong>Organisasi &amp; Divisi:</strong> <code>divisions_list</code>, <code>divisions_my</code>, <code>divisions_join</code>, <code>divisions_update_whatsapp</code>, <code>divisions_get_members</code>, <code>divisions_add_member</code>, <code>divisions_remove_member</code></li>
@@ -137,7 +138,7 @@
 
       <div class="docs-section">
         <h2>2. Referensi Lengkap MCP Tools & Hak Akses</h2>
-        <p>Bagian ini merinci seluruh <strong>67 method/tools</strong> yang tersedia lewat MCP Gateway, dikelompokkan berdasarkan fungsinya, beserta siapa saja yang berwenang menggunakannya.</p>
+        <p>Bagian ini merinci seluruh <strong>70 method/tools</strong> yang tersedia lewat MCP Gateway, dikelompokkan berdasarkan fungsinya, beserta siapa saja yang berwenang menggunakannya.</p>
 
         <div class="alert-box">
           <strong>PENTING:</strong> Meskipun sebuah tool "tampak" di daftar AI Assistant Anda, eksekusinya tetap divalidasi ulang oleh server berdasarkan role akun yang terhubung. Jika Anda tidak memiliki hak akses, permintaan akan ditolak (403/permission error) walau tool sempat dipanggil.
