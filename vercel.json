@@ -1,3 +1,7 @@
 {
-  "outputDirectory": "."
+  "outputDirectory": ".",
+  "rewrites": [
+    { "source": "/authorize", "destination": "/api/authorize" },
+    { "source": "/token", "destination": "/api/token" }
+  ]
 }
