@@ -114,10 +114,14 @@ export default async function handler(req, res) {
 
     // MCP tools/list — respond with tool list, no auth needed for discovery
     if (method === 'tools/list') {
+      const tools = getMcpToolsList().map(t => ({
+        ...t,
+        name: t.name.replace(/\./g, '_')
+      }));
       return res.status(200).json({
         jsonrpc: '2.0',
         id: mcpRequestId,
-        result: { tools: getMcpToolsList() }
+        result: { tools }
       });
     }
 
