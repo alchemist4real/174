@@ -1,6 +1,26 @@
 import fs from 'fs';
 import path from 'path';
 
+function copyRecursiveSync(src, dest) {
+  const exists = fs.existsSync(src);
+  const stats = exists && fs.statSync(src);
+  const isDirectory = exists && stats.isDirectory();
+  if (isDirectory) {
+    if (!fs.existsSync(dest)) {
+      fs.mkdirSync(dest, { recursive: true });
+    }
+    fs.readdirSync(src).forEach(childItemName => {
+      copyRecursiveSync(path.join(src, childItemName), path.join(dest, childItemName));
+    });
+  } else if (exists) {
+    const destDir = path.dirname(dest);
+    if (!fs.existsSync(destDir)) {
+      fs.mkdirSync(destDir, { recursive: true });
+    }
+    fs.copyFileSync(src, dest);
+  }
+}
+
 function walkDir(dir, fileList = []) {
   const files = fs.readdirSync(dir);
   for (const file of files) {
@@ -15,11 +35,16 @@ function walkDir(dir, fileList = []) {
 }
 
 function build() {
-  console.log('Building Mr. Capsules catalog...');
+  console.log('Building Mr. Capsules catalog and public static files...');
   try {
     const contentDir = path.join(process.cwd(), 'content');
     const coversDir = path.join(process.cwd(), 'cover');
-    
+    const publicDir = path.join(process.cwd(), 'public');
+
+    if (!fs.existsSync(publicDir)) {
+      fs.mkdirSync(publicDir, { recursive: true });
+    }
+
     let covers = [];
     if (fs.existsSync(coversDir)) {
       covers = fs.readdirSync(coversDir).filter(f => 
@@ -129,15 +154,20 @@ function build() {
 
     const jsContent = `window.appData = ${JSON.stringify(result)};`;
     fs.writeFileSync(path.join(process.cwd(), 'data.js'), jsContent);
-    
-    // Also ensure public directory exists for Vercel static build output
-    const publicDir = path.join(process.cwd(), 'public');
-    if (!fs.existsSync(publicDir)) {
-      fs.mkdirSync(publicDir, { recursive: true });
-    }
     fs.writeFileSync(path.join(publicDir, 'data.js'), jsContent);
 
-    console.log('Successfully generated data.js in root and public/');
+    // Copy all static web assets to public/ directory for Vercel CDN deployment
+    const rootFiles = fs.readdirSync(process.cwd());
+    rootFiles.forEach(file => {
+      if (file === 'node_modules' || file === '.git' || file === '.vercel' || file === 'api' || file === 'public' || file === 'graphify-out' || file === '.agents') {
+        return;
+      }
+      const srcPath = path.join(process.cwd(), file);
+      const destPath = path.join(publicDir, file);
+      copyRecursiveSync(srcPath, destPath);
+    });
+
+    console.log('Successfully generated catalog and copied all static assets to public/');
   } catch (err) {
     console.error('Error generating catalog:', err);
     process.exit(1);
