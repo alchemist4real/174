@@ -34,7 +34,11 @@ export default async function handler(req, res) {
       grant_types_supported: ["authorization_code", "refresh_token"],
       code_challenge_methods_supported: ["S256"],
       token_endpoint_auth_methods_supported: ["none", "client_secret_post"],
-      scopes_supported: ["mcp"]
+      scopes_supported: ["mcp"],
+      logo_uri: `${issuer}/logo.svg`,
+      icon_uri: `${issuer}/logo.svg`,
+      service_documentation: `${issuer}/docs#docsMcp`,
+      client_name: "Mr. Capsules MCP Gateway"
     });
   }
 

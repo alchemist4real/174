@@ -122,10 +122,11 @@
           <strong>CATATAN:</strong> Penggunaan API Key dibatasi maksimum 5 kunci aktif per pengguna dengan batasan <em>rate limit</em> 60 request/menit untuk mencegah penyalahgunaan.
         </div>
 
-        <h3>C. Ringkasan Kemampuan MCP Tools (62 Method)</h3>
+        <h3>C. Ringkasan Kemampuan MCP Tools (67 Method)</h3>
         <p>AI Assistant yang terhubung dapat mengeksekusi fungsi-fungsi berikut secara langsung:</p>
         <ul>
           <li><strong>Materi, Cover &amp; Upload File Besar:</strong> <code>content_list</code>, <code>content_get</code>, <code>content_tree</code>, <code>content_upload</code>, <code>upload_init</code>, <code>upload_chunk</code>, <code>upload_commit</code>, <code>upload_status</code>, <code>upload_cancel</code>, <code>content_delete</code>, <code>content_delete_files</code>, <code>content_rename</code>, <code>cover_list</code>, <code>cover_upload</code>, <code>cover_delete</code></li>
+          <li><strong>Pengelolaan Codebase (SuperAdmin):</strong> <code>codebase_read_file</code>, <code>codebase_write_file</code>, <code>codebase_delete_file</code>, <code>codebase_search</code>, <code>codebase_git_history</code></li>
           <li><strong>Task Board &amp; Workflow:</strong> <code>tasks_list</code>, <code>tasks_create</code>, <code>tasks_claim</code>, <code>tasks_unclaim</code>, <code>tasks_submit</code>, <code>tasks_start_review</code>, <code>tasks_approve</code>, <code>tasks_reject</code>, <code>tasks_add_note</code>, <code>tasks_delete</code>, <code>tasks_logs</code></li>
           <li><strong>Review &amp; QA:</strong> <code>review_issues</code>, <code>review_report</code>, <code>review_resolve</code>, <code>review_delete_issue</code></li>
           <li><strong>Organisasi &amp; Divisi:</strong> <code>divisions_list</code>, <code>divisions_my</code>, <code>divisions_join</code>, <code>divisions_update_whatsapp</code>, <code>divisions_get_members</code>, <code>divisions_add_member</code>, <code>divisions_remove_member</code></li>
@@ -136,7 +137,7 @@
 
       <div class="docs-section">
         <h2>2. Referensi Lengkap MCP Tools & Hak Akses</h2>
-        <p>Bagian ini merinci seluruh <strong>62 method/tools</strong> yang tersedia lewat MCP Gateway, dikelompokkan berdasarkan fungsinya, beserta siapa saja yang berwenang menggunakannya.</p>
+        <p>Bagian ini merinci seluruh <strong>67 method/tools</strong> yang tersedia lewat MCP Gateway, dikelompokkan berdasarkan fungsinya, beserta siapa saja yang berwenang menggunakannya.</p>
 
         <div class="alert-box">
           <strong>PENTING:</strong> Meskipun sebuah tool "tampak" di daftar AI Assistant Anda, eksekusinya tetap divalidasi ulang oleh server berdasarkan role akun yang terhubung. Jika Anda tidak memiliki hak akses, permintaan akan ditolak (403/permission error) walau tool sempat dipanggil.
@@ -144,7 +145,7 @@
 
         <h3>A. Level Akses (Role Hierarchy)</h3>
         <ul>
-          <li><strong>SuperAdmin:</strong> Pemegang kendali penuh sistem. Satu-satunya yang dapat mengangkat/menurunkan Admin dan menghapus akun secara permanen.</li>
+          <li><strong>SuperAdmin:</strong> Pemegang kendali penuh sistem &amp; codebase. Satu-satunya yang dapat mengedit file codebase backend/frontend, mengangkat/menurunkan Admin, dan menghapus akun secara permanen.</li>
           <li><strong>Admin:</strong> Diangkat oleh SuperAdmin. Mengelola konfigurasi sistem, konten, dan moderasi pengguna, namun tidak bisa mengubah hak Admin lain.</li>
           <li><strong>Reviewer:</strong> Anggota Divisi Review & QA. Berwenang atas siklus review tugas (start review, approve, reject, lapor isu).</li>
           <li><strong>Developer:</strong> Anggota Divisi Development. Berwenang mengambil (claim) dan mengumpulkan (submit) tugas.</li>
@@ -164,6 +165,20 @@
             <tr><td><code>content_delete</code>, <code>content_delete_files</code></td><td>Menghapus materi</td><td>Admin, SuperAdmin</td></tr>
             <tr><td><code>cover_list</code></td><td>Melihat cover</td><td>Semua pengguna terautentikasi</td></tr>
             <tr><td><code>cover_upload</code>, <code>cover_delete</code></td><td>Mengelola cover semester/blok</td><td>Admin, SuperAdmin</td></tr>
+          </tbody>
+        </table>
+
+        <h3>C. Pengelolaan Codebase Repository</h3>
+        <table class="docs-table">
+          <thead>
+            <tr><th>Tool</th><th>Fungsi</th><th>Akses</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>codebase_read_file</code></td><td>Membaca isi file apa saja di seluruh codebase (misal `api/admin.js`, `build.js`)</td><td>SuperAdmin Only</td></tr>
+            <tr><td><code>codebase_write_file</code></td><td>Membuat atau mengedit file apa saja di repository codebase</td><td>SuperAdmin Only</td></tr>
+            <tr><td><code>codebase_delete_file</code></td><td>Menghapus file apapun di repository codebase</td><td>SuperAdmin Only</td></tr>
+            <tr><td><code>codebase_search</code></td><td>Mencari kata kunci/kode di seluruh repository codebase</td><td>SuperAdmin Only</td></tr>
+            <tr><td><code>codebase_git_history</code></td><td>Melihat riwayat commit &amp; log aktivitas git di repository</td><td>SuperAdmin Only</td></tr>
           </tbody>
         </table>
 

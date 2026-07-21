@@ -64,7 +64,9 @@ export default async function handler(req, res) {
       resource: resourceUrl,
       authorization_servers: [issuer],
       scopes_supported: ["mcp"],
-      bearer_methods_supported: ["header"]
+      bearer_methods_supported: ["header"],
+      logo_uri: `${issuer}/logo.svg`,
+      icon_uri: `${issuer}/logo.svg`
     });
   }
 
@@ -339,6 +341,11 @@ function getMcpToolsList() {
     { name: 'docs_add_section', description: 'Append a new documentation section to docs.html', inputSchema: { type: 'object', properties: { title: { type: 'string' }, contentHtml: { type: 'string' } }, required: ['title', 'contentHtml'] } },
     { name: 'users_remove_device', description: 'Remove a registered device entry from a user account (Admin/User self)', inputSchema: { type: 'object', properties: { user_id: { type: 'string' }, device_id: { type: 'string' } }, required: ['user_id', 'device_id'] } },
     { name: 'users_block_device', description: 'Block or unblock a device ID globally in system settings (Admin only)', inputSchema: { type: 'object', properties: { device_id: { type: 'string' }, banned: { type: 'boolean' } }, required: ['device_id', 'banned'] } },
+    { name: 'codebase_read_file', description: 'Read the full content of any codebase file in the repository (SuperAdmin only)', inputSchema: { type: 'object', properties: { path: { type: 'string', description: 'Relative path, e.g. api/admin.js or build.js' } }, required: ['path'] } },
+    { name: 'codebase_write_file', description: 'Create or update any codebase file in the repository (SuperAdmin only)', inputSchema: { type: 'object', properties: { path: { type: 'string' }, contentBase64: { type: 'string' }, commitMessage: { type: 'string' } }, required: ['path', 'contentBase64'] } },
+    { name: 'codebase_delete_file', description: 'Delete any codebase file from the repository (SuperAdmin only)', inputSchema: { type: 'object', properties: { path: { type: 'string' }, commitMessage: { type: 'string' } }, required: ['path'] } },
+    { name: 'codebase_search', description: 'Search text or code across the codebase repository (SuperAdmin only)', inputSchema: { type: 'object', properties: { query: { type: 'string' } }, required: ['query'] } },
+    { name: 'codebase_git_history', description: 'Get recent git commit history for the codebase repository (SuperAdmin only)', inputSchema: { type: 'object', properties: { limit: { type: 'number' } } } },
   ];
 }
 
@@ -837,6 +844,34 @@ async function routeMethod(method, params, auth, roles, cfg) {
     return systemCleanupGuests(su, sk);
   }
 
+  if (m === 'codebase_read_file') {
+    if (!roles.isSuperAdmin) throw err403('SuperAdmin only to access codebase files');
+    if (!params.path) throw err400('Missing params.path');
+    validateCodebasePath(params.path);
+    return codebaseReadFile(params.path, gt, go, gr);
+  }
+  if (m === 'codebase_write_file') {
+    if (!roles.isSuperAdmin) throw err403('SuperAdmin only to modify codebase files');
+    if (!params.path || !params.contentBase64) throw err400('Missing params.path or params.contentBase64');
+    validateCodebasePath(params.path);
+    return codebaseWriteFile(params, auth.email, gt, go, gr, su, sk);
+  }
+  if (m === 'codebase_delete_file') {
+    if (!roles.isSuperAdmin) throw err403('SuperAdmin only to delete codebase files');
+    if (!params.path) throw err400('Missing params.path');
+    validateCodebasePath(params.path);
+    return codebaseDeleteFile(params, auth.email, gt, go, gr, su, sk);
+  }
+  if (m === 'codebase_search') {
+    if (!roles.isSuperAdmin) throw err403('SuperAdmin only');
+    if (!params.query) throw err400('Missing params.query');
+    return codebaseSearch(params.query, gt, go, gr);
+  }
+  if (m === 'codebase_git_history') {
+    if (!roles.isSuperAdmin) throw err403('SuperAdmin only');
+    return codebaseGitHistory(params.limit || 10, gt, go, gr);
+  }
+
   throw err400(`Unknown method: ${method}`);
 }
 
@@ -852,6 +887,76 @@ function validatePath(path) {
   if (!path) throw err400('Path is required');
   if (path.includes('..') || path.startsWith('/')) throw err400('Invalid path: no traversal allowed');
   if (!path.startsWith('content/') && !path.startsWith('cover/')) throw err400('Path must start with content/ or cover/');
+}
+
+function validateCodebasePath(path) {
+  if (!path) throw err400('Path is required');
+  if (path.includes('..') || path.startsWith('/')) throw err400('Invalid path: no traversal allowed');
+}
+
+async function codebaseReadFile(path, githubToken, owner, repo) {
+  const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${encodeURIComponent(path)}`, {
+    headers: { 'Authorization': `Bearer ${githubToken}`, 'Accept': 'application/vnd.github+json', 'User-Agent': 'MR-CAPSULES-MCP' }
+  });
+  if (!res.ok) throw new Error(`Failed to read codebase file ${path}: ${res.statusText}`);
+  const data = await res.json();
+  if (data.type !== 'file') throw err400(`Path ${path} is a ${data.type}, not a file`);
+  const contentUtf8 = Buffer.from(data.content.replace(/\n/g, ''), 'base64').toString('utf8');
+  return { path, content: contentUtf8, sha: data.sha, size: data.size };
+}
+
+async function codebaseWriteFile(params, adminEmail, githubToken, owner, repo, su, sk) {
+  const { path, contentBase64, commitMessage } = params;
+  const message = commitMessage || `mcp: update codebase file ${path}`;
+  const uploadRes = await contentUpload(
+    { path, contentBase64, isChunkedCommit: true },
+    adminEmail,
+    githubToken,
+    owner,
+    repo,
+    su,
+    sk
+  );
+  await logAction(adminEmail, 'mcp_codebase_write', { path, message }, su, sk);
+  return { success: true, path, sha: uploadRes.sha, message };
+}
+
+async function codebaseDeleteFile(params, adminEmail, githubToken, owner, repo, su, sk) {
+  const { path } = params;
+  const delRes = await contentDelete({ path }, adminEmail, githubToken, owner, repo, su, sk);
+  await logAction(adminEmail, 'mcp_codebase_delete', { path }, su, sk);
+  return { success: true, path };
+}
+
+async function codebaseSearch(query, githubToken, owner, repo) {
+  const searchRes = await fetch(`https://api.github.com/search/code?q=${encodeURIComponent(query)}+repo:${owner}/${repo}`, {
+    headers: { 'Authorization': `Bearer ${githubToken}`, 'Accept': 'application/vnd.github+json', 'User-Agent': 'MR-CAPSULES-MCP' }
+  });
+  if (!searchRes.ok) throw new Error(`Code search failed: ${searchRes.statusText}`);
+  const data = await searchRes.json();
+  const items = (data.items || []).slice(0, 30).map(item => ({
+    name: item.name,
+    path: item.path,
+    sha: item.sha,
+    url: item.html_url
+  }));
+  return { total_count: data.total_count, query, matches: items };
+}
+
+async function codebaseGitHistory(limit, githubToken, owner, repo) {
+  const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/commits?per_page=${limit}`, {
+    headers: { 'Authorization': `Bearer ${githubToken}`, 'Accept': 'application/vnd.github+json', 'User-Agent': 'MR-CAPSULES-MCP' }
+  });
+  if (!res.ok) throw new Error('Failed to fetch commit history');
+  const commitsData = await res.json();
+  const commits = (commitsData || []).map(c => ({
+    sha: c.sha ? c.sha.substring(0, 7) : '',
+    full_sha: c.sha,
+    message: c.commit ? c.commit.message : '',
+    author: c.commit && c.commit.author ? c.commit.author.name : '',
+    date: c.commit && c.commit.author ? c.commit.author.date : ''
+  }));
+  return { limit, commits };
 }
 
 // ═══════════════════════════════════════════════════════════════
