@@ -130,10 +130,13 @@ export default async function handler(req, res) {
       const code = `mrc_code_${crypto.randomBytes(24).toString('hex')}`;
       const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString();
       const userEmail = authenticatedUser.email || email;
-      const userId = String(authenticatedUser.id || userEmail);
+      let userId = String(authenticatedUser.id || userEmail);
+      if (!userId || !userId.includes('-')) {
+        userId = crypto.randomUUID ? crypto.randomUUID() : '00000000-0000-4000-8000-' + crypto.randomBytes(6).toString('hex');
+      }
 
       // Save code in Supabase oauth_codes with canonical resource
-      await fetch(`${SUPABASE_URL}/rest/v1/oauth_codes`, {
+      const saveRes = await fetch(`${SUPABASE_URL}/rest/v1/oauth_codes`, {
         method: 'POST',
         headers: {
           'apikey': SB_SERVICE_KEY,
@@ -152,6 +155,21 @@ export default async function handler(req, res) {
           expires_at: expiresAt
         })
       });
+
+      if (!saveRes.ok) {
+        const errText = await saveRes.text();
+        console.error(`[OAuth Code Save Error] status=${saveRes.status} body=${errText}`);
+        return res.status(500).send(`
+          <!DOCTYPE html>
+          <html>
+          <head><title>OAuth Server Error</title></head>
+          <body style="font-family:sans-serif; padding:40px; text-align:center; background:#0f172a; color:#f8fafc;">
+            <h2>Failed to issue authorization code</h2>
+            <p style="color:#ef4444;">${errText}</p>
+          </body>
+          </html>
+        `);
+      }
 
       // Structured Server-Side Logging for correlation
       console.log(`[OAuth Auth Code Issued] timestamp="${new Date().toISOString()}" iss="${issuer}" aud="${canonicalResource}" sub="${userEmail}" client_id="${clientId}" code="${code.slice(0, 15)}..."`);

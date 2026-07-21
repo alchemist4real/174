@@ -27,6 +27,7 @@ CREATE TABLE IF NOT EXISTS public.oauth_codes (
 
 -- Add resource column if table already exists
 ALTER TABLE public.oauth_codes ADD COLUMN IF NOT EXISTS resource TEXT;
+ALTER TABLE public.oauth_codes ALTER COLUMN user_id TYPE TEXT;
 
 -- 3. OAuth Tokens Table (Access Tokens & Refresh Tokens with Rotation & Audience)
 CREATE TABLE IF NOT EXISTS public.oauth_tokens (
@@ -43,6 +44,7 @@ CREATE TABLE IF NOT EXISTS public.oauth_tokens (
 
 -- Add resource column if table already exists
 ALTER TABLE public.oauth_tokens ADD COLUMN IF NOT EXISTS resource TEXT;
+ALTER TABLE public.oauth_tokens ALTER COLUMN user_id TYPE TEXT;
 
 -- Enable Row Level Security (Service role bypasses RLS)
 ALTER TABLE public.oauth_clients ENABLE ROW LEVEL SECURITY;

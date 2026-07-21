@@ -143,9 +143,13 @@ export default async function handler(req, res) {
     const expiresAt = new Date(Date.now() + expiresIn * 1000).toISOString();
 
     const targetResource = body.resource || codeRecord.resource || `https://${req.headers.host || 'mr-capsules.vercel.app'}/api/mcp`;
+    let tokenUserId = String(codeRecord.user_id || codeRecord.user_email);
+    if (!tokenUserId || !tokenUserId.includes('-')) {
+      tokenUserId = crypto.randomUUID ? crypto.randomUUID() : '00000000-0000-4000-8000-' + crypto.randomBytes(6).toString('hex');
+    }
 
     // Store token pair in Supabase oauth_tokens
-    await fetch(`${SUPABASE_URL}/rest/v1/oauth_tokens`, {
+    const saveTokenRes = await fetch(`${SUPABASE_URL}/rest/v1/oauth_tokens`, {
       method: 'POST',
       headers: {
         'apikey': SB_SERVICE_KEY,
@@ -156,13 +160,19 @@ export default async function handler(req, res) {
         access_token: accessToken,
         refresh_token: refreshToken,
         client_id: codeRecord.client_id,
-        user_id: codeRecord.user_id,
+        user_id: tokenUserId,
         user_email: codeRecord.user_email,
         resource: targetResource,
         expires_at: expiresAt,
         revoked: false
       })
     });
+
+    if (!saveTokenRes.ok) {
+      const errText = await saveTokenRes.text();
+      console.error(`[OAuth Token Save Error] status=${saveTokenRes.status} body=${errText}`);
+      return res.status(500).json({ error: 'server_error', error_description: 'Failed to persist access token: ' + errText });
+    }
 
     console.log(`[OAuth Token Issued] timestamp="${new Date().toISOString()}" iss="https://${req.headers.host || 'mr-capsules.vercel.app'}" aud="${targetResource}" sub="${codeRecord.user_email}" client_id="${codeRecord.client_id}" access_token="${accessToken.slice(0, 15)}..."`);
 
