@@ -198,110 +198,132 @@ export default async function handler(req, res) {
       <title>Authorize Claude | Mr. Capsules</title>
       <link rel="icon" type="image/svg+xml" href="/logo.svg">
       <style>
+      <link rel="preconnect" href="https://fonts.googleapis.com">
+      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+      <link href="https://fonts.googleapis.com/css2?family=Donegal+One&display=swap" rel="stylesheet">
+      <style>
         :root {
-          --bg: #090d16;
-          --card: #131b2e;
-          --border: #23314d;
-          --text: #f1f5f9;
-          --text-muted: #94a3b8;
-          --accent: #3b82f6;
-          --accent-hover: #2563eb;
-          --success: #10b981;
-          --danger: #ef4444;
+          --c1: #0D0D0D;
+          --c2: #161616;
+          --c3: #FAFAFA;
+          --c4: #E2FF4A;
+          --text-muted: rgba(250, 250, 250, 0.6);
+          --border: rgba(250, 250, 250, 0.15);
+          --danger: #ff5252;
         }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
           font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-          background: var(--bg);
-          color: var(--text);
+          background: radial-gradient(circle at 50% 30%, rgba(226, 255, 74, 0.06) 0%, transparent 65%), var(--c1);
+          color: var(--c3);
           min-height: 100vh;
           display: flex;
           align-items: center;
           justify-content: center;
-          padding: 20px;
+          padding: 24px;
         }
         .auth-card {
-          background: var(--card);
-          border: 1px solid var(--border);
+          background: var(--c2);
+          border: 1.5px solid var(--border);
           border-radius: 16px;
-          padding: 36px 32px;
+          padding: 40px 36px;
           max-width: 440px;
           width: 100%;
-          box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+          box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(226, 255, 74, 0.05);
           text-align: center;
+          position: relative;
+          backdrop-filter: blur(10px);
         }
         .logo-row {
           display: flex;
           align-items: center;
           justify-content: center;
-          gap: 14px;
-          margin-bottom: 20px;
+          gap: 12px;
+          margin-bottom: 24px;
         }
-        .logo-icon { width: 40px; height: 40px; }
-        .plus-icon { color: var(--text-muted); font-size: 18px; }
+        .logo-icon { width: 36px; height: 36px; filter: drop-shadow(0 0 8px rgba(226, 255, 74, 0.3)); }
+        .plus-icon { color: var(--text-muted); font-size: 16px; font-weight: 300; }
         .claude-badge {
-          background: #d97706;
-          color: #fff;
-          font-weight: 700;
-          font-size: 13px;
-          padding: 6px 12px;
-          border-radius: 6px;
+          background: var(--c4);
+          color: #0D0D0D;
+          font-weight: 800;
+          font-size: 12px;
+          letter-spacing: 0.05em;
+          padding: 5px 12px;
+          border-radius: 99px;
+          text-transform: uppercase;
         }
-        h1 { font-size: 20px; font-weight: 700; margin-bottom: 6px; }
-        p { color: var(--text-muted); font-size: 14px; line-height: 1.5; margin-bottom: 20px; }
+        h1 {
+          font-family: 'Donegal One', 'Times New Roman', serif;
+          font-size: 24px;
+          font-weight: 400;
+          margin-bottom: 8px;
+          color: var(--c3);
+          letter-spacing: 0.02em;
+        }
+        p { color: var(--text-muted); font-size: 14px; line-height: 1.5; margin-bottom: 24px; }
         .session-detected-box {
           display: none;
-          background: rgba(16, 185, 129, 0.12);
-          border: 1px solid var(--success);
-          color: var(--success);
-          padding: 12px 16px;
+          background: rgba(226, 255, 74, 0.08);
+          border: 1px solid var(--c4);
+          color: var(--c4);
+          padding: 14px 16px;
           border-radius: 10px;
           font-size: 14px;
-          margin-bottom: 20px;
+          margin-bottom: 24px;
           text-align: left;
+          box-shadow: 0 0 15px rgba(226, 255, 74, 0.1);
         }
-        .session-detected-box strong { display: block; font-size: 12px; text-transform: uppercase; margin-bottom: 2px; }
+        .session-detected-box strong { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 3px; }
         .error-banner {
-          background: rgba(239, 68, 68, 0.12);
+          background: rgba(255, 82, 82, 0.12);
           border: 1px solid var(--danger);
           color: var(--danger);
-          padding: 10px 14px;
+          padding: 12px 14px;
           border-radius: 8px;
           font-size: 13px;
-          margin-bottom: 20px;
+          margin-bottom: 24px;
           text-align: left;
         }
-        .input-group { margin-bottom: 16px; text-align: left; }
-        label { display: block; font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.05em; }
+        .input-group { margin-bottom: 18px; text-align: left; }
+        label { display: block; font-size: 11px; font-weight: 700; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.08em; }
         input[type="email"], input[type="password"] {
           width: 100%;
-          padding: 11px 14px;
+          padding: 12px 16px;
           border-radius: 8px;
           border: 1px solid var(--border);
-          background: #0b111e;
-          color: #fff;
+          background: #090909;
+          color: var(--c3);
           font-size: 14px;
           outline: none;
-          transition: border-color 0.2s;
+          transition: all 0.2s ease;
         }
-        input[type="email"]:focus, input[type="password"]:focus { border-color: var(--accent); }
+        input[type="email"]:focus, input[type="password"]:focus {
+          border-color: var(--c4);
+          box-shadow: 0 0 12px rgba(226, 255, 74, 0.2);
+        }
         .btn-submit {
           width: 100%;
-          padding: 12px;
+          padding: 14px;
           border-radius: 8px;
           border: none;
-          background: var(--accent);
-          color: #fff;
-          font-weight: 600;
+          background: var(--c4);
+          color: #0D0D0D;
+          font-weight: 700;
           font-size: 14px;
           cursor: pointer;
-          transition: background 0.2s;
-          margin-top: 8px;
+          transition: all 0.2s ease;
+          margin-top: 10px;
+          letter-spacing: 0.02em;
         }
-        .btn-submit:hover { background: var(--accent-hover); }
-        .footer-note { font-size: 12px; color: var(--text-muted); margin-top: 18px; }
-        .footer-note a { color: var(--accent); text-decoration: none; }
-        .use-other-account { font-size: 12px; color: var(--text-muted); text-decoration: underline; cursor: pointer; margin-top: 10px; display: none; }
+        .btn-submit:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 25px rgba(226, 255, 74, 0.35);
+        }
+        .footer-note { font-size: 12px; color: var(--text-muted); margin-top: 22px; }
+        .footer-note a { color: var(--c4); text-decoration: none; font-weight: 600; }
+        .footer-note a:hover { text-decoration: underline; }
+        .use-other-account { font-size: 12px; color: var(--text-muted); text-decoration: underline; cursor: pointer; margin-top: 12px; display: none; }
       </style>
     </head>
     <body>
