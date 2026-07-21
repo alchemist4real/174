@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documentation | Mr. Capsules</title>
+  <link rel="icon" type="image/svg+xml" href="/logo.svg">
+  <link rel="stylesheet" href="/tokens.css?v=1.9">
+  <link rel="stylesheet" href="/admin-styles.css?v=1.9">
+</head>
+<body>
+  <div class="bg"></div>
+  
+  <div class="top-nav">
+    <div class="brand">
+      <a href="/" class="btn-back-home" title="Kembali ke Beranda">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      </a>
+      <img src="/logo.svg" alt="logo">
+      <div class="docs-brand-text">
+        <div class="docs-brand-title">Mr. Capsules</div>
+        <div class="docs-brand-subtitle">Documentation</div>
+      </div>
+    </div>
+    
+    <div class="tabs">
+      <div class="tab active" data-target="docsGeneral">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+        General Guide
+      </div>
+      <!-- Tab tambahan di masa depan dapat ditambahkan di sini -->
+    </div>
+    <div id="adminThemeToggles" class="docs-theme-toggles">
+      <button class="btn-unified admin-theme-btn-unified theme-toggle-btn" data-theme-val="light">LIGHT</button>
+      <button class="btn-unified admin-theme-btn-unified theme-toggle-btn" data-theme-val="dark">DARK</button>
+      <button class="btn-unified admin-theme-btn-unified theme-toggle-btn" data-theme-val="mrs">Mrs.</button>
+    </div>
+  </div>
+  
+  <div class="docs-content-area">
+    <div class="docs-container" id="docsGeneral">
+      
+      <div class="docs-title">DOKUMENTASI SISTEM</div>
+      
+      <div class="docs-section">
+        <h2 >1. Pengantar MR-CAPSULES</h2>
+        <p><strong>MR-CAPSULES</strong> adalah platform edukasi open-source yang didedikasikan untuk melestarikan dan mendistribusikan sumber belajar mahasiswa kedokteran/kesehatan secara terpusat. Platform ini mengubah materi kuliah, praktikum, dan soal tahun lalu menjadi basis data HTML pilihan ganda yang interaktif (CBT pool).</p>
+      </div>
+
+      <div class="docs-section">
+        <h2 >2. Pengenalan Admin Panel</h2>
+        <p>Seluruh kontributor akan bekerja menggunakan <strong>Admin Panel</strong> yang memiliki 4 fitur utama:</p>
+        <ul>
+          <li><strong>Dashboard:</strong> Melacak analitik aplikasi (Uptime, Total Pengguna, Member Online), log aktivitas hybrid, serta melihat papan peringkat kontributor (Leaderboard).</li>
+          <li><strong>Files (File Manager):</strong> Mengelola struktur folder dan file HTML secara langsung. Terdapat <em>HTML Editor</em> berbasis CodeMirror bawaan dengan fitur <em>live preview</em> untuk mengecek materi.</li>
+          <li><strong>Team (Organization):</strong> Manajemen anggota divisi, filter pengguna (Admin, Banned, Online), serta fitur <em>Broadcast</em> pengumuman dan pengaturan global (Maintenance / Sign-up).</li>
+          <li><strong>Tasks (Task Board):</strong> Papan manajemen proyek dengan sistem <em>Kanban</em> (Open, In Progress, Developed, In Review, Done) dan tampilan Silabus. Penugasan dapat dibagi berdasarkan semester dan kategori materi (CBT, OSCE, Video, Summary).</li>
+        </ul>
+      </div>
+
+      <div class="docs-section">
+        <h2 >3. Pembagian Divisi Kontributor</h2>
+        <p>Kontribusi dalam MR-CAPSULES dibagi menjadi beberapa divisi utama. Anda dapat mendaftar tanpa rasa ragu, karena sistem ini didesain agar mudah dipelajari oleh siapa saja.</p>
+        
+        <div class="alert-box">
+          <strong>PENTING:</strong> Tidak perlu pengalaman (baik itu coding, IT, maupun organisasi) untuk masuk ke divisi mana pun! Workflow kerja teknis akan diberikan lebih lanjut setelah Anda bergabung.
+        </div>
+
+        <h3>A. Division Management (Pengurus)</h3>
+        <p>Bertugas memastikan kelancaran alur kerja dari Task Board hingga publikasi. Melakukan assign tugas di <em>Kanban Board</em>, mengelola pengguna di tab <em>Team</em>, serta menyiarkan pengumuman.</p>
+
+        <h3>B. Division Development (Pembuat Konten)</h3>
+        <p>Bertugas meracik materi mentah menjadi file HTML/CBT yang interaktif. Mengambil tugas di <em>Task Board</em>, mengerjakannya, lalu memindahkannya ke kolom <strong>Developed (Wait for Review)</strong>.</p>
+        <p class="docs-note-block">
+          Catatan Teknis: KITA TIDAK MELAKUKAN CODING ASLI / MANUAL.
+        </p>
+        <p>Pembuatan dan perbaikan kode seluruhnya menggunakan <strong>Viebo Code</strong> (istilah untuk men-<em>generate</em> kode menggunakan AI seperti <strong>Claude</strong> atau <strong>Antigravity</strong>). Peran developer lebih sebagai <em>Prompt Engineer</em>: menyuruh AI membuatkan soal dengan <em>template</em> yang sudah ada, lalu memasukkannya ke <em>HTML Editor</em> di tab <strong>Files</strong>.</p>
+
+        <h3>C. Division Review & QA (Koreksi)</h3>
+        <p>Memastikan setiap materi yang masuk kolom <strong>In Review</strong> di <em>Task Board</em> terbebas dari kesalahan ketik (typo) atau konsep yang keliru.</p>
+        <p>Mereka membedah <em>live preview</em> di <em>HTML Editor</em>, mencocokkan kunci jawaban dengan referensi asli. Jika lolos, tugas digeser ke <strong>Done</strong>. Jika salah, dikembalikan ke kolom <em>In Progress</em> agar Developer memperbaikinya via AI kembali.</p>
+      </div>
+
+      <div class="docs-section">
+        <h2>4. Integrasi MCP & API Gateway (AI Assistant Integration)</h2>
+        <p><strong>MR-CAPSULES</strong> menyediakan API Gateway & Model Context Protocol (MCP) serverless endpoint berbasis <em>Streamable HTTP (MCP 2025-06-18)</em>. Fitur ini memungkinkan AI Assistant seperti <strong>Claude.ai Web</strong>, <strong>Claude Desktop</strong>, atau AI Agent eksternal untuk mengakses konten dan melakukan tugas secara otomatis di Admin Panel.</p>
+
+        <h3>A. Cara Mengoperasikan & Mengisi API Key</h3>
+        <ol style="font-family: var(--font-mono); color: var(--text-muted); line-height: 1.7; font-size: 15px; padding-left: 24px; margin: 0;">
+          <li style="margin-bottom: 10px;">Buka <strong>Admin Panel</strong> dan pastikan Anda sudah terhubung ke salah satu Divisi (Management, Development, atau Review).</li>
+          <li style="margin-bottom: 10px;">Pilih tab <strong>API Keys</strong> di navigasi utama.</li>
+          <li style="margin-bottom: 10px;">Masukkan nama kunci pada bidang <strong>Key Name</strong> (contoh: <code style="font-size:12px; background:var(--bg-inset); padding:2px 6px; border-radius:4px;">Claude Web MCP</code>) serta tentukan masa berlaku (<em>Expires In</em>).</li>
+          <li style="margin-bottom: 10px;">Klik tombol <strong>+ Generate Key</strong>. Kunci rahasia berawalan <code style="font-size:12px; background:var(--bg-inset); padding:2px 6px; border-radius:4px;">mrc_...</code> akan ditampilkan dalam kotak kuning.</li>
+          <li style="margin-bottom: 10px;">Klik tombol <strong>Copy</strong> dan simpan kunci tersebut segera karena tidak dapat ditampilkan kembali demi alasan keamanan.</li>
+        </ol>
+
+        <h3>B. Menghubungkan ke Claude.ai Web (Custom Connector)</h3>
+        <p>Integrasi MCP MR-CAPSULES mendukung **OAuth 2.0 PKCE Auto-Discovery (RFC 8414 &amp; RFC 7591)** resmi.</p>
+        <ol style="font-family: var(--font-mono); color: var(--text-muted); line-height: 1.7; font-size: 15px; padding-left: 24px; margin: 0;">
+          <li style="margin-bottom: 8px;">Buka <strong>Claude.ai</strong> &rarr; <strong>Settings</strong> &rarr; <strong>Connectors</strong> &rarr; Klik <strong>Add Custom Connector (BETA)</strong>.</li>
+          <li style="margin-bottom: 8px;"><strong>Name:</strong> Isi dengan <code style="font-size:12px; background:var(--bg-inset); padding:2px 6px; border-radius:4px;">mr capsules</code> (atau nama pilihan Anda).</li>
+          <li style="margin-bottom: 8px;"><strong>URL:</strong> Isi dengan <code style="font-size:12px; background:var(--bg-inset); padding:2px 6px; border-radius:4px;">https://mr-capsules.vercel.app/api/mcp</code></li>
+          <li style="margin-bottom: 8px;"><strong>Advanced settings:</strong> <em>BIARKAN KOSONG / JANGAN DIISI</em> (Otorisasi OAuth 2.0 PKCE bekerja secara otomatis lewat Auto-Discovery).</li>
+          <li style="margin-bottom: 8px;">Klik <strong>Add</strong> &rarr; Klik <strong>Connect</strong> &rarr; Anda akan diarahkan ke halaman Login Mr. Capsules. Log in menggunakan akun Anda dan otorisasi selesai!</li>
+        </ol>
+
+        <div class="alert-box">
+          <strong>CATATAN:</strong> Penggunaan API Key dibatasi maksimum 5 kunci aktif per pengguna dengan batasan <em>rate limit</em> 60 request/menit untuk mencegah penyalahgunaan.
+        </div>
+
+        <h3>C. Daftar Kemampuan MCP Tools (27 Method)</h3>
+        <p>AI Assistant yang terhubung dapat mengeksekusi fungsi-fungsi berikut secara langsung:</p>
+        <ul>
+          <li><strong>Materi &amp; File:</strong> <code>content.list</code>, <code>content.get</code>, <code>content.tree</code>, <code>content.upload</code>, <code>content.delete</code>, <code>content.rename</code></li>
+          <li><strong>Task Board:</strong> <code>tasks.list</code>, <code>tasks.create</code>, <code>tasks.claim</code>, <code>tasks.submit</code>, <code>tasks.approve</code>, <code>tasks.reject</code>, <code>tasks.logs</code></li>
+          <li><strong>Review &amp; QA:</strong> <code>review.issues</code>, <code>review.report</code>, <code>review.resolve</code></li>
+          <li><strong>Organisasi &amp; Akun:</strong> <code>divisions.list</code>, <code>divisions.my</code>, <code>users.list</code>, <code>users.ban</code>, <code>contributions.leaderboard</code></li>
+          <li><strong>Sistem &amp; Kunci:</strong> <code>system.health</code>, <code>config.get</code>, <code>config.update</code>, <code>apikeys.list</code>, <code>apikeys.create</code>, <code>apikeys.revoke</code></li>
+        </ul>
+      </div>
+  </div>
+  
+  <script>
+    const savedTheme = localStorage.getItem('capsules_theme');
+    if (savedTheme) {
+      document.documentElement.setAttribute('data-theme', savedTheme);
+    } else {
+      document.documentElement.setAttribute('data-theme', 'dark');
+    }
+
+    const themeButtons = document.querySelectorAll('.admin-theme-btn-unified');
+    function updateActiveThemeBtn(val) {
+      themeButtons.forEach(b => {
+        if (b.getAttribute('data-theme-val') === val) {
+          b.classList.add('active');
+        } else {
+          b.classList.remove('active');
+        }
+      });
+    }
+
+    themeButtons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const v = btn.getAttribute('data-theme-val');
+        document.documentElement.setAttribute('data-theme', v);
+        localStorage.setItem('capsules_theme', v);
+        updateActiveThemeBtn(v);
+      });
+    });
+
+    const currentTheme = document.documentElement.getAttribute('data-theme') || 'dark';
+    updateActiveThemeBtn(currentTheme);
+  </script>
+</body>
+</html>

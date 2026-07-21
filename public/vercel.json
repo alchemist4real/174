@@ -1,0 +1,20 @@
+{
+  "cleanUrls": true,
+  "routes": [
+    { "handle": "filesystem" },
+    { "src": "/admin", "dest": "/admin.html" },
+    { "src": "/docs", "dest": "/docs.html" },
+    { "src": "/live", "dest": "/live.html" },
+    { "src": "/api/env", "dest": "/api/env.js" },
+    { "src": "/api/mcp/token", "dest": "/api/token.js" },
+    { "src": "/api/mcp/authorize", "dest": "/api/authorize.js" },
+    { "src": "/api/mcp/register", "dest": "/api/register.js" },
+    { "src": "/api/mcp", "dest": "/api/mcp.js" },
+    { "src": "/.well-known/oauth-authorization-server", "dest": "/api/authorize.js" },
+    { "src": "/.well-known/openid-configuration", "dest": "/api/authorize.js" },
+    { "src": "/.well-known/oauth-protected-resource(.*)", "dest": "/api/mcp.js" },
+    { "src": "/register", "dest": "/api/register.js" },
+    { "src": "/authorize", "dest": "/api/authorize.js" },
+    { "src": "/token", "dest": "/api/token.js" }
+  ]
+}
