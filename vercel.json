@@ -1,6 +1,10 @@
 {
+  "cleanUrls": true,
   "routes": [
     { "handle": "filesystem" },
+    { "src": "/admin", "dest": "/admin.html" },
+    { "src": "/docs", "dest": "/docs.html" },
+    { "src": "/live", "dest": "/live.html" },
     { "src": "/api/mcp/token", "dest": "/api/token.js" },
     { "src": "/api/mcp/authorize", "dest": "/api/authorize.js" },
     { "src": "/api/mcp/register", "dest": "/api/register.js" },
