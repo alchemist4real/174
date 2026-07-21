@@ -30,6 +30,10 @@
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
         General Guide
       </div>
+      <div class="tab" data-target="docsMcp">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
+        MCP &amp; API Gateway
+      </div>
     </div>
 
     <div id="adminThemeToggles" class="docs-theme-toggles">
@@ -40,9 +44,10 @@
   </div>
   
   <div class="docs-content-area">
+    <!-- TAB 1: GENERAL GUIDE -->
     <div class="docs-container active" id="docsGeneral">
       
-      <div class="docs-title">DOKUMENTASI SISTEM</div>
+      <div class="docs-title">DOKUMENTASI PANDUAN UMUM</div>
       
       <div class="docs-section">
         <h2>1. Pengantar MR-CAPSULES</h2>
@@ -83,8 +88,15 @@
         <p>Mereka membedah <em>live preview</em> di <em>HTML Editor</em>, mencocokkan kunci jawaban dengan referensi asli. Jika lolos, tugas digeser ke <strong>Done</strong>. Jika salah, dikembalikan ke kolom <em>In Progress</em> agar Developer memperbaikinya via AI kembali.</p>
       </div>
 
+    </div>
+
+    <!-- TAB 2: MCP & API GATEWAY -->
+    <div class="docs-container" id="docsMcp">
+      
+      <div class="docs-title">MCP &amp; API GATEWAY GUIDE</div>
+
       <div class="docs-section">
-        <h2>4. Integrasi MCP & API Gateway (AI Assistant Integration)</h2>
+        <h2>1. Integrasi MCP & API Gateway (AI Assistant Integration)</h2>
         <p><strong>MR-CAPSULES</strong> menyediakan API Gateway & Model Context Protocol (MCP) serverless endpoint berbasis <em>Streamable HTTP (MCP 2025-06-18)</em>. Fitur ini memungkinkan AI Assistant seperti <strong>Claude.ai Web</strong>, <strong>Claude Desktop</strong>, atau AI Agent eksternal untuk mengakses konten dan melakukan tugas secara otomatis di Admin Panel.</p>
 
         <h3>A. Cara Mengoperasikan & Mengisi API Key</h3>
@@ -110,7 +122,7 @@
           <strong>CATATAN:</strong> Penggunaan API Key dibatasi maksimum 5 kunci aktif per pengguna dengan batasan <em>rate limit</em> 60 request/menit untuk mencegah penyalahgunaan.
         </div>
 
-        <h3>C. Daftar Kemampuan MCP Tools (57 Method)</h3>
+        <h3>C. Ringkasan Kemampuan MCP Tools (57 Method)</h3>
         <p>AI Assistant yang terhubung dapat mengeksekusi fungsi-fungsi berikut secara langsung:</p>
         <ul>
           <li><strong>Materi, Cover &amp; Sampul:</strong> <code>content_list</code>, <code>content_get</code>, <code>content_tree</code>, <code>content_upload</code>, <code>content_delete</code>, <code>content_delete_files</code>, <code>content_rename</code>, <code>cover_list</code>, <code>cover_upload</code>, <code>cover_delete</code></li>
@@ -123,7 +135,7 @@
       </div>
 
       <div class="docs-section">
-        <h2>5. Referensi Lengkap MCP Tools & Hak Akses</h2>
+        <h2>2. Referensi Lengkap MCP Tools & Hak Akses</h2>
         <p>Bagian ini merinci seluruh <strong>57 method/tools</strong> yang tersedia lewat MCP Gateway, dikelompokkan berdasarkan fungsinya, beserta siapa saja yang berwenang menggunakannya.</p>
 
         <div class="alert-box">
