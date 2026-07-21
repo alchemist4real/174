@@ -87,10 +87,10 @@ Beyond serving as a static archive, MR-CAPSULES functions as a **hybrid platform
 
 ```mermaid
 graph TD
-    A[Student / User] -->|Browses CBT & Live Study| B[Vercel Serverless / Frontend]
-    C[Contributor / Admin] -->|Kanban & HTML Editor| B
-    D[Claude.ai / AI Agents] -->|MCP Protocol / OAuth 2.0 PKCE| E[API Gateway api/mcp.js]
-    E -->|30+ MCP Tools| F[(Supabase Database & Storage)]
+    A["Student / User"] -->|"Browses CBT & Live Study"| B["Vercel Serverless Frontend"]
+    C["Contributor / Admin"] -->|"Kanban & HTML Editor"| B
+    D["Claude.ai / AI Agents"] -->|"MCP Protocol & OAuth 2.0 PKCE"| E["API Gateway (api/mcp.js)"]
+    E -->|"30+ MCP Tools"| F["Supabase (Database & Storage)"]
     B --> F
 ```
 
