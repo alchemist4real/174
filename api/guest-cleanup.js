@@ -5,7 +5,7 @@ export default async function handler(req, res) {
   if (!authHeader) return res.status(401).json({ error: 'Missing authorization header' });
 
   const token = authHeader.replace('Bearer ', '');
-  const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
+  const supabaseUrl = process.env.SUPABASE_URL || 'https://hdhvrlkizorscvehttzd.supabase.co';
   const sbKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
   if (!sbKey) return res.status(500).json({ error: 'Server config error' });
@@ -22,7 +22,9 @@ export default async function handler(req, res) {
   
   if (!isSuperAdmin) {
     const encEmail = encodeURIComponent(userData.email);
-    const roleRes = await fetch(`${supabaseUrl}/rest/v1/user_roles?identifier=eq.${encEmail}&select=role`, {
+    const username = userData.user_metadata?.username;
+    const identifierQuery = username ? `or=(identifier.eq.${encEmail},identifier.eq.${encodeURIComponent(username)})` : `identifier=eq.${encEmail}`;
+    const roleRes = await fetch(`${supabaseUrl}/rest/v1/user_roles?${identifierQuery}&select=role`, {
       headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
     });
     let roleData = [];
@@ -35,9 +37,9 @@ export default async function handler(req, res) {
     // robust parsing
     let body = req.body;
     if (typeof body === 'string') {
-        try { body = JSON.parse(body); } catch(e) {}
+      try { body = JSON.parse(body); } catch(e) {}
     }
-    const maxAge = body?.max_age_hours || 24; 
+    const maxAge = typeof body?.max_age_hours === 'number' ? body.max_age_hours : 24; 
     const cutoff = new Date(Date.now() - maxAge * 60 * 60 * 1000).toISOString();
 
     let allUsers = [];
@@ -61,26 +63,36 @@ export default async function handler(req, res) {
     const guestUsers = allUsers.filter(u => {
       const isGuestEmail = u.email && u.email.match(/^guest_\d+_\d+@mrcapsules\.com$/);
       const isGuestMeta = u.user_metadata && u.user_metadata.is_guest;
-      const isOldEnough = new Date(u.created_at) < new Date(cutoff);
+      const isOldEnough = new Date(u.created_at) <= new Date(cutoff);
       return (isGuestEmail || isGuestMeta) && isOldEnough;
     });
 
     let deleted = 0;
     let errors = [];
 
-    // Parallel deletions can overload, so batch them 5 at a time
+    // Parallel deletions in batches of 5
     for (let i = 0; i < guestUsers.length; i += 5) {
       const batch = guestUsers.slice(i, i + 5);
       await Promise.all(batch.map(async (guest) => {
         try {
-            await fetch(`${supabaseUrl}/rest/v1/division_members?user_id=eq.${guest.id}`, { method: 'DELETE', headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` } });
-            await fetch(`${supabaseUrl}/rest/v1/user_stats?user_id=eq.${guest.id}`, { method: 'DELETE', headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` } });
-            await fetch(`${supabaseUrl}/rest/v1/user_devices?user_id=eq.${guest.id}`, { method: 'DELETE', headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` } });
-            const delRes = await fetch(`${supabaseUrl}/auth/v1/admin/users/${guest.id}`, { method: 'DELETE', headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` } });
-            if (delRes.ok) deleted++;
-            else errors.push({ email: guest.email, error: await delRes.text() });
+          // Delete related records
+          await fetch(`${supabaseUrl}/rest/v1/division_members?user_id=eq.${guest.id}`, { method: 'DELETE', headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` } });
+          await fetch(`${supabaseUrl}/rest/v1/user_stats?user_id=eq.${guest.id}`, { method: 'DELETE', headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` } });
+          await fetch(`${supabaseUrl}/rest/v1/user_devices?user_id=eq.${guest.id}`, { method: 'DELETE', headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` } });
+          await fetch(`${supabaseUrl}/rest/v1/division_requests?user_id=eq.${guest.id}`, { method: 'DELETE', headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` } });
+          if (guest.email) {
+            await fetch(`${supabaseUrl}/rest/v1/user_roles?identifier=eq.${encodeURIComponent(guest.email)}`, { method: 'DELETE', headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` } });
+          }
+          if (guest.user_metadata?.username) {
+            await fetch(`${supabaseUrl}/rest/v1/user_roles?identifier=eq.${encodeURIComponent(guest.user_metadata.username)}`, { method: 'DELETE', headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` } });
+          }
+
+          // Delete from Auth admin
+          const delRes = await fetch(`${supabaseUrl}/auth/v1/admin/users/${guest.id}`, { method: 'DELETE', headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` } });
+          if (delRes.ok) deleted++;
+          else errors.push({ email: guest.email, error: await delRes.text() });
         } catch(e) {
-            errors.push({ email: guest.email, error: e.message });
+          errors.push({ email: guest.email, error: e.message });
         }
       }));
     }
