@@ -310,6 +310,16 @@ function getMcpToolsList() {
     { name: 'apikeys_revoke', description: 'Revoke an API key by ID', inputSchema: { type: 'object', properties: { key_id: { type: 'string' } }, required: ['key_id'] } },
     { name: 'oauth_tokens_list', description: 'List your active OAuth connector tokens (Claude/MCP)', inputSchema: { type: 'object', properties: {} } },
     { name: 'oauth_tokens_revoke', description: 'Revoke an OAuth connector token by ID', inputSchema: { type: 'object', properties: { token_id: { type: 'string' } }, required: ['token_id'] } },
+    { name: 'users_add_admin', description: 'Promote a user to Admin role (SuperAdmin only)', inputSchema: { type: 'object', properties: { email: { type: 'string' } }, required: ['email'] } },
+    { name: 'users_remove_admin', description: 'Revoke Admin role from a user (SuperAdmin only)', inputSchema: { type: 'object', properties: { email: { type: 'string' } }, required: ['email'] } },
+    { name: 'users_delete', description: 'Permanently delete a user account (SuperAdmin only)', inputSchema: { type: 'object', properties: { user_id: { type: 'string' } }, required: ['user_id'] } },
+    { name: 'divisions_add_member', description: 'Assign a user to an organization division (Admin only)', inputSchema: { type: 'object', properties: { user_id: { type: 'string' }, division_id: { type: 'string', enum: ['management','development','review'] }, whatsapp: { type: 'string' } }, required: ['user_id', 'division_id'] } },
+    { name: 'divisions_remove_member', description: 'Remove a user from an organization division (Admin only)', inputSchema: { type: 'object', properties: { user_id: { type: 'string' }, division_id: { type: 'string' } }, required: ['user_id', 'division_id'] } },
+    { name: 'content_delete_files', description: 'Delete multiple content files in a single atomic Git commit', inputSchema: { type: 'object', properties: { paths: { type: 'array', items: { type: 'string' } } }, required: ['paths'] } },
+    { name: 'tasks_delete', description: 'Permanently delete a task from the board (Management/Admin only)', inputSchema: { type: 'object', properties: { task_id: { type: 'string' } }, required: ['task_id'] } },
+    { name: 'review_delete_issue', description: 'Delete a review issue report (Reviewer/Admin only)', inputSchema: { type: 'object', properties: { issue_id: { type: 'string' } }, required: ['issue_id'] } },
+    { name: 'activity_logs', description: 'Get system & user activity logs (Admin only)', inputSchema: { type: 'object', properties: { limit: { type: 'number' } } } },
+    { name: 'system_cleanup_guests', description: 'Run automated cleanup of expired guest/temporary accounts (Admin only)', inputSchema: { type: 'object', properties: {} } },
   ];
 }
 
@@ -645,6 +655,40 @@ async function routeMethod(method, params, auth, roles, cfg) {
     if (!params.user_id) throw err400('Missing params.user_id');
     return usersDelete(params.user_id, su, sk);
   }
+  if (m === 'users_add_admin') {
+    if (!roles.isSuperAdmin) throw err403('SuperAdmin only');
+    if (!params.email) throw err400('Missing params.email');
+    return usersAddAdmin(params.email, auth.email, su, sk);
+  }
+  if (m === 'users_remove_admin') {
+    if (!roles.isSuperAdmin) throw err403('SuperAdmin only');
+    if (!params.email) throw err400('Missing params.email');
+    return usersRemoveAdmin(params.email, auth.email, su, sk);
+  }
+
+  if (m === 'divisions_add_member') {
+    if (!roles.isAdmin) throw err403('Admin only');
+    if (!params.user_id || !params.division_id) throw err400('Missing params.user_id or params.division_id');
+    return divisionsAddMember(params.user_id, params.division_id, params.whatsapp || '', auth.email, su, sk);
+  }
+  if (m === 'divisions_remove_member') {
+    if (!roles.isAdmin) throw err403('Admin only');
+    if (!params.user_id || !params.division_id) throw err400('Missing params.user_id or params.division_id');
+    return divisionsRemoveMember(params.user_id, params.division_id, auth.email, su, sk);
+  }
+
+  if (m === 'content_delete_files') {
+    if (!roles.hasDivision && !roles.isAdmin) throw err403('Division membership required to delete files');
+    if (!params.paths || !Array.isArray(params.paths) || params.paths.length === 0) throw err400('Missing params.paths array');
+    params.paths.forEach(p => validatePath(p));
+    return contentDeleteFiles(params.paths, auth.email, gt, go, gr, su, sk);
+  }
+
+  if (m === 'tasks_delete') {
+    if (!roles.isManagement && !roles.isAdmin) throw err403('Management or Admin only');
+    if (!params.task_id) throw err400('Missing params.task_id');
+    return tasksDelete(params.task_id, auth.email, su, sk);
+  }
 
   if (m === 'config_get') {
     if (!roles.isAdmin) throw err403('Admin only');
@@ -671,6 +715,21 @@ async function routeMethod(method, params, auth, roles, cfg) {
     if (!roles.isReviewer) throw err403('Review division only');
     if (!params.issue_id) throw err400('Missing params.issue_id');
     return reviewIssuesResolve(params.issue_id, su, sk);
+  }
+  if (m === 'review_delete_issue') {
+    if (!roles.isReviewer && !roles.isAdmin) throw err403('Reviewer or Admin only');
+    if (!params.issue_id) throw err400('Missing params.issue_id');
+    return reviewIssuesDelete(params.issue_id, su, sk);
+  }
+
+  if (m === 'activity_logs') {
+    if (!roles.isAdmin) throw err403('Admin only');
+    return activityLogsList(params.limit || 100, su, sk);
+  }
+
+  if (m === 'system_cleanup_guests') {
+    if (!roles.isAdmin) throw err403('Admin only');
+    return systemCleanupGuests(su, sk);
   }
 
   throw err400(`Unknown method: ${method}`);
@@ -1169,6 +1228,124 @@ async function reviewIssuesResolve(issueId, su, sk) {
   });
   if (!res.ok) throw new Error(await res.text());
   return { success: true };
+}
+
+async function reviewIssuesDelete(issueId, su, sk) {
+  const res = await fetch(`${su}/rest/v1/review_issues?id=eq.${issueId}`, {
+    method: 'DELETE',
+    headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}` }
+  });
+  if (!res.ok) throw new Error('Failed to delete issue: ' + await res.text());
+  return { success: true, issueId };
+}
+
+async function usersAddAdmin(targetEmail, adminEmail, su, sk) {
+  const res = await fetch(`${su}/rest/v1/user_roles`, {
+    method: 'POST',
+    headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}`, 'Content-Type': 'application/json', 'Prefer': 'resolution=merge-duplicates' },
+    body: JSON.stringify({ identifier: targetEmail.trim(), role: 'admin' })
+  });
+  if (!res.ok) throw new Error('Failed to add admin: ' + await res.text());
+  await logAction(adminEmail, 'mcp_add_admin', { targetEmail }, su, sk);
+  return { success: true, email: targetEmail };
+}
+
+async function usersRemoveAdmin(targetEmail, adminEmail, su, sk) {
+  const encEmail = encodeURIComponent(targetEmail.trim());
+  const res = await fetch(`${su}/rest/v1/user_roles?identifier=eq.${encEmail}`, {
+    method: 'DELETE',
+    headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}` }
+  });
+  if (!res.ok) throw new Error('Failed to remove admin: ' + await res.text());
+  await logAction(adminEmail, 'mcp_remove_admin', { targetEmail }, su, sk);
+  return { success: true, email: targetEmail };
+}
+
+async function divisionsAddMember(userId, divisionId, whatsapp, adminEmail, su, sk) {
+  const res = await fetch(`${su}/rest/v1/division_members`, {
+    method: 'POST',
+    headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}`, 'Content-Type': 'application/json', 'Prefer': 'resolution=merge-duplicates' },
+    body: JSON.stringify({ user_id: userId, division_id: divisionId, whatsapp })
+  });
+  if (!res.ok) throw new Error('Failed to add division member: ' + await res.text());
+  await logAction(adminEmail, 'mcp_add_division_member', { userId, divisionId }, su, sk);
+  return { success: true, userId, divisionId };
+}
+
+async function divisionsRemoveMember(userId, divisionId, adminEmail, su, sk) {
+  const res = await fetch(`${su}/rest/v1/division_members?user_id=eq.${userId}&division_id=eq.${divisionId}`, {
+    method: 'DELETE',
+    headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}` }
+  });
+  if (!res.ok) throw new Error('Failed to remove division member: ' + await res.text());
+  await logAction(adminEmail, 'mcp_remove_division_member', { userId, divisionId }, su, sk);
+  return { success: true, userId, divisionId };
+}
+
+async function contentDeleteFiles(paths, adminEmail, githubToken, owner, repo, su, sk) {
+  const refRes = await ghApi('GET', '/git/refs/heads/main', null, githubToken, owner, repo);
+  const refData = await refRes.json();
+  const commitSha = refData.object.sha;
+
+  const commitRes = await ghApi('GET', `/git/commits/${commitSha}`, null, githubToken, owner, repo);
+  const commitData = await commitRes.json();
+
+  const treeEntries = paths.map(p => ({ path: p, mode: '100644', type: 'blob', sha: null }));
+
+  const treeRes = await ghApi('POST', '/git/trees', {
+    base_tree: commitData.tree.sha,
+    tree: treeEntries
+  }, githubToken, owner, repo);
+  const treeData = await treeRes.json();
+
+  const newCommitRes = await ghApi('POST', '/git/commits', {
+    message: `mcp: bulk delete ${paths.length} files`,
+    tree: treeData.sha,
+    parents: [commitSha]
+  }, githubToken, owner, repo);
+  const newCommit = await newCommitRes.json();
+
+  await ghApi('PATCH', '/git/refs/heads/main', { sha: newCommit.sha }, githubToken, owner, repo);
+  await logAction(adminEmail, 'mcp_delete_files', { paths }, su, sk);
+  return { success: true, deletedCount: paths.length };
+}
+
+async function tasksDelete(taskId, adminEmail, su, sk) {
+  const res = await fetch(`${su}/rest/v1/content_tasks?id=eq.${taskId}`, {
+    method: 'DELETE',
+    headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}` }
+  });
+  if (!res.ok) throw new Error('Failed to delete task: ' + await res.text());
+  await logAction(adminEmail, 'mcp_delete_task', { taskId }, su, sk);
+  return { success: true, taskId };
+}
+
+async function activityLogsList(limit, su, sk) {
+  const res = await fetch(`${su}/rest/v1/activity_logs?select=*&order=time.desc&limit=${limit}`, {
+    headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}` }
+  });
+  if (!res.ok) throw new Error('Failed to fetch activity logs');
+  return { logs: await res.json() };
+}
+
+async function systemCleanupGuests(su, sk) {
+  const cutoff = new Date(Date.now() - 24 * 3600 * 1000).toISOString();
+  const getRes = await fetch(`${su}/auth/v1/admin/users?per_page=1000`, {
+    headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}` }
+  });
+  if (!getRes.ok) throw new Error('Failed to fetch users');
+  const { users } = await getRes.json();
+  const guestUsers = (users || []).filter(u => u.email && u.email.endsWith('@guest.mr-capsules.local') && u.created_at < cutoff);
+
+  let deletedCount = 0;
+  for (const guest of guestUsers) {
+    const delRes = await fetch(`${su}/auth/v1/admin/users/${guest.id}`, {
+      method: 'DELETE',
+      headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}` }
+    });
+    if (delRes.ok) deletedCount++;
+  }
+  return { success: true, deletedGuestsCount: deletedCount };
 }
 
 // ═══════════════════════════════════════════════════════════════
