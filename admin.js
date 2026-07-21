@@ -1638,3 +1638,167 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
             });
         }
     });
+
+// ═══════════════════════════════════════════════════════════════
+// API KEYS MODULE — appended to admin.js
+// Uses: window.sessionToken (set by verifyAdmin at line 250)
+//       showToast() (defined at line ~1551)
+//       customConfirm() (defined at line ~193)
+//       sanitize() (defined at line ~42)
+// All functions are scoped in an IIFE to avoid global leaks.
+// ═══════════════════════════════════════════════════════════════
+
+(function initApiKeysModule() {
+  // Wait for adminReady (fired in verifyAdmin() at admin.js:L251)
+  // This ensures window.sessionToken is set before we use it
+  window.addEventListener('adminReady', function() {
+    var btnRefresh = document.getElementById('btnRefreshApiKeys');
+    if (btnRefresh) btnRefresh.onclick = loadApiKeys;
+
+    var btnGenerate = document.getElementById('btnGenerateApiKey');
+    if (btnGenerate) btnGenerate.onclick = generateApiKey;
+
+    var btnCopy = document.getElementById('btnCopyApiKey');
+    if (btnCopy) btnCopy.onclick = copyRevealedKey;
+
+    // Load keys when the API Keys tab is clicked
+    var tab = document.getElementById('tabApiKeys');
+    if (tab) {
+      tab.addEventListener('click', function() {
+        setTimeout(loadApiKeys, 50);
+      });
+    }
+  });
+
+  // POST to /api/mcp using the existing session JWT
+  async function mcpCall(method, params) {
+    var tok = window.sessionToken;
+    if (!tok) throw new Error('Not authenticated');
+    var res = await fetch('/api/mcp', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + tok
+      },
+      body: JSON.stringify({ method: method, params: params || {} })
+    });
+    var data = await res.json();
+    if (!data.success) throw new Error(data.error || 'Unknown error');
+    return data.result;
+  }
+
+  async function loadApiKeys() {
+    var listEl = document.getElementById('apiKeysList');
+    var generateSection = document.getElementById('apiKeysGenerateSection');
+    var accessInfo = document.getElementById('apiKeysAccessInfo');
+    if (!listEl) return;
+
+    listEl.innerHTML = '<div style="color:var(--text-muted); font-size:14px; padding:24px; text-align:center;">Loading...</div>';
+
+    try {
+      var result = await mcpCall('apikeys.list', {});
+      var keys = result.keys || [];
+
+      if (generateSection) generateSection.style.display = '';
+      if (accessInfo) accessInfo.style.display = 'none';
+
+      if (keys.length === 0) {
+        listEl.innerHTML = '<div style="color:var(--text-muted); font-size:14px; padding:24px; text-align:center;">No API keys yet. Generate one above.</div>';
+        return;
+      }
+
+      listEl.innerHTML = keys.map(function(k) {
+        var created = new Date(k.created_at).toLocaleDateString();
+        var lastUsed = k.last_used_at ? new Date(k.last_used_at).toLocaleDateString() : 'Never';
+        var expiresInfo = k.expires_at ? ('Expires ' + new Date(k.expires_at).toLocaleDateString()) : 'No expiry';
+        return '<div style="display:flex; justify-content:space-between; align-items:center; padding:14px 18px; border:1px solid var(--border-light); border-radius:10px; margin-bottom:10px; background:var(--bg-card);">' +
+          '<div>' +
+            '<div style="font-weight:600; font-size:14px; color:var(--text-main); margin-bottom:4px;">' + sanitize(k.name) + '</div>' +
+            '<code style="font-size:12px; background:var(--bg-inset); padding:2px 8px; border-radius:4px; color:var(--text-muted);">' + sanitize(k.key_prefix) + '...</code>' +
+            '<span style="font-size:12px; color:var(--text-muted); margin-left:12px;">Created ' + created + '</span>' +
+            '<span style="font-size:12px; color:var(--text-muted); margin-left:8px;">&middot; Last used: ' + lastUsed + '</span>' +
+            '<span style="font-size:12px; color:var(--text-muted); margin-left:8px;">&middot; ' + (k.request_count || 0) + ' requests</span>' +
+            '<span style="font-size:12px; color:var(--text-muted); margin-left:8px;">&middot; ' + expiresInfo + '</span>' +
+          '</div>' +
+          '<button class="btn-unified" style="color:var(--danger); border-color:var(--danger);" onclick="window._revokeApiKey(\'' + k.id + '\', \'' + sanitize(k.name).replace(/'/g, "\\'") + '\')">Revoke</button>' +
+        '</div>';
+      }).join('');
+
+    } catch (err) {
+      // If error mentions division, user has no division — show info banner
+      if (err.message && err.message.toLowerCase().includes('division')) {
+        if (generateSection) generateSection.style.display = 'none';
+        if (accessInfo) accessInfo.style.display = '';
+        listEl.innerHTML = '';
+      } else {
+        listEl.innerHTML = '<div style="color:var(--danger); padding:16px;">' + sanitize(err.message) + '</div>';
+      }
+    }
+  }
+
+  async function generateApiKey() {
+    var nameInput = document.getElementById('newKeyName');
+    var expirySelect = document.getElementById('newKeyExpiry');
+    var revealBox = document.getElementById('apiKeyRevealBox');
+    var revealText = document.getElementById('apiKeyRevealText');
+    var btn = document.getElementById('btnGenerateApiKey');
+
+    var name = nameInput ? nameInput.value.trim() : '';
+    if (!name) { showToast('Please enter a key name', 'error'); return; }
+
+    var expiresInDays = (expirySelect && expirySelect.value) ? parseInt(expirySelect.value, 10) : null;
+
+    if (btn) { btn.disabled = true; btn.textContent = 'Generating...'; }
+
+    try {
+      var result = await mcpCall('apikeys.create', { name: name, expires_in_days: expiresInDays });
+
+      if (revealText) revealText.textContent = result.raw_key;
+      if (revealBox) revealBox.style.display = '';
+
+      if (nameInput) nameInput.value = '';
+      if (expirySelect) expirySelect.value = '';
+
+      showToast('API key generated! Copy it now.', 'success');
+      loadApiKeys();
+    } catch (err) {
+      showToast('Error: ' + err.message, 'error');
+    } finally {
+      if (btn) { btn.disabled = false; btn.textContent = '+ Generate Key'; }
+    }
+  }
+
+  function copyRevealedKey() {
+    var revealText = document.getElementById('apiKeyRevealText');
+    if (!revealText || !revealText.textContent) return;
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(revealText.textContent).then(function() {
+        showToast('API key copied!', 'success');
+      });
+    } else {
+      // Fallback
+      var ta = document.createElement('textarea');
+      ta.value = revealText.textContent;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.focus(); ta.select();
+      try { document.execCommand('copy'); showToast('API key copied!', 'success'); } catch(e) {}
+      ta.remove();
+    }
+  }
+
+  // Used by onclick= in rendered key cards. Must be global.
+  window._revokeApiKey = async function(keyId, keyName) {
+    var confirmed = await customConfirm('Revoke key "' + keyName + '"? Services using it will stop working immediately.');
+    if (!confirmed) return;
+    try {
+      await mcpCall('apikeys.revoke', { key_id: keyId });
+      showToast('API key revoked', 'success');
+      loadApiKeys();
+    } catch (err) {
+      showToast('Error: ' + err.message, 'error');
+    }
+  };
+})();
+

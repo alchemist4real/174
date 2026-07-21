@@ -1,0 +1,2 @@
+# Exclude third-party minified libraries that pollute the symbol namespace
+fp.js

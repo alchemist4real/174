@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Documentation | Mr. Capsules</title>
   <link rel="icon" type="image/svg+xml" href="/logo.svg">
-  <link rel="stylesheet" href="/global-styles.css">
+  <link rel="stylesheet" href="/tokens.css?v=1.9">
+  <link rel="stylesheet" href="/admin-styles.css?v=1.9">
 </head>
 <body>
   <div class="bg"></div>
@@ -79,8 +80,42 @@
         <p>Memastikan setiap materi yang masuk kolom <strong>In Review</strong> di <em>Task Board</em> terbebas dari kesalahan ketik (typo) atau konsep yang keliru.</p>
         <p>Mereka membedah <em>live preview</em> di <em>HTML Editor</em>, mencocokkan kunci jawaban dengan referensi asli. Jika lolos, tugas digeser ke <strong>Done</strong>. Jika salah, dikembalikan ke kolom <em>In Progress</em> agar Developer memperbaikinya via AI kembali.</p>
       </div>
-      
-    </div>
+
+      <div class="docs-section">
+        <h2>4. Integrasi MCP & API Gateway (AI Assistant Integration)</h2>
+        <p><strong>MR-CAPSULES</strong> menyediakan API Gateway & Model Context Protocol (MCP) serverless endpoint berbasis <em>Streamable HTTP (MCP 2025-06-18)</em>. Fitur ini memungkinkan AI Assistant seperti <strong>Claude.ai Web</strong>, <strong>Claude Desktop</strong>, atau AI Agent eksternal untuk mengakses konten dan melakukan tugas secara otomatis di Admin Panel.</p>
+
+        <h3>A. Cara Mengoperasikan & Mengisi API Key</h3>
+        <ol style="font-family: var(--font-mono); color: var(--text-muted); line-height: 1.7; font-size: 15px; padding-left: 24px; margin: 0;">
+          <li style="margin-bottom: 10px;">Buka <strong>Admin Panel</strong> dan pastikan Anda sudah terhubung ke salah satu Divisi (Management, Development, atau Review).</li>
+          <li style="margin-bottom: 10px;">Pilih tab <strong>API Keys</strong> di navigasi utama.</li>
+          <li style="margin-bottom: 10px;">Masukkan nama kunci pada bidang <strong>Key Name</strong> (contoh: <code style="font-size:12px; background:var(--bg-inset); padding:2px 6px; border-radius:4px;">Claude Web MCP</code>) serta tentukan masa berlaku (<em>Expires In</em>).</li>
+          <li style="margin-bottom: 10px;">Klik tombol <strong>+ Generate Key</strong>. Kunci rahasia berawalan <code style="font-size:12px; background:var(--bg-inset); padding:2px 6px; border-radius:4px;">mrc_...</code> akan ditampilkan dalam kotak kuning.</li>
+          <li style="margin-bottom: 10px;">Klik tombol <strong>Copy</strong> dan simpan kunci tersebut segera karena tidak dapat ditampilkan kembali demi alasan keamanan.</li>
+        </ol>
+
+        <h3>B. Menghubungkan ke Claude.ai Web / Client MCP</h3>
+        <p>Untuk menyambungkan Remote MCP Server ke Claude.ai atau klien MCP lainnya:</p>
+        <ul>
+          <li><strong>Endpoint URL:</strong> <code style="font-size:12px; background:var(--bg-inset); padding:2px 6px; border-radius:4px;">https://mr-capsules.vercel.app/api/mcp</code></li>
+          <li><strong>Authentication Header:</strong> <code style="font-size:12px; background:var(--bg-inset); padding:2px 6px; border-radius:4px;">Authorization: ApiKey YOUR_API_KEY</code> atau <code style="font-size:12px; background:var(--bg-inset); padding:2px 6px; border-radius:4px;">Authorization: Bearer YOUR_API_KEY</code></li>
+          <li><strong>Protokol:</strong> Streamable HTTP / JSON-RPC 2.0 (GET &amp; POST pada endpoint yang sama).</li>
+        </ul>
+
+        <div class="alert-box">
+          <strong>CATATAN:</strong> Penggunaan API Key dibatasi maksimum 5 kunci aktif per pengguna dengan batasan <em>rate limit</em> 60 request/menit untuk mencegah penyalahgunaan.
+        </div>
+
+        <h3>C. Daftar Kemampuan MCP Tools (27 Method)</h3>
+        <p>AI Assistant yang terhubung dapat mengeksekusi fungsi-fungsi berikut secara langsung:</p>
+        <ul>
+          <li><strong>Materi &amp; File:</strong> <code>content.list</code>, <code>content.get</code>, <code>content.tree</code>, <code>content.upload</code>, <code>content.delete</code>, <code>content.rename</code></li>
+          <li><strong>Task Board:</strong> <code>tasks.list</code>, <code>tasks.create</code>, <code>tasks.claim</code>, <code>tasks.submit</code>, <code>tasks.approve</code>, <code>tasks.reject</code>, <code>tasks.logs</code></li>
+          <li><strong>Review &amp; QA:</strong> <code>review.issues</code>, <code>review.report</code>, <code>review.resolve</code></li>
+          <li><strong>Organisasi &amp; Akun:</strong> <code>divisions.list</code>, <code>divisions.my</code>, <code>users.list</code>, <code>users.ban</code>, <code>contributions.leaderboard</code></li>
+          <li><strong>Sistem &amp; Kunci:</strong> <code>system.health</code>, <code>config.get</code>, <code>config.update</code>, <code>apikeys.list</code>, <code>apikeys.create</code>, <code>apikeys.revoke</code></li>
+        </ul>
+      </div>
   </div>
   
   <script>
