@@ -1,8 +1,32 @@
 // api/token.js
-// OAuth 2.0 Token Endpoint for Claude.ai Custom Connectors
+// OAuth 2.0 Token Endpoint (RFC 6749 / RFC 7636 PKCE S256) with Refresh Token Rotation
+
+import crypto from 'crypto';
+
+function base64url(buffer) {
+  return buffer.toString('base64')
+    .replace(/=/g, '')
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_');
+}
+
+function verifyPkce(codeVerifier, codeChallenge, method = 'S256') {
+  if (!codeChallenge) return true; // Optional if no challenge was sent
+  if (method === 'S256') {
+    const hash = crypto.createHash('sha256').update(codeVerifier).digest();
+    const computed = base64url(hash);
+    return computed === codeChallenge;
+  }
+  if (method === 'plain') {
+    return codeVerifier === codeChallenge;
+  }
+  return false;
+}
 
 export default async function handler(req, res) {
-  // Allow CORS preflight
+  const SUPABASE_URL = 'https://hdhvrlkizorscvehttzd.supabase.co';
+  const SB_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
@@ -12,7 +36,7 @@ export default async function handler(req, res) {
   }
 
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Method not allowed' });
+    return res.status(405).json({ error: 'invalid_request', error_description: 'Method not allowed' });
   }
 
   let body = req.body;
@@ -25,20 +49,174 @@ export default async function handler(req, res) {
     }
   }
 
-  const code = (body && body.code) || '';
+  body = body || {};
+  const grantType = body.grant_type;
 
-  // The authorization code passed back by our /authorize endpoint is the user's API Key (mrc_...)
-  if (!code || !code.startsWith('mrc_')) {
-    return res.status(400).json({
-      error: 'invalid_grant',
-      error_description: 'Invalid or missing authorization code (must be a valid mrc_ API key)'
+  if (!grantType) {
+    return res.status(400).json({ error: 'invalid_request', error_description: 'Missing grant_type parameter' });
+  }
+
+  // ── 1. Authorization Code Grant ──────────────────────────────────────────
+  if (grantType === 'authorization_code') {
+    const code = body.code;
+    const redirectUri = body.redirect_uri;
+    const codeVerifier = body.code_verifier || body.code_challenge; // Fallback
+
+    if (!code) {
+      return res.status(400).json({ error: 'invalid_request', error_description: 'Missing code parameter' });
+    }
+
+    if (!SB_SERVICE_KEY) {
+      return res.status(500).json({ error: 'server_error', error_description: 'Service role key not configured' });
+    }
+
+    // Fetch code from Supabase oauth_codes
+    const codeRes = await fetch(`${SUPABASE_URL}/rest/v1/oauth_codes?code=eq.${encodeURIComponent(code)}&select=*`, {
+      headers: { 'apikey': SB_SERVICE_KEY, 'Authorization': `Bearer ${SB_SERVICE_KEY}` }
+    });
+
+    if (!codeRes.ok) {
+      return res.status(400).json({ error: 'invalid_grant', error_description: 'Failed to query authorization code' });
+    }
+
+    const rows = await codeRes.json();
+    if (!rows || rows.length === 0) {
+      return res.status(400).json({ error: 'invalid_grant', error_description: 'Invalid, expired, or used authorization code' });
+    }
+
+    const codeRecord = rows[0];
+
+    // Check expiration
+    if (new Date(codeRecord.expires_at) < new Date()) {
+      // Delete expired code
+      await fetch(`${SUPABASE_URL}/rest/v1/oauth_codes?code=eq.${encodeURIComponent(code)}`, {
+        method: 'DELETE',
+        headers: { 'apikey': SB_SERVICE_KEY, 'Authorization': `Bearer ${SB_SERVICE_KEY}` }
+      });
+      return res.status(400).json({ error: 'invalid_grant', error_description: 'Authorization code expired' });
+    }
+
+    // Delete single-use authorization code immediately
+    await fetch(`${SUPABASE_URL}/rest/v1/oauth_codes?code=eq.${encodeURIComponent(code)}`, {
+      method: 'DELETE',
+      headers: { 'apikey': SB_SERVICE_KEY, 'Authorization': `Bearer ${SB_SERVICE_KEY}` }
+    });
+
+    // Verify PKCE if present
+    if (codeRecord.code_challenge) {
+      if (!codeVerifier) {
+        return res.status(400).json({ error: 'invalid_grant', error_description: 'Missing code_verifier for PKCE' });
+      }
+      const pkceValid = verifyPkce(codeVerifier, codeRecord.code_challenge, codeRecord.code_challenge_method);
+      if (!pkceValid) {
+        return res.status(400).json({ error: 'invalid_grant', error_description: 'PKCE verification failed' });
+      }
+    }
+
+    // Issue Access Token and Refresh Token
+    const accessToken = `mrc_at_${crypto.randomBytes(32).toString('hex')}`;
+    const refreshToken = `mrc_rt_${crypto.randomBytes(32).toString('hex')}`;
+    const expiresIn = 3600; // 1 hour
+    const expiresAt = new Date(Date.now() + expiresIn * 1000).toISOString();
+
+    // Store token pair in Supabase oauth_tokens
+    await fetch(`${SUPABASE_URL}/rest/v1/oauth_tokens`, {
+      method: 'POST',
+      headers: {
+        'apikey': SB_SERVICE_KEY,
+        'Authorization': `Bearer ${SB_SERVICE_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        access_token: accessToken,
+        refresh_token: refreshToken,
+        client_id: codeRecord.client_id,
+        user_id: codeRecord.user_id,
+        user_email: codeRecord.user_email,
+        expires_at: expiresAt,
+        revoked: false
+      })
+    });
+
+    return res.status(200).json({
+      access_token: accessToken,
+      token_type: 'Bearer',
+      expires_in: expiresIn,
+      refresh_token: refreshToken,
+      scope: 'mcp'
     });
   }
 
-  // Return standard OAuth 2.0 token response
-  return res.status(200).json({
-    access_token: code,
-    token_type: 'Bearer',
-    expires_in: 2592000 // 30 days
-  });
+  // ── 2. Refresh Token Grant (Token Rotation) ──────────────────────────────
+  if (grantType === 'refresh_token') {
+    const refreshTokenInput = body.refresh_token;
+    if (!refreshTokenInput) {
+      return res.status(400).json({ error: 'invalid_request', error_description: 'Missing refresh_token parameter' });
+    }
+
+    if (!SB_SERVICE_KEY) {
+      return res.status(500).json({ error: 'server_error', error_description: 'Service role key not configured' });
+    }
+
+    // Fetch existing token record
+    const tokenRes = await fetch(`${SUPABASE_URL}/rest/v1/oauth_tokens?refresh_token=eq.${encodeURIComponent(refreshTokenInput)}&revoked=eq.false&select=*`, {
+      headers: { 'apikey': SB_SERVICE_KEY, 'Authorization': `Bearer ${SB_SERVICE_KEY}` }
+    });
+
+    if (!tokenRes.ok) {
+      return res.status(400).json({ error: 'invalid_grant', error_description: 'Failed to query refresh token' });
+    }
+
+    const rows = await tokenRes.json();
+    if (!rows || rows.length === 0) {
+      return res.status(400).json({ error: 'invalid_grant', error_description: 'Invalid, revoked, or expired refresh token' });
+    }
+
+    const oldToken = rows[0];
+
+    // Revoke old refresh token (Rotation enforcement)
+    await fetch(`${SUPABASE_URL}/rest/v1/oauth_tokens?access_token=eq.${encodeURIComponent(oldToken.access_token)}`, {
+      method: 'PATCH',
+      headers: {
+        'apikey': SB_SERVICE_KEY,
+        'Authorization': `Bearer ${SB_SERVICE_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ revoked: true })
+    });
+
+    // Issue new token pair
+    const newAccessToken = `mrc_at_${crypto.randomBytes(32).toString('hex')}`;
+    const newRefreshToken = `mrc_rt_${crypto.randomBytes(32).toString('hex')}`;
+    const expiresIn = 3600;
+    const expiresAt = new Date(Date.now() + expiresIn * 1000).toISOString();
+
+    await fetch(`${SUPABASE_URL}/rest/v1/oauth_tokens`, {
+      method: 'POST',
+      headers: {
+        'apikey': SB_SERVICE_KEY,
+        'Authorization': `Bearer ${SB_SERVICE_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        access_token: newAccessToken,
+        refresh_token: newRefreshToken,
+        client_id: oldToken.client_id,
+        user_id: oldToken.user_id,
+        user_email: oldToken.user_email,
+        expires_at: expiresAt,
+        revoked: false
+      })
+    });
+
+    return res.status(200).json({
+      access_token: newAccessToken,
+      token_type: 'Bearer',
+      expires_in: expiresIn,
+      refresh_token: newRefreshToken,
+      scope: 'mcp'
+    });
+  }
+
+  return res.status(400).json({ error: 'unsupported_grant_type', error_description: `Unsupported grant_type: ${grantType}` });
 }

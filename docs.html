@@ -95,22 +95,13 @@
         </ol>
 
         <h3>B. Menghubungkan ke Claude.ai Web (Custom Connector)</h3>
-        <p>Terdapat dua cara mudah untuk mengisikan form <strong>Add Custom Connector (BETA)</strong> di Claude.ai:</p>
-
-        <h4>Opsi 1: Otentikasi OAuth Web Popup (Direkomendasikan)</h4>
-        <ol style="font-family: var(--font-mono); color: var(--text-muted); line-height: 1.7; font-size: 15px; padding-left: 24px; margin: 0 0 16px 0;">
-          <li style="margin-bottom: 8px;"><strong>Name:</strong> <code style="font-size:12px; background:var(--bg-inset); padding:2px 6px; border-radius:4px;">mr capsules</code></li>
-          <li style="margin-bottom: 8px;"><strong>URL:</strong> <code style="font-size:12px; background:var(--bg-inset); padding:2px 6px; border-radius:4px;">https://mr-capsules.vercel.app/api/mcp</code></li>
-          <li style="margin-bottom: 8px;"><strong>Advanced settings:</strong> Isi Client ID dengan <code style="font-size:12px; background:var(--bg-inset); padding:2px 6px; border-radius:4px;">mr-capsules</code></li>
-          <li style="margin-bottom: 8px;">Klik <strong>Connect</strong> &rarr; Halaman pop-up otorisasi akan terbuka. Masukkan API Key Anda (<code style="font-size:12px; background:var(--bg-inset); padding:2px 6px; border-radius:4px;">mrc_...</code>) lalu klik <strong>Authorize &amp; Connect</strong>.</li>
-        </ol>
-
-        <h4>Opsi 2: Tanpa Popup / Langsung via URL Parameter</h4>
+        <p>Integrasi MCP MR-CAPSULES mendukung **OAuth 2.0 PKCE Auto-Discovery (RFC 8414 &amp; RFC 7591)** resmi.</p>
         <ol style="font-family: var(--font-mono); color: var(--text-muted); line-height: 1.7; font-size: 15px; padding-left: 24px; margin: 0;">
-          <li style="margin-bottom: 8px;"><strong>Name:</strong> <code style="font-size:12px; background:var(--bg-inset); padding:2px 6px; border-radius:4px;">mr capsules</code></li>
-          <li style="margin-bottom: 8px;"><strong>URL:</strong> <code style="font-size:12px; background:var(--bg-inset); padding:2px 6px; border-radius:4px;">https://mr-capsules.vercel.app/api/mcp?key=KUNCI_API_ANDA</code></li>
-          <li style="margin-bottom: 8px;"><strong>Advanced settings:</strong> BIARKAN KOSONG (Jangan diisi apa pun).</li>
-          <li style="margin-bottom: 8px;">Klik <strong>Add</strong> &rarr; Langsung terhubung dalam 1 detik tanpa perlunya pop-up browser!</li>
+          <li style="margin-bottom: 8px;">Buka <strong>Claude.ai</strong> &rarr; <strong>Settings</strong> &rarr; <strong>Connectors</strong> &rarr; Klik <strong>Add Custom Connector (BETA)</strong>.</li>
+          <li style="margin-bottom: 8px;"><strong>Name:</strong> Isi dengan <code style="font-size:12px; background:var(--bg-inset); padding:2px 6px; border-radius:4px;">mr capsules</code> (atau nama pilihan Anda).</li>
+          <li style="margin-bottom: 8px;"><strong>URL:</strong> Isi dengan <code style="font-size:12px; background:var(--bg-inset); padding:2px 6px; border-radius:4px;">https://mr-capsules.vercel.app/api/mcp</code></li>
+          <li style="margin-bottom: 8px;"><strong>Advanced settings:</strong> <em>BIARKAN KOSONG / JANGAN DIISI</em> (Otorisasi OAuth 2.0 PKCE bekerja secara otomatis lewat Auto-Discovery).</li>
+          <li style="margin-bottom: 8px;">Klik <strong>Add</strong> &rarr; Klik <strong>Connect</strong> &rarr; Anda akan diarahkan ke halaman Login Mr. Capsules. Log in menggunakan akun Anda dan otorisasi selesai!</li>
         </ol>
 
         <div class="alert-box">

@@ -163,13 +163,7 @@ export default async function handler(req, res) {
   }
 
   // ── Authenticate ─────────────────────────────────────────────────────────
-  // Claude.ai web Custom Connectors can send credentials via:
-  //   - Authorization: ApiKey mrc_...
-  //   - Authorization: Bearer mrc_...
-  //   - Authorization: mrc_... (Raw key in Authorization)
-  //   - Authorization: Bearer <supabase_jwt>
-  //   - x-api-key: mrc_...
-  //   - Query parameter: ?key=mrc_...
+  // Supports OAuth Bearer Access Tokens (mrc_at_...), API keys (mrc_...), and JWTs
   const authHeader = (req.headers.authorization || '').trim();
   const xApiKey = (req.headers['x-api-key'] || req.headers['api-key'] || '').trim();
   const urlObj = new URL(req.url, `https://${req.headers.host || 'mr-capsules.vercel.app'}`);
@@ -177,26 +171,29 @@ export default async function handler(req, res) {
 
   let authResult = null;
 
-  if (xApiKey.startsWith('mrc_')) {
-    authResult = await authenticateApiKey(xApiKey, SUPABASE_URL, SB_SERVICE_KEY);
-  } else if (queryKey.startsWith('mrc_')) {
-    authResult = await authenticateApiKey(queryKey, SUPABASE_URL, SB_SERVICE_KEY);
-  } else if (authHeader.startsWith('ApiKey ')) {
-    authResult = await authenticateApiKey(authHeader.slice(7).trim(), SUPABASE_URL, SB_SERVICE_KEY);
-  } else if (authHeader.startsWith('Bearer ')) {
+  if (authHeader.startsWith('Bearer ')) {
     const bearerVal = authHeader.slice(7).trim();
-    if (bearerVal.startsWith('mrc_')) {
+    if (bearerVal.startsWith('mrc_at_')) {
+      authResult = await authenticateOAuthAccessToken(bearerVal, SUPABASE_URL, SB_SERVICE_KEY);
+    } else if (bearerVal.startsWith('mrc_')) {
       authResult = await authenticateApiKey(bearerVal, SUPABASE_URL, SB_SERVICE_KEY);
     } else {
       authResult = await authenticateJWT(bearerVal, SUPABASE_URL, SB_SERVICE_KEY);
     }
+  } else if (authHeader.startsWith('ApiKey ')) {
+    authResult = await authenticateApiKey(authHeader.slice(7).trim(), SUPABASE_URL, SB_SERVICE_KEY);
   } else if (authHeader.startsWith('mrc_')) {
-    // Raw key directly in Authorization header
     authResult = await authenticateApiKey(authHeader, SUPABASE_URL, SB_SERVICE_KEY);
+  } else if (xApiKey.startsWith('mrc_')) {
+    authResult = await authenticateApiKey(xApiKey, SUPABASE_URL, SB_SERVICE_KEY);
+  } else if (queryKey.startsWith('mrc_')) {
+    authResult = await authenticateApiKey(queryKey, SUPABASE_URL, SB_SERVICE_KEY);
   } else {
-    const authErr = {
-      message: 'Missing or invalid Authorization header. Provide key as "ApiKey mrc_...", "Bearer mrc_...", "mrc_...", or query param ?key=mrc_...'
-    };
+    res.setHeader(
+      'WWW-Authenticate',
+      'Bearer realm="https://mr-capsules.vercel.app", error="invalid_token", error_description="Bearer token required"'
+    );
+    const authErr = { message: 'Unauthorized. Bearer token required.' };
     if (isMcpJsonRpc) {
       return res.status(401).json({ jsonrpc: '2.0', id: mcpRequestId, error: { code: -32001, message: authErr.message } });
     }
@@ -204,6 +201,10 @@ export default async function handler(req, res) {
   }
 
   if (!authResult || authResult.error) {
+    res.setHeader(
+      'WWW-Authenticate',
+      'Bearer realm="https://mr-capsules.vercel.app", error="invalid_token", error_description="Invalid or expired token"'
+    );
     const msg = authResult?.error || 'Unauthorized';
     if (isMcpJsonRpc) {
       return res.status(401).json({ jsonrpc: '2.0', id: mcpRequestId, error: { code: -32001, message: msg } });
@@ -365,6 +366,34 @@ async function authenticateJWT(token, supabaseUrl, sbKey) {
     userId: userData.id,
     email: userData.email,
     userMetadata: userData.user_metadata || {}
+  };
+}
+
+async function authenticateOAuthAccessToken(token, supabaseUrl, sbKey) {
+  const res = await fetch(`${supabaseUrl}/rest/v1/oauth_tokens?access_token=eq.${encodeURIComponent(token)}&revoked=eq.false&select=*`, {
+    headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
+  });
+
+  if (!res.ok) {
+    return { error: 'OAuth token lookup failed' };
+  }
+
+  const rows = await res.json();
+  if (!rows || rows.length === 0) {
+    return { error: 'Invalid, revoked, or non-existent OAuth token' };
+  }
+
+  const tokenRecord = rows[0];
+  if (new Date(tokenRecord.expires_at) < new Date()) {
+    return { error: 'OAuth token expired' };
+  }
+
+  return {
+    isApiKey: false,
+    keyId: null,
+    userId: tokenRecord.user_id,
+    email: tokenRecord.user_email,
+    userMetadata: {}
   };
 }
 
