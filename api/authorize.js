@@ -35,10 +35,12 @@ export default async function handler(req, res) {
       code_challenge_methods_supported: ["S256"],
       token_endpoint_auth_methods_supported: ["none", "client_secret_post"],
       scopes_supported: ["mcp"],
-      logo_uri: `${issuer}/logo.svg`,
-      icon_uri: `${issuer}/logo.svg`,
+      logo_uri: `${issuer}/logo.png`,
+      icon_uri: `${issuer}/logo.png`,
+      logo_url: `${issuer}/logo.png`,
+      icon_url: `${issuer}/logo.png`,
       service_documentation: `${issuer}/docs#docsMcp`,
-      client_name: "Mr. Capsules MCP Gateway"
+      client_name: "Mr. Capsules"
     });
   }
 
@@ -200,10 +202,10 @@ export default async function handler(req, res) {
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <title>Authorize Claude | Mr. Capsules</title>
+      <link rel="icon" type="image/png" href="/logo.png">
       <link rel="icon" type="image/svg+xml" href="/logo.svg">
-      <link rel="icon" type="image/svg+xml" href="/favicon.svg">
-      <link rel="shortcut icon" href="/favicon.ico">
-      <style>
+      <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+      <link rel="shortcut icon" href="/favicon.png">
       <link rel="preconnect" href="https://fonts.googleapis.com">
       <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
       <link href="https://fonts.googleapis.com/css2?family=Donegal+One&display=swap" rel="stylesheet">

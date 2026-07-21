@@ -65,8 +65,8 @@ export default async function handler(req, res) {
       authorization_servers: [issuer],
       scopes_supported: ["mcp"],
       bearer_methods_supported: ["header"],
-      logo_uri: `${issuer}/logo.svg`,
-      icon_uri: `${issuer}/logo.svg`
+      logo_uri: `${issuer}/logo.png`,
+      icon_uri: `${issuer}/logo.png`
     });
   }
 
@@ -116,7 +116,14 @@ export default async function handler(req, res) {
             tools: { listChanged: false },
             resources: { listChanged: false }
           },
-          serverInfo: { name: 'mr-capsules-v2', version: '1.0.1' }
+          serverInfo: {
+            name: 'mr-capsules-mcp-server',
+            version: '2.0.0',
+            title: 'Mr. Capsules',
+            description: 'Mr. Capsules Medical Education Platform MCP Server',
+            icon_url: `${issuer}/logo.png`,
+            logo_uri: `${issuer}/logo.png`
+          }
         }
       });
     }
@@ -235,16 +242,15 @@ export default async function handler(req, res) {
     return res.status(401).json({ success: false, error: msg });
   }
 
-  // ── Rate limit (API keys only) ────────────────────────────────────────────
-  if (authResult.isApiKey) {
-    const allowed = await checkRateLimit(authResult.keyId, SUPABASE_URL, SB_SERVICE_KEY);
-    if (!allowed) {
-      const rateLimitMsg = 'Rate limit exceeded (60 requests/minute). Wait and retry.';
-      if (isMcpJsonRpc) {
-        return res.status(429).json({ jsonrpc: '2.0', id: mcpRequestId, error: { code: -32029, message: rateLimitMsg } });
-      }
-      return res.status(429).json({ success: false, error: rateLimitMsg });
+  // ── Rate limit (Universal: API keys, OAuth Tokens, JWTs) ─────────────────
+  const rateLimitId = authResult.isApiKey ? `key_${authResult.keyId}` : `user_${authResult.userId}`;
+  const allowed = await checkRateLimit(rateLimitId, SUPABASE_URL, SB_SERVICE_KEY);
+  if (!allowed) {
+    const rateLimitMsg = 'Rate limit exceeded (60 requests/minute). Wait and retry.';
+    if (isMcpJsonRpc) {
+      return res.status(429).json({ jsonrpc: '2.0', id: mcpRequestId, error: { code: -32029, message: rateLimitMsg } });
     }
+    return res.status(429).json({ success: false, error: rateLimitMsg });
   }
 
   // ── Resolve roles (same logic as api/admin.js) ────────────────────────────
@@ -473,7 +479,8 @@ async function authenticateOAuthAccessToken(token, supabaseUrl, sbKey, reqHost =
   const tokenAudience = canonicalizeUrl(tokenRecord.resource);
 
   if (tokenAudience && tokenAudience !== canonicalServerUrl && tokenAudience !== canonicalServerHost) {
-    console.warn(`[OAuth Token Audience Warning] timestamp="${new Date().toISOString()}" expected="${canonicalServerUrl}" received="${tokenAudience}" sub="${tokenRecord.user_email}"`);
+    console.error(`[OAuth Token Audience Mismatch] timestamp="${new Date().toISOString()}" expected="${canonicalServerUrl}" received="${tokenAudience}" sub="${tokenRecord.user_email}"`);
+    return { error: 'OAuth token audience mismatch: token resource does not match server URI' };
   }
 
   return {
@@ -570,6 +577,8 @@ async function ghApi(method, endpoint, bodyObj, githubToken, owner, repo) {
 async function routeMethod(method, params, auth, roles, cfg) {
   const { SUPABASE_URL: su, SB_SERVICE_KEY: sk, GITHUB_TOKEN: gt, GH_OWNER: go, GH_REPO: gr, MAX_KEYS_PER_USER: maxKeys } = cfg;
 
+  validateToolArguments(method, params);
+
   const m = (method || '').replace(/\./g, '_');
 
   if (m === 'system_health') {
@@ -597,7 +606,9 @@ async function routeMethod(method, params, auth, roles, cfg) {
   }
   if (m === 'apikeys_revoke') {
     if (!roles.canUseApiKeys) throw err403('Only division members can revoke API keys');
-    return revokeApiKey(auth.userId, params, su, sk);
+    const res = await revokeApiKey(auth.userId, params, su, sk);
+    await logAction(auth.email, 'mcp_apikey_revoke', { key_id: params.key_id }, su, sk);
+    return res;
   }
   if (m === 'oauth_tokens_list') {
     if (!roles.canUseApiKeys) throw err403('Only division members can view OAuth tokens');
@@ -606,7 +617,9 @@ async function routeMethod(method, params, auth, roles, cfg) {
   if (m === 'oauth_tokens_revoke') {
     if (!roles.canUseApiKeys) throw err403('Only division members can revoke OAuth tokens');
     if (!params.token_id && !params.access_token) throw err400('Missing params.token_id or params.access_token');
-    return revokeOAuthToken(params.token_id || params.access_token, su, sk);
+    const res = await revokeOAuthToken(params.token_id || params.access_token, su, sk);
+    await logAction(auth.email, 'mcp_oauth_revoke', { token_id: params.token_id || params.access_token }, su, sk);
+    return res;
   }
 
   if (m === 'content_list') return contentList(gt, go, gr);
@@ -839,7 +852,9 @@ async function routeMethod(method, params, auth, roles, cfg) {
   if (m === 'review_delete_issue') {
     if (!roles.isReviewer && !roles.isAdmin) throw err403('Reviewer or Admin only');
     if (!params.issue_id) throw err400('Missing params.issue_id');
-    return reviewIssuesDelete(params.issue_id, su, sk);
+    const res = await reviewIssuesDelete(params.issue_id, su, sk);
+    await logAction(auth.email, 'mcp_review_delete_issue', { issue_id: params.issue_id }, su, sk);
+    return res;
   }
 
   if (m === 'activity_logs') {
@@ -856,7 +871,7 @@ async function routeMethod(method, params, auth, roles, cfg) {
     if (!roles.isSuperAdmin) throw err403('SuperAdmin only to access codebase files');
     if (!params.path) throw err400('Missing params.path');
     validateCodebasePath(params.path);
-    return codebaseReadFile(params.path, gt, go, gr);
+    return codebaseReadFile(params.path, auth.email, gt, go, gr, su, sk);
   }
   if (m === 'codebase_write_file') {
     if (!roles.isSuperAdmin) throw err403('SuperAdmin only to modify codebase files');
@@ -876,8 +891,8 @@ async function routeMethod(method, params, auth, roles, cfg) {
     return codebaseSearch(params.query, gt, go, gr);
   }
   if (m === 'mcp_create_tool') {
-    if (!roles.isAdmin) throw err403('Admin or SuperAdmin only to create custom MCP tools');
-    return mcpCreateTool(params, auth.email, su, sk);
+    if (!roles.isSuperAdmin) throw err403('SuperAdmin only to create custom MCP tools');
+    return mcpCreateTool(params, auth.email, su, sk, roles);
   }
   if (m === 'mcp_delete_tool') {
     if (!roles.isAdmin) throw err403('Admin or SuperAdmin only to delete custom MCP tools');
@@ -905,18 +920,96 @@ function err400(msg) { const e = new Error(msg); e.statusCode = 400; return e; }
 function err403(msg) { const e = new Error(msg); e.statusCode = 403; return e; }
 function err404(msg) { const e = new Error(msg); e.statusCode = 404; return e; }
 
+function sanitizeAndNormalizePath(rawPath) {
+  if (!rawPath || typeof rawPath !== 'string') throw err400('Path must be a non-empty string');
+  let clean = rawPath.replace(/\0/g, '');
+  try {
+    clean = decodeURIComponent(clean);
+  } catch (e) {}
+  clean = clean.replace(/\\/g, '/').replace(/\/+/g, '/');
+  if (clean.includes('..') || clean.includes('./') || clean.startsWith('/') || clean.toLowerCase().includes('%2e%2e')) {
+    throw err400('Invalid path: directory traversal is strictly forbidden');
+  }
+  return clean.trim();
+}
+
 function validatePath(path) {
-  if (!path) throw err400('Path is required');
-  if (path.includes('..') || path.startsWith('/')) throw err400('Invalid path: no traversal allowed');
-  if (!path.startsWith('content/') && !path.startsWith('cover/')) throw err400('Path must start with content/ or cover/');
+  const cleanPath = sanitizeAndNormalizePath(path);
+  if (!cleanPath.startsWith('content/') && !cleanPath.startsWith('cover/')) {
+    throw err400('Path must start with content/ or cover/');
+  }
+  return cleanPath;
 }
 
 function validateCodebasePath(path) {
-  if (!path) throw err400('Path is required');
-  if (path.includes('..') || path.startsWith('/')) throw err400('Invalid path: no traversal allowed');
+  const cleanPath = sanitizeAndNormalizePath(path);
+  const forbiddenFiles = [
+    '.env', '.env.local', '.env.production', '.env.development',
+    'vercel.json', '.vercel', 'package-lock.json'
+  ];
+  const lower = cleanPath.toLowerCase();
+  if (forbiddenFiles.includes(lower) || lower.startsWith('.git') || lower.startsWith('.github/secrets')) {
+    throw err403(`Access denied: Access to sensitive codebase file "${cleanPath}" is strictly prohibited.`);
+  }
+  return cleanPath;
 }
 
-async function codebaseReadFile(path, githubToken, owner, repo) {
+function validateToolArguments(method, params) {
+  if (params === null || params === undefined) {
+    params = {};
+  }
+  if (typeof params !== 'object') {
+    throw err400('Invalid params format: must be a JSON object');
+  }
+
+  const m = (method || '').replace(/\./g, '_');
+  const tools = getMcpToolsList();
+  const toolDef = tools.find(t => t.name === m);
+
+  if (!toolDef || !toolDef.inputSchema) return;
+
+  const schema = toolDef.inputSchema;
+  const required = schema.required || [];
+  const props = schema.properties || {};
+
+  for (const reqField of required) {
+    if (params[reqField] === undefined || params[reqField] === null || params[reqField] === '') {
+      throw err400(`Missing required parameter: params.${reqField}`);
+    }
+  }
+
+  for (const [key, val] of Object.entries(params)) {
+    if (val === undefined || val === null) continue;
+    const propSchema = props[key];
+    if (!propSchema) continue;
+
+    if (propSchema.type === 'string') {
+      if (typeof val !== 'string') throw err400(`Invalid type for params.${key}: expected string`);
+      const isLargePayload = key.toLowerCase().includes('base64') || key.toLowerCase().includes('content');
+      const maxLen = isLargePayload ? 5242880 : 20000;
+      if (val.length > maxLen) throw err400(`Parameter params.${key} exceeds maximum allowed length`);
+    } else if (propSchema.type === 'number') {
+      if (typeof val !== 'number' || Number.isNaN(val)) throw err400(`Invalid type for params.${key}: expected number`);
+    } else if (propSchema.type === 'boolean') {
+      if (typeof val !== 'boolean') throw err400(`Invalid type for params.${key}: expected boolean`);
+    } else if (propSchema.type === 'array') {
+      if (!Array.isArray(val)) throw err400(`Invalid type for params.${key}: expected array`);
+      if (key === 'paths' && val.length > 20) throw err400(`Parameter params.${key} exceeds maximum limit of 20 items per request`);
+    }
+
+    if (propSchema.enum && !propSchema.enum.includes(val)) {
+      throw err400(`Invalid value for params.${key}: must be one of [${propSchema.enum.join(', ')}]`);
+    }
+  }
+
+  if (m === 'upload_init') {
+    if (!Number.isInteger(params.totalChunks) || params.totalChunks < 1 || params.totalChunks > 500) {
+      throw err400('params.totalChunks must be an integer between 1 and 500');
+    }
+  }
+}
+
+async function codebaseReadFile(path, adminEmail, githubToken, owner, repo, su, sk) {
   const res = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${encodeURIComponent(path)}`, {
     headers: { 'Authorization': `Bearer ${githubToken}`, 'Accept': 'application/vnd.github+json', 'User-Agent': 'MR-CAPSULES-MCP' }
   });
@@ -924,6 +1017,7 @@ async function codebaseReadFile(path, githubToken, owner, repo) {
   const data = await res.json();
   if (data.type !== 'file') throw err400(`Path ${path} is a ${data.type}, not a file`);
   const contentUtf8 = Buffer.from(data.content.replace(/\n/g, ''), 'base64').toString('utf8');
+  await logAction(adminEmail, 'mcp_codebase_read', { path }, su, sk);
   return { path, content: contentUtf8, sha: data.sha, size: data.size };
 }
 
@@ -1010,10 +1104,35 @@ async function getActiveCustomTools(su, sk) {
   }
 }
 
-async function mcpCreateTool(params, adminEmail, su, sk) {
+async function mcpCreateTool(params, adminEmail, su, sk, roles) {
+  if (!roles || !roles.isSuperAdmin) {
+    throw err403('SuperAdmin role required to create dynamic custom MCP tools.');
+  }
+
   const { name, description, inputSchema, handler, minRole = 'admin' } = params;
   if (!name || !description || !handler) throw err400('Missing required fields: name, description, handler');
-  
+
+  const forbiddenPatterns = [
+    /process\s*\./i,
+    /process\s*\[/i,
+    /process\s*env/i,
+    /SUPABASE_SERVICE_ROLE_KEY/i,
+    /SB_SERVICE_KEY/i,
+    /GITHUB_TOKEN/i,
+    /eval\s*\(/i,
+    /Function\s*\(/i,
+    /globalThis/i,
+    /global\s*\./i,
+    /import\s*\(/i,
+    /require\s*\(/i
+  ];
+
+  for (const pattern of forbiddenPatterns) {
+    if (pattern.test(handler)) {
+      throw err400(`Custom tool handler rejected: Contains forbidden security pattern matching ${pattern.toString()}`);
+    }
+  }
+
   const cleanName = name.trim().toLowerCase().replace(/[^a-z0-9_]/g, '_');
   
   const toolDef = {
@@ -1064,12 +1183,12 @@ async function executeCustomTool(toolDef, params, auth, roles, su, sk, gt) {
   }
 
   try {
-    const fn = new Function('params', 'auth', 'su', 'sk', 'gt', 'fetch', `
+    const fn = new Function('params', 'auth', 'su', 'gt', 'fetch', `
       return (async () => {
         ${toolDef.handler}
       })();
     `);
-    const result = await fn(params, auth, su, sk, gt, fetch);
+    const result = await fn(params, auth, su, gt, fetch);
     return { success: true, tool: toolDef.name, result };
   } catch (err) {
     throw new Error(`Execution error in custom tool "${toolDef.name}": ${err.message}`);
