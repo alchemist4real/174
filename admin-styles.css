@@ -741,7 +741,7 @@ body { margin: 0; overflow: hidden; }
   margin-bottom: 0;
 }
 
-.docs-section p, .docs-section ul {
+.docs-section p, .docs-section ul, .docs-section ol {
   font-family: var(--font-mono);
   color: var(--text-muted);
   line-height: 1.7;
@@ -749,7 +749,7 @@ body { margin: 0; overflow: hidden; }
   margin: 0;
 }
 
-.docs-section ul {
+.docs-section ul, .docs-section ol {
   padding-left: 24px;
 }
 
@@ -759,6 +759,51 @@ body { margin: 0; overflow: hidden; }
 
 .docs-section strong {
   color: var(--c3);
+}
+
+.docs-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  border-radius: var(--radius-card);
+  overflow: hidden;
+  border: var(--border-main);
+  background: var(--bg-card);
+}
+
+.docs-table th {
+  background: var(--bg-inset);
+  color: var(--text-main);
+  font-family: var(--font-sans);
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 10px 14px;
+  border-bottom: var(--border-main);
+  text-align: left;
+}
+
+.docs-table td {
+  padding: 10px 14px;
+  border-bottom: var(--border-light);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-muted);
+  vertical-align: middle;
+}
+
+.docs-table tr:last-child td {
+  border-bottom: none;
+}
+
+.docs-table code, .docs-section code {
+  font-size: 12px;
+  background: var(--bg-inset);
+  padding: 2px 6px;
+  border-radius: 4px;
+  color: var(--c4);
+  border: 1px solid color-mix(in srgb, var(--c4) 25%, transparent);
 }
 
 .alert-box {

@@ -7,8 +7,8 @@
   <link rel="icon" type="image/svg+xml" href="/logo.svg">
   <link rel="icon" type="image/svg+xml" href="/favicon.svg">
   <link rel="shortcut icon" href="/favicon.ico">
-  <link rel="stylesheet" href="/tokens.css?v=1.9">
-  <link rel="stylesheet" href="/admin-styles.css?v=1.9">
+  <link rel="stylesheet" href="/tokens.css?v=2.0">
+  <link rel="stylesheet" href="/admin-styles.css?v=2.0">
 </head>
 <body>
   <div class="bg"></div>
@@ -30,8 +30,8 @@
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
         General Guide
       </div>
-      <!-- Tab tambahan di masa depan dapat ditambahkan di sini -->
     </div>
+
     <div id="adminThemeToggles" class="docs-theme-toggles">
       <button class="btn-unified admin-theme-btn-unified theme-toggle-btn" data-theme-val="light">LIGHT</button>
       <button class="btn-unified admin-theme-btn-unified theme-toggle-btn" data-theme-val="dark">DARK</button>
@@ -40,17 +40,17 @@
   </div>
   
   <div class="docs-content-area">
-    <div class="docs-container" id="docsGeneral">
+    <div class="docs-container active" id="docsGeneral">
       
       <div class="docs-title">DOKUMENTASI SISTEM</div>
       
       <div class="docs-section">
-        <h2 >1. Pengantar MR-CAPSULES</h2>
+        <h2>1. Pengantar MR-CAPSULES</h2>
         <p><strong>MR-CAPSULES</strong> adalah platform edukasi open-source yang didedikasikan untuk melestarikan dan mendistribusikan sumber belajar mahasiswa kedokteran/kesehatan secara terpusat. Platform ini mengubah materi kuliah, praktikum, dan soal tahun lalu menjadi basis data HTML pilihan ganda yang interaktif (CBT pool).</p>
       </div>
 
       <div class="docs-section">
-        <h2 >2. Pengenalan Admin Panel</h2>
+        <h2>2. Pengenalan Admin Panel</h2>
         <p>Seluruh kontributor akan bekerja menggunakan <strong>Admin Panel</strong> yang memiliki 4 fitur utama:</p>
         <ul>
           <li><strong>Dashboard:</strong> Melacak analitik aplikasi (Uptime, Total Pengguna, Member Online), log aktivitas hybrid, serta melihat papan peringkat kontributor (Leaderboard).</li>
@@ -61,7 +61,7 @@
       </div>
 
       <div class="docs-section">
-        <h2 >3. Pembagian Divisi Kontributor</h2>
+        <h2>3. Pembagian Divisi Kontributor</h2>
         <p>Kontribusi dalam MR-CAPSULES dibagi menjadi beberapa divisi utama. Anda dapat mendaftar tanpa rasa ragu, karena sistem ini didesain agar mudah dipelajari oleh siapa saja.</p>
         
         <div class="alert-box">
@@ -88,29 +88,29 @@
         <p><strong>MR-CAPSULES</strong> menyediakan API Gateway & Model Context Protocol (MCP) serverless endpoint berbasis <em>Streamable HTTP (MCP 2025-06-18)</em>. Fitur ini memungkinkan AI Assistant seperti <strong>Claude.ai Web</strong>, <strong>Claude Desktop</strong>, atau AI Agent eksternal untuk mengakses konten dan melakukan tugas secara otomatis di Admin Panel.</p>
 
         <h3>A. Cara Mengoperasikan & Mengisi API Key</h3>
-        <ol style="font-family: var(--font-mono); color: var(--text-muted); line-height: 1.7; font-size: 15px; padding-left: 24px; margin: 0;">
-          <li style="margin-bottom: 10px;">Buka <strong>Admin Panel</strong> dan pastikan Anda sudah terhubung ke salah satu Divisi (Management, Development, atau Review).</li>
-          <li style="margin-bottom: 10px;">Pilih tab <strong>API Keys</strong> di navigasi utama.</li>
-          <li style="margin-bottom: 10px;">Masukkan nama kunci pada bidang <strong>Key Name</strong> (contoh: <code style="font-size:12px; background:var(--bg-inset); padding:2px 6px; border-radius:4px;">Claude Web MCP</code>) serta tentukan masa berlaku (<em>Expires In</em>).</li>
-          <li style="margin-bottom: 10px;">Klik tombol <strong>+ Generate Key</strong>. Kunci rahasia berawalan <code style="font-size:12px; background:var(--bg-inset); padding:2px 6px; border-radius:4px;">mrc_...</code> akan ditampilkan dalam kotak kuning.</li>
-          <li style="margin-bottom: 10px;">Klik tombol <strong>Copy</strong> dan simpan kunci tersebut segera karena tidak dapat ditampilkan kembali demi alasan keamanan.</li>
+        <ol>
+          <li>Buka <strong>Admin Panel</strong> dan pastikan Anda sudah terhubung ke salah satu Divisi (Management, Development, atau Review).</li>
+          <li>Pilih tab <strong>API Keys</strong> di navigasi utama.</li>
+          <li>Masukkan nama kunci pada bidang <strong>Key Name</strong> (contoh: <code>Claude Web MCP</code>) serta tentukan masa berlaku (<em>Expires In</em>).</li>
+          <li>Klik tombol <strong>+ Generate Key</strong>. Kunci rahasia berawalan <code>mrc_...</code> akan ditampilkan dalam kotak kuning.</li>
+          <li>Klik tombol <strong>Copy</strong> dan simpan kunci tersebut segera karena tidak dapat ditampilkan kembali demi alasan keamanan.</li>
         </ol>
 
         <h3>B. Menghubungkan ke Claude.ai Web (Custom Connector)</h3>
-        <p>Integrasi MCP MR-CAPSULES mendukung **OAuth 2.0 PKCE Auto-Discovery (RFC 8414 &amp; RFC 7591)** resmi.</p>
-        <ol style="font-family: var(--font-mono); color: var(--text-muted); line-height: 1.7; font-size: 15px; padding-left: 24px; margin: 0;">
-          <li style="margin-bottom: 8px;">Buka <strong>Claude.ai</strong> &rarr; <strong>Settings</strong> &rarr; <strong>Connectors</strong> &rarr; Klik <strong>Add Custom Connector (BETA)</strong>.</li>
-          <li style="margin-bottom: 8px;"><strong>Name:</strong> Isi dengan <code style="font-size:12px; background:var(--bg-inset); padding:2px 6px; border-radius:4px;">mr capsules</code> (atau nama pilihan Anda).</li>
-          <li style="margin-bottom: 8px;"><strong>URL:</strong> Isi dengan <code style="font-size:12px; background:var(--bg-inset); padding:2px 6px; border-radius:4px;">https://mr-capsules.vercel.app/api/mcp</code></li>
-          <li style="margin-bottom: 8px;"><strong>Advanced settings:</strong> <em>BIARKAN KOSONG / JANGAN DIISI</em> (Otorisasi OAuth 2.0 PKCE bekerja secara otomatis lewat Auto-Discovery).</li>
-          <li style="margin-bottom: 8px;">Klik <strong>Add</strong> &rarr; Klik <strong>Connect</strong> &rarr; Anda akan diarahkan ke halaman Login Mr. Capsules. Log in menggunakan akun Anda dan otorisasi selesai!</li>
+        <p>Integrasi MCP MR-CAPSULES mendukung <strong>OAuth 2.0 PKCE Auto-Discovery (RFC 8414 &amp; RFC 7591)</strong> resmi.</p>
+        <ol>
+          <li>Buka <strong>Claude.ai</strong> &rarr; <strong>Settings</strong> &rarr; <strong>Connectors</strong> &rarr; Klik <strong>Add Custom Connector (BETA)</strong>.</li>
+          <li><strong>Name:</strong> Isi dengan <code>mr capsules</code> (atau nama pilihan Anda).</li>
+          <li><strong>URL:</strong> Isi dengan <code>https://mr-capsules.vercel.app/api/mcp</code></li>
+          <li><strong>Advanced settings:</strong> <em>BIARKAN KOSONG / JANGAN DIISI</em> (Otorisasi OAuth 2.0 PKCE bekerja secara otomatis lewat Auto-Discovery).</li>
+          <li>Klik <strong>Add</strong> &rarr; Klik <strong>Connect</strong> &rarr; Anda akan diarahkan ke halaman Login Mr. Capsules. Log in menggunakan akun Anda dan otorisasi selesai!</li>
         </ol>
 
         <div class="alert-box">
           <strong>CATATAN:</strong> Penggunaan API Key dibatasi maksimum 5 kunci aktif per pengguna dengan batasan <em>rate limit</em> 60 request/menit untuk mencegah penyalahgunaan.
         </div>
 
-        <h3>C. Daftar Kemampuan MCP Tools (54 Method)</h3>
+        <h3>C. Daftar Kemampuan MCP Tools (57 Method)</h3>
         <p>AI Assistant yang terhubung dapat mengeksekusi fungsi-fungsi berikut secara langsung:</p>
         <ul>
           <li><strong>Materi, Cover &amp; Sampul:</strong> <code>content_list</code>, <code>content_get</code>, <code>content_tree</code>, <code>content_upload</code>, <code>content_delete</code>, <code>content_delete_files</code>, <code>content_rename</code>, <code>cover_list</code>, <code>cover_upload</code>, <code>cover_delete</code></li>
@@ -118,12 +118,148 @@
           <li><strong>Review &amp; QA:</strong> <code>review_issues</code>, <code>review_report</code>, <code>review_resolve</code>, <code>review_delete_issue</code></li>
           <li><strong>Organisasi &amp; Divisi:</strong> <code>divisions_list</code>, <code>divisions_my</code>, <code>divisions_join</code>, <code>divisions_update_whatsapp</code>, <code>divisions_get_members</code>, <code>divisions_add_member</code>, <code>divisions_remove_member</code></li>
           <li><strong>User, Perangkat &amp; Hak Akses:</strong> <code>users_list</code>, <code>users_ban</code>, <code>users_add_admin</code>, <code>users_remove_admin</code>, <code>users_delete</code>, <code>users_remove_device</code>, <code>users_block_device</code>, <code>contributions_leaderboard</code>, <code>contributions_my</code></li>
-          <li><strong>Dokumentasi &amp; Sistem:</strong> <code>docs_get</code>, <code>docs_update_section</code>, <code>docs_add_section</code>, <code>system_health</code>, <code>system_cleanup_guests</code>, <code>activity_logs</code>, <code>config_get</code>, <code>config_update</code>, <code>apikeys_list</code>, <code>apikeys_create</code>, <code>apikeys_revoke</code>, <code>oauth_tokens_list</code>, <code>oauth_tokens_revoke</code></li>
+          <li><strong>Dokumentasi &amp; Sistem:</strong> <code>docs_get</code>, <code>docs_update_section</code>, <code>docs_add_section</code>, <code>docs_add_tab</code>, <code>docs_update_tab</code>, <code>docs_delete_tab</code>, <code>system_health</code>, <code>system_cleanup_guests</code>, <code>activity_logs</code>, <code>config_get</code>, <code>config_update</code>, <code>apikeys_list</code>, <code>apikeys_create</code>, <code>apikeys_revoke</code>, <code>oauth_tokens_list</code>, <code>oauth_tokens_revoke</code></li>
         </ul>
       </div>
+
+      <div class="docs-section">
+        <h2>5. Referensi Lengkap MCP Tools & Hak Akses</h2>
+        <p>Bagian ini merinci seluruh <strong>57 method/tools</strong> yang tersedia lewat MCP Gateway, dikelompokkan berdasarkan fungsinya, beserta siapa saja yang berwenang menggunakannya.</p>
+
+        <div class="alert-box">
+          <strong>PENTING:</strong> Meskipun sebuah tool "tampak" di daftar AI Assistant Anda, eksekusinya tetap divalidasi ulang oleh server berdasarkan role akun yang terhubung. Jika Anda tidak memiliki hak akses, permintaan akan ditolak (403/permission error) walau tool sempat dipanggil.
+        </div>
+
+        <h3>A. Level Akses (Role Hierarchy)</h3>
+        <ul>
+          <li><strong>SuperAdmin:</strong> Pemegang kendali penuh sistem. Satu-satunya yang dapat mengangkat/menurunkan Admin dan menghapus akun secara permanen.</li>
+          <li><strong>Admin:</strong> Diangkat oleh SuperAdmin. Mengelola konfigurasi sistem, konten, dan moderasi pengguna, namun tidak bisa mengubah hak Admin lain.</li>
+          <li><strong>Reviewer:</strong> Anggota Divisi Review & QA. Berwenang atas siklus review tugas (start review, approve, reject, lapor isu).</li>
+          <li><strong>Developer:</strong> Anggota Divisi Development. Berwenang mengambil (claim) dan mengumpulkan (submit) tugas.</li>
+          <li><strong>Semua Pengguna Terautentikasi:</strong> Akses baca umum serta pengelolaan data milik sendiri (API key, kontribusi, WhatsApp, dsb).</li>
+        </ul>
+
+        <h3>B. Materi, Cover & Konten</h3>
+        <table class="docs-table">
+          <thead>
+            <tr><th>Tool</th><th>Fungsi</th><th>Akses</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>content_list</code>, <code>content_get</code>, <code>content_tree</code></td><td>Melihat/membaca materi HTML</td><td>Semua pengguna terautentikasi</td></tr>
+            <tr><td><code>content_upload</code>, <code>content_rename</code></td><td>Menambah/memindah file materi</td><td>Developer, Reviewer, Admin, SuperAdmin</td></tr>
+            <tr><td><code>content_delete</code>, <code>content_delete_files</code></td><td>Menghapus materi</td><td>Admin, SuperAdmin</td></tr>
+            <tr><td><code>cover_list</code></td><td>Melihat cover</td><td>Semua pengguna terautentikasi</td></tr>
+            <tr><td><code>cover_upload</code>, <code>cover_delete</code></td><td>Mengelola cover semester/blok</td><td>Admin, SuperAdmin</td></tr>
+          </tbody>
+        </table>
+
+        <h3>C. Task Board & Workflow</h3>
+        <table class="docs-table">
+          <thead>
+            <tr><th>Tool</th><th>Fungsi</th><th>Akses</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>tasks_list</code>, <code>tasks_logs</code></td><td>Melihat papan tugas & riwayat</td><td>Semua pengguna terautentikasi</td></tr>
+            <tr><td><code>tasks_create</code>, <code>tasks_delete</code></td><td>Membuat/menghapus tugas</td><td>Management (Admin/SuperAdmin)</td></tr>
+            <tr><td><code>tasks_claim</code>, <code>tasks_unclaim</code>, <code>tasks_submit</code></td><td>Mengambil & mengumpulkan tugas</td><td>Developer</td></tr>
+            <tr><td><code>tasks_start_review</code>, <code>tasks_approve</code>, <code>tasks_reject</code></td><td>Siklus review tugas</td><td>Reviewer</td></tr>
+            <tr><td><code>tasks_add_note</code></td><td>Menambah catatan di log tugas</td><td>Semua pengguna terautentikasi</td></tr>
+          </tbody>
+        </table>
+
+        <h3>D. Review & QA</h3>
+        <table class="docs-table">
+          <thead>
+            <tr><th>Tool</th><th>Fungsi</th><th>Akses</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>review_issues</code></td><td>Melihat isu review pada tugas</td><td>Reviewer</td></tr>
+            <tr><td><code>review_report</code>, <code>review_resolve</code>, <code>review_delete_issue</code></td><td>Melaporkan/menyelesaikan/menghapus isu</td><td>Reviewer, Admin, SuperAdmin</td></tr>
+          </tbody>
+        </table>
+
+        <h3>E. Organisasi & Divisi</h3>
+        <table class="docs-table">
+          <thead>
+            <tr><th>Tool</th><th>Fungsi</th><th>Akses</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>divisions_list</code>, <code>divisions_my</code></td><td>Melihat daftar/status divisi sendiri</td><td>Semua pengguna terautentikasi</td></tr>
+            <tr><td><code>divisions_join</code>, <code>divisions_update_whatsapp</code></td><td>Bergabung ke divisi & update kontak</td><td>Semua pengguna terautentikasi</td></tr>
+            <tr><td><code>divisions_get_members</code></td><td>Melihat anggota divisi tertentu</td><td>Admin, SuperAdmin</td></tr>
+            <tr><td><code>divisions_add_member</code>, <code>divisions_remove_member</code></td><td>Menambah/mengeluarkan anggota divisi</td><td>Admin, SuperAdmin</td></tr>
+          </tbody>
+        </table>
+
+        <h3>F. User, Perangkat & Hak Akses</h3>
+        <table class="docs-table">
+          <thead>
+            <tr><th>Tool</th><th>Fungsi</th><th>Akses</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>users_list</code></td><td>Melihat semua pengguna terdaftar</td><td>SuperAdmin</td></tr>
+            <tr><td><code>users_ban</code>, <code>users_delete</code>, <code>users_remove_device</code>, <code>users_block_device</code></td><td>Moderasi & keamanan akun/perangkat</td><td>SuperAdmin</td></tr>
+            <tr><td><code>users_add_admin</code>, <code>users_remove_admin</code></td><td>Mengangkat/menurunkan hak Admin</td><td>SuperAdmin</td></tr>
+            <tr><td><code>contributions_leaderboard</code>, <code>contributions_my</code></td><td>Melihat papan peringkat & riwayat sendiri</td><td>Semua pengguna terautentikasi</td></tr>
+          </tbody>
+        </table>
+
+        <h3>G. Dokumentasi & Sistem</h3>
+        <table class="docs-table">
+          <thead>
+            <tr><th>Tool</th><th>Fungsi</th><th>Akses</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>docs_get</code>, <code>system_health</code></td><td>Membaca dokumentasi & status sistem</td><td>Semua pengguna terautentikasi</td></tr>
+            <tr><td><code>docs_update_section</code>, <code>docs_add_section</code>, <code>docs_add_tab</code>, <code>docs_update_tab</code>, <code>docs_delete_tab</code></td><td>Mengedit & mengelola tab/halaman dokumentasi</td><td>Admin, SuperAdmin</td></tr>
+            <tr><td><code>config_get</code>, <code>config_update</code>, <code>activity_logs</code>, <code>system_cleanup_guests</code></td><td>Konfigurasi global & pemeliharaan sistem</td><td>Admin, SuperAdmin</td></tr>
+            <tr><td><code>apikeys_list</code>, <code>apikeys_create</code>, <code>apikeys_revoke</code></td><td>Mengelola API key milik sendiri</td><td>Semua pengguna terautentikasi</td></tr>
+            <tr><td><code>oauth_tokens_list</code>, <code>oauth_tokens_revoke</code></td><td>Mengelola koneksi OAuth (Claude/MCP) milik sendiri</td><td>Semua pengguna terautentikasi</td></tr>
+          </tbody>
+        </table>
+
+        <div class="alert-box">
+          <strong>CATATAN:</strong> Tabel di atas merepresentasikan role minimum yang dibutuhkan. Role yang lebih tinggi dalam hierarki (SuperAdmin &gt; Admin &gt; Reviewer/Developer) otomatis mewarisi akses baca dari role di bawahnya.
+        </div>
+      </div>
+
+    </div>
   </div>
   
   <script>
+    function initTabs() {
+      const tabs = document.querySelectorAll('.top-nav .tab');
+      const containers = document.querySelectorAll('.docs-container');
+
+      tabs.forEach(tab => {
+        tab.onclick = () => {
+          const target = tab.getAttribute('data-target');
+          if (!target) return;
+          tabs.forEach(t => t.classList.remove('active'));
+          containers.forEach(c => c.classList.remove('active'));
+          
+          tab.classList.add('active');
+          const targetEl = document.getElementById(target);
+          if (targetEl) targetEl.classList.add('active');
+
+          if (history.pushState) {
+            history.pushState(null, null, '#' + target);
+          } else {
+            location.hash = '#' + target;
+          }
+        };
+      });
+
+      const hash = location.hash.replace('#', '');
+      if (hash) {
+        const targetTab = document.querySelector(`.top-nav .tab[data-target="${hash}"]`);
+        if (targetTab) targetTab.click();
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', initTabs);
+    initTabs();
+
     const savedTheme = localStorage.getItem('capsules_theme');
     if (savedTheme) {
       document.documentElement.setAttribute('data-theme', savedTheme);
