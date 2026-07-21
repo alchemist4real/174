@@ -365,8 +365,18 @@
             <div style="font-size:12px; color:var(--text-muted);">5. Click <strong>Add</strong> &rarr; Click <strong>Connect</strong> &rarr; Sign in with your Mr. Capsules account to authorize!</div>
           </div>
 
+          <div style="margin-bottom: 28px;">
+            <div style="font-size:13px; font-weight:700; color:var(--text-main); margin-bottom:12px; text-transform:uppercase; letter-spacing:0.05em; display:flex; align-items:center; gap:8px;">
+              <span style="background:var(--accent-soft); color:var(--accent); padding:4px 10px; border-radius:99px; font-size:11px;">MCP OAuth</span>
+              <span>Connected Claude / Client Sessions</span>
+            </div>
+            <div id="oauthTokensList">
+              <div style="color:var(--text-muted); font-size:14px; padding:24px; text-align:center;">Loading OAuth sessions...</div>
+            </div>
+          </div>
+
           <div>
-            <div style="font-size:13px; font-weight:600; color:var(--text-muted); margin-bottom:12px; text-transform:uppercase; letter-spacing:0.05em;">Active Keys (max 5)</div>
+            <div style="font-size:13px; font-weight:600; color:var(--text-muted); margin-bottom:12px; text-transform:uppercase; letter-spacing:0.05em;">Developer API Keys (max 5)</div>
             <div id="apiKeysList">
               <div style="color:var(--text-muted); font-size:14px; padding:24px; text-align:center;">Loading...</div>
             </div>

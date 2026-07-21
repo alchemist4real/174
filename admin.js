@@ -1705,11 +1705,63 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
     return data.result;
   }
 
+  async function loadOAuthTokens() {
+    var oauthListEl = document.getElementById('oauthTokensList');
+    if (!oauthListEl) return;
+
+    oauthListEl.innerHTML = '<div style="color:var(--text-muted); font-size:14px; padding:24px; text-align:center;">Loading OAuth sessions...</div>';
+
+    try {
+      var result = await mcpCall('oauth_tokens_list', {});
+      var tokens = result.tokens || [];
+
+      if (tokens.length === 0) {
+        oauthListEl.innerHTML = '<div style="color:var(--text-muted); font-size:14px; padding:20px; text-align:center; border:1px dashed var(--border-light); border-radius:10px;">No active OAuth sessions found. Connect via Claude.ai connector to generate an OAuth token.</div>';
+        return;
+      }
+
+      oauthListEl.innerHTML = tokens.map(function(t) {
+        var created = new Date(t.created_at).toLocaleString();
+        var expires = t.expires_at ? new Date(t.expires_at).toLocaleString() : 'No expiry';
+        return '<div style="display:flex; justify-content:space-between; align-items:center; padding:14px 18px; border:1px solid var(--border-light); border-radius:10px; margin-bottom:10px; background:var(--bg-card); gap:12px;">' +
+          '<div>' +
+            '<div style="font-weight:700; font-size:14px; color:var(--text-main); margin-bottom:4px; display:flex; align-items:center; gap:8px;">' +
+              '<span style="color:#d97706;">🤖 Claude AI Connector</span>' +
+              '<span style="font-size:11px; background:var(--accent-soft); color:var(--accent); padding:2px 8px; border-radius:99px; font-weight:600;">ACTIVE</span>' +
+            '</div>' +
+            '<div style="font-size:13px; color:var(--text-main); margin-bottom:4px;">Account: <strong>' + sanitize(t.user_email) + '</strong></div>' +
+            '<code style="font-size:11px; background:var(--bg-inset); padding:2px 8px; border-radius:4px; color:var(--text-muted);">' + sanitize(t.token_prefix) + '</code>' +
+            '<span style="font-size:12px; color:var(--text-muted); margin-left:12px;">Authorized ' + created + '</span>' +
+            '<span style="font-size:12px; color:var(--text-muted); margin-left:8px;">&middot; Expires: ' + expires + '</span>' +
+          '</div>' +
+          '<button class="btn-unified" style="color:var(--danger); border-color:var(--danger);" onclick="window._revokeOAuthToken(\'' + sanitize(t.token_id).replace(/'/g, "\\'") + '\', \'' + sanitize(t.user_email).replace(/'/g, "\\'") + '\')">Disconnect</button>' +
+        '</div>';
+      }).join('');
+
+    } catch (err) {
+      oauthListEl.innerHTML = '<div style="color:var(--danger); padding:16px;">Failed to load OAuth tokens: ' + sanitize(err.message) + '</div>';
+    }
+  }
+
+  window._revokeOAuthToken = async function(tokenId, userEmail) {
+    var confirmed = await customConfirm('Disconnect Claude OAuth session for "' + userEmail + '"? Claude will lose access to MCP tools immediately.');
+    if (!confirmed) return;
+    try {
+      await mcpCall('oauth_tokens_revoke', { token_id: tokenId });
+      showToast('Claude OAuth session disconnected', 'success');
+      loadOAuthTokens();
+    } catch (err) {
+      showToast('Error: ' + err.message, 'error');
+    }
+  };
+
   async function loadApiKeys() {
     var listEl = document.getElementById('apiKeysList');
     var generateSection = document.getElementById('apiKeysGenerateSection');
     var accessInfo = document.getElementById('apiKeysAccessInfo');
     if (!listEl) return;
+
+    loadOAuthTokens();
 
     listEl.innerHTML = '<div style="color:var(--text-muted); font-size:14px; padding:24px; text-align:center;">Loading...</div>';
 
@@ -1721,7 +1773,7 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
       if (accessInfo) accessInfo.style.display = 'none';
 
       if (keys.length === 0) {
-        listEl.innerHTML = '<div style="color:var(--text-muted); font-size:14px; padding:24px; text-align:center;">No API keys yet. Generate one above.</div>';
+        listEl.innerHTML = '<div style="color:var(--text-muted); font-size:14px; padding:24px; text-align:center;">No developer API keys yet. Generate one above.</div>';
         return;
       }
 
@@ -1743,7 +1795,6 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
       }).join('');
 
     } catch (err) {
-      // If error mentions division, user has no division — show info banner
       if (err.message && err.message.toLowerCase().includes('division')) {
         if (generateSection) generateSection.style.display = 'none';
         if (accessInfo) accessInfo.style.display = '';

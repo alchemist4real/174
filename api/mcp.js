@@ -308,6 +308,8 @@ function getMcpToolsList() {
     { name: 'apikeys_list', description: 'List your active API keys', inputSchema: { type: 'object', properties: {} } },
     { name: 'apikeys_create', description: 'Generate a new API key', inputSchema: { type: 'object', properties: { name: { type: 'string' }, expires_in_days: { type: 'number' } }, required: ['name'] } },
     { name: 'apikeys_revoke', description: 'Revoke an API key by ID', inputSchema: { type: 'object', properties: { key_id: { type: 'string' } }, required: ['key_id'] } },
+    { name: 'oauth_tokens_list', description: 'List your active OAuth connector tokens (Claude/MCP)', inputSchema: { type: 'object', properties: {} } },
+    { name: 'oauth_tokens_revoke', description: 'Revoke an OAuth connector token by ID', inputSchema: { type: 'object', properties: { token_id: { type: 'string' } }, required: ['token_id'] } },
   ];
 }
 
@@ -526,6 +528,21 @@ async function routeMethod(method, params, auth, roles, cfg) {
 
   const m = (method || '').replace(/\./g, '_');
 
+  if (m === 'system_health') {
+    return {
+      status: 'healthy',
+      version: '1.0.0',
+      uptime_seconds: Math.floor(process.uptime()),
+      timestamp: new Date().toISOString(),
+      authenticated_user: auth.email,
+      roles: {
+        isSuperAdmin: roles.isSuperAdmin,
+        isAdmin: roles.isAdmin,
+        division: roles.divisionId || 'None'
+      }
+    };
+  }
+
   if (m === 'apikeys_list') {
     if (!roles.canUseApiKeys) throw err403('Only division members can manage API keys');
     return listApiKeys(auth.userId, su, sk);
@@ -537,6 +554,15 @@ async function routeMethod(method, params, auth, roles, cfg) {
   if (m === 'apikeys_revoke') {
     if (!roles.canUseApiKeys) throw err403('Only division members can revoke API keys');
     return revokeApiKey(auth.userId, params, su, sk);
+  }
+  if (m === 'oauth_tokens_list') {
+    if (!roles.canUseApiKeys) throw err403('Only division members can view OAuth tokens');
+    return listOAuthTokens(auth.userId, auth.email, roles.isSuperAdmin, su, sk);
+  }
+  if (m === 'oauth_tokens_revoke') {
+    if (!roles.canUseApiKeys) throw err403('Only division members can revoke OAuth tokens');
+    if (!params.token_id && !params.access_token) throw err400('Missing params.token_id or params.access_token');
+    return revokeOAuthToken(params.token_id || params.access_token, su, sk);
   }
 
   if (m === 'content_list') return contentList(gt, go, gr);
