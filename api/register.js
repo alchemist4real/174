@@ -21,6 +21,9 @@ export default async function handler(req, res) {
   }
 
   let body = req.body;
+  if (Buffer.isBuffer(body)) {
+    body = body.toString('utf-8');
+  }
   if (typeof body === 'string') {
     try { body = JSON.parse(body); } catch(e) {
       return res.status(400).json({ error: 'invalid_request', error_description: 'Invalid JSON body' });
