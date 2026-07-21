@@ -1,6 +1,17 @@
-.vercel
-
+# Vercel & Environment
 .vercel
 .env*.local
+.env.local
 
+# Dependencies
 node_modules/
+
+# Graphify Local Cache
+graphify-out/cache/
+
+# OS & Editor Garbage
+.DS_Store
+Thumbs.db
+*.log
+.vscode/
+.idea/
