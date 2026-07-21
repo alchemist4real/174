@@ -26,16 +26,11 @@ Beyond serving as a static archive, MR-CAPSULES functions as a **hybrid platform
 
 ## 🚀 What's New in v2.0 (Recent Updates)
 
-```text
-┌─────────────────────────────────────────────────────────────────────────┐
-│                        MR-CAPSULES v2.0 ECOSYSTEM                       │
-├──────────────────────────┬──────────────────────────┬───────────────────┤
-│   AI Agent Gateway       │   Admin Portal           │   Live & CBT      │
-│  - MCP 2025 Protocol     │  - Kanban Board (5 steps)│  - CBT Pool Engine│
-│  - 30+ MCP Tools         │  - Built-in CodeMirror   │  - Flashcard Sys  │
-│  - OAuth 2.0 PKCE        │  - Division Management   │  - Live Study Room│
-└──────────────────────────┴──────────────────────────┴───────────────────┘
-```
+| Ecosystem Module | Core Features & Capabilities |
+| :--- | :--- |
+| 🤖 **AI Agent Gateway** | MCP 2025-06-18 Protocol (`/api/mcp`), 30+ Tools, OAuth 2.0 PKCE Auto-Discovery (RFC 8414 / RFC 7591). |
+| 🎛️ **Admin Portal** | 5-step Kanban Board (`Open` &rarr; `Done`), CodeMirror Live Editor, Division & Device Security Controls. |
+| ⚡ **Live & CBT Engine** | Interactive CBT Question Pools, Flashcard System, Realtime Live Study Rooms. |
 
 ### 1. 🤖 Model Context Protocol (MCP) & API Gateway Integration
 - **Serverless MCP Protocol (2025-06-18 standard)**: Built-in native support for external AI Agents (Claude Web, Claude Desktop, Antigravity, Custom Agents) at `/api/mcp`.
@@ -107,18 +102,20 @@ graph TD
 
 MR-CAPSULES operates through three collaborative divisions:
 
-```text
-               ┌───────────────────────────────────────────────┐
-               │           1. MANAGEMENT DIVISION              │
-               │   Assigns tasks & oversees Kanban workflow    │
-               └──────────────────────┬────────────────────────┘
-                                      │
-                                      ▼
-┌─────────────────────────────────────────┐       ┌─────────────────────────────────────────┐
-│         2. DEVELOPMENT DIVISION         │       │          3. REVIEW & QA DIVISION        │
-│   Creates CBT HTML using Viebo Code     │ ────► │    Verifies answers & moves task to     │
-│  (AI Prompt Engineering + HTML Editor)  │       │                 DONE                    │
-└─────────────────────────────────────────┘       └─────────────────────────────────────────┘
+```mermaid
+graph TD
+    subgraph M["1. MANAGEMENT DIVISION"]
+        M1["Assigns tasks & oversees Kanban workflow"]
+    end
+    subgraph D["2. DEVELOPMENT DIVISION"]
+        D1["Creates CBT HTML using Viebo Code<br/>(AI Prompt Engineering + HTML Editor)"]
+    end
+    subgraph R["3. REVIEW & QA DIVISION"]
+        R1["Verifies answers & moves task to DONE"]
+    end
+
+    M --> D
+    D --> R
 ```
 
 ### 👥 Division Roles
