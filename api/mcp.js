@@ -284,7 +284,12 @@ function getMcpToolsList() {
     { name: 'content_list', description: 'List all educational content organized by semester, block, and category', inputSchema: { type: 'object', properties: {} } },
     { name: 'content_get', description: 'Download a specific content file by path (returns full HTML)', inputSchema: { type: 'object', properties: { path: { type: 'string', description: 'File path, e.g. content/semester 1/1.2/1.2-2_Overall CBT.html' } }, required: ['path'] } },
     { name: 'content_tree', description: 'Get the full file tree of content/ and cover/ directories', inputSchema: { type: 'object', properties: {} } },
-    { name: 'content_upload', description: 'Upload a new content file (base64 encoded)', inputSchema: { type: 'object', properties: { path: { type: 'string' }, contentBase64: { type: 'string' } }, required: ['path', 'contentBase64'] } },
+    { name: 'content_upload', description: 'Upload a content file directly (Base64 encoded, max ~3.5MB per request). For larger files (videos, PDFs, zip pools), use chunked upload tools (upload_init -> upload_chunk -> upload_commit).', inputSchema: { type: 'object', properties: { path: { type: 'string' }, contentBase64: { type: 'string' } }, required: ['path', 'contentBase64'] } },
+    { name: 'upload_init', description: 'Initialize a bulletproof chunked upload session for large files of any size (videos, PDFs, zip pools, large HTML). Prevents serverless size limits & timeouts.', inputSchema: { type: 'object', properties: { path: { type: 'string', description: 'Target path, e.g. content/Semester 1/video.mp4 or cover/semester1.png' }, totalChunks: { type: 'number', description: 'Total number of chunks to be uploaded' }, totalSizeBytes: { type: 'number', description: 'Optional estimated file size in bytes' } }, required: ['path', 'totalChunks'] } },
+    { name: 'upload_chunk', description: 'Upload a single Base64 chunk (recommended size: 500KB - 1.5MB per chunk) for an active upload session.', inputSchema: { type: 'object', properties: { uploadId: { type: 'string', description: 'Session ID returned by upload_init' }, chunkIndex: { type: 'number', description: '1-indexed chunk number (1 to totalChunks)' }, chunkBase64: { type: 'string', description: 'Base64 encoded chunk data' } }, required: ['uploadId', 'chunkIndex', 'chunkBase64'] } },
+    { name: 'upload_commit', description: 'Reassemble all uploaded chunks, verify integrity, and commit the complete large file to GitHub reliably.', inputSchema: { type: 'object', properties: { uploadId: { type: 'string', description: 'Session ID returned by upload_init' } }, required: ['uploadId'] } },
+    { name: 'upload_status', description: 'Check status, received chunks, and missing chunks of an active chunked upload session.', inputSchema: { type: 'object', properties: { uploadId: { type: 'string', description: 'Session ID returned by upload_init' } }, required: ['uploadId'] } },
+    { name: 'upload_cancel', description: 'Cancel an active chunked upload session and clean up temporary chunk data.', inputSchema: { type: 'object', properties: { uploadId: { type: 'string', description: 'Session ID returned by upload_init' } }, required: ['uploadId'] } },
     { name: 'content_delete', description: 'Delete a content file by path', inputSchema: { type: 'object', properties: { path: { type: 'string' } }, required: ['path'] } },
     { name: 'content_rename', description: 'Rename or move a content file', inputSchema: { type: 'object', properties: { path: { type: 'string' }, newPath: { type: 'string' } }, required: ['path', 'newPath'] } },
     { name: 'tasks_list', description: 'List all content tasks on the task board', inputSchema: { type: 'object', properties: {} } },
@@ -600,6 +605,28 @@ async function routeMethod(method, params, auth, roles, cfg) {
     if (!params.path || !params.contentBase64) throw err400('Missing params.path or params.contentBase64');
     validatePath(params.path);
     return contentUpload(params, auth.email, gt, go, gr, su, sk);
+  }
+  if (m === 'upload_init') {
+    if (!roles.hasDivision && !roles.isAdmin) throw err403('Division membership required to upload');
+    if (!params.path || !params.totalChunks) throw err400('Missing params.path or params.totalChunks');
+    validatePath(params.path);
+    return uploadInit(params, auth.email, su, sk);
+  }
+  if (m === 'upload_chunk') {
+    if (!roles.hasDivision && !roles.isAdmin) throw err403('Division membership required to upload');
+    return uploadChunk(params, auth.email, su, sk);
+  }
+  if (m === 'upload_commit') {
+    if (!roles.hasDivision && !roles.isAdmin) throw err403('Division membership required to upload');
+    return uploadCommit(params, auth.email, gt, go, gr, su, sk);
+  }
+  if (m === 'upload_status') {
+    if (!roles.hasDivision && !roles.isAdmin) throw err403('Division membership required');
+    return uploadStatus(params, su, sk);
+  }
+  if (m === 'upload_cancel') {
+    if (!roles.hasDivision && !roles.isAdmin) throw err403('Division membership required');
+    return uploadCancel(params, auth.email, su, sk);
   }
   if (m === 'content_delete') {
     if (!roles.hasDivision && !roles.isAdmin) throw err403('Division membership required to delete');
@@ -974,37 +1001,308 @@ async function contentTree(githubToken, owner, repo) {
   return { tree: data.tree.filter(item => item.path.startsWith('content/') || item.path.startsWith('cover/')) };
 }
 
+// ═══════════════════════════════════════════════════════════════
+// CHUNKED UPLOAD SESSION SYSTEM (In-Memory + Supabase Fallback)
+// ═══════════════════════════════════════════════════════════════
+const uploadSessions = new Map();
+
+async function uploadInit(params, adminEmail, su, sk) {
+  const { path, totalChunks, totalSizeBytes } = params;
+  if (!path || !totalChunks || totalChunks < 1) throw err400('Missing path or valid totalChunks');
+  validatePath(path);
+
+  const uploadId = `up_${Date.now()}_${Math.random().toString(36).substring(2, 9)}`;
+  const sessionData = {
+    uploadId,
+    path,
+    adminEmail,
+    totalChunks,
+    totalSizeBytes: totalSizeBytes || 0,
+    chunks: {},
+    createdAt: new Date().toISOString()
+  };
+
+  uploadSessions.set(uploadId, sessionData);
+
+  // Store in Supabase for cross-container serverless persistence
+  await logAction(adminEmail, 'mcp_upload_init', { uploadId, path, totalChunks, totalSizeBytes }, su, sk);
+
+  return {
+    success: true,
+    uploadId,
+    path,
+    totalChunks,
+    maxRecommendedChunkSizeBytes: 1500000,
+    message: `Upload session initialized. Send chunks 1 to ${totalChunks} using upload_chunk, then call upload_commit.`
+  };
+}
+
+async function uploadChunk(params, adminEmail, su, sk) {
+  const { uploadId, chunkIndex, chunkBase64 } = params;
+  if (!uploadId || !chunkIndex || !chunkBase64) throw err400('Missing uploadId, chunkIndex, or chunkBase64');
+
+  if (chunkBase64.length > 3.5 * 1024 * 1024) {
+    throw err400('Chunk Base64 size exceeds 3.5MB single-request limit. Please send smaller chunks (e.g. 1MB per chunk).');
+  }
+
+  let session = uploadSessions.get(uploadId);
+
+  // Fallback to restore session state if container restarted
+  if (!session) {
+    session = await restoreUploadSessionFromSb(uploadId, su, sk);
+  }
+
+  if (!session) {
+    throw err400(`Upload session "${uploadId}" not found or expired. Please initialize a new session with upload_init.`);
+  }
+
+  if (chunkIndex < 1 || chunkIndex > session.totalChunks) {
+    throw err400(`Invalid chunkIndex ${chunkIndex}. Must be between 1 and ${session.totalChunks}.`);
+  }
+
+  session.chunks[chunkIndex] = chunkBase64;
+  uploadSessions.set(uploadId, session);
+
+  // Persist chunk to Supabase REST admin_action_logs
+  await logAction(adminEmail, 'mcp_upload_chunk', { uploadId, chunkIndex, chunkBase64 }, su, sk);
+
+  const receivedIndexes = Object.keys(session.chunks).map(Number).sort((a, b) => a - b);
+  const complete = receivedIndexes.length === session.totalChunks;
+  const progressPercent = parseFloat(((receivedIndexes.length / session.totalChunks) * 100).toFixed(1));
+
+  return {
+    success: true,
+    uploadId,
+    chunkIndex,
+    receivedChunksCount: receivedIndexes.length,
+    totalChunks: session.totalChunks,
+    complete,
+    progressPercent
+  };
+}
+
+async function uploadCommit(params, adminEmail, githubToken, owner, repo, su, sk) {
+  const { uploadId } = params;
+  if (!uploadId) throw err400('Missing uploadId');
+
+  let session = uploadSessions.get(uploadId);
+  if (!session) {
+    session = await restoreUploadSessionFromSb(uploadId, su, sk);
+  }
+
+  if (!session) {
+    throw err400(`Upload session "${uploadId}" not found or expired.`);
+  }
+
+  const missingChunks = [];
+  for (let i = 1; i <= session.totalChunks; i++) {
+    if (!session.chunks[i]) missingChunks.push(i);
+  }
+
+  if (missingChunks.length > 0) {
+    throw err400(`Cannot commit upload session "${uploadId}". Missing chunks: [${missingChunks.join(', ')}].`);
+  }
+
+  // Reassemble full binary Buffer in numeric chunk order for 100% exact precision
+  const bufferChunks = [];
+  for (let i = 1; i <= session.totalChunks; i++) {
+    bufferChunks.push(Buffer.from(session.chunks[i], 'base64'));
+  }
+  const fullBuffer = Buffer.concat(bufferChunks);
+  const fullBase64 = fullBuffer.toString('base64');
+
+  // Upload complete file using enhanced robust contentUpload
+  const uploadResult = await contentUpload(
+    { path: session.path, contentBase64: fullBase64, isChunkedCommit: true },
+    adminEmail,
+    githubToken,
+    owner,
+    repo,
+    su,
+    sk
+  );
+
+  // Cleanup session
+  uploadSessions.delete(uploadId);
+  await logAction(adminEmail, 'mcp_upload_commit', { uploadId, path: session.path, totalChunks: session.totalChunks }, su, sk);
+
+  return {
+    success: true,
+    path: session.path,
+    uploadId,
+    totalChunks: session.totalChunks,
+    totalBase64Length: fullBase64.length,
+    sha: uploadResult.sha,
+    message: `File "${session.path}" assembled and committed successfully!`
+  };
+}
+
+async function uploadStatus(params, su, sk) {
+  const { uploadId } = params;
+  if (!uploadId) throw err400('Missing uploadId');
+
+  let session = uploadSessions.get(uploadId);
+  if (!session) {
+    session = await restoreUploadSessionFromSb(uploadId, su, sk);
+  }
+
+  if (!session) {
+    throw err400(`Upload session "${uploadId}" not found or expired.`);
+  }
+
+  const receivedIndexes = Object.keys(session.chunks).map(Number).sort((a, b) => a - b);
+  const missingChunks = [];
+  for (let i = 1; i <= session.totalChunks; i++) {
+    if (!session.chunks[i]) missingChunks.push(i);
+  }
+
+  return {
+    uploadId,
+    path: session.path,
+    totalChunks: session.totalChunks,
+    receivedChunksCount: receivedIndexes.length,
+    receivedChunks: receivedIndexes,
+    missingChunks,
+    complete: missingChunks.length === 0,
+    createdAt: session.createdAt
+  };
+}
+
+async function uploadCancel(params, adminEmail, su, sk) {
+  const { uploadId } = params;
+  if (!uploadId) throw err400('Missing uploadId');
+
+  uploadSessions.delete(uploadId);
+  await logAction(adminEmail, 'mcp_upload_cancel', { uploadId }, su, sk);
+  return { success: true, uploadId, message: 'Upload session canceled.' };
+}
+
+async function restoreUploadSessionFromSb(uploadId, su, sk) {
+  try {
+    const res = await fetch(`${su}/rest/v1/admin_action_logs?details->>uploadId=eq.${uploadId}&order=time.asc`, {
+      headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}` }
+    });
+    if (!res.ok) return null;
+    const logs = await res.json();
+    if (!logs || logs.length === 0) return null;
+
+    const initLog = logs.find(l => l.action === 'mcp_upload_init');
+    if (!initLog) return null;
+
+    const details = initLog.details || {};
+    const session = {
+      uploadId,
+      path: details.path,
+      adminEmail: initLog.admin_email,
+      totalChunks: details.totalChunks,
+      totalSizeBytes: details.totalSizeBytes || 0,
+      chunks: {},
+      createdAt: initLog.time
+    };
+
+    const chunkLogs = logs.filter(l => l.action === 'mcp_upload_chunk');
+    chunkLogs.forEach(cl => {
+      if (cl.details && cl.details.chunkIndex && cl.details.chunkBase64) {
+        session.chunks[cl.details.chunkIndex] = cl.details.chunkBase64;
+      }
+    });
+
+    uploadSessions.set(uploadId, session);
+    return session;
+  } catch (e) {
+    return null;
+  }
+}
+
+// ═══════════════════════════════════════════════════════════════
+// ROBUST DIRECT FILE UPLOAD (Contents API + Git Data API Conflict Retries)
+// ═══════════════════════════════════════════════════════════════
 async function contentUpload(params, adminEmail, githubToken, owner, repo, su, sk) {
-  const { path, contentBase64 } = params;
-  if (contentBase64.length > 10 * 1024 * 1024 * 1.34) throw err400('File too large (max 10MB)');
+  const { path, contentBase64, isChunkedCommit } = params;
+  if (!contentBase64) throw err400('Missing contentBase64');
 
-  const blobRes = await ghApi('POST', '/git/blobs', { content: contentBase64, encoding: 'base64' }, githubToken, owner, repo);
-  const blobData = await blobRes.json();
-  if (!blobRes.ok) throw new Error(blobData.message || 'Failed to create blob');
+  const base64Len = contentBase64.length;
+  // If called directly (not via chunked commit), enforce single-request serverless payload limit
+  if (!isChunkedCommit && base64Len > 3.5 * 1024 * 1024) {
+    throw err400(`Single-request payload too large (${(base64Len / (1024 * 1024)).toFixed(2)}MB). Maximum payload for direct content_upload is 3.5MB to fit within serverless gateway limits. Please use chunked upload tools (upload_init -> upload_chunk -> upload_commit) to upload large files of any size reliably.`);
+  }
 
-  const refRes = await ghApi('GET', '/git/refs/heads/main', null, githubToken, owner, repo);
-  const refData = await refRes.json();
-  const commitSha = refData.object.sha;
+  // ATTEMPT 1: GitHub Contents API (Atomic single-call for files < 100MB)
+  try {
+    let existingSha = null;
+    try {
+      const getRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${encodeURIComponent(path)}`, {
+        headers: { 'Authorization': `Bearer ${githubToken}`, 'Accept': 'application/vnd.github+json', 'User-Agent': 'MR-CAPSULES-MCP' }
+      });
+      if (getRes.ok) {
+        const fileInfo = await getRes.json();
+        existingSha = fileInfo.sha;
+      }
+    } catch (e) { /* file doesn't exist yet, ok */ }
 
-  const commitRes = await ghApi('GET', `/git/commits/${commitSha}`, null, githubToken, owner, repo);
-  const commitData = await commitRes.json();
+    const putBody = {
+      message: `mcp: upload ${path}`,
+      content: contentBase64
+    };
+    if (existingSha) putBody.sha = existingSha;
 
-  const treeRes = await ghApi('POST', '/git/trees', {
-    base_tree: commitData.tree.sha,
-    tree: [{ path, mode: '100644', type: 'blob', sha: blobData.sha }]
-  }, githubToken, owner, repo);
-  const treeData = await treeRes.json();
+    const putRes = await ghApi('PUT', `/contents/${encodeURIComponent(path)}`, putBody, githubToken, owner, repo);
+    if (putRes.ok) {
+      const putData = await putRes.json();
+      await logAction(adminEmail, 'mcp_upload', { path, method: 'contents_api' }, su, sk);
+      return { success: true, path, sha: putData.content?.sha || putData.commit?.sha };
+    }
+  } catch (e) {
+    console.warn('Contents API direct upload failed, attempting Git Data API fallback:', e.message);
+  }
 
-  const newCommitRes = await ghApi('POST', '/git/commits', {
-    message: `mcp: upload ${path}`,
-    tree: treeData.sha,
-    parents: [commitSha]
-  }, githubToken, owner, repo);
-  const newCommit = await newCommitRes.json();
+  // ATTEMPT 2: Git Data API with Automatic Exponential Backoff Retries for Fast-Forward Conflicts
+  let maxRetries = 4;
+  let lastErr = null;
 
-  await ghApi('PATCH', '/git/refs/heads/main', { sha: newCommit.sha }, githubToken, owner, repo);
-  await logAction(adminEmail, 'mcp_upload', { path }, su, sk);
-  return { success: true, path };
+  for (let attempt = 1; attempt <= maxRetries; attempt++) {
+    try {
+      const blobRes = await ghApi('POST', '/git/blobs', { content: contentBase64, encoding: 'base64' }, githubToken, owner, repo);
+      const blobData = await blobRes.json();
+      if (!blobRes.ok) throw new Error(blobData.message || 'Failed to create blob');
+
+      const refRes = await ghApi('GET', '/git/refs/heads/main', null, githubToken, owner, repo);
+      const refData = await refRes.json();
+      const commitSha = refData.object.sha;
+
+      const commitRes = await ghApi('GET', `/git/commits/${commitSha}`, null, githubToken, owner, repo);
+      const commitData = await commitRes.json();
+
+      const treeRes = await ghApi('POST', '/git/trees', {
+        base_tree: commitData.tree.sha,
+        tree: [{ path, mode: '100644', type: 'blob', sha: blobData.sha }]
+      }, githubToken, owner, repo);
+      const treeData = await treeRes.json();
+
+      const newCommitRes = await ghApi('POST', '/git/commits', {
+        message: `mcp: upload ${path}`,
+        tree: treeData.sha,
+        parents: [commitSha]
+      }, githubToken, owner, repo);
+      const newCommit = await newCommitRes.json();
+
+      const patchRes = await ghApi('PATCH', '/git/refs/heads/main', { sha: newCommit.sha }, githubToken, owner, repo);
+      if (!patchRes.ok) {
+        const patchErr = await patchRes.json();
+        throw new Error(patchErr.message || 'Failed to update git ref');
+      }
+
+      await logAction(adminEmail, 'mcp_upload', { path, attempt }, su, sk);
+      return { success: true, path, sha: newCommit.sha };
+    } catch (err) {
+      lastErr = err;
+      if (attempt < maxRetries) {
+        await new Promise(r => setTimeout(r, attempt * 500));
+      }
+    }
+  }
+
+  throw new Error(`Failed to upload ${path} after ${maxRetries} attempts: ${lastErr?.message || 'Git conflict'}`);
 }
 
 async function contentDelete(params, adminEmail, githubToken, owner, repo, su, sk) {
