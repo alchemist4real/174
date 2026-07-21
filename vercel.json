@@ -1,10 +1,10 @@
 {
-  "rewrites": [
-    { "source": "/api/mcp", "destination": "/api/mcp.js" },
-    { "source": "/.well-known/oauth-authorization-server", "destination": "/api/oauth-authorization-server.js" },
-    { "source": "/.well-known/oauth-protected-resource", "destination": "/api/oauth-protected-resource.js" },
-    { "source": "/register", "destination": "/api/register.js" },
-    { "source": "/authorize", "destination": "/api/authorize.js" },
-    { "source": "/token", "destination": "/api/token.js" }
+  "routes": [
+    { "src": "/.well-known/oauth-authorization-server", "dest": "/api/oauth-authorization-server.js" },
+    { "src": "/.well-known/oauth-protected-resource", "dest": "/api/oauth-protected-resource.js" },
+    { "src": "/register", "dest": "/api/register.js" },
+    { "src": "/authorize", "dest": "/api/authorize.js" },
+    { "src": "/token", "dest": "/api/token.js" },
+    { "src": "/api/mcp", "dest": "/api/mcp.js" }
   ]
 }
