@@ -94,13 +94,20 @@
           <li style="margin-bottom: 10px;">Klik tombol <strong>Copy</strong> dan simpan kunci tersebut segera karena tidak dapat ditampilkan kembali demi alasan keamanan.</li>
         </ol>
 
-        <h3>B. Menghubungkan ke Claude.ai Web / Client MCP</h3>
-        <p>Untuk menyambungkan Remote MCP Server ke Claude.ai atau klien MCP lainnya:</p>
-        <ul>
-          <li><strong>Endpoint URL:</strong> <code style="font-size:12px; background:var(--bg-inset); padding:2px 6px; border-radius:4px;">https://mr-capsules.vercel.app/api/mcp</code></li>
-          <li><strong>Authentication Header:</strong> <code style="font-size:12px; background:var(--bg-inset); padding:2px 6px; border-radius:4px;">Authorization: ApiKey YOUR_API_KEY</code> atau <code style="font-size:12px; background:var(--bg-inset); padding:2px 6px; border-radius:4px;">Authorization: Bearer YOUR_API_KEY</code></li>
-          <li><strong>Protokol:</strong> Streamable HTTP / JSON-RPC 2.0 (GET &amp; POST pada endpoint yang sama).</li>
-        </ul>
+        <h3>B. Menghubungkan ke Claude.ai Web (Custom Connector)</h3>
+        <p>Langkah mengisi form <strong>Add Custom Connector</strong> di Claude.ai (seperti gambar modal):</p>
+        <ol style="font-family: var(--font-mono); color: var(--text-muted); line-height: 1.7; font-size: 15px; padding-left: 24px; margin: 0;">
+          <li style="margin-bottom: 10px;">Buka <strong>Claude.ai</strong> &rarr; <strong>Settings</strong> &rarr; <strong>Connectors</strong> &rarr; Klik <strong>Add Custom Connector (BETA)</strong>.</li>
+          <li style="margin-bottom: 10px;"><strong>Connector Name:</strong> Isi dengan <code style="font-size:12px; background:var(--bg-inset); padding:2px 6px; border-radius:4px;">mr capsules</code></li>
+          <li style="margin-bottom: 10px;"><strong>URL:</strong> Isi dengan <code style="font-size:12px; background:var(--bg-inset); padding:2px 6px; border-radius:4px;">https://mr-capsules.vercel.app/api/mcp</code></li>
+          <li style="margin-bottom: 10px;">Buka menu <strong>Advanced settings</strong>:
+            <ul style="padding-left: 20px; margin-top: 6px;">
+              <li>Kotak Pertama (Header Name): Isi <code style="font-size:12px; background:var(--bg-inset); padding:2px 6px; border-radius:4px;">Authorization</code></li>
+              <li>Kotak Kedua (Header Value / Secret): Tempelkan API Key Anda, misal: <code style="font-size:12px; background:var(--bg-inset); padding:2px 6px; border-radius:4px;">ApiKey mrc_...</code> atau langsung <code style="font-size:12px; background:var(--bg-inset); padding:2px 6px; border-radius:4px;">mrc_...</code></li>
+            </ul>
+          </li>
+          <li style="margin-bottom: 10px;">Klik <strong>Add</strong> / <strong>Connect</strong>. Klien MCP akan langsung terverifikasi dan 27 tools MR-CAPSULES siap digunakan di Claude Chat!</li>
+        </ol>
 
         <div class="alert-box">
           <strong>CATATAN:</strong> Penggunaan API Key dibatasi maksimum 5 kunci aktif per pengguna dengan batasan <em>rate limit</em> 60 request/menit untuk mencegah penyalahgunaan.

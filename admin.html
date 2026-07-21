@@ -357,11 +357,12 @@
               <code id="apiKeyRevealText" style="flex:1; font-family:monospace; font-size:13px; background:var(--bg-inset); padding:10px 14px; border-radius:8px; word-break:break-all; color:var(--text-main);"></code>
               <button id="btnCopyApiKey" class="btn-unified primary" style="white-space:nowrap;">Copy</button>
             </div>
-            <div style="font-size:13px; color:var(--text-muted); margin-bottom:8px; font-weight:600;">How to use with Claude (POST):</div>
-            <div style="font-size:12px; color:var(--text-muted); margin-bottom:4px;">POST <code style="background:var(--bg-inset); padding:2px 5px; border-radius:4px;">https://mr-capsules.vercel.app/api/mcp</code></div>
-            <div style="font-size:12px; color:var(--text-muted); margin-bottom:4px;">Header: <code style="background:var(--bg-inset); padding:2px 5px; border-radius:4px;">Authorization: ApiKey YOUR_KEY</code></div>
-            <div style="font-size:12px; color:var(--text-muted); margin-bottom:4px;">Body: <code style="background:var(--bg-inset); padding:2px 5px; border-radius:4px;">{"method": "content.list", "params": {}}</code></div>
-            <div style="font-size:12px; color:var(--text-muted);">MCP SSE: <code style="background:var(--bg-inset); padding:2px 5px; border-radius:4px;">GET /api/mcp?key=YOUR_KEY</code></div>
+            <div style="font-size:13px; color:var(--text-muted); margin-bottom:8px; font-weight:600;">How to connect to Claude.ai (Custom Connector):</div>
+            <div style="font-size:12px; color:var(--text-muted); margin-bottom:4px;">1. Go to Claude.ai Settings &rarr; Connectors &rarr; Add Custom Connector</div>
+            <div style="font-size:12px; color:var(--text-muted); margin-bottom:4px;">2. Name: <code style="background:var(--bg-inset); padding:2px 5px; border-radius:4px;">Mr Capsules</code></div>
+            <div style="font-size:12px; color:var(--text-muted); margin-bottom:4px;">3. URL: <code style="background:var(--bg-inset); padding:2px 5px; border-radius:4px;">https://mr-capsules.vercel.app/api/mcp</code></div>
+            <div style="font-size:12px; color:var(--text-muted); margin-bottom:4px;">4. Advanced settings &rarr; Header Name: <code style="background:var(--bg-inset); padding:2px 5px; border-radius:4px;">Authorization</code></div>
+            <div style="font-size:12px; color:var(--text-muted);">5. Header Value / Secret: <code style="background:var(--bg-inset); padding:2px 5px; border-radius:4px;">ApiKey mrc_...</code> (or just your key)</div>
           </div>
 
           <div>
