@@ -102,7 +102,7 @@ export default async function handler(req, res) {
             tools: { listChanged: false },
             resources: { listChanged: false }
           },
-          serverInfo: { name: 'mr-capsules', version: '1.0.0' }
+          serverInfo: { name: 'mr-capsules-v2', version: '1.0.1' }
         }
       });
     }
