@@ -42,15 +42,15 @@
       0%, 70% { opacity: 0; }
       80%, 100% { opacity: 1; }
     }
-    .ascii-art {
-      font-family: 'Courier New', Courier, 'Cascadia Code', 'Fira Code', monospace;
-      font-size: 12px;
+    .ascii-art text {
+      font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, 'Liberation Mono', 'Courier New', monospace;
+      font-size: 11px;
       font-weight: bold;
       fill: url(#ascii-grad);
-      letter-spacing: 0px;
+      white-space: pre;
     }
     .term-text {
-      font-family: 'Courier New', Courier, 'Cascadia Code', 'Fira Code', monospace;
+      font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, 'Liberation Mono', 'Courier New', monospace;
       font-size: 13px;
       fill: #94a3b8;
     }
@@ -97,15 +97,13 @@
     <path d="M100 38 V360 M200 38 V360 M300 38 V360 M400 38 V360 M500 38 V360 M600 38 V360 M700 38 V360 M800 38 V360" stroke="#38bdf8" stroke-width="1" />
   </g>
 
-  <!-- Animated ASCII Art Header (Explicit TSpan lines) -->
-  <g transform="translate(25, 50)">
-    <text class="ascii-art">
-      <tspan x="0" y="12">  __  __ ____    ____    _    ____  ____  _   _ _     _____ ____  </tspan>
-      <tspan x="0" y="27"> |  \/  |  _ \  / ___|  / \  |  _ \/ ___|| | | | |   | ____/ ___| </tspan>
-      <tspan x="0" y="42"> | |\/| | |_) || |     / _ \ | |_) \___ \| | | | |   |  _| \___ \ </tspan>
-      <tspan x="0" y="57"> | |  | |  _ &lt; | |___ / ___ \|  __/ ___) | |_| | |___| |___ ___) |</tspan>
-      <tspan x="0" y="72"> |_|  |_|_| \_\ \____/_/   \_\_|   |____/ \___/|_____|_____|____/ </tspan>
-    </text>
+  <!-- Animated ASCII Art Header (Standalone Text Elements for bulletproof rendering) -->
+  <g class="ascii-art">
+    <text x="25" y="62">  __  __ ____    ____    _    ____  ____  _   _ _     _____ ____  </text>
+    <text x="25" y="76"> |  \/  |  _ \  / ___|  / \  |  _ \/ ___|| | | | |   | ____/ ___| </text>
+    <text x="25" y="90"> | |\/| | |_) || |     / _ \ | |_) \___ \| | | | |   |  _| \___ \ </text>
+    <text x="25" y="104"> | |  | |  _ &lt; | |___ / ___ \|  __/ ___) | |_| | |___| |___ ___) |</text>
+    <text x="25" y="118"> |_|  |_|_| \_\ \____/_/   \_\_|   |____/ \___/|_____|_____|____/ </text>
   </g>
 
   <!-- Side Badge (System Mode) -->
