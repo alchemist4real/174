@@ -30,10 +30,10 @@ Beyond serving as a static archive, MR-CAPSULES functions as a **hybrid platform
 ┌─────────────────────────────────────────────────────────────────────────┐
 │                        MR-CAPSULES v2.0 ECOSYSTEM                       │
 ├──────────────────────────┬──────────────────────────┬───────────────────┤
-│  🤖 AI Agent Gateway     │ 📊 Admin Portal          │ ⚡ Live & CBT     │
-│  - MCP 2025 Protocol     │ - Kanban Board (5 steps) │ - CBT Pool Engine │
-│  - 30+ MCP Tools         │ - Built-in CodeMirror    │ - Flashcard System│
-│  - OAuth 2.0 PKCE        │ - Division Management    │ - Live Study Room │
+│   AI Agent Gateway       │   Admin Portal           │   Live & CBT      │
+│  - MCP 2025 Protocol     │  - Kanban Board (5 steps)│  - CBT Pool Engine│
+│  - 30+ MCP Tools         │  - Built-in CodeMirror   │  - Flashcard Sys  │
+│  - OAuth 2.0 PKCE        │  - Division Management   │  - Live Study Room│
 └──────────────────────────┴──────────────────────────┴───────────────────┘
 ```
 
@@ -116,7 +116,7 @@ MR-CAPSULES operates through three collaborative divisions:
                                       ▼
 ┌─────────────────────────────────────────┐       ┌─────────────────────────────────────────┐
 │         2. DEVELOPMENT DIVISION         │       │          3. REVIEW & QA DIVISION        │
-│   Creates CBT HTML using Viebo Code     │ ────► │    Verifies answers & moves task to    │
+│   Creates CBT HTML using Viebo Code     │ ────► │    Verifies answers & moves task to     │
 │  (AI Prompt Engineering + HTML Editor)  │       │                 DONE                    │
 └─────────────────────────────────────────┘       └─────────────────────────────────────────┘
 ```
