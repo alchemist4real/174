@@ -325,6 +325,7 @@ function getMcpToolsList() {
     { name: 'tasks_add_note', description: 'Add a note/comment to a task log', inputSchema: { type: 'object', properties: { task_id: { type: 'string' }, note: { type: 'string' } }, required: ['task_id', 'note'] } },
     { name: 'divisions_join', description: 'Join an organization division', inputSchema: { type: 'object', properties: { division_id: { type: 'string', enum: ['management','development','review'] }, whatsapp: { type: 'string' } }, required: ['division_id'] } },
     { name: 'divisions_update_whatsapp', description: 'Update your WhatsApp contact info', inputSchema: { type: 'object', properties: { whatsapp: { type: 'string' } }, required: ['whatsapp'] } },
+    { name: 'divisions_get_members', description: 'Get detailed member list of a specific division (or all divisions)', inputSchema: { type: 'object', properties: { division_id: { type: 'string' } } } },
   ];
 }
 
@@ -666,6 +667,10 @@ async function routeMethod(method, params, auth, roles, cfg) {
   if (m === 'divisions_update_whatsapp') {
     if (!params.whatsapp) throw err400('Missing params.whatsapp');
     return divisionsUpdateWhatsapp(auth.userId, params.whatsapp, su, sk);
+  }
+  if (m === 'divisions_get_members') {
+    if (!roles.hasDivision && !roles.isAdmin) throw err403('Division membership required');
+    return divisionsGetMembers(params.division_id, su, sk);
   }
 
   if (m === 'users_list') {
@@ -1105,11 +1110,49 @@ async function tasksGetLogs(taskId, su, sk) {
 // ═══════════════════════════════════════════════════════════════
 
 async function divisionsList(su, sk) {
-  const res = await fetch(`${su}/rest/v1/divisions?select=*`, {
+  const divRes = await fetch(`${su}/rest/v1/divisions?select=*`, {
     headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}` }
   });
-  const divs = await res.json();
-  return { divisions: divs };
+  const divs = await divRes.json();
+
+  const sbUsersRes = await fetch(`${su}/auth/v1/admin/users?page=1&per_page=1000`, {
+    headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}` }
+  });
+  let allUsers = [];
+  if (sbUsersRes.ok) {
+    try {
+      const usersData = await sbUsersRes.json();
+      allUsers = usersData.users || [];
+    } catch(e) {}
+  }
+
+  const memResDirect = await fetch(`${su}/rest/v1/division_members?select=division_id,user_id,whatsapp`, {
+    headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}` }
+  });
+  const mems = await memResDirect.json();
+
+  const stats = divs.map(d => {
+    const divisionMems = mems.filter(m => m.division_id === d.id);
+    const membersList = divisionMems.map(m => {
+      const u = allUsers.find(au => au.id === m.user_id);
+      const email = u ? u.email : 'Unknown User';
+      const username = u?.user_metadata?.username || (u ? u.email.split('@')[0] : 'Unknown');
+      return { user_id: m.user_id, email, username, whatsapp: m.whatsapp || '' };
+    });
+    return {
+      ...d,
+      member_count: divisionMems.length,
+      members: membersList
+    };
+  });
+  return { divisions: stats };
+}
+
+async function divisionsGetMembers(divisionId, su, sk) {
+  const allDivs = await divisionsList(su, sk);
+  if (!divisionId) return allDivs;
+  const found = allDivs.divisions.find(d => d.id === divisionId);
+  return { division_id: divisionId, members: found ? found.members : [], member_count: found ? found.member_count : 0 };
 }
 
 async function divisionsMyDivision(userId, su, sk) {
