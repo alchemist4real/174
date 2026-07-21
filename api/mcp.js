@@ -326,6 +326,12 @@ function getMcpToolsList() {
     { name: 'divisions_join', description: 'Join an organization division', inputSchema: { type: 'object', properties: { division_id: { type: 'string', enum: ['management','development','review'] }, whatsapp: { type: 'string' } }, required: ['division_id'] } },
     { name: 'divisions_update_whatsapp', description: 'Update your WhatsApp contact info', inputSchema: { type: 'object', properties: { whatsapp: { type: 'string' } }, required: ['whatsapp'] } },
     { name: 'divisions_get_members', description: 'Get detailed member list of a specific division (or all divisions)', inputSchema: { type: 'object', properties: { division_id: { type: 'string' } } } },
+    { name: 'cover_list', description: 'List all cover image files in the cover/ directory', inputSchema: { type: 'object', properties: {} } },
+    { name: 'cover_upload', description: 'Upload or update a cover image in cover/ (base64 encoded)', inputSchema: { type: 'object', properties: { filename: { type: 'string', description: 'e.g. semester 1.png' }, contentBase64: { type: 'string' } }, required: ['filename', 'contentBase64'] } },
+    { name: 'cover_delete', description: 'Delete a cover image from cover/', inputSchema: { type: 'object', properties: { filename: { type: 'string' } }, required: ['filename'] } },
+    { name: 'docs_get', description: 'Get the full documentation page HTML and sections (docs.html)', inputSchema: { type: 'object', properties: {} } },
+    { name: 'docs_update_section', description: 'Update or revise a specific documentation section in docs.html', inputSchema: { type: 'object', properties: { sectionIndex: { type: 'number', description: '1-indexed section number' }, title: { type: 'string' }, contentHtml: { type: 'string' } }, required: ['sectionIndex'] } },
+    { name: 'docs_add_section', description: 'Append a new documentation section to docs.html', inputSchema: { type: 'object', properties: { title: { type: 'string' }, contentHtml: { type: 'string' } }, required: ['title', 'contentHtml'] } },
   ];
 }
 
@@ -671,6 +677,32 @@ async function routeMethod(method, params, auth, roles, cfg) {
   if (m === 'divisions_get_members') {
     if (!roles.hasDivision && !roles.isAdmin) throw err403('Division membership required');
     return divisionsGetMembers(params.division_id, su, sk);
+  }
+
+  if (m === 'cover_list') return coverList(gt, go, gr);
+  if (m === 'cover_upload') {
+    if (!roles.hasDivision && !roles.isAdmin) throw err403('Division membership required to upload cover');
+    if (!params.filename || !params.contentBase64) throw err400('Missing params.filename or params.contentBase64');
+    const path = params.filename.startsWith('cover/') ? params.filename : `cover/${params.filename}`;
+    validatePath(path);
+    return contentUpload({ path, contentBase64: params.contentBase64 }, auth.email, gt, go, gr, su, sk);
+  }
+  if (m === 'cover_delete') {
+    if (!roles.hasDivision && !roles.isAdmin) throw err403('Division membership required to delete cover');
+    if (!params.filename) throw err400('Missing params.filename');
+    const path = params.filename.startsWith('cover/') ? params.filename : `cover/${params.filename}`;
+    validatePath(path);
+    return contentDelete({ path }, auth.email, gt, go, gr, su, sk);
+  }
+
+  if (m === 'docs_get') return docsGet(gt, go, gr);
+  if (m === 'docs_update_section') {
+    if (!roles.isAdmin) throw err403('Admin only to edit documentation');
+    return docsUpdateSection(params, auth.email, gt, go, gr, su, sk);
+  }
+  if (m === 'docs_add_section') {
+    if (!roles.isAdmin) throw err403('Admin only to edit documentation');
+    return docsAddSection(params, auth.email, gt, go, gr, su, sk);
   }
 
   if (m === 'users_list') {
@@ -1438,6 +1470,72 @@ async function divisionsUpdateWhatsapp(userId, whatsapp, su, sk) {
   });
   if (!res.ok) throw new Error('Failed to update whatsapp: ' + await res.text());
   return { success: true, whatsapp };
+}
+
+// ═══════════════════════════════════════════════════════════════
+// COVER & DOCS HANDLERS
+// ═══════════════════════════════════════════════════════════════
+
+async function coverList(githubToken, owner, repo) {
+  const tree = await contentTree(githubToken, owner, repo);
+  const covers = (tree.tree || []).filter(item => item.path.startsWith('cover/'));
+  return { covers };
+}
+
+async function docsGet(githubToken, owner, repo) {
+  const fileData = await contentGet('docs.html', githubToken, owner, repo);
+  return { html: fileData.content, path: 'docs.html' };
+}
+
+async function docsUpdateSection(params, adminEmail, githubToken, owner, repo, su, sk) {
+  const { sectionIndex, title, contentHtml } = params;
+  const docsData = await contentGet('docs.html', githubToken, owner, repo);
+  let html = docsData.content;
+
+  const sections = html.split('<div class="docs-section">');
+  if (sectionIndex < 1 || sectionIndex >= sections.length) {
+    throw err400(`Invalid sectionIndex: ${sectionIndex}. Total sections: ${sections.length - 1}`);
+  }
+
+  let oldSec = sections[sectionIndex];
+  let endIdx = oldSec.indexOf('</div>');
+  if (endIdx === -1) endIdx = oldSec.length;
+
+  let newSecContent = '\n';
+  if (title) newSecContent += `        <h2>${title}</h2>\n`;
+  if (contentHtml) newSecContent += `        ${contentHtml}\n      `;
+
+  sections[sectionIndex] = newSecContent + oldSec.substring(endIdx);
+  const updatedHtml = sections.join('<div class="docs-section">');
+
+  const base64Content = Buffer.from(updatedHtml, 'utf-8').toString('base64');
+  await contentUpload({ path: 'docs.html', contentBase64: base64Content }, adminEmail, githubToken, owner, repo, su, sk);
+  return { success: true, updatedSectionIndex: sectionIndex };
+}
+
+async function docsAddSection(params, adminEmail, githubToken, owner, repo, su, sk) {
+  const { title, contentHtml } = params;
+  const docsData = await contentGet('docs.html', githubToken, owner, repo);
+  let html = docsData.content;
+
+  const newSectionTag = `
+      <div class="docs-section">
+        <h2>${title}</h2>
+        ${contentHtml}
+      </div>
+  </div>`;
+
+  if (html.includes('  </div>\n  \n  <script>')) {
+    html = html.replace('  </div>\n  \n  <script>', `${newSectionTag}\n  \n  <script>`);
+  } else if (html.includes('  </div>\n  <script>')) {
+    html = html.replace('  </div>\n  <script>', `${newSectionTag}\n  <script>`);
+  } else {
+    html = html.replace('</body>', `${newSectionTag}\n</body>`);
+  }
+
+  const base64Content = Buffer.from(html, 'utf-8').toString('base64');
+  await contentUpload({ path: 'docs.html', contentBase64: base64Content }, adminEmail, githubToken, owner, repo, su, sk);
+  return { success: true, title };
 }
 
 async function activityLogsList(limit, su, sk) {
