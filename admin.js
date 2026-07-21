@@ -1194,11 +1194,15 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
            for (var di = 0; di < devices.length; di++) {
               var dev = devices[di];
               var isDevBanned = bannedDevs.includes(dev.id);
-              devRows += '<div style="display:flex; justify-content:space-between; align-items:center; padding: 4px 0;">';
-              devRows += '<span style="font-family:var(--font-mono); font-size:12px;">' + dev.id.substr(0,14) + '...</span>';
+              devRows += '<div style="display:flex; justify-content:space-between; align-items:center; padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">';
+              devRows += '<span style="font-family:var(--font-mono); font-size:12px; max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="' + dev.id + '">' + dev.id.substr(0,14) + '...</span>';
+              devRows += '<div style="display:flex; gap: 4px;">';
               devRows += '<button class="btn-card ' + (isDevBanned ? 'primary' : 'danger') + ' btn-block-dev" style="padding: 2px 8px; font-size: 11px;" data-dev="' + dev.id + '" data-banned="' + isDevBanned + '">';
-              devRows += (isDevBanned ? 'Unban Dev' : 'Block Dev');
-              devRows += '</button></div>';
+              devRows += (isDevBanned ? 'Unban' : 'Block');
+              devRows += '</button>';
+              devRows += '<button class="btn-card danger btn-delete-dev" style="padding: 2px 8px; font-size: 11px; background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3);" data-dev="' + dev.id + '" data-userid="' + u.id + '" data-email="' + email + '" title="Remove Device">';
+              devRows += 'Delete';
+              devRows += '</button></div></div>';
            }
            devicesHtml = '<div style="margin-top:12px; font-size:13px; color:var(--text-muted); border-top:1px solid var(--border-light); padding-top:10px;">';
            devicesHtml += '<div style="font-weight:600; margin-bottom:6px;">Known Devices (' + devices.length + ')</div>';
@@ -1317,6 +1321,30 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
              } catch(err) {
                 customAlert('Error updating config: ' + err.message);
                 e.target.textContent = 'Error';
+         });
+
+        const deleteDevBtns = card.querySelectorAll('.btn-delete-dev');
+        deleteDevBtns.forEach(btn => {
+          btn.onclick = async (e) => {
+             const devId = e.target.getAttribute('data-dev');
+             const targetUserId = e.target.getAttribute('data-userid');
+             const targetEmail = e.target.getAttribute('data-email');
+             if (!devId || !targetUserId) return;
+
+             if (!await customConfirm(`Delete device "${devId.substr(0,14)}..." from user ${targetEmail}?`)) return;
+
+             e.target.textContent = '...';
+             try {
+                const res = await adminAction('remove_user_device', { userId: targetUserId, deviceId: devId });
+                if (res && res.success) {
+                   customAlert(`Device deleted successfully from ${targetEmail}`);
+                   loadUsers();
+                } else {
+                   throw new Error(res ? res.error : 'Failed to delete device');
+                }
+             } catch(err) {
+                customAlert('Error deleting device: ' + err.message);
+                e.target.textContent = 'Delete';
              }
           };
         });

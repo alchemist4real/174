@@ -332,6 +332,8 @@ function getMcpToolsList() {
     { name: 'docs_get', description: 'Get the full documentation page HTML and sections (docs.html)', inputSchema: { type: 'object', properties: {} } },
     { name: 'docs_update_section', description: 'Update or revise a specific documentation section in docs.html', inputSchema: { type: 'object', properties: { sectionIndex: { type: 'number', description: '1-indexed section number' }, title: { type: 'string' }, contentHtml: { type: 'string' } }, required: ['sectionIndex'] } },
     { name: 'docs_add_section', description: 'Append a new documentation section to docs.html', inputSchema: { type: 'object', properties: { title: { type: 'string' }, contentHtml: { type: 'string' } }, required: ['title', 'contentHtml'] } },
+    { name: 'users_remove_device', description: 'Remove a registered device entry from a user account (Admin/User self)', inputSchema: { type: 'object', properties: { user_id: { type: 'string' }, device_id: { type: 'string' } }, required: ['user_id', 'device_id'] } },
+    { name: 'users_block_device', description: 'Block or unblock a device ID globally in system settings (Admin only)', inputSchema: { type: 'object', properties: { device_id: { type: 'string' }, banned: { type: 'boolean' } }, required: ['device_id', 'banned'] } },
   ];
 }
 
@@ -703,6 +705,18 @@ async function routeMethod(method, params, auth, roles, cfg) {
   if (m === 'docs_add_section') {
     if (!roles.isAdmin) throw err403('Admin only to edit documentation');
     return docsAddSection(params, auth.email, gt, go, gr, su, sk);
+  }
+
+  if (m === 'users_remove_device') {
+    if (!params.user_id || !params.device_id) throw err400('Missing params.user_id or params.device_id');
+    const isSelf = auth.userId === params.user_id;
+    if (!isSelf && !roles.isAdmin) throw err403('Admin or account owner required');
+    return usersRemoveDevice(params.user_id, params.device_id, auth.email, su, sk);
+  }
+  if (m === 'users_block_device') {
+    if (!roles.isAdmin) throw err403('Admin only');
+    if (!params.device_id || params.banned === undefined) throw err400('Missing params.device_id or params.banned');
+    return usersBlockDevice(params.device_id, params.banned, auth.email, su, sk);
   }
 
   if (m === 'users_list') {
@@ -1536,6 +1550,56 @@ async function docsAddSection(params, adminEmail, githubToken, owner, repo, su, 
   const base64Content = Buffer.from(html, 'utf-8').toString('base64');
   await contentUpload({ path: 'docs.html', contentBase64: base64Content }, adminEmail, githubToken, owner, repo, su, sk);
   return { success: true, title };
+}
+
+async function usersRemoveDevice(userId, deviceId, adminEmail, su, sk) {
+  await fetch(`${su}/rest/v1/user_devices?user_id=eq.${userId}&device_id=eq.${encodeURIComponent(deviceId)}`, {
+    method: 'DELETE',
+    headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}` }
+  });
+
+  const getSbRes = await fetch(`${su}/auth/v1/admin/users/${userId}`, {
+    headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}` }
+  });
+  if (getSbRes.ok) {
+    const userData = await getSbRes.json();
+    const userMeta = userData.user_metadata || {};
+    let devices = Array.isArray(userMeta.devices) ? userMeta.devices : [];
+    devices = devices.filter(d => d.id !== deviceId);
+
+    await fetch(`${su}/auth/v1/admin/users/${userId}`, {
+      method: 'PUT',
+      headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user_metadata: { ...userMeta, devices } })
+    });
+  }
+
+  await logAction(adminEmail, 'mcp_remove_user_device', { userId, deviceId }, su, sk);
+  return { success: true, userId, deviceId };
+}
+
+async function usersBlockDevice(deviceId, banned, adminEmail, su, sk) {
+  const getRes = await fetch(`${su}/rest/v1/app_settings?limit=1`, {
+    headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}` }
+  });
+  const [cfg] = await getRes.json();
+  let bannedDevs = cfg.banned_devices || [];
+
+  if (banned) {
+    if (!bannedDevs.includes(deviceId)) bannedDevs.push(deviceId);
+  } else {
+    bannedDevs = bannedDevs.filter(id => id !== deviceId);
+  }
+
+  const res = await fetch(`${su}/rest/v1/app_settings?id=eq.${cfg.id}`, {
+    method: 'PATCH',
+    headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ banned_devices: bannedDevs })
+  });
+  if (!res.ok) throw new Error('Failed to block/unblock device');
+
+  await logAction(adminEmail, banned ? 'mcp_block_device' : 'mcp_unblock_device', { deviceId }, su, sk);
+  return { success: true, deviceId, banned };
 }
 
 async function activityLogsList(limit, su, sk) {

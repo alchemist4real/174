@@ -418,6 +418,43 @@ export default async function handler(req, res) {
       return res.status(200).json({ success: true });
     }
 
+    if (action === 'remove_user_device') {
+      const { userId, deviceId } = req.body;
+      if (!userId || !deviceId) return res.status(400).json({ error: 'Missing userId or deviceId' });
+      const sbKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+      if (!sbKey) return res.status(500).json({ error: 'SUPABASE_SERVICE_ROLE_KEY not configured' });
+
+      // Permission check: regular user can delete their own, Admin can delete non-admins, SuperAdmin can delete anyone
+      const isSelf = user.id === userId;
+      if (!isSelf && !isAdmin && !isSuperAdmin) {
+        return res.status(403).json({ error: 'Permission denied' });
+      }
+
+      await fetch(`${supabaseUrl}/rest/v1/user_devices?user_id=eq.${userId}&device_id=eq.${encodeURIComponent(deviceId)}`, {
+        method: 'DELETE',
+        headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
+      });
+
+      const getSbRes = await fetch(`${supabaseUrl}/auth/v1/admin/users/${userId}`, {
+        headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
+      });
+      if (getSbRes.ok) {
+        const userData = await getSbRes.json();
+        const userMeta = userData.user_metadata || {};
+        let devices = Array.isArray(userMeta.devices) ? userMeta.devices : [];
+        devices = devices.filter(d => d.id !== deviceId);
+
+        await fetch(`${supabaseUrl}/auth/v1/admin/users/${userId}`, {
+          method: 'PUT',
+          headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ user_metadata: { ...userMeta, devices } })
+        });
+      }
+
+      await logAdminAction('remove_user_device', { targetUserId: userId, deviceId });
+      return res.status(200).json({ success: true });
+    }
+
     return res.status(400).json({ error: 'Unknown action' });
   } catch (error) {
     return res.status(500).json({ error: error.message });
