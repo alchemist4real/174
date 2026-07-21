@@ -263,34 +263,34 @@ export default async function handler(req, res) {
 
 function getMcpToolsList() {
   return [
-    { name: 'system.health', description: 'Health check — returns server info and usage instructions', inputSchema: { type: 'object', properties: {} } },
-    { name: 'content.list', description: 'List all educational content organized by semester, block, and category', inputSchema: { type: 'object', properties: {} } },
-    { name: 'content.get', description: 'Download a specific content file by path (returns full HTML)', inputSchema: { type: 'object', properties: { path: { type: 'string', description: 'File path, e.g. content/semester 1/1.2/1.2-2_Overall CBT.html' } }, required: ['path'] } },
-    { name: 'content.tree', description: 'Get the full file tree of content/ and cover/ directories', inputSchema: { type: 'object', properties: {} } },
-    { name: 'content.upload', description: 'Upload a new content file (base64 encoded)', inputSchema: { type: 'object', properties: { path: { type: 'string' }, contentBase64: { type: 'string' } }, required: ['path', 'contentBase64'] } },
-    { name: 'content.delete', description: 'Delete a content file by path', inputSchema: { type: 'object', properties: { path: { type: 'string' } }, required: ['path'] } },
-    { name: 'content.rename', description: 'Rename or move a content file', inputSchema: { type: 'object', properties: { path: { type: 'string' }, newPath: { type: 'string' } }, required: ['path', 'newPath'] } },
-    { name: 'tasks.list', description: 'List all content tasks on the task board', inputSchema: { type: 'object', properties: {} } },
-    { name: 'tasks.create', description: 'Create a new content task (management only)', inputSchema: { type: 'object', properties: { title: { type: 'string' }, description: { type: 'string' }, semester: { type: 'string' }, block: { type: 'string' }, category: { type: 'string' }, priority: { type: 'string', enum: ['low','normal','high','urgent'] } }, required: ['title'] } },
-    { name: 'tasks.claim', description: 'Claim an open task (developer only)', inputSchema: { type: 'object', properties: { task_id: { type: 'string' } }, required: ['task_id'] } },
-    { name: 'tasks.submit', description: 'Submit a task for review (developer only)', inputSchema: { type: 'object', properties: { task_id: { type: 'string' } }, required: ['task_id'] } },
-    { name: 'tasks.approve', description: 'Approve a reviewed task (reviewer only)', inputSchema: { type: 'object', properties: { task_id: { type: 'string' } }, required: ['task_id'] } },
-    { name: 'tasks.reject', description: 'Reject a task back to in-progress (reviewer only)', inputSchema: { type: 'object', properties: { task_id: { type: 'string' }, note: { type: 'string' } }, required: ['task_id'] } },
-    { name: 'tasks.logs', description: 'Get activity history for a task', inputSchema: { type: 'object', properties: { task_id: { type: 'string' } }, required: ['task_id'] } },
-    { name: 'divisions.list', description: 'List all organization divisions', inputSchema: { type: 'object', properties: {} } },
-    { name: 'divisions.my', description: 'Get your division membership', inputSchema: { type: 'object', properties: {} } },
-    { name: 'users.list', description: 'List all registered users (SuperAdmin only)', inputSchema: { type: 'object', properties: {} } },
-    { name: 'users.ban', description: 'Ban or unban a user (SuperAdmin only)', inputSchema: { type: 'object', properties: { user_id: { type: 'string' }, banned: { type: 'boolean' } }, required: ['user_id', 'banned'] } },
-    { name: 'config.get', description: 'Get app configuration settings (Admin only)', inputSchema: { type: 'object', properties: {} } },
-    { name: 'config.update', description: 'Update app settings (Admin only)', inputSchema: { type: 'object', properties: { allowSignup: { type: 'boolean' }, maintenanceMode: { type: 'boolean' } } } },
-    { name: 'contributions.leaderboard', description: 'Get the contribution points leaderboard', inputSchema: { type: 'object', properties: {} } },
-    { name: 'contributions.my', description: 'Get your own contribution history', inputSchema: { type: 'object', properties: {} } },
-    { name: 'review.issues', description: 'Get review issues for a task (reviewer only)', inputSchema: { type: 'object', properties: { task_id: { type: 'string' } }, required: ['task_id'] } },
-    { name: 'review.report', description: 'Report a review issue on a task', inputSchema: { type: 'object', properties: { task_id: { type: 'string' }, issue_type: { type: 'string' }, description: { type: 'string' } }, required: ['task_id'] } },
-    { name: 'review.resolve', description: 'Mark a review issue as resolved', inputSchema: { type: 'object', properties: { issue_id: { type: 'string' } }, required: ['issue_id'] } },
-    { name: 'apikeys.list', description: 'List your active API keys', inputSchema: { type: 'object', properties: {} } },
-    { name: 'apikeys.create', description: 'Generate a new API key', inputSchema: { type: 'object', properties: { name: { type: 'string' }, expires_in_days: { type: 'number' } }, required: ['name'] } },
-    { name: 'apikeys.revoke', description: 'Revoke an API key by ID', inputSchema: { type: 'object', properties: { key_id: { type: 'string' } }, required: ['key_id'] } },
+    { name: 'system_health', description: 'Health check — returns server info and usage instructions', inputSchema: { type: 'object', properties: {} } },
+    { name: 'content_list', description: 'List all educational content organized by semester, block, and category', inputSchema: { type: 'object', properties: {} } },
+    { name: 'content_get', description: 'Download a specific content file by path (returns full HTML)', inputSchema: { type: 'object', properties: { path: { type: 'string', description: 'File path, e.g. content/semester 1/1.2/1.2-2_Overall CBT.html' } }, required: ['path'] } },
+    { name: 'content_tree', description: 'Get the full file tree of content/ and cover/ directories', inputSchema: { type: 'object', properties: {} } },
+    { name: 'content_upload', description: 'Upload a new content file (base64 encoded)', inputSchema: { type: 'object', properties: { path: { type: 'string' }, contentBase64: { type: 'string' } }, required: ['path', 'contentBase64'] } },
+    { name: 'content_delete', description: 'Delete a content file by path', inputSchema: { type: 'object', properties: { path: { type: 'string' } }, required: ['path'] } },
+    { name: 'content_rename', description: 'Rename or move a content file', inputSchema: { type: 'object', properties: { path: { type: 'string' }, newPath: { type: 'string' } }, required: ['path', 'newPath'] } },
+    { name: 'tasks_list', description: 'List all content tasks on the task board', inputSchema: { type: 'object', properties: {} } },
+    { name: 'tasks_create', description: 'Create a new content task (management only)', inputSchema: { type: 'object', properties: { title: { type: 'string' }, description: { type: 'string' }, semester: { type: 'string' }, block: { type: 'string' }, category: { type: 'string' }, priority: { type: 'string', enum: ['low','normal','high','urgent'] } }, required: ['title'] } },
+    { name: 'tasks_claim', description: 'Claim an open task (developer only)', inputSchema: { type: 'object', properties: { task_id: { type: 'string' } }, required: ['task_id'] } },
+    { name: 'tasks_submit', description: 'Submit a task for review (developer only)', inputSchema: { type: 'object', properties: { task_id: { type: 'string' } }, required: ['task_id'] } },
+    { name: 'tasks_approve', description: 'Approve a reviewed task (reviewer only)', inputSchema: { type: 'object', properties: { task_id: { type: 'string' } }, required: ['task_id'] } },
+    { name: 'tasks_reject', description: 'Reject a task back to in-progress (reviewer only)', inputSchema: { type: 'object', properties: { task_id: { type: 'string' }, note: { type: 'string' } }, required: ['task_id'] } },
+    { name: 'tasks_logs', description: 'Get activity history for a task', inputSchema: { type: 'object', properties: { task_id: { type: 'string' } }, required: ['task_id'] } },
+    { name: 'divisions_list', description: 'List all organization divisions', inputSchema: { type: 'object', properties: {} } },
+    { name: 'divisions_my', description: 'Get your division membership', inputSchema: { type: 'object', properties: {} } },
+    { name: 'users_list', description: 'List all registered users (SuperAdmin only)', inputSchema: { type: 'object', properties: {} } },
+    { name: 'users_ban', description: 'Ban or unban a user (SuperAdmin only)', inputSchema: { type: 'object', properties: { user_id: { type: 'string' }, banned: { type: 'boolean' } }, required: ['user_id', 'banned'] } },
+    { name: 'config_get', description: 'Get app configuration settings (Admin only)', inputSchema: { type: 'object', properties: {} } },
+    { name: 'config_update', description: 'Update app settings (Admin only)', inputSchema: { type: 'object', properties: { allowSignup: { type: 'boolean' }, maintenanceMode: { type: 'boolean' } } } },
+    { name: 'contributions_leaderboard', description: 'Get the contribution points leaderboard', inputSchema: { type: 'object', properties: {} } },
+    { name: 'contributions_my', description: 'Get your own contribution history', inputSchema: { type: 'object', properties: {} } },
+    { name: 'review_issues', description: 'Get review issues for a task (reviewer only)', inputSchema: { type: 'object', properties: { task_id: { type: 'string' } }, required: ['task_id'] } },
+    { name: 'review_report', description: 'Report a review issue on a task', inputSchema: { type: 'object', properties: { task_id: { type: 'string' }, issue_type: { type: 'string' }, description: { type: 'string' } }, required: ['task_id'] } },
+    { name: 'review_resolve', description: 'Mark a review issue as resolved', inputSchema: { type: 'object', properties: { issue_id: { type: 'string' } }, required: ['issue_id'] } },
+    { name: 'apikeys_list', description: 'List your active API keys', inputSchema: { type: 'object', properties: {} } },
+    { name: 'apikeys_create', description: 'Generate a new API key', inputSchema: { type: 'object', properties: { name: { type: 'string' }, expires_in_days: { type: 'number' } }, required: ['name'] } },
+    { name: 'apikeys_revoke', description: 'Revoke an API key by ID', inputSchema: { type: 'object', properties: { key_id: { type: 'string' } }, required: ['key_id'] } },
   ];
 }
 
@@ -453,38 +453,40 @@ async function ghApi(method, endpoint, bodyObj, githubToken, owner, repo) {
 async function routeMethod(method, params, auth, roles, cfg) {
   const { SUPABASE_URL: su, SB_SERVICE_KEY: sk, GITHUB_TOKEN: gt, GH_OWNER: go, GH_REPO: gr, MAX_KEYS_PER_USER: maxKeys } = cfg;
 
-  if (method === 'apikeys.list') {
+  const m = (method || '').replace(/\./g, '_');
+
+  if (m === 'apikeys_list') {
     if (!roles.canUseApiKeys) throw err403('Only division members can manage API keys');
     return listApiKeys(auth.userId, su, sk);
   }
-  if (method === 'apikeys.create') {
+  if (m === 'apikeys_create') {
     if (!roles.canUseApiKeys) throw err403('Only division members can create API keys');
     return createApiKey(auth.userId, params, su, sk, maxKeys);
   }
-  if (method === 'apikeys.revoke') {
+  if (m === 'apikeys_revoke') {
     if (!roles.canUseApiKeys) throw err403('Only division members can revoke API keys');
     return revokeApiKey(auth.userId, params, su, sk);
   }
 
-  if (method === 'content.list') return contentList(gt, go, gr);
-  if (method === 'content.get') {
+  if (m === 'content_list') return contentList(gt, go, gr);
+  if (m === 'content_get') {
     if (!params.path) throw err400('Missing params.path');
     return contentGet(params.path, gt, go, gr);
   }
-  if (method === 'content.tree') return contentTree(gt, go, gr);
-  if (method === 'content.upload') {
+  if (m === 'content_tree') return contentTree(gt, go, gr);
+  if (m === 'content_upload') {
     if (!roles.hasDivision && !roles.isAdmin) throw err403('Division membership required to upload');
     if (!params.path || !params.contentBase64) throw err400('Missing params.path or params.contentBase64');
     validatePath(params.path);
     return contentUpload(params, auth.email, gt, go, gr, su, sk);
   }
-  if (method === 'content.delete') {
+  if (m === 'content_delete') {
     if (!roles.hasDivision && !roles.isAdmin) throw err403('Division membership required to delete');
     if (!params.path) throw err400('Missing params.path');
     validatePath(params.path);
     return contentDelete(params, auth.email, gt, go, gr, su, sk);
   }
-  if (method === 'content.rename') {
+  if (m === 'content_rename') {
     if (!roles.hasDivision && !roles.isAdmin) throw err403('Division membership required to rename');
     if (!params.path || !params.newPath) throw err400('Missing params.path or params.newPath');
     validatePath(params.path);
@@ -492,83 +494,83 @@ async function routeMethod(method, params, auth, roles, cfg) {
     return contentRename(params, auth.email, gt, go, gr, su, sk);
   }
 
-  if (method === 'tasks.list') {
+  if (m === 'tasks_list') {
     if (!roles.hasDivision && !roles.isAdmin) throw err403('Division membership required');
     return tasksList(su, sk);
   }
-  if (method === 'tasks.create') {
+  if (m === 'tasks_create') {
     if (!roles.isManagement) throw err403('Management division only');
     return tasksCreate(params, auth.userId, su, sk);
   }
-  if (method === 'tasks.claim') {
+  if (m === 'tasks_claim') {
     if (!roles.isDeveloper) throw err403('Development division only');
     if (!params.task_id) throw err400('Missing params.task_id');
     return tasksClaim(params.task_id, auth.userId, su, sk);
   }
-  if (method === 'tasks.submit') {
+  if (m === 'tasks_submit') {
     if (!roles.isDeveloper) throw err403('Development division only');
     if (!params.task_id) throw err400('Missing params.task_id');
     return tasksSubmit(params.task_id, auth.userId, su, sk);
   }
-  if (method === 'tasks.approve') {
+  if (m === 'tasks_approve') {
     if (!roles.isReviewer) throw err403('Review division only');
     if (!params.task_id) throw err400('Missing params.task_id');
     return tasksApprove(params.task_id, auth.userId, su, sk);
   }
-  if (method === 'tasks.reject') {
+  if (m === 'tasks_reject') {
     if (!roles.isReviewer) throw err403('Review division only');
     if (!params.task_id) throw err400('Missing params.task_id');
     return tasksReject(params.task_id, params.note || '', su, sk);
   }
-  if (method === 'tasks.logs') {
+  if (m === 'tasks_logs') {
     if (!roles.hasDivision && !roles.isAdmin) throw err403('Division membership required');
     if (!params.task_id) throw err400('Missing params.task_id');
     return tasksGetLogs(params.task_id, su, sk);
   }
 
-  if (method === 'divisions.list') {
+  if (m === 'divisions_list') {
     if (!roles.hasDivision && !roles.isAdmin) throw err403('Division membership required');
     return divisionsList(su, sk);
   }
-  if (method === 'divisions.my') return divisionsMyDivision(auth.userId, su, sk);
+  if (m === 'divisions_my') return divisionsMyDivision(auth.userId, su, sk);
 
-  if (method === 'users.list') {
+  if (m === 'users_list') {
     if (!roles.isSuperAdmin) throw err403('SuperAdmin only');
     return usersList(su, sk);
   }
-  if (method === 'users.ban') {
+  if (m === 'users_ban') {
     if (!roles.isSuperAdmin) throw err403('SuperAdmin only');
     if (!params.user_id || params.banned === undefined) throw err400('Missing params.user_id or params.banned');
     return usersBan(params.user_id, params.banned, auth.email, su, sk);
   }
-  if (method === 'users.delete') {
+  if (m === 'users_delete') {
     if (!roles.isSuperAdmin) throw err403('SuperAdmin only');
     if (!params.user_id) throw err400('Missing params.user_id');
     return usersDelete(params.user_id, su, sk);
   }
 
-  if (method === 'config.get') {
+  if (m === 'config_get') {
     if (!roles.isAdmin) throw err403('Admin only');
     return configGet(su, sk);
   }
-  if (method === 'config.update') {
+  if (m === 'config_update') {
     if (!roles.isAdmin) throw err403('Admin only');
     return configUpdate(params, auth.email, su, sk);
   }
 
-  if (method === 'contributions.leaderboard') return contributionsLeaderboard(su, sk);
-  if (method === 'contributions.my') return contributionsMy(auth.userId, su, sk);
+  if (m === 'contributions_leaderboard') return contributionsLeaderboard(su, sk);
+  if (m === 'contributions_my') return contributionsMy(auth.userId, su, sk);
 
-  if (method === 'review.issues') {
+  if (m === 'review_issues') {
     if (!roles.isReviewer) throw err403('Review division only');
     if (!params.task_id) throw err400('Missing params.task_id');
     return reviewIssuesList(params.task_id, su, sk);
   }
-  if (method === 'review.report') {
+  if (m === 'review_report') {
     if (!roles.isReviewer) throw err403('Review division only');
     return reviewIssuesReport(params, auth.userId, su, sk);
   }
-  if (method === 'review.resolve') {
+  if (m === 'review_resolve') {
     if (!roles.isReviewer) throw err403('Review division only');
     if (!params.issue_id) throw err400('Missing params.issue_id');
     return reviewIssuesResolve(params.issue_id, su, sk);
