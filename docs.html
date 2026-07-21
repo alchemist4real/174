@@ -87,28 +87,31 @@
         <h2>4. Integrasi MCP & API Gateway (AI Assistant Integration)</h2>
         <p><strong>MR-CAPSULES</strong> menyediakan API Gateway & Model Context Protocol (MCP) serverless endpoint berbasis <em>Streamable HTTP (MCP 2025-06-18)</em>. Fitur ini memungkinkan AI Assistant seperti <strong>Claude.ai Web</strong>, <strong>Claude Desktop</strong>, atau AI Agent eksternal untuk mengakses konten dan melakukan tugas secara otomatis di Admin Panel.</p>
 
-        <h3>A. Cara Mengoperasikan & Mengisi API Key</h3>
-        <ol style="font-family: var(--font-mono); color: var(--text-muted); line-height: 1.7; font-size: 15px; padding-left: 24px; margin: 0;">
-          <li style="margin-bottom: 10px;">Buka <strong>Admin Panel</strong> dan pastikan Anda sudah terhubung ke salah satu Divisi (Management, Development, atau Review).</li>
-          <li style="margin-bottom: 10px;">Pilih tab <strong>API Keys</strong> di navigasi utama.</li>
-          <li style="margin-bottom: 10px;">Masukkan nama kunci pada bidang <strong>Key Name</strong> (contoh: <code style="font-size:12px; background:var(--bg-inset); padding:2px 6px; border-radius:4px;">Claude Web MCP</code>) serta tentukan masa berlaku (<em>Expires In</em>).</li>
-          <li style="margin-bottom: 10px;">Klik tombol <strong>+ Generate Key</strong>. Kunci rahasia berawalan <code style="font-size:12px; background:var(--bg-inset); padding:2px 6px; border-radius:4px;">mrc_...</code> akan ditampilkan dalam kotak kuning.</li>
-          <li style="margin-bottom: 10px;">Klik tombol <strong>Copy</strong> dan simpan kunci tersebut segera karena tidak dapat ditampilkan kembali demi alasan keamanan.</li>
-        </ol>
+<h3>A. Cara Mengoperasikan & Mengisi API Key</h3>
+<ol style="font-family: var(--font-mono); color: var(--text-muted); line-height: 1.7; font-size: 15px; padding-left: 24px; margin: 0;">
+  <li style="margin-bottom: 10px;">Buka <strong>Admin Panel</strong> dan pastikan Anda sudah terhubung ke salah satu Divisi (Management, Development, atau Review).</li>
+  <li style="margin-bottom: 10px;">Pilih tab <strong>API Keys</strong> di navigasi utama.</li>
+  <li style="margin-bottom: 10px;">Masukkan nama kunci pada bidang <strong>Key Name</strong> (contoh: <code style="font-size:12px; background:var(--bg-inset); padding:2px 6px; border-radius:4px;">Claude Web MCP</code>) serta tentukan masa berlaku (<em>Expires In</em>).</li>
+  <li style="margin-bottom: 10px;">Klik tombol <strong>+ Generate Key</strong>. Kunci rahasia berawalan <code style="font-size:12px; background:var(--bg-inset); padding:2px 6px; border-radius:4px;">mrc_...</code> akan ditampilkan dalam kotak kuning.</li>
+  <li style="margin-bottom: 10px;">Klik tombol <strong>Copy</strong> dan simpan kunci tersebut segera karena tidak dapat ditampilkan kembali demi alasan keamanan.</li>
+</ol>
 
-        <h3>B. Menghubungkan ke Claude.ai Web (Custom Connector)</h3>
-        <p>Integrasi MCP MR-CAPSULES mendukung **OAuth 2.0 PKCE Auto-Discovery (RFC 8414 &amp; RFC 7591)** resmi.</p>
-        <ol style="font-family: var(--font-mono); color: var(--text-muted); line-height: 1.7; font-size: 15px; padding-left: 24px; margin: 0;">
-          <li style="margin-bottom: 8px;">Buka <strong>Claude.ai</strong> &rarr; <strong>Settings</strong> &rarr; <strong>Connectors</strong> &rarr; Klik <strong>Add Custom Connector (BETA)</strong>.</li>
-          <li style="margin-bottom: 8px;"><strong>Name:</strong> Isi dengan <code style="font-size:12px; background:var(--bg-inset); padding:2px 6px; border-radius:4px;">mr capsules</code> (atau nama pilihan Anda).</li>
-          <li style="margin-bottom: 8px;"><strong>URL:</strong> Isi dengan <code style="font-size:12px; background:var(--bg-inset); padding:2px 6px; border-radius:4px;">https://mr-capsules.vercel.app/api/mcp</code></li>
-          <li style="margin-bottom: 8px;"><strong>Advanced settings:</strong> <em>BIARKAN KOSONG / JANGAN DIISI</em> (Otorisasi OAuth 2.0 PKCE bekerja secara otomatis lewat Auto-Discovery).</li>
-          <li style="margin-bottom: 8px;">Klik <strong>Add</strong> &rarr; Klik <strong>Connect</strong> &rarr; Anda akan diarahkan ke halaman Login Mr. Capsules. Log in menggunakan akun Anda dan otorisasi selesai!</li>
-        </ol>
+<h3>B. Menghubungkan ke Claude.ai Web (Custom Connector)</h3>
+<p>Integrasi MCP MR-CAPSULES mendukung <strong>OAuth 2.0 PKCE Auto-Discovery (RFC 8414 &amp; RFC 7591)</strong> resmi.</p>
+<ol style="font-family: var(--font-mono); color: var(--text-muted); line-height: 1.7; font-size: 15px; padding-left: 24px; margin: 0;">
+  <li style="margin-bottom: 8px;">Buka <strong>Claude.ai</strong> &rarr; <strong>Settings</strong> &rarr; <strong>Connectors</strong> &rarr; Klik <strong>Add Custom Connector (BETA)</strong>.</li>
+  <li style="margin-bottom: 8px;"><strong>Name:</strong> Isi dengan <code style="font-size:12px; background:var(--bg-inset); padding:2px 6px; border-radius:4px;">mr capsules</code> (atau nama pilihan Anda).</li>
+  <li style="margin-bottom: 8px;"><strong>URL:</strong> Isi dengan <code style="font-size:12px; background:var(--bg-inset); padding:2px 6px; border-radius:4px;">https://mr-capsules.vercel.app/api/mcp</code></li>
+  <li style="margin-bottom: 8px;"><strong>Advanced settings:</strong> <em>BIARKAN KOSONG / JANGAN DIISI</em> (Otorisasi OAuth 2.0 PKCE bekerja secara otomatis lewat Auto-Discovery).</li>
+  <li style="margin-bottom: 8px;">Klik <strong>Add</strong> &rarr; Klik <strong>Connect</strong> &rarr; Anda akan diarahkan ke halaman Login Mr. Capsules. Log in menggunakan akun Anda dan otorisasi selesai!</li>
+</ol>
 
-        <div class="alert-box">
-          <strong>CATATAN:</strong> Penggunaan API Key dibatasi maksimum 5 kunci aktif per pengguna dengan batasan <em>rate limit</em> 60 request/menit untuk mencegah penyalahgunaan.
-        </div>
+<div class="alert-box">
+  <strong>CATATAN:</strong> Penggunaan API Key dibatasi maksimum 5 kunci aktif per pengguna dengan batasan <em>rate limit</em> 60 request/menit untuk mencegah penyalahgunaan.
+</div>
+
+<p>Untuk daftar lengkap kemampuan (tools) yang tersedia dan siapa saja yang punya hak akses terhadap masing-masing fungsi, lihat <strong>Bagian 5: Referensi Lengkap MCP Tools & Hak Akses</strong> di bawah ini.</p>
+      </div>
 
         <h3>C. Daftar Kemampuan MCP Tools (54 Method)</h3>
         <p>AI Assistant yang terhubung dapat mengeksekusi fungsi-fungsi berikut secara langsung:</p>
