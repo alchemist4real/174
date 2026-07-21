@@ -111,7 +111,8 @@ export default async function handler(req, res) {
           callbackUrl.searchParams.set('code', code);
           if (state) callbackUrl.searchParams.set('state', state);
 
-          return res.redirect(302, callbackUrl.toString());
+          res.writeHead(302, { Location: callbackUrl.toString() });
+          return res.end();
         }
       } catch(err) {
         errorMessage = 'Authentication error: ' + err.message;
