@@ -10,15 +10,26 @@ function base64url(buffer) {
     .replace(/\//g, '_');
 }
 
+function sanitizeBase64Url(str) {
+  if (!str) return '';
+  return String(str).trim()
+    .replace(/=/g, '')
+    .replace(/\+/g, '-')
+    .replace(/\//g, '_');
+}
+
 function verifyPkce(codeVerifier, codeChallenge, method = 'S256') {
   if (!codeChallenge) return true; // Optional if no challenge was sent
-  if (method === 'S256') {
-    const hash = crypto.createHash('sha256').update(codeVerifier).digest();
+  const cleanChallenge = sanitizeBase64Url(codeChallenge);
+  const cleanVerifier = String(codeVerifier || '').trim();
+
+  if (!method || method === 'S256') {
+    const hash = crypto.createHash('sha256').update(cleanVerifier).digest();
     const computed = base64url(hash);
-    return computed === codeChallenge;
+    return computed === cleanChallenge;
   }
   if (method === 'plain') {
-    return codeVerifier === codeChallenge;
+    return cleanVerifier === cleanChallenge;
   }
   return false;
 }
@@ -27,9 +38,12 @@ export default async function handler(req, res) {
   const SUPABASE_URL = 'https://hdhvrlkizorscvehttzd.supabase.co';
   const SB_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
+  // RFC 6749 Section 5.1: MUST include Cache-Control: no-store and Pragma: no-cache
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
+  res.setHeader('Pragma', 'no-cache');
 
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
@@ -104,22 +118,23 @@ export default async function handler(req, res) {
       return res.status(400).json({ error: 'invalid_grant', error_description: 'Authorization code expired' });
     }
 
-    // Delete single-use authorization code immediately
-    await fetch(`${SUPABASE_URL}/rest/v1/oauth_codes?code=eq.${encodeURIComponent(code)}`, {
-      method: 'DELETE',
-      headers: { 'apikey': SB_SERVICE_KEY, 'Authorization': `Bearer ${SB_SERVICE_KEY}` }
-    });
-
-    // Verify PKCE if present
+    // Verify PKCE BEFORE deleting code
     if (codeRecord.code_challenge) {
       if (!codeVerifier) {
         return res.status(400).json({ error: 'invalid_grant', error_description: 'Missing code_verifier for PKCE' });
       }
       const pkceValid = verifyPkce(codeVerifier, codeRecord.code_challenge, codeRecord.code_challenge_method);
       if (!pkceValid) {
+        console.error(`[OAuth PKCE Failure] timestamp="${new Date().toISOString()}" code="${code}" challenge="${codeRecord.code_challenge}" verifier="${codeVerifier}"`);
         return res.status(400).json({ error: 'invalid_grant', error_description: 'PKCE verification failed' });
       }
     }
+
+    // Delete single-use authorization code ONLY after successful PKCE validation
+    await fetch(`${SUPABASE_URL}/rest/v1/oauth_codes?code=eq.${encodeURIComponent(code)}`, {
+      method: 'DELETE',
+      headers: { 'apikey': SB_SERVICE_KEY, 'Authorization': `Bearer ${SB_SERVICE_KEY}` }
+    });
 
     // Issue Access Token and Refresh Token
     const accessToken = `mrc_at_${crypto.randomBytes(32).toString('hex')}`;
@@ -217,6 +232,7 @@ export default async function handler(req, res) {
         client_id: oldToken.client_id,
         user_id: oldToken.user_id,
         user_email: oldToken.user_email,
+        resource: oldToken.resource,
         expires_at: expiresAt,
         revoked: false
       })
