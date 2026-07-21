@@ -320,6 +320,11 @@ function getMcpToolsList() {
     { name: 'review_delete_issue', description: 'Delete a review issue report (Reviewer/Admin only)', inputSchema: { type: 'object', properties: { issue_id: { type: 'string' } }, required: ['issue_id'] } },
     { name: 'activity_logs', description: 'Get system & user activity logs (Admin only)', inputSchema: { type: 'object', properties: { limit: { type: 'number' } } } },
     { name: 'system_cleanup_guests', description: 'Run automated cleanup of expired guest/temporary accounts (Admin only)', inputSchema: { type: 'object', properties: {} } },
+    { name: 'tasks_unclaim', description: 'Unclaim a task back to open status (Developer only)', inputSchema: { type: 'object', properties: { task_id: { type: 'string' } }, required: ['task_id'] } },
+    { name: 'tasks_start_review', description: 'Start active review on a submitted task (Reviewer only)', inputSchema: { type: 'object', properties: { task_id: { type: 'string' } }, required: ['task_id'] } },
+    { name: 'tasks_add_note', description: 'Add a note/comment to a task log', inputSchema: { type: 'object', properties: { task_id: { type: 'string' }, note: { type: 'string' } }, required: ['task_id', 'note'] } },
+    { name: 'divisions_join', description: 'Join an organization division', inputSchema: { type: 'object', properties: { division_id: { type: 'string', enum: ['management','development','review'] }, whatsapp: { type: 'string' } }, required: ['division_id'] } },
+    { name: 'divisions_update_whatsapp', description: 'Update your WhatsApp contact info', inputSchema: { type: 'object', properties: { whatsapp: { type: 'string' } }, required: ['whatsapp'] } },
   ];
 }
 
@@ -634,12 +639,34 @@ async function routeMethod(method, params, auth, roles, cfg) {
     if (!params.task_id) throw err400('Missing params.task_id');
     return tasksGetLogs(params.task_id, su, sk);
   }
+  if (m === 'tasks_unclaim') {
+    if (!roles.isDeveloper) throw err403('Development division only');
+    if (!params.task_id) throw err400('Missing params.task_id');
+    return tasksUnclaim(params.task_id, auth.userId, su, sk);
+  }
+  if (m === 'tasks_start_review') {
+    if (!roles.isReviewer) throw err403('Review division only');
+    if (!params.task_id) throw err400('Missing params.task_id');
+    return tasksStartReview(params.task_id, auth.userId, su, sk);
+  }
+  if (m === 'tasks_add_note') {
+    if (!params.task_id || !params.note) throw err400('Missing params.task_id or params.note');
+    return tasksAddNote(params.task_id, auth.userId, params.note, su, sk);
+  }
 
   if (m === 'divisions_list') {
     if (!roles.hasDivision && !roles.isAdmin) throw err403('Division membership required');
     return divisionsList(su, sk);
   }
   if (m === 'divisions_my') return divisionsMyDivision(auth.userId, su, sk);
+  if (m === 'divisions_join') {
+    if (!params.division_id) throw err400('Missing params.division_id');
+    return divisionsJoin(auth.userId, params.division_id, params.whatsapp || '', su, sk);
+  }
+  if (m === 'divisions_update_whatsapp') {
+    if (!params.whatsapp) throw err400('Missing params.whatsapp');
+    return divisionsUpdateWhatsapp(auth.userId, params.whatsapp, su, sk);
+  }
 
   if (m === 'users_list') {
     if (!roles.isSuperAdmin) throw err403('SuperAdmin only');
@@ -1318,6 +1345,56 @@ async function tasksDelete(taskId, adminEmail, su, sk) {
   if (!res.ok) throw new Error('Failed to delete task: ' + await res.text());
   await logAction(adminEmail, 'mcp_delete_task', { taskId }, su, sk);
   return { success: true, taskId };
+}
+
+async function tasksUnclaim(taskId, userId, su, sk) {
+  const res = await fetch(`${su}/rest/v1/content_tasks?id=eq.${taskId}`, {
+    method: 'PATCH',
+    headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ status: 'open', assignee_id: null, claimed_at: null })
+  });
+  if (!res.ok) throw new Error('Failed to unclaim task: ' + await res.text());
+  return { success: true };
+}
+
+async function tasksStartReview(taskId, userId, su, sk) {
+  const res = await fetch(`${su}/rest/v1/content_tasks?id=eq.${taskId}`, {
+    method: 'PATCH',
+    headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ status: 'in_review', reviewer_id: userId })
+  });
+  if (!res.ok) throw new Error('Failed to start review: ' + await res.text());
+  return { success: true };
+}
+
+async function tasksAddNote(taskId, userId, note, su, sk) {
+  const res = await fetch(`${su}/rest/v1/task_activity_logs`, {
+    method: 'POST',
+    headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ task_id: taskId, actor_id: userId, action: 'add_note', note })
+  });
+  if (!res.ok) throw new Error('Failed to add note: ' + await res.text());
+  return { success: true };
+}
+
+async function divisionsJoin(userId, divisionId, whatsapp, su, sk) {
+  const res = await fetch(`${su}/rest/v1/division_members`, {
+    method: 'POST',
+    headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}`, 'Content-Type': 'application/json', 'Prefer': 'resolution=merge-duplicates' },
+    body: JSON.stringify({ user_id: userId, division_id: divisionId, whatsapp })
+  });
+  if (!res.ok) throw new Error('Failed to join division: ' + await res.text());
+  return { success: true, divisionId };
+}
+
+async function divisionsUpdateWhatsapp(userId, whatsapp, su, sk) {
+  const res = await fetch(`${su}/rest/v1/division_members?user_id=eq.${userId}`, {
+    method: 'PATCH',
+    headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ whatsapp })
+  });
+  if (!res.ok) throw new Error('Failed to update whatsapp: ' + await res.text());
+  return { success: true, whatsapp };
 }
 
 async function activityLogsList(limit, su, sk) {
