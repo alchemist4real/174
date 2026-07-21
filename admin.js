@@ -1683,6 +1683,7 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
   }
   window.addEventListener('adminReady', function() {
     bindKeyEvents();
+    loadApiKeys();
   });
 
   window.loadApiKeys = loadApiKeys;

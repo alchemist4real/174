@@ -1821,5 +1821,106 @@ h1, h2, h3, h4, h5, h6, .modal-title, .docs-title, .docs-section h2, .section-ti
 /* Uses existing: var(--bg-card), var(--bg-inset), var(--border-light),
    var(--text-main), var(--text-muted), var(--danger),
    .toolbar-header, .btn-unified, .auth-input, .form-label */
-/* No additional CSS rules required — all inline styles in HTML */
+
+/* ══ SETTINGS OVERLAY & MODALS ══ */
+.settings-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 10000;
+  background: rgba(0, 0, 0, 0.7);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  visibility: hidden;
+  transition: opacity 0.25s ease, visibility 0.25s ease;
+}
+
+.settings-overlay.active {
+  opacity: 1;
+  pointer-events: auto;
+  visibility: visible;
+}
+
+.settings-box {
+  background: var(--bg-card);
+  color: var(--text-main);
+  border: 1px solid var(--border-light);
+  width: 90%;
+  max-width: 520px;
+  max-height: 90vh;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  transform: translateY(16px) scale(0.97);
+  transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.settings-overlay.active .settings-box {
+  transform: translateY(0) scale(1);
+}
+
+.settings-header {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--border-light);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  background: var(--bg-card);
+}
+
+.modal-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-main);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.settings-body {
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  overflow-y: auto;
+}
+
+.modal-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-end;
+  margin-top: 12px;
+}
+
+.modal-actions-end {
+  justify-content: flex-end;
+}
+
+.settings-box-limit {
+  max-width: 600px;
+}
+
+.prompt-box-limit {
+  max-width: 440px;
+}
+
+.prompt-input-full {
+  width: 100%;
+}
+
+.editor-modal-container {
+  max-width: 96vw !important;
+  width: 96vw !important;
+  height: 92vh !important;
+  max-height: 92vh !important;
+}/* No additional CSS rules required — all inline styles in HTML */
 
