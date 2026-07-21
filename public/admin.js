@@ -1321,7 +1321,9 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
              } catch(err) {
                 customAlert('Error updating config: ' + err.message);
                 e.target.textContent = 'Error';
-         });
+             }
+          };
+        });
 
         const deleteDevBtns = card.querySelectorAll('.btn-delete-dev');
         deleteDevBtns.forEach(btn => {
