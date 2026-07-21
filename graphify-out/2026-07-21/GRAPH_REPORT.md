@@ -1,16 +1,16 @@
 # Graph Report - MR-CAPSULES-main  (2026-07-21)
 
 ## Corpus Check
-- 169 files · ~13,674,754 words
+- 169 files · ~13,674,722 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 4144 nodes · 6166 edges · 171 communities (161 shown, 10 thin omitted)
+- 4142 nodes · 6160 edges · 172 communities (161 shown, 11 thin omitted)
 - Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 171 edges (avg confidence: 0.5)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `01ffb5a1`
+- Built from commit: `7a68aa06`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -169,6 +169,7 @@
 - token.js
 - oauth-protected-resource.js
 - register.js
+- Admin Page Feature Expansion — Unified Comprehensive Implementation Plan
 
 ## God Nodes (most connected - your core abstractions)
 1. `routeMethod()` - 33 edges
@@ -189,7 +190,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (171 total, 10 thin omitted)
+## Communities (172 total, 11 thin omitted)
 
 ### Community 0 - "2.4 CBT 2_K20C AM I CINEMATIC.html"
 Cohesion: 0.06
@@ -700,8 +701,8 @@ Cohesion: 0.14
 Nodes (14): 2. Backend Serverless API Implementation, 2a. Notifications Endpoint — `api/notifications.js` [NEW File], 2b. Invitation Links Endpoint — `api/invites.js` [NEW File], 2c. Task Management Modifications — `api/tasks.js`, 2d. Division Request Modifications — `api/divisions.js`, 2e. Admin System Actions & Rate Limits — `api/admin.js`, Add notification hooks inside existing status updates:, Append administrative actions after the admin check: (+6 more)
 
 ### Community 127 - "3a. Document Markup Changes — `admin.html`"
-Cohesion: 0.11
-Nodes (18): 3. Frontend Client Implementation, 3a. Document Markup Changes — `admin.html`, 3b. Design Aesthetics & Colors Variables — `tokens.css`, 3c. Component Styles — `admin-styles.css`, Add CSV import button next to task board controls inside `#viewTasks`:, Add inside `tokens.css` root scopes (~line 13):, Add view toggle calendars options inside `#tasksViewToggle`:, Append calendar layout container and grid inside `#viewTasks` (beneath table container): (+10 more)
+Cohesion: 0.14
+Nodes (14): 3a. Document Markup Changes — `admin.html`, Add CSV import button next to task board controls inside `#viewTasks`:, Add view toggle calendars options inside `#tasksViewToggle`:, Append calendar layout container and grid inside `#viewTasks` (beneath table container):, Append new file modals overlays for histories and batch uploads at bottom of file:, Append notification bell and unread badge in `#adminTabs` (Dock area):, Append pending requests dashboard inside `#viewUsers`:, Append rebuilding button and orphan checks inside files browser toolbar in `#viewFiles`: (+6 more)
 
 ### Community 128 - "live.js"
 Cohesion: 0.38
@@ -720,8 +721,8 @@ Cohesion: 0.29
 Nodes (5): activeTypes, KEYS, makePicker(), makeQ_K21, rnd()
 
 ### Community 132 - "package.json"
-Cohesion: 0.25
-Nodes (7): dependencies, @supabase/supabase-js, name, scripts, build, version, @supabase/supabase-js
+Cohesion: 0.22
+Nodes (8): dependencies, @supabase/supabase-js, name, scripts, build, type, version, @supabase/supabase-js
 
 ### Community 134 - "5. Verification & Testing Protocol"
 Cohesion: 0.29
@@ -736,12 +737,8 @@ Cohesion: 0.60
 Nodes (5): err(), info(), ok(), gpush.sh script, warn()
 
 ### Community 138 - "4. Frontend Application Logic"
-Cohesion: 0.25
-Nodes (7): 1. System Architecture & Database Schema Migrations, 4. Frontend Application Logic, 4c. Main Page Integration — `index.html` & `fp.js`, Admin Page Feature Expansion — Unified Comprehensive Implementation Plan, Filter broadcasts target divisions:, Intercept Invitation token query parameter during onboarding:, Verify and consume token during Auth Sign Up callback:
-
-### Community 139 - "build.js"
-Cohesion: 0.90
-Nodes (4): build(), fs, path, walkDir()
+Cohesion: 0.40
+Nodes (5): 4. Frontend Application Logic, 4c. Main Page Integration — `index.html` & `fp.js`, Filter broadcasts target divisions:, Intercept Invitation token query parameter during onboarding:, Verify and consume token during Auth Sign Up callback:
 
 ### Community 141 - "1.2 other_Pull up 1.html"
 Cohesion: 0.83
@@ -767,19 +764,23 @@ Nodes (43): authenticateApiKey(), authenticateJWT(), authenticateOAuthAccessToke
 Cohesion: 0.47
 Nodes (5): base64url(), handler(), verifyPkce(), RFC-6749, RFC-7636
 
+### Community 171 - "Admin Page Feature Expansion — Unified Comprehensive Implementation Plan"
+Cohesion: 0.29
+Nodes (6): 1. System Architecture & Database Schema Migrations, 3. Frontend Client Implementation, 3b. Design Aesthetics & Colors Variables — `tokens.css`, 3c. Component Styles — `admin-styles.css`, Add inside `tokens.css` root scopes (~line 13):, Admin Page Feature Expansion — Unified Comprehensive Implementation Plan
+
 ## Knowledge Gaps
 - **1710 isolated node(s):** `fileCache`, `_statusTextEl`, `_statusBarEl`, `_itemCountEl`, `fileInput` (+1705 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **10 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **11 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `4a. Core Core Infrastructure Modifications — `admin.js`` connect `4a. Core Core Infrastructure Modifications — `admin.js`` to `4. Frontend Application Logic`?**
   _High betweenness centrality (0.000) - this node is a cross-community bridge._
-- **Why does `4. Frontend Application Logic` connect `4. Frontend Application Logic` to `4a. Core Core Infrastructure Modifications — `admin.js``, `4b. Workflow Logic Enhancements — `admin-workflow.js``?**
+- **Why does `4. Frontend Application Logic` connect `4. Frontend Application Logic` to `Admin Page Feature Expansion — Unified Comprehensive Implementation Plan`, `4a. Core Core Infrastructure Modifications — `admin.js``, `4b. Workflow Logic Enhancements — `admin-workflow.js``?**
   _High betweenness centrality (0.000) - this node is a cross-community bridge._
-- **Why does `Admin Page Feature Expansion — Unified Comprehensive Implementation Plan` connect `4. Frontend Application Logic` to `5. Verification & Testing Protocol`, `2. Backend Serverless API Implementation`, `3a. Document Markup Changes — `admin.html``?**
+- **Why does `Admin Page Feature Expansion — Unified Comprehensive Implementation Plan` connect `Admin Page Feature Expansion — Unified Comprehensive Implementation Plan` to `4. Frontend Application Logic`, `5. Verification & Testing Protocol`, `2. Backend Serverless API Implementation`?**
   _High betweenness centrality (0.000) - this node is a cross-community bridge._
 - **What connects `fileCache`, `_statusTextEl`, `_statusBarEl` to the rest of the system?**
   _1710 weakly-connected nodes found - possible documentation gaps or missing edges._

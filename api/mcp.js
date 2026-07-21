@@ -57,9 +57,11 @@ export default async function handler(req, res) {
   }
 
   if (req.url && req.url.includes('oauth-protected-resource')) {
-    const issuer = `https://${req.headers.host || 'mr-capsules.vercel.app'}`;
+    const host = req.headers.host || 'mr-capsules.vercel.app';
+    const issuer = `https://${host}`;
+    const resourceUrl = `${issuer}/api/mcp`;
     return res.status(200).json({
-      resource: issuer,
+      resource: resourceUrl,
       authorization_servers: [issuer],
       scopes_supported: ["mcp"],
       bearer_methods_supported: ["header"]
@@ -383,23 +385,49 @@ async function authenticateJWT(token, supabaseUrl, sbKey) {
   };
 }
 
-async function authenticateOAuthAccessToken(token, supabaseUrl, sbKey) {
+function canonicalizeUrl(rawUrl) {
+  if (!rawUrl) return '';
+  try {
+    const parsed = new URL(rawUrl);
+    const scheme = parsed.protocol.toLowerCase();
+    const host = parsed.hostname.toLowerCase();
+    const port = (parsed.port && parsed.port !== '80' && parsed.port !== '443') ? `:${parsed.port}` : '';
+    let pathname = parsed.pathname.replace(/\/+$/, '');
+    return `${scheme}//${host}${port}${pathname}`;
+  } catch (e) {
+    return rawUrl.trim().toLowerCase().replace(/\/+$/, '');
+  }
+}
+
+async function authenticateOAuthAccessToken(token, supabaseUrl, sbKey, reqHost = 'mr-capsules.vercel.app') {
   const res = await fetch(`${supabaseUrl}/rest/v1/oauth_tokens?access_token=eq.${encodeURIComponent(token)}&revoked=eq.false&select=*`, {
     headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
   });
 
   if (!res.ok) {
+    console.error(`[OAuth Token Verification Failure] timestamp="${new Date().toISOString()}" reason="Database lookup failed" token="${token.slice(0, 15)}..."`);
     return { error: 'OAuth token lookup failed' };
   }
 
   const rows = await res.json();
   if (!rows || rows.length === 0) {
+    console.error(`[OAuth Token Verification Failure] timestamp="${new Date().toISOString()}" reason="Invalid or revoked token" token="${token.slice(0, 15)}..."`);
     return { error: 'Invalid, revoked, or non-existent OAuth token' };
   }
 
   const tokenRecord = rows[0];
   if (new Date(tokenRecord.expires_at) < new Date()) {
+    console.error(`[OAuth Token Verification Failure] timestamp="${new Date().toISOString()}" reason="Token expired" token="${token.slice(0, 15)}..." sub="${tokenRecord.user_email}"`);
     return { error: 'OAuth token expired' };
+  }
+
+  // RFC 8707 Canonical Audience Check
+  const canonicalServerUrl = canonicalizeUrl(`https://${reqHost}/api/mcp`);
+  const canonicalServerHost = canonicalizeUrl(`https://${reqHost}`);
+  const tokenAudience = canonicalizeUrl(tokenRecord.resource);
+
+  if (tokenAudience && tokenAudience !== canonicalServerUrl && tokenAudience !== canonicalServerHost) {
+    console.warn(`[OAuth Token Audience Warning] timestamp="${new Date().toISOString()}" expected="${canonicalServerUrl}" received="${tokenAudience}" sub="${tokenRecord.user_email}"`);
   }
 
   return {

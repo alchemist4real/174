@@ -1,15 +1,30 @@
 // api/authorize.js
-// Real OAuth 2.0 Authorization Endpoint with PKCE and Auto-Detected Local Session
+// Real OAuth 2.0 Authorization Endpoint with PKCE, RFC 8707 Resource, and Auto-Detected Session
 
 import crypto from 'crypto';
+
+function canonicalizeUrl(rawUrl) {
+  if (!rawUrl) return '';
+  try {
+    const parsed = new URL(rawUrl);
+    const scheme = parsed.protocol.toLowerCase();
+    const host = parsed.hostname.toLowerCase();
+    const port = (parsed.port && parsed.port !== '80' && parsed.port !== '443') ? `:${parsed.port}` : '';
+    let pathname = parsed.pathname.replace(/\/+$/, '');
+    return `${scheme}//${host}${port}${pathname}`;
+  } catch (e) {
+    return rawUrl.trim().toLowerCase().replace(/\/+$/, '');
+  }
+}
 
 export default async function handler(req, res) {
   const host = req.headers.host || 'mr-capsules.vercel.app';
   const SUPABASE_URL = 'https://hdhvrlkizorscvehttzd.supabase.co';
   const SB_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const issuer = `https://${host}`;
 
-  if (req.url && req.url.includes('oauth-authorization-server')) {
-    const issuer = `https://${host}`;
+  // RFC 8414 & OpenID Connect Discovery Metadata
+  if (req.url && (req.url.includes('oauth-authorization-server') || req.url.includes('openid-configuration'))) {
     return res.status(200).json({
       issuer,
       authorization_endpoint: `${issuer}/authorize`,
@@ -30,6 +45,8 @@ export default async function handler(req, res) {
   const clientId = url.searchParams.get('client_id') || 'claude-mcp-client';
   const codeChallenge = url.searchParams.get('code_challenge') || '';
   const codeChallengeMethod = url.searchParams.get('code_challenge_method') || 'S256';
+  const resourceParam = url.searchParams.get('resource') || `${issuer}/api/mcp`;
+  const canonicalResource = canonicalizeUrl(resourceParam);
 
   if (!redirectUri) {
     return res.status(400).send(`
@@ -112,8 +129,10 @@ export default async function handler(req, res) {
       // Generate single-use authorization code (valid 10 mins)
       const code = `mrc_code_${crypto.randomBytes(24).toString('hex')}`;
       const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString();
+      const userEmail = authenticatedUser.email || email;
+      const userId = String(authenticatedUser.id || userEmail);
 
-      // Save code in Supabase oauth_codes
+      // Save code in Supabase oauth_codes with canonical resource
       await fetch(`${SUPABASE_URL}/rest/v1/oauth_codes`, {
         method: 'POST',
         headers: {
@@ -124,14 +143,18 @@ export default async function handler(req, res) {
         body: JSON.stringify({
           code,
           client_id: clientId,
-          user_id: authenticatedUser.id || authenticatedUser.email,
-          user_email: authenticatedUser.email || email,
+          user_id: userId,
+          user_email: userEmail,
           redirect_uri: redirectUri,
+          resource: canonicalResource,
           code_challenge: codeChallenge,
           code_challenge_method: codeChallengeMethod,
           expires_at: expiresAt
         })
       });
+
+      // Structured Server-Side Logging for correlation
+      console.log(`[OAuth Auth Code Issued] timestamp="${new Date().toISOString()}" iss="${issuer}" aud="${canonicalResource}" sub="${userEmail}" client_id="${clientId}" code="${code.slice(0, 15)}..."`);
 
       // Redirect back to Claude.ai auth_callback
       const callbackUrl = new URL(redirectUri);
@@ -146,7 +169,7 @@ export default async function handler(req, res) {
   }
 
   // Render modern Mr. Capsules User Login Page with Session Auto-Detection
-  const actionUrl = `/authorize?client_id=${encodeURIComponent(clientId)}&redirect_uri=${encodeURIComponent(redirectUri)}&state=${encodeURIComponent(state)}&code_challenge=${encodeURIComponent(codeChallenge)}&code_challenge_method=${encodeURIComponent(codeChallengeMethod)}`;
+  const actionUrl = `/authorize?client_id=${encodeURIComponent(clientId)}&redirect_uri=${encodeURIComponent(redirectUri)}&state=${encodeURIComponent(state)}&code_challenge=${encodeURIComponent(codeChallenge)}&code_challenge_method=${encodeURIComponent(codeChallengeMethod)}&resource=${encodeURIComponent(canonicalResource)}`;
 
   const html = `
     <!DOCTYPE html>
@@ -309,7 +332,6 @@ export default async function handler(req, res) {
             let userEmail = null;
             let tokenVal = null;
 
-            // Search localStorage for Supabase Auth Session or saved email
             for (let i = 0; i < localStorage.length; i++) {
               const key = localStorage.key(i);
               if (key && (key.includes('auth-token') || key.includes('supabase') || key.includes('sb-'))) {
@@ -324,7 +346,6 @@ export default async function handler(req, res) {
               }
             }
 
-            // Fallback: Check SuperAdmin / user email in localStorage
             if (!userEmail) {
               userEmail = localStorage.getItem('mr_user_email') || localStorage.getItem('user_email');
             }

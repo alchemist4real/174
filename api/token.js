@@ -127,6 +127,8 @@ export default async function handler(req, res) {
     const expiresIn = 3600; // 1 hour
     const expiresAt = new Date(Date.now() + expiresIn * 1000).toISOString();
 
+    const targetResource = body.resource || codeRecord.resource || `https://${req.headers.host || 'mr-capsules.vercel.app'}/api/mcp`;
+
     // Store token pair in Supabase oauth_tokens
     await fetch(`${SUPABASE_URL}/rest/v1/oauth_tokens`, {
       method: 'POST',
@@ -141,10 +143,13 @@ export default async function handler(req, res) {
         client_id: codeRecord.client_id,
         user_id: codeRecord.user_id,
         user_email: codeRecord.user_email,
+        resource: targetResource,
         expires_at: expiresAt,
         revoked: false
       })
     });
+
+    console.log(`[OAuth Token Issued] timestamp="${new Date().toISOString()}" iss="https://${req.headers.host || 'mr-capsules.vercel.app'}" aud="${targetResource}" sub="${codeRecord.user_email}" client_id="${codeRecord.client_id}" access_token="${accessToken.slice(0, 15)}..."`);
 
     return res.status(200).json({
       access_token: accessToken,

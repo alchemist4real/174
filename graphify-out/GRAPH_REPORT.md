@@ -1,16 +1,16 @@
 # Graph Report - MR-CAPSULES-main  (2026-07-21)
 
 ## Corpus Check
-- 169 files · ~13,674,722 words
+- 167 files · ~13,675,011 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 4142 nodes · 6160 edges · 172 communities (161 shown, 11 thin omitted)
+- 4136 nodes · 6156 edges · 170 communities (161 shown, 9 thin omitted)
 - Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 171 edges (avg confidence: 0.5)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `7a68aa06`
+- Built from commit: `da6f39c9`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -148,7 +148,6 @@
 - 1.2-1_flashcard biochemical romance.html
 - 2.4 CBT 2_K21 AM I COMMUNICATIVE.html
 - package.json
-- Admin Page Feature Expansion — Unified Comprehensive Implementation Plan
 - 5. Verification & Testing Protocol
 - 1.3 CBT 1_card generator.html
 - 2.3 CBT_Kicaw.html
@@ -167,7 +166,6 @@
 - vercel.json
 - mcp.js
 - token.js
-- oauth-protected-resource.js
 - register.js
 - Admin Page Feature Expansion — Unified Comprehensive Implementation Plan
 
@@ -190,7 +188,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (172 total, 11 thin omitted)
+## Communities (170 total, 9 thin omitted)
 
 ### Community 0 - "2.4 CBT 2_K20C AM I CINEMATIC.html"
 Cohesion: 0.06
@@ -769,21 +767,21 @@ Cohesion: 0.29
 Nodes (6): 1. System Architecture & Database Schema Migrations, 3. Frontend Client Implementation, 3b. Design Aesthetics & Colors Variables — `tokens.css`, 3c. Component Styles — `admin-styles.css`, Add inside `tokens.css` root scopes (~line 13):, Admin Page Feature Expansion — Unified Comprehensive Implementation Plan
 
 ## Knowledge Gaps
-- **1710 isolated node(s):** `fileCache`, `_statusTextEl`, `_statusBarEl`, `_itemCountEl`, `fileInput` (+1705 more)
+- **1708 isolated node(s):** `fileCache`, `_statusTextEl`, `_statusBarEl`, `_itemCountEl`, `fileInput` (+1703 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **11 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **9 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `4a. Core Core Infrastructure Modifications — `admin.js`` connect `4a. Core Core Infrastructure Modifications — `admin.js`` to `4. Frontend Application Logic`?**
+- **Why does `Admin Page Feature Expansion — Unified Comprehensive Implementation Plan` connect `Admin Page Feature Expansion — Unified Comprehensive Implementation Plan` to `4. Frontend Application Logic`, `5. Verification & Testing Protocol`, `2. Backend Serverless API Implementation`?**
   _High betweenness centrality (0.000) - this node is a cross-community bridge._
 - **Why does `4. Frontend Application Logic` connect `4. Frontend Application Logic` to `Admin Page Feature Expansion — Unified Comprehensive Implementation Plan`, `4a. Core Core Infrastructure Modifications — `admin.js``, `4b. Workflow Logic Enhancements — `admin-workflow.js``?**
   _High betweenness centrality (0.000) - this node is a cross-community bridge._
-- **Why does `Admin Page Feature Expansion — Unified Comprehensive Implementation Plan` connect `Admin Page Feature Expansion — Unified Comprehensive Implementation Plan` to `4. Frontend Application Logic`, `5. Verification & Testing Protocol`, `2. Backend Serverless API Implementation`?**
+- **Why does `4b. Workflow Logic Enhancements — `admin-workflow.js`` connect `4b. Workflow Logic Enhancements — `admin-workflow.js`` to `Priority Badges injection logic inside Kanban Board and Syllabus Tables:`, `4. Frontend Application Logic`?**
   _High betweenness centrality (0.000) - this node is a cross-community bridge._
 - **What connects `fileCache`, `_statusTextEl`, `_statusBarEl` to the rest of the system?**
-  _1710 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _1708 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `2.4 CBT 2_K20C AM I CINEMATIC.html` be split into smaller, more focused modules?**
   _Cohesion score 0.06398730830248546 - nodes in this community are weakly interconnected._
 - **Should `2.5 PRAKTIKUM_PRAKTIKUM 2.html` be split into smaller, more focused modules?**
