@@ -129,7 +129,15 @@ function build() {
 
     const jsContent = `window.appData = ${JSON.stringify(result)};`;
     fs.writeFileSync(path.join(process.cwd(), 'data.js'), jsContent);
-    console.log('Successfully generated data.js');
+    
+    // Also ensure public directory exists for Vercel static build output
+    const publicDir = path.join(process.cwd(), 'public');
+    if (!fs.existsSync(publicDir)) {
+      fs.mkdirSync(publicDir, { recursive: true });
+    }
+    fs.writeFileSync(path.join(publicDir, 'data.js'), jsContent);
+
+    console.log('Successfully generated data.js in root and public/');
   } catch (err) {
     console.error('Error generating catalog:', err);
     process.exit(1);

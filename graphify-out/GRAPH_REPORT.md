@@ -1,16 +1,16 @@
 # Graph Report - MR-CAPSULES-main  (2026-07-21)
 
 ## Corpus Check
-- 163 files · ~13,672,291 words
+- 169 files · ~13,674,722 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 4124 nodes · 6147 edges · 167 communities (160 shown, 7 thin omitted)
-- Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 170 edges (avg confidence: 0.5)
+- 4142 nodes · 6160 edges · 172 communities (161 shown, 11 thin omitted)
+- Extraction: 97% EXTRACTED · 3% INFERRED · 0% AMBIGUOUS · INFERRED: 171 edges (avg confidence: 0.5)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `43ace075`
+- Built from commit: `7a68aa06`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -166,6 +166,10 @@
 - graphify.md
 - vercel.json
 - mcp.js
+- token.js
+- oauth-protected-resource.js
+- register.js
+- Admin Page Feature Expansion — Unified Comprehensive Implementation Plan
 
 ## God Nodes (most connected - your core abstractions)
 1. `routeMethod()` - 33 edges
@@ -186,7 +190,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (167 total, 7 thin omitted)
+## Communities (172 total, 11 thin omitted)
 
 ### Community 0 - "2.4 CBT 2_K20C AM I CINEMATIC.html"
 Cohesion: 0.06
@@ -261,8 +265,8 @@ Cohesion: 0.08
 Nodes (45): activeTypes, DEF_POOL, endSession(), genHarvardCepatQ(), genHarvardLambatQ(), genLegKlinis(), genLegNormaQ(), genSitUpNormaQ() (+37 more)
 
 ### Community 18 - "admin.js"
-Cohesion: 0.10
-Nodes (49): adminAction(), adminThemeBtns, applyAdminTheme(), authMessage, authOverlay, btnGuestCleanup, copyRevealedKey(), currentTree (+41 more)
+Cohesion: 0.09
+Nodes (50): adminAction(), adminThemeBtns, applyAdminTheme(), authMessage, authOverlay, bindKeyEvents(), btnGuestCleanup, copyRevealedKey() (+42 more)
 
 ### Community 19 - "2.5 LECTURE_K13B am-i-special-2.html"
 Cohesion: 0.07
@@ -717,12 +721,8 @@ Cohesion: 0.29
 Nodes (5): activeTypes, KEYS, makePicker(), makeQ_K21, rnd()
 
 ### Community 132 - "package.json"
-Cohesion: 0.25
-Nodes (7): dependencies, @supabase/supabase-js, name, scripts, build, version, @supabase/supabase-js
-
-### Community 133 - "Admin Page Feature Expansion — Unified Comprehensive Implementation Plan"
-Cohesion: 0.29
-Nodes (6): 1. System Architecture & Database Schema Migrations, 3. Frontend Client Implementation, 3b. Design Aesthetics & Colors Variables — `tokens.css`, 3c. Component Styles — `admin-styles.css`, Add inside `tokens.css` root scopes (~line 13):, Admin Page Feature Expansion — Unified Comprehensive Implementation Plan
+Cohesion: 0.22
+Nodes (8): dependencies, @supabase/supabase-js, name, scripts, build, type, version, @supabase/supabase-js
 
 ### Community 134 - "5. Verification & Testing Protocol"
 Cohesion: 0.29
@@ -739,10 +739,6 @@ Nodes (5): err(), info(), ok(), gpush.sh script, warn()
 ### Community 138 - "4. Frontend Application Logic"
 Cohesion: 0.40
 Nodes (5): 4. Frontend Application Logic, 4c. Main Page Integration — `index.html` & `fp.js`, Filter broadcasts target divisions:, Intercept Invitation token query parameter during onboarding:, Verify and consume token during Auth Sign Up callback:
-
-### Community 139 - "build.js"
-Cohesion: 0.90
-Nodes (4): build(), fs, path, walkDir()
 
 ### Community 141 - "1.2 other_Pull up 1.html"
 Cohesion: 0.83
@@ -761,25 +757,33 @@ Cohesion: 0.67
 Nodes (3): Inside `renderKanban(tasks)` (~line 228):, Inside `renderTasksAsSyllabus(tasks)` (~line 416):, Priority Badges injection logic inside Kanban Board and Syllabus Tables:
 
 ### Community 166 - "mcp.js"
-Cohesion: 0.11
-Nodes (42): authenticateApiKey(), authenticateJWT(), checkRateLimit(), configGet(), configUpdate(), contentDelete(), contentGet(), contentList() (+34 more)
+Cohesion: 0.10
+Nodes (43): authenticateApiKey(), authenticateJWT(), authenticateOAuthAccessToken(), checkRateLimit(), configGet(), configUpdate(), contentDelete(), contentGet() (+35 more)
+
+### Community 168 - "token.js"
+Cohesion: 0.47
+Nodes (5): base64url(), handler(), verifyPkce(), RFC-6749, RFC-7636
+
+### Community 171 - "Admin Page Feature Expansion — Unified Comprehensive Implementation Plan"
+Cohesion: 0.29
+Nodes (6): 1. System Architecture & Database Schema Migrations, 3. Frontend Client Implementation, 3b. Design Aesthetics & Colors Variables — `tokens.css`, 3c. Component Styles — `admin-styles.css`, Add inside `tokens.css` root scopes (~line 13):, Admin Page Feature Expansion — Unified Comprehensive Implementation Plan
 
 ## Knowledge Gaps
-- **1704 isolated node(s):** `fileCache`, `_statusTextEl`, `_statusBarEl`, `_itemCountEl`, `fileInput` (+1699 more)
+- **1710 isolated node(s):** `fileCache`, `_statusTextEl`, `_statusBarEl`, `_itemCountEl`, `fileInput` (+1705 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **7 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **11 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
+- **Why does `4a. Core Core Infrastructure Modifications — `admin.js`` connect `4a. Core Core Infrastructure Modifications — `admin.js`` to `4. Frontend Application Logic`?**
+  _High betweenness centrality (0.000) - this node is a cross-community bridge._
+- **Why does `4. Frontend Application Logic` connect `4. Frontend Application Logic` to `Admin Page Feature Expansion — Unified Comprehensive Implementation Plan`, `4a. Core Core Infrastructure Modifications — `admin.js``, `4b. Workflow Logic Enhancements — `admin-workflow.js``?**
+  _High betweenness centrality (0.000) - this node is a cross-community bridge._
 - **Why does `Admin Page Feature Expansion — Unified Comprehensive Implementation Plan` connect `Admin Page Feature Expansion — Unified Comprehensive Implementation Plan` to `4. Frontend Application Logic`, `5. Verification & Testing Protocol`, `2. Backend Serverless API Implementation`?**
   _High betweenness centrality (0.000) - this node is a cross-community bridge._
-- **Why does `4. Frontend Application Logic` connect `4. Frontend Application Logic` to `4a. Core Core Infrastructure Modifications — `admin.js``, `4b. Workflow Logic Enhancements — `admin-workflow.js``, `Admin Page Feature Expansion — Unified Comprehensive Implementation Plan`?**
-  _High betweenness centrality (0.000) - this node is a cross-community bridge._
-- **Why does `4b. Workflow Logic Enhancements — `admin-workflow.js`` connect `4b. Workflow Logic Enhancements — `admin-workflow.js`` to `Priority Badges injection logic inside Kanban Board and Syllabus Tables:`, `4. Frontend Application Logic`?**
-  _High betweenness centrality (0.000) - this node is a cross-community bridge._
 - **What connects `fileCache`, `_statusTextEl`, `_statusBarEl` to the rest of the system?**
-  _1704 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _1710 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `2.4 CBT 2_K20C AM I CINEMATIC.html` be split into smaller, more focused modules?**
   _Cohesion score 0.06398730830248546 - nodes in this community are weakly interconnected._
 - **Should `2.5 PRAKTIKUM_PRAKTIKUM 2.html` be split into smaller, more focused modules?**

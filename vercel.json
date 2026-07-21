@@ -1,10 +1,8 @@
 {
-  "buildCommand": "node build.js",
-  "outputDirectory": ".",
   "routes": [
     { "src": "/api/mcp", "dest": "/api/mcp.js" },
-    { "src": "/.well-known/oauth-authorization-server", "dest": "/api/oauth-authorization-server.js" },
-    { "src": "/.well-known/oauth-protected-resource", "dest": "/api/oauth-protected-resource.js" },
+    { "src": "/.well-known/oauth-authorization-server", "dest": "/api/authorize.js" },
+    { "src": "/.well-known/oauth-protected-resource", "dest": "/api/mcp.js" },
     { "src": "/register", "dest": "/api/register.js" },
     { "src": "/authorize", "dest": "/api/authorize.js" },
     { "src": "/token", "dest": "/api/token.js" }

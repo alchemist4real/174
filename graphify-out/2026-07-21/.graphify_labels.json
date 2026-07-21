@@ -165,5 +165,9 @@
   "163": "1.4 CBT_0. COKI PARDEDE.html",
   "164": "data.js",
   "165": "live.html",
-  "166": "mcp.js"
+  "166": "mcp.js",
+  "167": "authorize.js",
+  "168": "token.js",
+  "169": "oauth-protected-resource.js",
+  "170": "register.js"
 }

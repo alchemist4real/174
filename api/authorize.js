@@ -8,6 +8,21 @@ export default async function handler(req, res) {
   const SUPABASE_URL = 'https://hdhvrlkizorscvehttzd.supabase.co';
   const SB_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
 
+  if (req.url && req.url.includes('oauth-authorization-server')) {
+    const issuer = `https://${host}`;
+    return res.status(200).json({
+      issuer,
+      authorization_endpoint: `${issuer}/authorize`,
+      token_endpoint: `${issuer}/token`,
+      registration_endpoint: `${issuer}/register`,
+      response_types_supported: ["code"],
+      grant_types_supported: ["authorization_code", "refresh_token"],
+      code_challenge_methods_supported: ["S256"],
+      token_endpoint_auth_methods_supported: ["none", "client_secret_post"],
+      scopes_supported: ["mcp"]
+    });
+  }
+
   const url = new URL(req.url, `https://${host}`);
   const redirectUri = url.searchParams.get('redirect_uri');
   const state = url.searchParams.get('state') || '';

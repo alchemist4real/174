@@ -56,6 +56,16 @@ export default async function handler(req, res) {
     return res.status(500).json({ success: false, error: 'Server config error' });
   }
 
+  if (req.url && req.url.includes('oauth-protected-resource')) {
+    const issuer = `https://${req.headers.host || 'mr-capsules.vercel.app'}`;
+    return res.status(200).json({
+      resource: issuer,
+      authorization_servers: [issuer],
+      scopes_supported: ["mcp"],
+      bearer_methods_supported: ["header"]
+    });
+  }
+
   // ── Streamable HTTP MCP Transport (GET) ──────────────────────────────────
   // Claude.ai web sends a GET to open a streaming connection, then POST for calls.
   // The MCP spec 2025-06-18 uses a SINGLE endpoint for both GET (streaming)
