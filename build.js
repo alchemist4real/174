@@ -1,5 +1,5 @@
-const fs = require('fs');
-const path = require('path');
+import fs from 'fs';
+import path from 'path';
 
 function walkDir(dir, fileList = []) {
   const files = fs.readdirSync(dir);
@@ -29,19 +29,14 @@ function build() {
 
     const allHtmlPaths = fs.existsSync(contentDir) ? walkDir(contentDir) : [];
     
-    // For Folder Mode
     const semMap = {};
-    // For Flat Mode
     const flatFiles = [];
 
     allHtmlPaths.forEach(filePath => {
-      // Normalize path for web
       const relativePath = path.relative(process.cwd(), filePath).replace(/\\/g, '/');
       const fileName = path.basename(filePath);
       
       const parts = relativePath.split('/');
-      // Expected structure: content / semester / block / file.html
-      // If it's just content / block / file.html, we pad it with a default semester
       let semesterName = "Other Semesters";
       let blockName = "Other Blocks";
       
@@ -61,7 +56,6 @@ function build() {
         name = fileParts.slice(1).join('_').replace('.html', '');
       }
 
-      // Add to Flat Mode
       flatFiles.push({
         id: fileName,
         title: name,
@@ -72,7 +66,6 @@ function build() {
         semesterName: semesterName
       });
 
-      // Add to Folder Mode Map
       if (!semMap[semesterName]) semMap[semesterName] = {};
       if (!semMap[semesterName][blockName]) semMap[semesterName][blockName] = {};
       if (!semMap[semesterName][blockName][category]) semMap[semesterName][blockName][category] = [];
@@ -83,7 +76,6 @@ function build() {
       });
     });
 
-    // Build semesters array
     const semesters = Object.keys(semMap).map(semName => {
       const blocksObj = semMap[semName];
       let semFilesCount = 0;
