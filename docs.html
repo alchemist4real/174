@@ -124,6 +124,85 @@
           <li><strong>Dokumentasi &amp; Sistem:</strong> <code>docs_get</code>, <code>docs_update_section</code>, <code>docs_add_section</code>, <code>system_health</code>, <code>system_cleanup_guests</code>, <code>activity_logs</code>, <code>config_get</code>, <code>config_update</code>, <code>apikeys_list</code>, <code>apikeys_create</code>, <code>apikeys_revoke</code>, <code>oauth_tokens_list</code>, <code>oauth_tokens_revoke</code></li>
         </ul>
       </div>
+
+      <div class="docs-section">
+        <h2>5. Referensi Lengkap MCP Tools & Hak Akses</h2>
+        <p>Bagian ini merinci seluruh <strong>54 method/tools</strong> yang tersedia lewat MCP Gateway, dikelompokkan berdasarkan fungsinya, beserta siapa saja yang berwenang menggunakannya.</p>
+
+<div class="alert-box">
+  <strong>PENTING:</strong> Meskipun sebuah tool "tampak" di daftar AI Assistant Anda, eksekusinya tetap divalidasi ulang oleh server berdasarkan role akun yang terhubung. Jika Anda tidak memiliki hak akses, permintaan akan ditolak (403/permission error) walau tool sempat dipanggil.
+
+</div>
+
+<h3>A. Level Akses (Role Hierarchy)</h3>
+<ul>
+  <li><strong>SuperAdmin:</strong> Pemegang kendali penuh sistem. Satu-satunya yang dapat mengangkat/menurunkan Admin dan menghapus akun secara permanen.</li>
+  <li><strong>Admin:</strong> Diangkat oleh SuperAdmin. Mengelola konfigurasi sistem, konten, dan moderasi pengguna, namun tidak bisa mengubah hak Admin lain.</li>
+  <li><strong>Reviewer:</strong> Anggota Divisi Review & QA. Berwenang atas siklus review tugas (start review, approve, reject, lapor isu).</li>
+  <li><strong>Developer:</strong> Anggota Divisi Development. Berwenang mengambil (claim) dan mengumpulkan (submit) tugas.</li>
+  <li><strong>Semua Pengguna Terautentikasi:</strong> Akses baca umum serta pengelolaan data milik sendiri (API key, kontribusi, WhatsApp, dsb).</li>
+</ul>
+
+<h3>B. Materi, Cover & Konten</h3>
+<table style="width:100%; border-collapse:collapse; margin:12px 0;">
+<tr style="background:var(--bg-inset);"><th style="text-align:left; padding:6px 10px; border:1px solid var(--border-color);">Tool</th><th style="text-align:left; padding:6px 10px; border:1px solid var(--border-color);">Fungsi</th><th style="text-align:left; padding:6px 10px; border:1px solid var(--border-color);">Akses</th></tr>
+<tr><td style="padding:6px 10px; border:1px solid var(--border-color);"><code>content_list</code>, <code>content_get</code>, <code>content_tree</code></td><td style="padding:6px 10px; border:1px solid var(--border-color);">Melihat/membaca materi HTML</td><td style="padding:6px 10px; border:1px solid var(--border-color);">Semua pengguna terautentikasi</td></tr>
+<tr><td style="padding:6px 10px; border:1px solid var(--border-color);"><code>content_upload</code>, <code>content_rename</code></td><td style="padding:6px 10px; border:1px solid var(--border-color);">Menambah/memindah file materi</td><td style="padding:6px 10px; border:1px solid var(--border-color);">Developer, Reviewer, Admin, SuperAdmin</td></tr>
+<tr><td style="padding:6px 10px; border:1px solid var(--border-color);"><code>content_delete</code>, <code>content_delete_files</code></td><td style="padding:6px 10px; border:1px solid var(--border-color);">Menghapus materi</td><td style="padding:6px 10px; border:1px solid var(--border-color);">Admin, SuperAdmin</td></tr>
+<tr><td style="padding:6px 10px; border:1px solid var(--border-color);"><code>cover_list</code></td><td style="padding:6px 10px; border:1px solid var(--border-color);">Melihat cover</td><td style="padding:6px 10px; border:1px solid var(--border-color);">Semua pengguna terautentikasi</td></tr>
+<tr><td style="padding:6px 10px; border:1px solid var(--border-color);"><code>cover_upload</code>, <code>cover_delete</code></td><td style="padding:6px 10px; border:1px solid var(--border-color);">Mengelola cover semester/blok</td><td style="padding:6px 10px; border:1px solid var(--border-color);">Admin, SuperAdmin</td></tr>
+</table>
+
+<h3>C. Task Board & Workflow</h3>
+<table style="width:100%; border-collapse:collapse; margin:12px 0;">
+<tr style="background:var(--bg-inset);"><th style="text-align:left; padding:6px 10px; border:1px solid var(--border-color);">Tool</th><th style="text-align:left; padding:6px 10px; border:1px solid var(--border-color);">Fungsi</th><th style="text-align:left; padding:6px 10px; border:1px solid var(--border-color);">Akses</th></tr>
+<tr><td style="padding:6px 10px; border:1px solid var(--border-color);"><code>tasks_list</code>, <code>tasks_logs</code></td><td style="padding:6px 10px; border:1px solid var(--border-color);">Melihat papan tugas & riwayat</td><td style="padding:6px 10px; border:1px solid var(--border-color);">Semua pengguna terautentikasi</td></tr>
+<tr><td style="padding:6px 10px; border:1px solid var(--border-color);"><code>tasks_create</code>, <code>tasks_delete</code></td><td style="padding:6px 10px; border:1px solid var(--border-color);">Membuat/menghapus tugas</td><td style="padding:6px 10px; border:1px solid var(--border-color);">Management (Admin/SuperAdmin)</td></tr>
+<tr><td style="padding:6px 10px; border:1px solid var(--border-color);"><code>tasks_claim</code>, <code>tasks_unclaim</code>, <code>tasks_submit</code></td><td style="padding:6px 10px; border:1px solid var(--border-color);">Mengambil & mengumpulkan tugas</td><td style="padding:6px 10px; border:1px solid var(--border-color);">Developer</td></tr>
+<tr><td style="padding:6px 10px; border:1px solid var(--border-color);"><code>tasks_start_review</code>, <code>tasks_approve</code>, <code>tasks_reject</code></td><td style="padding:6px 10px; border:1px solid var(--border-color);">Siklus review tugas</td><td style="padding:6px 10px; border:1px solid var(--border-color);">Reviewer</td></tr>
+<tr><td style="padding:6px 10px; border:1px solid var(--border-color);"><code>tasks_add_note</code></td><td style="padding:6px 10px; border:1px solid var(--border-color);">Menambah catatan di log tugas</td><td style="padding:6px 10px; border:1px solid var(--border-color);">Semua pengguna terautentikasi</td></tr>
+</table>
+
+<h3>D. Review & QA</h3>
+<table style="width:100%; border-collapse:collapse; margin:12px 0;">
+<tr style="background:var(--bg-inset);"><th style="text-align:left; padding:6px 10px; border:1px solid var(--border-color);">Tool</th><th style="text-align:left; padding:6px 10px; border:1px solid var(--border-color);">Fungsi</th><th style="text-align:left; padding:6px 10px; border:1px solid var(--border-color);">Akses</th></tr>
+<tr><td style="padding:6px 10px; border:1px solid var(--border-color);"><code>review_issues</code></td><td style="padding:6px 10px; border:1px solid var(--border-color);">Melihat isu review pada tugas</td><td style="padding:6px 10px; border:1px solid var(--border-color);">Reviewer</td></tr>
+<tr><td style="padding:6px 10px; border:1px solid var(--border-color);"><code>review_report</code>, <code>review_resolve</code>, <code>review_delete_issue</code></td><td style="padding:6px 10px; border:1px solid var(--border-color);">Melaporkan/menyelesaikan/menghapus isu</td><td style="padding:6px 10px; border:1px solid var(--border-color);">Reviewer, Admin, SuperAdmin</td></tr>
+</table>
+
+<h3>E. Organisasi & Divisi</h3>
+<table style="width:100%; border-collapse:collapse; margin:12px 0;">
+<tr style="background:var(--bg-inset);"><th style="text-align:left; padding:6px 10px; border:1px solid var(--border-color);">Tool</th><th style="text-align:left; padding:6px 10px; border:1px solid var(--border-color);">Fungsi</th><th style="text-align:left; padding:6px 10px; border:1px solid var(--border-color);">Akses</th></tr>
+<tr><td style="padding:6px 10px; border:1px solid var(--border-color);"><code>divisions_list</code>, <code>divisions_my</code></td><td style="padding:6px 10px; border:1px solid var(--border-color);">Melihat daftar/status divisi sendiri</td><td style="padding:6px 10px; border:1px solid var(--border-color);">Semua pengguna terautentikasi</td></tr>
+<tr><td style="padding:6px 10px; border:1px solid var(--border-color);"><code>divisions_join</code>, <code>divisions_update_whatsapp</code></td><td style="padding:6px 10px; border:1px solid var(--border-color);">Bergabung ke divisi & update kontak</td><td style="padding:6px 10px; border:1px solid var(--border-color);">Semua pengguna terautentikasi</td></tr>
+<tr><td style="padding:6px 10px; border:1px solid var(--border-color);"><code>divisions_get_members</code></td><td style="padding:6px 10px; border:1px solid var(--border-color);">Melihat anggota divisi tertentu</td><td style="padding:6px 10px; border:1px solid var(--border-color);">Admin, SuperAdmin</td></tr>
+<tr><td style="padding:6px 10px; border:1px solid var(--border-color);"><code>divisions_add_member</code>, <code>divisions_remove_member</code></td><td style="padding:6px 10px; border:1px solid var(--border-color);">Menambah/mengeluarkan anggota divisi</td><td style="padding:6px 10px; border:1px solid var(--border-color);">Admin, SuperAdmin</td></tr>
+</table>
+
+<h3>F. User, Perangkat & Hak Akses</h3>
+<table style="width:100%; border-collapse:collapse; margin:12px 0;">
+<tr style="background:var(--bg-inset);"><th style="text-align:left; padding:6px 10px; border:1px solid var(--border-color);">Tool</th><th style="text-align:left; padding:6px 10px; border:1px solid var(--border-color);">Fungsi</th><th style="text-align:left; padding:6px 10px; border:1px solid var(--border-color);">Akses</th></tr>
+<tr><td style="padding:6px 10px; border:1px solid var(--border-color);"><code>users_list</code></td><td style="padding:6px 10px; border:1px solid var(--border-color);">Melihat semua pengguna terdaftar</td><td style="padding:6px 10px; border:1px solid var(--border-color);">SuperAdmin</td></tr>
+<tr><td style="padding:6px 10px; border:1px solid var(--border-color);"><code>users_ban</code>, <code>users_delete</code>, <code>users_remove_device</code>, <code>users_block_device</code></td><td style="padding:6px 10px; border:1px solid var(--border-color);">Moderasi & keamanan akun/perangkat</td><td style="padding:6px 10px; border:1px solid var(--border-color);">SuperAdmin</td></tr>
+<tr><td style="padding:6px 10px; border:1px solid var(--border-color);"><code>users_add_admin</code>, <code>users_remove_admin</code></td><td style="padding:6px 10px; border:1px solid var(--border-color);">Mengangkat/menurunkan hak Admin</td><td style="padding:6px 10px; border:1px solid var(--border-color);">SuperAdmin</td></tr>
+<tr><td style="padding:6px 10px; border:1px solid var(--border-color);"><code>contributions_leaderboard</code>, <code>contributions_my</code></td><td style="padding:6px 10px; border:1px solid var(--border-color);">Melihat papan peringkat & riwayat sendiri</td><td style="padding:6px 10px; border:1px solid var(--border-color);">Semua pengguna terautentikasi</td></tr>
+</table>
+
+<h3>G. Dokumentasi & Sistem</h3>
+<table style="width:100%; border-collapse:collapse; margin:12px 0;">
+<tr style="background:var(--bg-inset);"><th style="text-align:left; padding:6px 10px; border:1px solid var(--border-color);">Tool</th><th style="text-align:left; padding:6px 10px; border:1px solid var(--border-color);">Fungsi</th><th style="text-align:left; padding:6px 10px; border:1px solid var(--border-color);">Akses</th></tr>
+<tr><td style="padding:6px 10px; border:1px solid var(--border-color);"><code>docs_get</code>, <code>system_health</code></td><td style="padding:6px 10px; border:1px solid var(--border-color);">Membaca dokumentasi & status sistem</td><td style="padding:6px 10px; border:1px solid var(--border-color);">Semua pengguna terautentikasi</td></tr>
+<tr><td style="padding:6px 10px; border:1px solid var(--border-color);"><code>docs_update_section</code>, <code>docs_add_section</code></td><td style="padding:6px 10px; border:1px solid var(--border-color);">Mengedit halaman dokumentasi</td><td style="padding:6px 10px; border:1px solid var(--border-color);">Admin, SuperAdmin</td></tr>
+<tr><td style="padding:6px 10px; border:1px solid var(--border-color);"><code>config_get</code>, <code>config_update</code>, <code>activity_logs</code>, <code>system_cleanup_guests</code></td><td style="padding:6px 10px; border:1px solid var(--border-color);">Konfigurasi global & pemeliharaan sistem</td><td style="padding:6px 10px; border:1px solid var(--border-color);">Admin, SuperAdmin</td></tr>
+<tr><td style="padding:6px 10px; border:1px solid var(--border-color);"><code>apikeys_list</code>, <code>apikeys_create</code>, <code>apikeys_revoke</code></td><td style="padding:6px 10px; border:1px solid var(--border-color);">Mengelola API key milik sendiri</td><td style="padding:6px 10px; border:1px solid var(--border-color);">Semua pengguna terautentikasi</td></tr>
+<tr><td style="padding:6px 10px; border:1px solid var(--border-color);"><code>oauth_tokens_list</code>, <code>oauth_tokens_revoke</code></td><td style="padding:6px 10px; border:1px solid var(--border-color);">Mengelola koneksi OAuth (Claude/MCP) milik sendiri</td><td style="padding:6px 10px; border:1px solid var(--border-color);">Semua pengguna terautentikasi</td></tr>
+</table>
+
+<div class="alert-box">
+  <strong>CATATAN:</strong> Tabel di atas merepresentasikan role minimum yang dibutuhkan. Role yang lebih tinggi dalam hierarki (SuperAdmin &gt; Admin &gt; Reviewer/Developer) otomatis mewarisi akses baca dari role di bawahnya.
+
+</div>
+      </div>
   </div>
   
   <script>
