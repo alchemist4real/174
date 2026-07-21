@@ -1501,8 +1501,19 @@ async function docsGet(githubToken, owner, repo) {
   return { html: fileData.content, path: 'docs.html' };
 }
 
+function sanitizeDocsHtml(rawHtml) {
+  if (!rawHtml) return '';
+  let cleaned = rawHtml;
+  cleaned = cleaned.replace(/\s*style="[^"]*"/gi, '');
+  cleaned = cleaned.replace(/\s*style='[^']*'/gi, '');
+  cleaned = cleaned.replace(/<table(?!\s+class=)[^>]*>/gi, '<table class="docs-table">');
+  cleaned = cleaned.replace(/<table\s+class="(?![^"]*docs-table)[^"]*"/gi, '<table class="docs-table"');
+  return cleaned;
+}
+
 async function docsUpdateSection(params, adminEmail, githubToken, owner, repo, su, sk) {
-  const { sectionIndex, title, contentHtml } = params;
+  let { sectionIndex, title, contentHtml } = params;
+  if (contentHtml) contentHtml = sanitizeDocsHtml(contentHtml);
   const docsData = await contentGet('docs.html', githubToken, owner, repo);
   let html = docsData.content;
 
@@ -1528,28 +1539,135 @@ async function docsUpdateSection(params, adminEmail, githubToken, owner, repo, s
 }
 
 async function docsAddSection(params, adminEmail, githubToken, owner, repo, su, sk) {
-  const { title, contentHtml } = params;
+  let { title, contentHtml, tabId = 'docsGeneral' } = params;
+  if (contentHtml) contentHtml = sanitizeDocsHtml(contentHtml);
   const docsData = await contentGet('docs.html', githubToken, owner, repo);
   let html = docsData.content;
 
-  const newSectionTag = `
-      <div class="docs-section">
-        <h2>${title}</h2>
-        ${contentHtml}
-      </div>
-  </div>`;
+  const sectionHtml = `\n      <div class="docs-section">\n        <h2>${title}</h2>\n        ${contentHtml}\n      </div>\n`;
 
-  if (html.includes('  </div>\n  \n  <script>')) {
-    html = html.replace('  </div>\n  \n  <script>', `${newSectionTag}\n  \n  <script>`);
-  } else if (html.includes('  </div>\n  <script>')) {
-    html = html.replace('  </div>\n  <script>', `${newSectionTag}\n  <script>`);
-  } else {
-    html = html.replace('</body>', `${newSectionTag}\n</body>`);
+  const containerMarker = `id="${tabId}"`;
+  const containerIdx = html.indexOf(containerMarker);
+  if (containerIdx === -1) {
+    throw new Error(`Target tab container "${tabId}" not found in docs.html`);
+  }
+
+  const nextContainerIdx = html.indexOf('<div class="docs-container"', containerIdx + containerMarker.length);
+  const scriptIdx = html.indexOf('<script>', containerIdx);
+  let limitIdx = html.length;
+  if (nextContainerIdx !== -1) limitIdx = Math.min(limitIdx, nextContainerIdx);
+  if (scriptIdx !== -1) limitIdx = Math.min(limitIdx, scriptIdx);
+
+  const closeDivIdx = html.lastIndexOf('</div>', limitIdx);
+  if (closeDivIdx === -1 || closeDivIdx <= containerIdx) {
+    throw new Error(`Could not find closing tag for container "${tabId}"`);
+  }
+
+  html = html.substring(0, closeDivIdx) + sectionHtml + html.substring(closeDivIdx);
+
+  const base64Content = Buffer.from(html, 'utf-8').toString('base64');
+  await contentUpload({ path: 'docs.html', contentBase64: base64Content }, adminEmail, githubToken, owner, repo, su, sk);
+  return { success: true, title, tabId };
+}
+
+async function docsAddTab(params, adminEmail, githubToken, owner, repo, su, sk) {
+  let { tabId, title, iconSvg, contentHtml = '' } = params;
+  if (contentHtml) contentHtml = sanitizeDocsHtml(contentHtml);
+  const docsData = await contentGet('docs.html', githubToken, owner, repo);
+  let html = docsData.content;
+
+  if (html.includes(`data-target="${tabId}"`) || html.includes(`id="${tabId}"`)) {
+    throw new Error(`Tab with ID "${tabId}" already exists.`);
+  }
+
+  const defaultIcon = `<svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline></svg>`;
+  const icon = iconSvg || defaultIcon;
+
+  const tabButtonHtml = `\n      <div class="tab" data-target="${tabId}">\n        ${icon}\n        ${title}\n      </div>\n    `;
+  
+  const containerHtml = `\n    <div class="docs-container" id="${tabId}">\n      <div class="docs-title">${title.toUpperCase()}</div>\n      ${contentHtml}\n    </div>\n`;
+
+  const tabsMarker = '<div class="tabs">';
+  const tabsIdx = html.indexOf(tabsMarker);
+  if (tabsIdx === -1) throw new Error('<div class="tabs"> not found in docs.html');
+  const tabsCloseIdx = html.indexOf('</div>', tabsIdx);
+  html = html.substring(0, tabsCloseIdx) + tabButtonHtml + html.substring(tabsCloseIdx);
+
+  const scriptIdx = html.indexOf('<script>');
+  const lastDivBeforeScript = html.lastIndexOf('</div>', scriptIdx);
+  if (lastDivBeforeScript === -1) throw new Error('Closing container div before script not found');
+
+  html = html.substring(0, lastDivBeforeScript) + containerHtml + html.substring(lastDivBeforeScript);
+
+  const base64Content = Buffer.from(html, 'utf-8').toString('base64');
+  await contentUpload({ path: 'docs.html', contentBase64: base64Content }, adminEmail, githubToken, owner, repo, su, sk);
+  return { success: true, tabId, title };
+}
+
+async function docsUpdateTab(params, adminEmail, githubToken, owner, repo, su, sk) {
+  let { tabId, title, contentHtml } = params;
+  if (contentHtml) contentHtml = sanitizeDocsHtml(contentHtml);
+  const docsData = await contentGet('docs.html', githubToken, owner, repo);
+  let html = docsData.content;
+
+  if (title) {
+    const tabRegex = new RegExp(`(<div class="tab[^"]*" data-target="${tabId}">[\\s\\S]*?<\\/div>)`);
+    if (tabRegex.test(html)) {
+      html = html.replace(tabRegex, (match) => {
+        return match.replace(/>\s*([^<]+)\s*<\/div>/, `> ${title}</div>`);
+      });
+    }
+  }
+
+  if (contentHtml) {
+    const containerMarker = `id="${tabId}"`;
+    const containerIdx = html.indexOf(containerMarker);
+    if (containerIdx === -1) throw new Error(`Tab container "${tabId}" not found`);
+
+    const startIdx = html.indexOf('>', containerIdx) + 1;
+    const nextContainerIdx = html.indexOf('<div class="docs-container"', startIdx);
+    const scriptIdx = html.indexOf('<script>', startIdx);
+    let limitIdx = html.length;
+    if (nextContainerIdx !== -1) limitIdx = Math.min(limitIdx, nextContainerIdx);
+    if (scriptIdx !== -1) limitIdx = Math.min(limitIdx, scriptIdx);
+
+    const endIdx = html.lastIndexOf('</div>', limitIdx);
+    const newInner = `\n      <div class="docs-title">${(title || tabId).toUpperCase()}</div>\n      ${contentHtml}\n    `;
+    html = html.substring(0, startIdx) + newInner + html.substring(endIdx);
   }
 
   const base64Content = Buffer.from(html, 'utf-8').toString('base64');
   await contentUpload({ path: 'docs.html', contentBase64: base64Content }, adminEmail, githubToken, owner, repo, su, sk);
-  return { success: true, title };
+  return { success: true, tabId };
+}
+
+async function docsDeleteTab(params, adminEmail, githubToken, owner, repo, su, sk) {
+  const { tabId } = params;
+  const docsData = await contentGet('docs.html', githubToken, owner, repo);
+  let html = docsData.content;
+
+  const tabBtnRegex = new RegExp(`\\s*<div class="tab[^"]*" data-target="${tabId}">[\\s\\S]*?<\\/div>`, 'g');
+  html = html.replace(tabBtnRegex, '');
+
+  const containerMarker = `id="${tabId}"`;
+  const containerIdx = html.indexOf(containerMarker);
+  if (containerIdx !== -1) {
+    const divStartIdx = html.lastIndexOf('<div class="docs-container"', containerIdx);
+    const startIdx = html.indexOf('>', containerIdx) + 1;
+    const nextContainerIdx = html.indexOf('<div class="docs-container"', startIdx);
+    const scriptIdx = html.indexOf('<script>', startIdx);
+    let limitIdx = html.length;
+    if (nextContainerIdx !== -1) limitIdx = Math.min(limitIdx, nextContainerIdx);
+    if (scriptIdx !== -1) limitIdx = Math.min(limitIdx, scriptIdx);
+
+    const endDivIdx = html.lastIndexOf('</div>', limitIdx);
+    const fullEndIdx = html.indexOf('>', endDivIdx) + 1;
+    html = html.substring(0, divStartIdx) + html.substring(fullEndIdx);
+  }
+
+  const base64Content = Buffer.from(html, 'utf-8').toString('base64');
+  await contentUpload({ path: 'docs.html', contentBase64: base64Content }, adminEmail, githubToken, owner, repo, su, sk);
+  return { success: true, tabId };
 }
 
 async function usersRemoveDevice(userId, deviceId, adminEmail, su, sk) {
