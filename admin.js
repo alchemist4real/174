@@ -1037,10 +1037,18 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
     document.querySelectorAll('.tab').forEach(t => {
       t.onclick = (e) => {
         const targetTab = e.currentTarget;
+        const targetId = targetTab.getAttribute('data-target');
+        if (!targetId) return; // Allow default link behavior for tabs without data-target (e.g. docs link)
         document.querySelectorAll('.tab').forEach(tx => tx.classList.remove('active'));
         document.querySelectorAll('.view-section, .view-section-row').forEach(vx => vx.classList.remove('active'));
         targetTab.classList.add('active');
-        document.getElementById(targetTab.getAttribute('data-target')).classList.add('active');
+        const targetEl = document.getElementById(targetId);
+        if (targetEl) {
+          targetEl.classList.add('active');
+          if (targetId === 'viewApiKeys' && typeof window.loadApiKeys === 'function') {
+            window.loadApiKeys();
+          }
+        }
       }
     });
 
@@ -1649,9 +1657,7 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
 // ═══════════════════════════════════════════════════════════════
 
 (function initApiKeysModule() {
-  // Wait for adminReady (fired in verifyAdmin() at admin.js:L251)
-  // This ensures window.sessionToken is set before we use it
-  window.addEventListener('adminReady', function() {
+  function bindKeyEvents() {
     var btnRefresh = document.getElementById('btnRefreshApiKeys');
     if (btnRefresh) btnRefresh.onclick = loadApiKeys;
 
@@ -1661,14 +1667,25 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
     var btnCopy = document.getElementById('btnCopyApiKey');
     if (btnCopy) btnCopy.onclick = copyRevealedKey;
 
-    // Load keys when the API Keys tab is clicked
     var tab = document.getElementById('tabApiKeys');
     if (tab) {
       tab.addEventListener('click', function() {
         setTimeout(loadApiKeys, 50);
       });
     }
+  }
+
+  // Bind events immediately if DOM is ready, and also listen for adminReady
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bindKeyEvents);
+  } else {
+    bindKeyEvents();
+  }
+  window.addEventListener('adminReady', function() {
+    bindKeyEvents();
   });
+
+  window.loadApiKeys = loadApiKeys;
 
   // POST to /api/mcp using the existing session JWT
   async function mcpCall(method, params) {
