@@ -2429,36 +2429,32 @@ async function logAction(adminEmail, action, details, su, sk) {
 // ═══════════════════════════════════════════════════════════════
 
 async function handleMcpStreamableGet(req, res, su, sk) {
-  // The client may send the API key in the Authorization header
-  // (Claude.ai web does this) or as a query param ?key= (older clients)
-  const authHeader = req.headers.authorization || '';
-  const url = new URL(req.url, `https://${req.headers.host}`);
-  const keyFromQuery = url.searchParams.get('key');
+  const authHeader = (req.headers.authorization || '').trim();
+  const url = new URL(req.url, `https://${req.headers.host || 'mr-capsules.vercel.app'}`);
+  const keyFromQuery = (url.searchParams.get('key') || '').trim();
 
   let rawKey = keyFromQuery;
   if (!rawKey && authHeader.startsWith('Bearer ')) {
     rawKey = authHeader.slice(7).trim();
   } else if (!rawKey && authHeader.startsWith('ApiKey ')) {
     rawKey = authHeader.slice(7).trim();
+  } else if (!rawKey && authHeader.startsWith('mrc_')) {
+    rawKey = authHeader;
   }
 
-  // Validate key if provided. If no key, return server info only.
+  // Validate token if provided
   if (rawKey) {
-    const encoder = new TextEncoder();
-    const hashBuffer = await crypto.subtle.digest('SHA-256', encoder.encode(rawKey));
-    const keyHash = Array.from(new Uint8Array(hashBuffer)).map(b => b.toString(16).padStart(2,'0')).join('');
+    let authResult = null;
+    if (rawKey.startsWith('mrc_at_')) {
+      authResult = await authenticateOAuthAccessToken(rawKey, su, sk);
+    } else if (rawKey.startsWith('mrc_')) {
+      authResult = await authenticateApiKey(rawKey, su, sk);
+    } else {
+      authResult = await authenticateJWT(rawKey, su, sk);
+    }
 
-    const rpcRes = await fetch(`${su}/rest/v1/rpc/validate_api_key`, {
-      method: 'POST',
-      headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ p_key_hash: keyHash })
-    });
-
-    if (rpcRes.ok) {
-      const rows = await rpcRes.json();
-      if (!rows || rows.length === 0) {
-        return res.status(401).json({ error: 'Invalid API key' });
-      }
+    if (!authResult || authResult.error) {
+      return res.status(401).json({ error: authResult?.error || 'Invalid authentication token' });
     }
   }
 
