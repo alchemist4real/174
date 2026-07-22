@@ -1,9 +1,4 @@
-// Disable default Vercel body parser to receive raw multipart stream
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
+
 
 function parseMultipart(bodyBuffer, boundary) {
   const boundaryBuffer = Buffer.from(`--${boundary}`);
