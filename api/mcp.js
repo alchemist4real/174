@@ -282,7 +282,8 @@ export default async function handler(req, res) {
   // ── Route to handler ──────────────────────────────────────────────────────
   try {
     const result = await routeMethod(method, params, authResult, roles, {
-      SUPABASE_URL, SB_SERVICE_KEY, GITHUB_TOKEN, GH_OWNER, GH_REPO, MAX_KEYS_PER_USER
+      SUPABASE_URL, SB_SERVICE_KEY, GITHUB_TOKEN, GH_OWNER, GH_REPO, MAX_KEYS_PER_USER,
+      reqHost: currentReqHost
     });
 
     // Respond in the correct format: MCP JSON-RPC or plain REST
@@ -325,6 +326,7 @@ function getMcpToolsList() {
     { name: 'content_get', description: 'Download a specific content file by path (returns full HTML)', inputSchema: { type: 'object', properties: { path: { type: 'string', description: 'File path, e.g. content/semester 1/1.2/1.2-2_Overall CBT.html' } }, required: ['path'] } },
     { name: 'content_tree', description: 'Get the full file tree of content/ and cover/ directories', inputSchema: { type: 'object', properties: {} } },
     { name: 'content_upload', description: 'Upload a content file directly. You can either pass contentBase64 (for files < 3.5MB) OR a public url (for files of any size up to 100MB, e.g. PDFs, videos, zip pools) to fetch and commit the file reliably without chunking.', inputSchema: { type: 'object', properties: { path: { type: 'string', description: 'Target path, e.g. content/Semester 1/file.html' }, contentBase64: { type: 'string', description: 'Base64 encoded file content (optional if url is provided)' }, url: { type: 'string', description: 'Public URL to fetch the file from (optional if contentBase64 is provided)' } }, required: ['path'] } },
+    { name: 'content_upload_from_agent_path', description: 'Generates authenticated curl commands and instructions for Claude to upload a large local file directly from the sandbox filesystem (avoiding base64 typing corruption).', inputSchema: { type: 'object', properties: { agentFilePath: { type: 'string', description: 'Absolute file path in agent sandbox, e.g. /mnt/user-data/outputs/farmakokinetik.html' }, targetPath: { type: 'string', description: 'Target path in repository, e.g. content/semester 3/3.1/3.1 LECTURE_Am I Kinetic.html' } }, required: ['agentFilePath', 'targetPath'] } },
     { name: 'upload_init', description: 'Initialize a bulletproof chunked upload session for large files of any size (videos, PDFs, zip pools, large HTML). Prevents serverless size limits & timeouts.', inputSchema: { type: 'object', properties: { path: { type: 'string', description: 'Target path, e.g. content/Semester 1/video.mp4 or cover/semester1.png' }, totalChunks: { type: 'number', description: 'Total number of chunks to be uploaded' }, totalSizeBytes: { type: 'number', description: 'Optional estimated file size in bytes' } }, required: ['path', 'totalChunks'] } },
     { name: 'upload_chunk', description: 'Upload a single Base64 chunk (recommended size: 500KB - 1.5MB per chunk) for an active upload session.', inputSchema: { type: 'object', properties: { uploadId: { type: 'string', description: 'Session ID returned by upload_init' }, chunkIndex: { type: 'number', description: '1-indexed chunk number (1 to totalChunks)' }, chunkBase64: { type: 'string', description: 'Base64 encoded chunk data' } }, required: ['uploadId', 'chunkIndex', 'chunkBase64'] } },
     { name: 'upload_commit', description: 'Reassemble all uploaded chunks, verify integrity, and commit the complete large file to GitHub reliably.', inputSchema: { type: 'object', properties: { uploadId: { type: 'string', description: 'Session ID returned by upload_init' } }, required: ['uploadId'] } },
@@ -437,6 +439,7 @@ async function authenticateApiKey(rawKey, supabaseUrl, sbKey) {
     keyId,
     userId,
     email: userData.email,
+    token: rawKey,
     userMetadata: userData.user_metadata || {}
   };
 }
@@ -460,6 +463,7 @@ async function authenticateJWT(token, supabaseUrl, sbKey) {
     keyId: null,
     userId: userData.id,
     email: userData.email,
+    token: token,
     userMetadata: userData.user_metadata || {}
   };
 }
@@ -524,6 +528,7 @@ async function authenticateOAuthAccessToken(token, supabaseUrl, sbKey, reqHost =
     keyId: null,
     userId: tokenRecord.user_id,
     email: tokenRecord.user_email,
+    token: token,
     userMetadata: {}
   };
 }
@@ -693,6 +698,12 @@ async function routeMethod(method, params, auth, roles, cfg) {
     if (!params.path || (!params.contentBase64 && !params.url)) throw err400('Missing params.path, params.contentBase64, or params.url');
     validatePath(params.path);
     return contentUpload(params, auth.email, gt, go, gr, su, sk);
+  }
+  if (m === 'content_upload_from_agent_path') {
+    if (!roles.hasDivision && !roles.isAdmin) throw err403('Division membership required to upload');
+    if (!params.agentFilePath || !params.targetPath) throw err400('Missing params.agentFilePath or params.targetPath');
+    validatePath(params.targetPath);
+    return contentUploadFromAgentPath(params, auth, cfg.reqHost);
   }
   if (m === 'upload_init') {
     if (!roles.hasDivision && !roles.isAdmin) throw err403('Division membership required to upload');
@@ -1718,6 +1729,18 @@ async function contentUpload(params, adminEmail, githubToken, owner, repo, su, s
   }
 
   throw new Error(`Failed to upload ${path} after ${maxRetries} attempts: ${lastErr?.message || 'Git conflict'}`);
+}
+
+async function contentUploadFromAgentPath(params, auth, reqHost) {
+  const { agentFilePath, targetPath } = params;
+  const host = reqHost || 'mr-capsules.vercel.app';
+  const protocol = host.includes('localhost') ? 'http' : 'https';
+  const url = `${protocol}://${host}/api/upload`;
+  const token = auth.token || '';
+
+  const curlCmd = `curl -X POST -H "Authorization: Bearer ${token}" -F "path=${targetPath}" -F "file=@${agentFilePath}" ${url}`;
+
+  return `To upload this file reliably and avoid base64 typing corruption, please execute the following command in your terminal/bash tool:\n\n\`\`\`bash\n${curlCmd}\n\`\`\`\n\nOnce the command finishes, it will print the target path, size in bytes, and the new commit SHA.`;
 }
 
 async function contentDelete(params, adminEmail, githubToken, owner, repo, su, sk) {
