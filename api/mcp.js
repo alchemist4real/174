@@ -2511,8 +2511,9 @@ async function handleMcpStreamableGet(req, res, su, sk) {
   res.setHeader('X-Accel-Buffering', 'no');
   res.setHeader('Mcp-Session-Id', sessionId);
 
-  // Send the server's endpoint event (relative URI /api/mcp per MCP SSE spec)
-  res.write(`event: endpoint\ndata: /api/mcp\n\n`);
+  // Send the server's endpoint event with absolute URI & sessionId
+  const endpointUrl = `https://${host}/api/mcp?sessionId=${sessionId}`;
+  res.write(`event: endpoint\ndata: ${endpointUrl}\n\n`);
 
   // Heartbeat to keep Vercel connection alive
   const heartbeat = setInterval(() => {
