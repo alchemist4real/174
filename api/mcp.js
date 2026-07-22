@@ -17,16 +17,11 @@ export default async function handler(req, res) {
   const isAllowedOrigin = allowedOrigins.includes(requestOrigin);
 
   // For requests with no Origin header (server-to-server calls, curl, etc.)
-  // we allow them through without CORS restriction.
   if (requestOrigin) {
-    if (isAllowedOrigin) {
-      res.setHeader('Access-Control-Allow-Origin', requestOrigin);
-    } else {
-      // For any other origin (e.g. admin UI on same domain, postman)
-      // allow it — the API key is the auth mechanism, not CORS.
-      res.setHeader('Access-Control-Allow-Origin', requestOrigin);
-    }
+    res.setHeader('Access-Control-Allow-Origin', requestOrigin);
     res.setHeader('Vary', 'Origin');
+  } else {
+    res.setHeader('Access-Control-Allow-Origin', '*');
   }
 
   // Required headers per MCP spec 2025-06-18
@@ -57,7 +52,7 @@ export default async function handler(req, res) {
   }
 
   if (req.url && req.url.includes('oauth-protected-resource')) {
-    const host = req.headers.host || 'mr-capsules.vercel.app';
+    const host = req.headers['x-forwarded-host'] || req.headers.host || 'mr-capsules.vercel.app';
     const issuer = `https://${host}`;
     const resourceUrl = `${issuer}/api/mcp`;
     return res.status(200).json({
@@ -107,16 +102,19 @@ export default async function handler(req, res) {
 
     // MCP initialize handshake — respond immediately, no auth needed
     if (method === 'initialize') {
-      const host = req.headers.host || 'mr-capsules.vercel.app';
+      const host = req.headers['x-forwarded-host'] || req.headers.host || 'mr-capsules.vercel.app';
       const issuer = `https://${host}`;
+      const negotiatedVersion = (params && params.protocolVersion) ? params.protocolVersion : '2024-11-05';
       return res.status(200).json({
         jsonrpc: '2.0',
         id: mcpRequestId,
         result: {
-          protocolVersion: '2025-06-18',
+          protocolVersion: negotiatedVersion,
           capabilities: {
             tools: { listChanged: false },
-            resources: { listChanged: false }
+            resources: { listChanged: false },
+            prompts: { listChanged: false },
+            logging: {}
           },
           serverInfo: {
             name: 'mr-capsules-mcp-server',
@@ -142,7 +140,8 @@ export default async function handler(req, res) {
                 sizes: 'any'
               }
             ]
-          }
+          },
+          instructions: 'Mr. Capsules MCP server provides access to medical education content, tasks board, organization divisions, and management tools.'
         }
       });
     }
@@ -219,11 +218,12 @@ export default async function handler(req, res) {
   const queryKey = (urlObj.searchParams.get('key') || '').trim();
 
   let authResult = null;
+  const currentReqHost = req.headers['x-forwarded-host'] || req.headers.host || 'mr-capsules.vercel.app';
 
   if (authHeader.startsWith('Bearer ')) {
     const bearerVal = authHeader.slice(7).trim();
     if (bearerVal.startsWith('mrc_at_')) {
-      authResult = await authenticateOAuthAccessToken(bearerVal, SUPABASE_URL, SB_SERVICE_KEY);
+      authResult = await authenticateOAuthAccessToken(bearerVal, SUPABASE_URL, SB_SERVICE_KEY, currentReqHost);
     } else if (bearerVal.startsWith('mrc_')) {
       authResult = await authenticateApiKey(bearerVal, SUPABASE_URL, SB_SERVICE_KEY);
     } else {
@@ -240,7 +240,7 @@ export default async function handler(req, res) {
   } else {
     res.setHeader(
       'WWW-Authenticate',
-      'Bearer realm="https://mr-capsules.vercel.app", error="invalid_token", error_description="Bearer token required"'
+      `Bearer realm="https://${currentReqHost}", error="invalid_token", error_description="Bearer token required"`
     );
     const authErr = { message: 'Unauthorized. Bearer token required.' };
     if (isMcpJsonRpc) {
@@ -252,7 +252,7 @@ export default async function handler(req, res) {
   if (!authResult || authResult.error) {
     res.setHeader(
       'WWW-Authenticate',
-      'Bearer realm="https://mr-capsules.vercel.app", error="invalid_token", error_description="Invalid or expired token"'
+      `Bearer realm="https://${currentReqHost}", error="invalid_token", error_description="Invalid or expired token"`
     );
     const msg = authResult?.error || 'Unauthorized';
     if (isMcpJsonRpc) {
@@ -295,10 +295,14 @@ export default async function handler(req, res) {
   } catch (err) {
     const statusCode = err.statusCode || 500;
     if (isMcpJsonRpc) {
-      const mcpErrCode = statusCode === 403 ? -32003 : statusCode === 404 ? -32004 : -32603;
-      return res.status(statusCode).json({
-        jsonrpc: '2.0', id: mcpRequestId,
-        error: { code: mcpErrCode, message: err.message }
+      // Per MCP spec 2024-11-05 / 2025-06-18: tool errors return 200 OK with isError: true in result
+      return res.status(200).json({
+        jsonrpc: '2.0',
+        id: mcpRequestId,
+        result: {
+          content: [{ type: 'text', text: `Error (${statusCode}): ${err.message}` }],
+          isError: true
+        }
       });
     }
     return res.status(statusCode).json({ success: false, error: err.message });
@@ -492,12 +496,21 @@ async function authenticateOAuthAccessToken(token, supabaseUrl, sbKey, reqHost =
     return { error: 'OAuth token expired' };
   }
 
-  // RFC 8707 Canonical Audience Check
+  // RFC 8707 Canonical Audience Check — with flexible host/alias matching
   const canonicalServerUrl = canonicalizeUrl(`https://${reqHost}/api/mcp`);
   const canonicalServerHost = canonicalizeUrl(`https://${reqHost}`);
+  const defaultServerUrl = canonicalizeUrl(`https://mr-capsules.vercel.app/api/mcp`);
+  const defaultServerHost = canonicalizeUrl(`https://mr-capsules.vercel.app`);
   const tokenAudience = canonicalizeUrl(tokenRecord.resource);
 
-  if (tokenAudience && tokenAudience !== canonicalServerUrl && tokenAudience !== canonicalServerHost) {
+  const matchesAudience = !tokenAudience ||
+    tokenAudience === canonicalServerUrl ||
+    tokenAudience === canonicalServerHost ||
+    tokenAudience === defaultServerUrl ||
+    tokenAudience === defaultServerHost ||
+    tokenAudience.includes('mr-capsules');
+
+  if (!matchesAudience) {
     console.error(`[OAuth Token Audience Mismatch] timestamp="${new Date().toISOString()}" expected="${canonicalServerUrl}" received="${tokenAudience}" sub="${tokenRecord.user_email}"`);
     return { error: 'OAuth token audience mismatch: token resource does not match server URI' };
   }
@@ -512,13 +525,13 @@ async function authenticateOAuthAccessToken(token, supabaseUrl, sbKey, reqHost =
 }
 
 // ═══════════════════════════════════════════════════════════════
-// ROLE RESOLVER — identical logic to api/admin.js
+// ROLE RESOLVER — resolves roles & division membership
 // ═══════════════════════════════════════════════════════════════
 
 async function resolveRoles(userId, email, supabaseUrl, sbKey, superAdminEmail) {
   const isSuperAdmin = email === superAdminEmail;
 
-  const encEmail = encodeURIComponent(email);
+  const encEmail = encodeURIComponent(email || '');
   const roleRes = await fetch(`${supabaseUrl}/rest/v1/user_roles?identifier=eq.${encEmail}&select=role`, {
     headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
   });
@@ -528,15 +541,39 @@ async function resolveRoles(userId, email, supabaseUrl, sbKey, superAdminEmail) 
     hasAdminRole = Array.isArray(roleData) && roleData.length > 0 && roleData[0].role === 'admin';
   }
 
+  let divisionId = null;
   const divRes = await fetch(`${supabaseUrl}/rest/v1/division_members?user_id=eq.${userId}&select=division_id`, {
     headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
   });
-  let divisionId = null;
   if (divRes.ok) {
     const divData = await divRes.json();
     if (Array.isArray(divData) && divData.length > 0) {
       divisionId = divData[0].division_id;
     }
+  }
+
+  // Fallback: If no division found by userId, look up real Supabase auth user by email
+  if (!divisionId && email && sbKey) {
+    try {
+      const sbUsersRes = await fetch(`${supabaseUrl}/auth/v1/admin/users?per_page=1000`, {
+        headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
+      });
+      if (sbUsersRes.ok) {
+        const usersData = await sbUsersRes.json();
+        const matchedUser = (usersData.users || []).find(u => u.email === email);
+        if (matchedUser && matchedUser.id !== userId) {
+          const fallbackDivRes = await fetch(`${supabaseUrl}/rest/v1/division_members?user_id=eq.${matchedUser.id}&select=division_id`, {
+            headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
+          });
+          if (fallbackDivRes.ok) {
+            const fbData = await fallbackDivRes.json();
+            if (Array.isArray(fbData) && fbData.length > 0) {
+              divisionId = fbData[0].division_id;
+            }
+          }
+        }
+      }
+    } catch(e) {}
   }
 
   const isAdmin = isSuperAdmin || hasAdminRole;
@@ -2430,7 +2467,8 @@ async function logAction(adminEmail, action, details, su, sk) {
 
 async function handleMcpStreamableGet(req, res, su, sk) {
   const authHeader = (req.headers.authorization || '').trim();
-  const url = new URL(req.url, `https://${req.headers.host || 'mr-capsules.vercel.app'}`);
+  const host = req.headers['x-forwarded-host'] || req.headers.host || 'mr-capsules.vercel.app';
+  const url = new URL(req.url, `https://${host}`);
   const keyFromQuery = (url.searchParams.get('key') || '').trim();
 
   let rawKey = keyFromQuery;
@@ -2446,7 +2484,7 @@ async function handleMcpStreamableGet(req, res, su, sk) {
   if (rawKey) {
     let authResult = null;
     if (rawKey.startsWith('mrc_at_')) {
-      authResult = await authenticateOAuthAccessToken(rawKey, su, sk);
+      authResult = await authenticateOAuthAccessToken(rawKey, su, sk, host);
     } else if (rawKey.startsWith('mrc_')) {
       authResult = await authenticateApiKey(rawKey, su, sk);
     } else {
@@ -2458,25 +2496,17 @@ async function handleMcpStreamableGet(req, res, su, sk) {
     }
   }
 
-  // Return SSE stream per Streamable HTTP spec
-  // Claude.ai web uses this to confirm the server is reachable
-  // and to get the server's capabilities before making POST calls.
+  // Return SSE stream per Streamable HTTP / SSE spec
   res.setHeader('Content-Type', 'text/event-stream');
   res.setHeader('Cache-Control', 'no-cache, no-transform');
   res.setHeader('Connection', 'keep-alive');
   res.setHeader('X-Accel-Buffering', 'no');
-  // Assign a session ID — stateless here, but required by spec
   res.setHeader('Mcp-Session-Id', `mrc-${Date.now()}`);
 
-  // Send the server's endpoint event (Streamable HTTP pattern)
-  res.write(`event: endpoint\ndata: ${JSON.stringify({
-    uri: '/api/mcp',
-    name: 'mr-capsules'
-  })}\n\n`);
+  // Send the server's endpoint event (Streamable HTTP pattern: data MUST be URI string)
+  res.write(`event: endpoint\ndata: https://${host}/api/mcp\n\n`);
 
-  // Heartbeat to keep Vercel from closing the connection
-  // Vercel max execution time is 60s on Pro, 10s on hobby.
-  // The client will reconnect automatically per SSE spec.
+  // Heartbeat to keep Vercel connection alive
   const heartbeat = setInterval(() => {
     try { res.write(': heartbeat\n\n'); } catch(e) { clearInterval(heartbeat); }
   }, 20000);
