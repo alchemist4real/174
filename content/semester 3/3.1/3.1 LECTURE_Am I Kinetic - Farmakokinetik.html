@@ -4,3 +4,80 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Am I Kinetic? — Quiz Farmakokinetik</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Mono:wght@300;400;500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#f5f8f9;--bg2:#eef3f5;--bg3:#e3ebee;--bg4:#d5e1e5;
+  --border:rgba(15,80,95,.10);--border2:rgba(15,80,95,.20);
+  --text:#0e2430;--text2:#2c4a58;--text3:#6f8894;
+  --green:#1f7a4a;--greenbg:rgba(31,122,74,.09);--greenb:rgba(31,122,74,.25);
+  --gold:#0f6a7a;--goldbg:rgba(15,106,122,.09);--goldb:rgba(15,106,122,.28);
+  --red:#b03030;--redbg:rgba(176,48,48,.08);--redb:rgba(176,48,48,.25);
+  --blue:#1a4faa;--bluebg:rgba(26,79,170,.09);--blueb:rgba(26,79,170,.28);
+  --purp:#4433a0;--purpbg:rgba(68,51,160,.08);--purpb:rgba(68,51,160,.25);
+  --teal:#0c8299;--tealbg:rgba(12,130,153,.08);--tealb:rgba(12,130,153,.25);
+  --r:10px;--rl:14px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:var(--bg);color:var(--text);font-family:'DM Sans',sans-serif;font-size:15px;line-height:1.6;min-height:100vh}
+.app{max-width:900px;margin:0 auto;padding:0 16px 60px}
+header{padding:40px 0 28px;text-align:center}
+.eyebrow{font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.18em;color:var(--text3);text-transform:uppercase;margin-bottom:10px}
+h1{font-family:'Syne',sans-serif;font-weight:800;font-size:clamp(30px,6vw,54px);letter-spacing:-.03em;line-height:1;margin-bottom:10px}
+h1 span{color:var(--teal)}
+.sub{font-size:13px;color:var(--text2);max-width:520px;margin:0 auto}
+.main-tabs{display:flex;gap:3px;background:var(--bg2);border:1px solid var(--border);border-radius:12px;padding:4px;margin-bottom:24px}
+.main-tab{flex:1;padding:9px 6px;border-radius:9px;border:none;background:transparent;color:var(--text3);font-family:'DM Sans',sans-serif;font-size:13px;font-weight:500;cursor:pointer;transition:all .18s}
+.main-tab:hover{color:var(--text)}
+.main-tab.active{background:var(--gold);color:#fff;font-weight:600}
+.main-panel{display:none}
+.main-panel.active{display:block;animation:fi .2s ease}
+@keyframes fi{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+.sub-tabs{display:grid;grid-template-columns:repeat(auto-fill,minmax(120px,1fr));gap:4px;margin-bottom:20px}
+.sub-tab{padding:8px 10px;border-radius:8px;border:1.5px solid var(--border);background:var(--bg2);color:var(--text3);font-family:'DM Mono',monospace;font-size:10.5px;cursor:pointer;transition:all .18s;text-align:center;line-height:1.4}
+.sub-tab:hover{background:var(--bg3);color:var(--text2);border-color:var(--border2)}
+.sub-tab.active{background:var(--gold);color:#fff;border-color:var(--text);font-weight:600}
+.sub-panel{display:none}
+.sub-panel.active{display:block;animation:fi .18s ease}
+.sec-h{font-family:'Syne',sans-serif;font-weight:700;font-size:18px;padding-bottom:8px;border-bottom:2px solid var(--gold);margin-bottom:14px;color:var(--text)}
+p{margin-bottom:10px;color:var(--text2)}
+ul{margin:0 0 12px 20px;color:var(--text2)}
+li{margin-bottom:5px}
+strong{color:var(--text)}
+.divider{height:1px;background:var(--border);margin:16px 0}
+.note{border-radius:var(--r);padding:12px 14px;margin:10px 0;font-size:13.5px;border:1px solid}
+.note.blue{background:var(--bluebg);border-color:var(--blueb);color:var(--text)}
+.note.green{background:var(--greenbg);border-color:var(--greenb);color:var(--text)}
+.note.gold{background:var(--goldbg);border-color:var(--goldb);color:var(--text)}
+.note.red{background:var(--redbg);border-color:var(--redb);color:var(--text)}
+.note.purp{background:var(--purpbg);border-color:var(--purpb);color:var(--text)}
+.note.teal{background:var(--tealbg);border-color:var(--tealb);color:var(--text)}
+table{width:100%;border-collapse:collapse;margin:12px 0;font-size:13px}
+th,td{border:1px solid var(--border2);padding:8px 10px;text-align:left}
+th{background:var(--bg3);font-family:'DM Mono',monospace;font-size:10.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--text2)}
+.imgcap{text-align:center;margin:16px 0}
+.imgcap .cap{font-size:11px;color:var(--text3);margin-top:6px;font-family:'DM Mono',monospace}
+.flowbox{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap;margin:14px 0}
+.flowitem{background:var(--bg3);border:1px solid var(--border2);border-radius:8px;padding:8px 14px;font-size:13px;font-weight:600;color:var(--text)}
+.flowarrow{color:var(--gold);font-size:18px}
+
+/* Quiz */
+.qconfig{background:var(--bg2);border:1px solid var(--border);border-radius:var(--rl);padding:24px}
+.qconfig-title{font-family:'Syne',sans-serif;font-weight:800;font-size:20px;margin-bottom:4px}
+.qconfig-sub{font-size:12.5px;color:var(--text3);margin-bottom:16px}
+.cfg-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-bottom:18px}
+.cfg-btn{padding:10px 8px;border-radius:8px;border:1.5px solid var(--border2);background:#fff;color:var(--text3);font-size:11.5px;font-weight:600;cursor:pointer;transition:all .15s;text-align:center;line-height:1.3}
+.cfg-btn.sel{background:var(--gold);color:#fff;border-color:var(--text)}
+.start-btn{width:100%;padding:14px;border-radius:10px;border:none;background:var(--text);color:#fff;font-family:'Syne',sans-serif;font-weight:700;font-size:15px;cursor:pointer;transition:all .15s}
+.start-btn:hover{background:var(--gold)}
+.qheader{display:flex;align-items:center;justify-content:space-between;margin-bottom:14px;font-size:13px;color:var(--text3)}
+.qnum-display strong{color:var(--text);font-size:16px}
+.qtype-pill{padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;font-family:'DM Mono',monospace}
+.qscore-display strong{color:var(--green);font-size:16px}
+.qcard{background:#fff;border:1px solid var(--border);border-radius:var(--rl);padding:20px;margin-bottom:14px}
+.qscen{background:var(--bg3);border-left:3px solid var(--gold);padding:10px 14px;border-radius:6px;margin-bottom:14px;font-size:13.5px}
+.qdata{background:var(--bg2);border-radius:8px;padding:12px;margin-bottom:14px;font-size:13px}
+.qtext{font-size:16px;font-weight:600;line-height:1.5;color:var(--text)}
+.opts{display:flex;flex-direction:column;gap:8px;margin-bottom:14px}
+.opt{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:10px;border:1.5px solid var(--border2);background:#fff;cursor:pointer;text-align:left;font-size:13.5px;transition:all .12s;.font-family:'DM Sans',sans-serif}
