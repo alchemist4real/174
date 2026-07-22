@@ -1,7 +1,8 @@
-# 📜 MR-CAPSULES — Comprehensive System & Conversation Log
+# 📜 MR-CAPSULES — Conversation Log [ID: 99ec7531-376c-4c63-aba3-5d9a0f9bf27e] (Device: Windows PC)
 
 > [!NOTE]
 > **Session ID**: `99ec7531-376c-4c63-aba3-5d9a0f9bf27e`  
+> **Device / OS**: `Windows 10 / Antigravity Windows Environment`  
 > **Repository**: `alchemist4real/MR-CAPSULES`  
 > **Live URL**: `https://mr-capsules.vercel.app`  
 > **Date**: `2026-07-22`  
