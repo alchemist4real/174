@@ -1,5 +1,3 @@
-import crypto from 'crypto';
-
 // Disable default Vercel body parser to receive raw multipart stream
 export const config = {
   api: {
