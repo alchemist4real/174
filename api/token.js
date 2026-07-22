@@ -22,14 +22,17 @@ function verifyPkce(codeVerifier, codeChallenge, method = 'S256') {
   if (!codeChallenge) return true; // Optional if no challenge was sent
   const cleanChallenge = sanitizeBase64Url(codeChallenge);
   const cleanVerifier = String(codeVerifier || '').trim();
+  const sanitizedVerifier = sanitizeBase64Url(cleanVerifier);
 
   if (!method || method === 'S256') {
-    const hash = crypto.createHash('sha256').update(cleanVerifier).digest();
-    const computed = base64url(hash);
-    return computed === cleanChallenge;
+    const hash1 = base64url(crypto.createHash('sha256').update(cleanVerifier).digest());
+    if (hash1 === cleanChallenge) return true;
+    const hash2 = base64url(crypto.createHash('sha256').update(sanitizedVerifier).digest());
+    if (hash2 === cleanChallenge) return true;
+    return false;
   }
   if (method === 'plain') {
-    return cleanVerifier === cleanChallenge;
+    return cleanVerifier === cleanChallenge || sanitizedVerifier === cleanChallenge;
   }
   return false;
 }
