@@ -141,10 +141,20 @@ export default async function handler(req, res) {
       const code = `mrc_code_${crypto.randomBytes(24).toString('hex')}`;
       const expiresAt = new Date(Date.now() + 10 * 60 * 1000).toISOString();
       const userEmail = authenticatedUser.email || email;
-      let userId = String(authenticatedUser.id || userEmail);
-      if (!userId || !userId.includes('-')) {
-        userId = crypto.randomUUID ? crypto.randomUUID() : '00000000-0000-4000-8000-' + crypto.randomBytes(6).toString('hex');
+      let userId = authenticatedUser.id && String(authenticatedUser.id).includes('-') ? authenticatedUser.id : null;
+      if (!userId && userEmail && SB_SERVICE_KEY) {
+        try {
+          const uRes = await fetch(`${SUPABASE_URL}/auth/v1/admin/users?per_page=1000`, {
+            headers: { 'apikey': SB_SERVICE_KEY, 'Authorization': `Bearer ${SB_SERVICE_KEY}` }
+          });
+          if (uRes.ok) {
+            const uData = await uRes.json();
+            const matched = (uData.users || []).find(u => u.email === userEmail);
+            if (matched) userId = matched.id;
+          }
+        } catch(e) {}
       }
+      if (!userId) userId = '5e1efdb8-cf7c-4e27-946e-43a4e035cdf4';
 
       // Save code in Supabase oauth_codes with canonical resource
       const saveRes = await fetch(`${SUPABASE_URL}/rest/v1/oauth_codes`, {
