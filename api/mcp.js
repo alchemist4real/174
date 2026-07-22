@@ -110,7 +110,7 @@ export default async function handler(req, res) {
           protocolVersion: negotiatedVersion,
           capabilities: {
             tools: { listChanged: false },
-            ]
+            resources: { listChanged: false }
           },
           instructions: 'Mr. Capsules MCP server provides access to medical education content, tasks board, organization divisions, and management tools.'
         }
