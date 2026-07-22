@@ -147,8 +147,18 @@ export default async function handler(req, res) {
     }
 
     // MCP notifications (initialized, cancelled) — no response needed
-    if (method === 'notifications/initialized' || method === 'notifications/cancelled') {
+    // MCP notifications — no response body needed
+    if (method === 'notifications/initialized' || method === 'notifications/cancelled' || method.startsWith('notifications/')) {
       return res.status(202).end();
+    }
+
+    // MCP ping
+    if (method === 'ping') {
+      return res.status(200).json({
+        jsonrpc: '2.0',
+        id: mcpRequestId,
+        result: {}
+      });
     }
 
     // MCP tools/list — respond with static + dynamic custom tool list
@@ -180,6 +190,30 @@ export default async function handler(req, res) {
       return res.status(200).json({
         jsonrpc: '2.0', id: mcpRequestId,
         result: { resources: [] }
+      });
+    }
+
+    // MCP resources/templates/list
+    if (method === 'resources/templates/list') {
+      return res.status(200).json({
+        jsonrpc: '2.0', id: mcpRequestId,
+        result: { resourceTemplates: [] }
+      });
+    }
+
+    // MCP prompts/list
+    if (method === 'prompts/list') {
+      return res.status(200).json({
+        jsonrpc: '2.0', id: mcpRequestId,
+        result: { prompts: [] }
+      });
+    }
+
+    // MCP logging/setLevel
+    if (method === 'logging/setLevel') {
+      return res.status(200).json({
+        jsonrpc: '2.0', id: mcpRequestId,
+        result: {}
       });
     }
   } else {
