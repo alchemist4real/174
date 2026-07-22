@@ -44,8 +44,8 @@ export default async function handler(req, res) {
       logo_url: `${issuer}/logo.png`,
       icon_url: `${issuer}/logo.png`,
       service_documentation: `${issuer}/docs#docsMcp`,
-      client_name: "💊 Mr. Capsules",
-      name: "💊 Mr. Capsules"
+      client_name: "Mr. Capsules",
+      name: "Mr. Capsules"
     });
   }
 
