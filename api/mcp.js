@@ -102,9 +102,7 @@ export default async function handler(req, res) {
 
     // MCP initialize handshake — respond immediately, no auth needed
     if (method === 'initialize') {
-      const host = req.headers['x-forwarded-host'] || req.headers.host || 'mr-capsules.vercel.app';
-      const issuer = `https://${host}`;
-      const negotiatedVersion = (params && params.protocolVersion) ? params.protocolVersion : '2024-11-05';
+      const negotiatedVersion = (params && params.protocolVersion) ? params.protocolVersion : '2025-06-18';
       return res.status(200).json({
         jsonrpc: '2.0',
         id: mcpRequestId,
@@ -112,33 +110,6 @@ export default async function handler(req, res) {
           protocolVersion: negotiatedVersion,
           capabilities: {
             tools: { listChanged: false },
-            resources: { listChanged: false },
-            prompts: { listChanged: false },
-            logging: {}
-          },
-          serverInfo: {
-            name: 'mr-capsules-mcp-server',
-            version: '2.0.0',
-            title: 'Mr. Capsules',
-            description: 'Mr. Capsules Medical Education Platform MCP Server',
-            icon_url: `${issuer}/logo.png`,
-            logo_uri: `${issuer}/logo.png`,
-            icons: [
-              {
-                src: `${issuer}/logo.png`,
-                mimeType: 'image/png',
-                sizes: '512x512'
-              },
-              {
-                src: `${issuer}/apple-touch-icon.png`,
-                mimeType: 'image/png',
-                sizes: '180x180'
-              },
-              {
-                src: `${issuer}/logo.svg`,
-                mimeType: 'image/svg+xml',
-                sizes: 'any'
-              }
             ]
           },
           instructions: 'Mr. Capsules MCP server provides access to medical education content, tasks board, organization divisions, and management tools.'
@@ -2511,9 +2482,11 @@ async function handleMcpStreamableGet(req, res, su, sk) {
   res.setHeader('X-Accel-Buffering', 'no');
   res.setHeader('Mcp-Session-Id', sessionId);
 
-  // Send the server's endpoint event with absolute URI & sessionId
-  const endpointUrl = `https://${host}/api/mcp?sessionId=${sessionId}`;
-  res.write(`event: endpoint\ndata: ${endpointUrl}\n\n`);
+  // Send the server's endpoint event (Streamable HTTP pattern)
+  res.write(`event: endpoint\ndata: ${JSON.stringify({
+    uri: '/api/mcp',
+    name: 'mr-capsules'
+  })}\n\n`);
 
   // Heartbeat to keep Vercel connection alive
   const heartbeat = setInterval(() => {
