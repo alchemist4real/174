@@ -24,14 +24,21 @@ function verifyPkce(codeVerifier, codeChallenge, method = 'S256') {
   const cleanVerifier = String(codeVerifier || '').trim();
   const sanitizedVerifier = sanitizeBase64Url(cleanVerifier);
 
-  if (!method || method === 'S256') {
+  const cleanMethod = (method || 'S256').toUpperCase();
+
+  if (cleanMethod === 'S256') {
     const hash1 = base64url(crypto.createHash('sha256').update(cleanVerifier).digest());
     if (hash1 === cleanChallenge) return true;
     const hash2 = base64url(crypto.createHash('sha256').update(sanitizedVerifier).digest());
     if (hash2 === cleanChallenge) return true;
+    try {
+      const decoded = decodeURIComponent(cleanVerifier);
+      const hash3 = base64url(crypto.createHash('sha256').update(decoded).digest());
+      if (hash3 === cleanChallenge) return true;
+    } catch(e) {}
     return false;
   }
-  if (method === 'plain') {
+  if (cleanMethod === 'PLAIN') {
     return cleanVerifier === cleanChallenge || sanitizedVerifier === cleanChallenge;
   }
   return false;
@@ -145,7 +152,8 @@ export default async function handler(req, res) {
     const expiresIn = 3600; // 1 hour
     const expiresAt = new Date(Date.now() + expiresIn * 1000).toISOString();
 
-    const targetResource = body.resource || codeRecord.resource || `https://${req.headers.host || 'mr-capsules.vercel.app'}/api/mcp`;
+    const host = req.headers['x-forwarded-host'] || req.headers.host || 'mr-capsules.vercel.app';
+    const targetResource = body.resource || codeRecord.resource || `https://${host}/api/mcp`;
     let tokenUserId = String(codeRecord.user_id || codeRecord.user_email);
     if (!tokenUserId || !tokenUserId.includes('-')) {
       tokenUserId = crypto.randomUUID ? crypto.randomUUID() : '00000000-0000-4000-8000-' + crypto.randomBytes(6).toString('hex');
