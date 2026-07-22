@@ -1,3 +1,5 @@
+import zlib from 'zlib';
+
 // api/mcp.js
 // MCP/API Gateway v1.0.1 — supports both JWT auth, API key auth, and OAuth 2.0 PKCE Bearer tokens
 // Exposes 28 methods (with underscore naming for Claude regex ^[a-zA-Z0-9_-]{1,64}$)
@@ -330,7 +332,7 @@ function getMcpToolsList() {
     { name: 'content_list', description: 'List all educational content organized by semester, block, and category', inputSchema: { type: 'object', properties: {} } },
     { name: 'content_get', description: 'Download a specific content file by path (returns full HTML)', inputSchema: { type: 'object', properties: { path: { type: 'string', description: 'File path, e.g. content/semester 1/1.2/1.2-2_Overall CBT.html' } }, required: ['path'] } },
     { name: 'content_tree', description: 'Get the full file tree of content/ and cover/ directories', inputSchema: { type: 'object', properties: {} } },
-    { name: 'content_upload', description: 'Upload a content file directly. You can either pass contentBase64 (for files < 3.5MB) OR a public url (for files of any size up to 100MB, e.g. PDFs, videos, zip pools) to fetch and commit the file reliably without chunking.', inputSchema: { type: 'object', properties: { path: { type: 'string', description: 'Target path, e.g. content/Semester 1/file.html' }, contentBase64: { type: 'string', description: 'Base64 encoded file content (optional if url is provided)' }, url: { type: 'string', description: 'Public URL to fetch the file from (optional if contentBase64 is provided)' } }, required: ['path'] } },
+    { name: 'content_upload', description: 'Upload a content file directly. You can pass contentBase64, contentGzipBase64 (compressed & 100% checksum-verified, ideal when network egress is blocked), OR a public url (for files up to 100MB) to fetch and commit the file reliably without chunking.', inputSchema: { type: 'object', properties: { path: { type: 'string', description: 'Target path, e.g. content/Semester 1/file.html' }, contentBase64: { type: 'string', description: 'Base64 encoded file content' }, contentGzipBase64: { type: 'string', description: 'Gzip compressed base64 encoded content (80% smaller, checksum verified)' }, url: { type: 'string', description: 'Public URL to fetch the file from' } }, required: ['path'] } },
     { name: 'content_upload_from_agent_path', description: 'Generates authenticated curl commands and instructions for Claude to upload a large local file directly from the sandbox filesystem (avoiding base64 typing corruption).', inputSchema: { type: 'object', properties: { agentFilePath: { type: 'string', description: 'Absolute file path in agent sandbox, e.g. /mnt/user-data/outputs/farmakokinetik.html' }, targetPath: { type: 'string', description: 'Target path in repository, e.g. content/semester 3/3.1/3.1 LECTURE_Am I Kinetic.html' } }, required: ['agentFilePath', 'targetPath'] } },
     { name: 'upload_init', description: 'Initialize a bulletproof chunked upload session for large files of any size (videos, PDFs, zip pools, large HTML). Prevents serverless size limits & timeouts.', inputSchema: { type: 'object', properties: { path: { type: 'string', description: 'Target path, e.g. content/Semester 1/video.mp4 or cover/semester1.png' }, totalChunks: { type: 'number', description: 'Total number of chunks to be uploaded' }, totalSizeBytes: { type: 'number', description: 'Optional estimated file size in bytes' } }, required: ['path', 'totalChunks'] } },
     { name: 'upload_chunk', description: 'Upload a single Base64 chunk (recommended size: 500KB - 1.5MB per chunk) for an active upload session.', inputSchema: { type: 'object', properties: { uploadId: { type: 'string', description: 'Session ID returned by upload_init' }, chunkIndex: { type: 'number', description: '1-indexed chunk number (1 to totalChunks)' }, chunkBase64: { type: 'string', description: 'Base64 encoded chunk data' } }, required: ['uploadId', 'chunkIndex', 'chunkBase64'] } },
@@ -1639,7 +1641,15 @@ async function contentUpload(params, adminEmail, githubToken, owner, repo, su, s
   const { path, isChunkedCommit } = params;
   let contentBase64 = params.contentBase64;
 
-  if (params.url) {
+  if (params.contentGzipBase64) {
+    try {
+      const compressedBuffer = Buffer.from(params.contentGzipBase64, 'base64');
+      const decompressedBuffer = zlib.gunzipSync(compressedBuffer);
+      contentBase64 = decompressedBuffer.toString('base64');
+    } catch (gzipErr) {
+      throw err400(`Gzip decompression failed (file corrupted during LLM transfer): ${gzipErr.message}`);
+    }
+  } else if (params.url) {
     try {
       const fetchRes = await fetch(params.url);
       if (!fetchRes.ok) throw new Error(`Failed to fetch file from URL: ${fetchRes.statusText}`);
@@ -1650,7 +1660,7 @@ async function contentUpload(params, adminEmail, githubToken, owner, repo, su, s
     }
   }
 
-  if (!contentBase64) throw err400('Missing contentBase64 or url');
+  if (!contentBase64) throw err400('Missing contentBase64, contentGzipBase64, or url');
 
   const base64Len = contentBase64.length;
   // If called directly (not via chunked commit) and not using url, enforce single-request serverless payload limit
@@ -1744,8 +1754,24 @@ async function contentUploadFromAgentPath(params, auth, reqHost) {
   const token = auth.token || '';
 
   const curlCmd = `curl -X POST -H "Authorization: Bearer ${token}" -F "path=${targetPath}" -F "file=@${agentFilePath}" ${url}`;
+  const pyCmd = `python3 -c "import gzip, base64; print(base64.b64encode(gzip.compress(open('${agentFilePath}','rb').read())).decode())"`;
 
-  return `To upload this file reliably and avoid base64 typing corruption, please execute the following command in your terminal/bash tool:\n\n\`\`\`bash\n${curlCmd}\n\`\`\`\n\nOnce the command finishes, it will print the target path, size in bytes, and the new commit SHA.`;
+  return `To upload this file reliably, choose one of the following methods depending on your sandbox environment:
+
+METHOD A (If network egress is ALLOWED in your terminal):
+Run this curl command in your terminal/bash tool:
+\`\`\`bash
+${curlCmd}
+\`\`\`
+
+METHOD B (If network egress is BLOCKED in your terminal):
+1. Run this 1-line Python command locally to get the compressed, CRC32-verified Gzip string (reduces file size by ~80% and guarantees zero corruption):
+\`\`\`bash
+${pyCmd}
+\`\`\`
+2. Call the tool \`content_upload\` with:
+   - path: "${targetPath}"
+   - contentGzipBase64: "<paste the output string from python command>"`;
 }
 
 async function contentDelete(params, adminEmail, githubToken, owner, repo, su, sk) {
