@@ -18,7 +18,7 @@ function canonicalizeUrl(rawUrl) {
 }
 
 export default async function handler(req, res) {
-  const host = req.headers.host || 'mr-capsules.vercel.app';
+  const host = req.headers['x-forwarded-host'] || req.headers.host || 'mr-capsules.vercel.app';
   const SUPABASE_URL = 'https://hdhvrlkizorscvehttzd.supabase.co';
   const SB_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhkaHZybGtpem9yc2N2ZWh0dHpkIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NzI2MzA3MiwiZXhwIjoyMDkyODM5MDcyfQ.1fW24fXFAZx98dtLelrWmw8ROvkRcap8ObsMkWpy-6E";
   const issuer = `https://${host}`;
