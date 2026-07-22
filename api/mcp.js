@@ -3,29 +3,6 @@
 // Exposes 28 methods (with underscore naming for Claude regex ^[a-zA-Z0-9_-]{1,64}$)
 
 export default async function handler(req, res) {
-  // Temporary request debugger
-  try {
-    const SUPABASE_URL = 'https://hdhvrlkizorscvehttzd.supabase.co';
-    const SB_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhkaHZybGtpem9yc2N2ZWh0dHpkIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NzI2MzA3MiwiZXhwIjoyMDkyODM5MDcyfQ.1fW24fXFAZx98dtLelrWmw8ROvkRcap8ObsMkWpy-6E";
-    const dbgHeaders = `Method: ${req.method} | Auth: ${req.headers.authorization || 'none'} | Host: ${req.headers.host || 'none'}`;
-    const dbgBody = typeof req.body === 'string' ? req.body : JSON.stringify(req.body);
-    await fetch(`${SUPABASE_URL}/rest/v1/activity_logs`, {
-      method: 'POST',
-      headers: {
-        'apikey': SB_SERVICE_KEY,
-        'Authorization': `Bearer ${SB_SERVICE_KEY}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({
-        log_id: `dbg-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
-        type: 'mcp_debug',
-        time: new Date().toISOString(),
-        user_name: req.method || 'UNKNOWN',
-        email: dbgHeaders.slice(0, 254),
-        dev_str: dbgBody ? dbgBody.slice(0, 999) : ''
-      })
-    });
-  } catch(e) {}
   // ── CORS — Required for Claude.ai web, Claude Code, and other MCP clients ──
   // Claude.ai sends requests from https://claude.ai origin.
   // We must NOT use wildcard '*' when we also want to send credentials.
