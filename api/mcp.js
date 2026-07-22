@@ -1082,13 +1082,14 @@ const customMcpToolsMap = new Map();
 
 async function getActiveCustomTools(su, sk) {
   try {
-    const res = await fetch(`${su}/rest/v1/admin_action_logs?action=eq.mcp_custom_tool_def&order=time.asc`, {
+    const res = await fetch(`${su}/rest/v1/activity_logs?action=eq.mcp_custom_tool_def&order=time.asc`, {
       headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}` }
     });
     if (!res.ok) return Array.from(customMcpToolsMap.values());
     const logs = await res.json();
+    if (!Array.isArray(logs)) return Array.from(customMcpToolsMap.values());
     const activeTools = {};
-    (logs || []).forEach(log => {
+    logs.forEach(log => {
       const details = log.details || {};
       if (details.deleted) {
         delete activeTools[details.name];
@@ -1520,12 +1521,12 @@ async function uploadCancel(params, adminEmail, su, sk) {
 
 async function restoreUploadSessionFromSb(uploadId, su, sk) {
   try {
-    const res = await fetch(`${su}/rest/v1/admin_action_logs?details->>uploadId=eq.${uploadId}&order=time.asc`, {
+    const res = await fetch(`${su}/rest/v1/activity_logs?details->>uploadId=eq.${uploadId}&order=time.asc`, {
       headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}` }
     });
     if (!res.ok) return null;
     const logs = await res.json();
-    if (!logs || logs.length === 0) return null;
+    if (!Array.isArray(logs) || logs.length === 0) return null;
 
     const initLog = logs.find(l => l.action === 'mcp_upload_init');
     if (!initLog) return null;
@@ -2393,7 +2394,7 @@ async function systemCleanupGuests(su, sk) {
 
 async function logAction(adminEmail, action, details, su, sk) {
   try {
-    await fetch(`${su}/rest/v1/admin_action_logs`, {
+    await fetch(`${su}/rest/v1/activity_logs`, {
       method: 'POST',
       headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}`, 'Content-Type': 'application/json' },
       body: JSON.stringify({ admin_email: adminEmail, action, details })
