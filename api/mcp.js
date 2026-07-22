@@ -124,7 +124,24 @@ export default async function handler(req, res) {
             title: 'Mr. Capsules',
             description: 'Mr. Capsules Medical Education Platform MCP Server',
             icon_url: `${issuer}/logo.png`,
-            logo_uri: `${issuer}/logo.png`
+            logo_uri: `${issuer}/logo.png`,
+            icons: [
+              {
+                src: `${issuer}/logo.png`,
+                mimeType: 'image/png',
+                sizes: '512x512'
+              },
+              {
+                src: `${issuer}/apple-touch-icon.png`,
+                mimeType: 'image/png',
+                sizes: '180x180'
+              },
+              {
+                src: `${issuer}/logo.svg`,
+                mimeType: 'image/svg+xml',
+                sizes: 'any'
+              }
+            ]
           }
         }
       });
