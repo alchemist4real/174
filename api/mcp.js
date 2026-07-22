@@ -45,7 +45,7 @@ export default async function handler(req, res) {
 
   // ── Constants ─────────────────────────────────────────────────────────────
   const SUPABASE_URL = 'https://hdhvrlkizorscvehttzd.supabase.co';
-  const SB_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const SB_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhkaHZybGtpem9yc2N2ZWh0dHpkIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NzI2MzA3MiwiZXhwIjoyMDkyODM5MDcyfQ.1fW24fXFAZx98dtLelrWmw8ROvkRcap8ObsMkWpy-6E";
   const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
   const GH_OWNER = 'alchemist4real';
   const GH_REPO = 'MR-CAPSULES';
@@ -107,6 +107,8 @@ export default async function handler(req, res) {
 
     // MCP initialize handshake — respond immediately, no auth needed
     if (method === 'initialize') {
+      const host = req.headers.host || 'mr-capsules.vercel.app';
+      const issuer = `https://${host}`;
       return res.status(200).json({
         jsonrpc: '2.0',
         id: mcpRequestId,

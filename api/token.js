@@ -39,7 +39,7 @@ function verifyPkce(codeVerifier, codeChallenge, method = 'S256') {
 
 export default async function handler(req, res) {
   const SUPABASE_URL = 'https://hdhvrlkizorscvehttzd.supabase.co';
-  const SB_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  const SB_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhkaHZybGtpem9yc2N2ZWh0dHpkIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NzI2MzA3MiwiZXhwIjoyMDkyODM5MDcyfQ.1fW24fXFAZx98dtLelrWmw8ROvkRcap8ObsMkWpy-6E";
 
   // RFC 6749 Section 5.1: MUST include Cache-Control: no-store and Pragma: no-cache
   res.setHeader('Access-Control-Allow-Origin', '*');
