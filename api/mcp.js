@@ -710,7 +710,7 @@ async function routeMethod(method, params, auth, roles, cfg) {
     if (!roles.hasDivision && !roles.isAdmin) throw err403('Division membership required to upload');
     if (!params.agentFilePath || !params.targetPath) throw err400('Missing params.agentFilePath or params.targetPath');
     validatePath(params.targetPath);
-    return contentUploadFromAgentPath(params, auth, cfg.reqHost);
+    return contentUploadFromAgentPath(params, auth, cfg.reqHost, gt, go, gr);
   }
   if (m === 'upload_init') {
     if (!roles.hasDivision && !roles.isAdmin) throw err403('Division membership required to upload');
@@ -1746,30 +1746,51 @@ async function contentUpload(params, adminEmail, githubToken, owner, repo, su, s
   throw new Error(`Failed to upload ${path} after ${maxRetries} attempts: ${lastErr?.message || 'Git conflict'}`);
 }
 
-async function contentUploadFromAgentPath(params, auth, reqHost) {
+async function contentUploadFromAgentPath(params, auth, reqHost, githubToken, owner, repo) {
   const { agentFilePath, targetPath } = params;
+
+  let existingSha = null;
+  if (githubToken && owner && repo) {
+    try {
+      const getRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${encodeURIComponent(targetPath)}`, {
+        headers: { 'Authorization': `Bearer ${githubToken}`, 'Accept': 'application/vnd.github+json', 'User-Agent': 'MR-CAPSULES-MCP' }
+      });
+      if (getRes.ok) {
+        const fileInfo = await getRes.json();
+        existingSha = fileInfo.sha;
+      }
+    } catch (e) {}
+  }
+
   const host = reqHost || 'mr-capsules.vercel.app';
   const protocol = host.includes('localhost') ? 'http' : 'https';
   const url = `${protocol}://${host}/api/upload`;
   const token = auth.token || '';
 
-  const curlCmd = `curl -X POST -H "Authorization: Bearer ${token}" -F "path=${targetPath}" -F "file=@${agentFilePath}" ${url}`;
+  const ghCurlCmd = `curl -X PUT -H "Authorization: Bearer ${githubToken}" -H "Accept: application/vnd.github+json" -H "User-Agent: MR-CAPSULES-AGENT" "https://api.github.com/repos/${owner}/${repo}/contents/${encodeURIComponent(targetPath)}" -d "{\\"message\\":\\"mcp: direct upload ${targetPath}\\",\\"content\\":\\"\$(base64 -w 0 '${agentFilePath}')\\"${existingSha ? `,\\"sha\\":\\"${existingSha}\\"` : ''}}"`;
+  const vercelCurlCmd = `curl -X POST -H "Authorization: Bearer ${token}" -F "path=${targetPath}" -F "file=@${agentFilePath}" ${url}`;
   const pyCmd = `python3 -c "import gzip, base64; print(base64.b64encode(gzip.compress(open('${agentFilePath}','rb').read())).decode())"`;
 
-  return `To upload this file reliably, choose one of the following methods depending on your sandbox environment:
+  return `To upload this file reliably, choose the best method for your sandbox container:
 
-METHOD A (If network egress is ALLOWED in your terminal):
-Run this curl command in your terminal/bash tool:
+METHOD 1 (Recommended if api.github.com is in your container's egress allowlist):
+Run this command in your terminal/bash tool to upload directly to GitHub API:
 \`\`\`bash
-${curlCmd}
+${ghCurlCmd}
 \`\`\`
 
-METHOD B (If network egress is BLOCKED in your terminal):
-1. Run this 1-line Python command locally to get the compressed, CRC32-verified Gzip string (reduces file size by ~80% and guarantees zero corruption):
+METHOD 2 (If Vercel endpoint is accessible in your terminal):
+Run this curl command in your terminal/bash tool:
+\`\`\`bash
+${vercelCurlCmd}
+\`\`\`
+
+METHOD 3 (If ALL network egress is BLOCKED in your terminal):
+1. Run this 1-line Python command locally to get the compressed, CRC32-verified Gzip string (80% smaller, zero corruption):
 \`\`\`bash
 ${pyCmd}
 \`\`\`
-2. Call the tool \`content_upload\` with:
+2. Call the tool \`content_upload\` via MCP with:
    - path: "${targetPath}"
    - contentGzipBase64: "<paste the output string from python command>"`;
 }
