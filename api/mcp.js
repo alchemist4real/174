@@ -47,6 +47,11 @@ export default async function handler(req, res) {
   const SUPERADMIN_EMAIL = process.env.SUPERADMIN_EMAIL || 'muqorroben@gmail.com';
   const MAX_KEYS_PER_USER = 5;
 
+  const initUrlObj = new URL(req.url, `https://${req.headers.host || 'mr-capsules.vercel.app'}`);
+  if (initUrlObj.searchParams.get('upload') === 'true') {
+    return handleDirectUpload(req, res, SUPABASE_URL, SB_SERVICE_KEY, GITHUB_TOKEN, GH_OWNER, GH_REPO, SUPERADMIN_EMAIL);
+  }
+
   if (!SB_SERVICE_KEY) {
     return res.status(500).json({ success: false, error: 'Server config error' });
   }
@@ -2529,4 +2534,152 @@ async function handleMcpStreamableGet(req, res, su, sk) {
   }, 20000);
 
   req.on('close', () => clearInterval(heartbeat));
+}
+
+function parseMultipart(bodyBuffer, boundary) {
+  const boundaryBuffer = Buffer.from(`--${boundary}`);
+  const parts = [];
+  let start = 0;
+
+  while (true) {
+    const index = bodyBuffer.indexOf(boundaryBuffer, start);
+    if (index === -1) break;
+    
+    const nextIndex = bodyBuffer.indexOf(boundaryBuffer, index + boundaryBuffer.length);
+    if (nextIndex === -1) break;
+
+    const partBuffer = bodyBuffer.slice(index + boundaryBuffer.length, nextIndex);
+    parts.push(partBuffer);
+    start = nextIndex;
+  }
+
+  const result = {};
+  for (const part of parts) {
+    const doubleCrlf = Buffer.from('\r\n\r\n');
+    const headerEnd = part.indexOf(doubleCrlf);
+    if (headerEnd === -1) continue;
+
+    const headerStr = part.slice(0, headerEnd).toString('utf-8');
+    const bodyVal = part.slice(headerEnd + 4, part.length - 2); // remove trailing \r\n
+
+    const nameMatch = headerStr.match(/name="([^"]+)"/);
+    if (!nameMatch) continue;
+    const name = nameMatch[1];
+
+    const filenameMatch = headerStr.match(/filename="([^"]+)"/);
+    if (filenameMatch) {
+      result[name] = {
+        filename: filenameMatch[1],
+        content: bodyVal
+      };
+    } else {
+      result[name] = bodyVal.toString('utf-8').trim();
+    }
+  }
+  return result;
+}
+
+async function handleDirectUpload(req, res, supabaseUrl, sbKey, githubToken, owner, repo, superAdminEmail) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'Method not allowed' });
+  }
+
+  const authHeader = (req.headers.authorization || '').trim();
+  if (!authHeader.startsWith('Bearer ')) {
+    return res.status(401).json({ error: 'Unauthorized. Bearer token required.' });
+  }
+  const token = authHeader.slice(7).trim();
+  const currentReqHost = req.headers['x-forwarded-host'] || req.headers.host || 'mr-capsules.vercel.app';
+
+  let authResult = null;
+  if (token.startsWith('mrc_at_')) {
+    authResult = await authenticateOAuthAccessToken(token, supabaseUrl, sbKey, currentReqHost);
+  } else if (token.startsWith('mrc_')) {
+    authResult = await authenticateApiKey(token, supabaseUrl, sbKey);
+  } else {
+    authResult = await authenticateJWT(token, supabaseUrl, sbKey);
+  }
+
+  if (authResult.error) {
+    return res.status(401).json({ error: authResult.error });
+  }
+
+  const roles = await resolveRoles(authResult.userId, authResult.email, supabaseUrl, sbKey, superAdminEmail);
+  if (!roles.hasDivision && !roles.isAdmin) {
+    return res.status(403).json({ error: 'Forbidden. Division membership required to upload.' });
+  }
+
+  // Parse Multipart Body
+  let parsedFields = {};
+  try {
+    const contentType = req.headers['content-type'] || '';
+    const match = contentType.match(/boundary=([^;]+)/);
+    if (!match) {
+      return res.status(400).json({ error: 'Invalid content type. Multipart boundary required.' });
+    }
+    const boundary = match[1];
+
+    const rawBody = await new Promise((resolve, reject) => {
+      const chunks = [];
+      req.on('data', chunk => chunks.push(chunk));
+      req.on('end', () => resolve(Buffer.concat(chunks)));
+      req.on('error', err => reject(err));
+    });
+
+    parsedFields = parseMultipart(rawBody, boundary);
+  } catch (err) {
+    return res.status(400).json({ error: 'Failed to parse multipart payload: ' + err.message });
+  }
+
+  const { path, file } = parsedFields;
+  if (!path) return res.status(400).json({ error: 'Missing path field' });
+  if (!file || !file.content) return res.status(400).json({ error: 'Missing file field' });
+
+  // Validate Path traversal
+  if (path.includes('..') || path.startsWith('/')) {
+    return res.status(400).json({ error: 'Invalid path traversal' });
+  }
+
+  const contentBase64 = file.content.toString('base64');
+  const sizeBytes = file.content.length;
+
+  // Commit to GitHub
+  try {
+    let existingSha = null;
+    try {
+      const getRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${encodeURIComponent(path)}`, {
+        headers: { 'Authorization': `Bearer ${githubToken}`, 'Accept': 'application/vnd.github+json', 'User-Agent': 'MR-CAPSULES-UPLOADER' }
+      });
+      if (getRes.ok) {
+        const fileInfo = await getRes.json();
+        existingSha = fileInfo.sha;
+      }
+    } catch (e) {}
+
+    const putBody = {
+      message: `mcp: upload ${path} (API)`,
+      content: contentBase64
+    };
+    if (existingSha) putBody.sha = existingSha;
+
+    const putRes = await ghApi('PUT', `/contents/${encodeURIComponent(path)}`, putBody, githubToken, owner, repo);
+    if (!putRes.ok) {
+      const errData = await putRes.json();
+      throw new Error(errData.message || 'GitHub API error');
+    }
+
+    const putData = await putRes.json();
+    const sha = putData.content?.sha || putData.commit?.sha || '';
+
+    await logAction(authResult.email, 'mcp_upload_api', { path, sizeBytes }, supabaseUrl, sbKey);
+
+    return res.status(200).json({
+      success: true,
+      path,
+      sha,
+      sizeBytes
+    });
+  } catch (err) {
+    return res.status(500).json({ error: 'Failed to commit to GitHub: ' + err.message });
+  }
 }

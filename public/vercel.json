@@ -4,6 +4,7 @@
     { "src": "/api/mcp/token", "dest": "/api/token" },
     { "src": "/api/mcp/authorize", "dest": "/api/authorize" },
     { "src": "/api/mcp/register", "dest": "/api/register" },
+    { "src": "/api/upload", "dest": "/api/mcp?upload=true" },
     { "src": "/api/mcp", "dest": "/api/mcp" },
     { "src": "/.well-known/oauth-authorization-server", "dest": "/api/authorize" },
     { "src": "/.well-known/openid-configuration", "dest": "/api/authorize" },
