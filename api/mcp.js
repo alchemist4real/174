@@ -324,7 +324,7 @@ function getMcpToolsList() {
     { name: 'content_list', description: 'List all educational content organized by semester, block, and category', inputSchema: { type: 'object', properties: {} } },
     { name: 'content_get', description: 'Download a specific content file by path (returns full HTML)', inputSchema: { type: 'object', properties: { path: { type: 'string', description: 'File path, e.g. content/semester 1/1.2/1.2-2_Overall CBT.html' } }, required: ['path'] } },
     { name: 'content_tree', description: 'Get the full file tree of content/ and cover/ directories', inputSchema: { type: 'object', properties: {} } },
-    { name: 'content_upload', description: 'Upload a content file directly (Base64 encoded, max ~3.5MB per request). For larger files (videos, PDFs, zip pools), use chunked upload tools (upload_init -> upload_chunk -> upload_commit).', inputSchema: { type: 'object', properties: { path: { type: 'string' }, contentBase64: { type: 'string' } }, required: ['path', 'contentBase64'] } },
+    { name: 'content_upload', description: 'Upload a content file directly. You can either pass contentBase64 (for files < 3.5MB) OR a public url (for files of any size up to 100MB, e.g. PDFs, videos, zip pools) to fetch and commit the file reliably without chunking.', inputSchema: { type: 'object', properties: { path: { type: 'string', description: 'Target path, e.g. content/Semester 1/file.html' }, contentBase64: { type: 'string', description: 'Base64 encoded file content (optional if url is provided)' }, url: { type: 'string', description: 'Public URL to fetch the file from (optional if contentBase64 is provided)' } }, required: ['path'] } },
     { name: 'upload_init', description: 'Initialize a bulletproof chunked upload session for large files of any size (videos, PDFs, zip pools, large HTML). Prevents serverless size limits & timeouts.', inputSchema: { type: 'object', properties: { path: { type: 'string', description: 'Target path, e.g. content/Semester 1/video.mp4 or cover/semester1.png' }, totalChunks: { type: 'number', description: 'Total number of chunks to be uploaded' }, totalSizeBytes: { type: 'number', description: 'Optional estimated file size in bytes' } }, required: ['path', 'totalChunks'] } },
     { name: 'upload_chunk', description: 'Upload a single Base64 chunk (recommended size: 500KB - 1.5MB per chunk) for an active upload session.', inputSchema: { type: 'object', properties: { uploadId: { type: 'string', description: 'Session ID returned by upload_init' }, chunkIndex: { type: 'number', description: '1-indexed chunk number (1 to totalChunks)' }, chunkBase64: { type: 'string', description: 'Base64 encoded chunk data' } }, required: ['uploadId', 'chunkIndex', 'chunkBase64'] } },
     { name: 'upload_commit', description: 'Reassemble all uploaded chunks, verify integrity, and commit the complete large file to GitHub reliably.', inputSchema: { type: 'object', properties: { uploadId: { type: 'string', description: 'Session ID returned by upload_init' } }, required: ['uploadId'] } },
@@ -690,7 +690,7 @@ async function routeMethod(method, params, auth, roles, cfg) {
   if (m === 'content_tree') return contentTree(gt, go, gr);
   if (m === 'content_upload') {
     if (!roles.hasDivision && !roles.isAdmin) throw err403('Division membership required to upload');
-    if (!params.path || !params.contentBase64) throw err400('Missing params.path or params.contentBase64');
+    if (!params.path || (!params.contentBase64 && !params.url)) throw err400('Missing params.path, params.contentBase64, or params.url');
     validatePath(params.path);
     return contentUpload(params, auth.email, gt, go, gr, su, sk);
   }
@@ -1620,13 +1620,26 @@ async function restoreUploadSessionFromSb(uploadId, su, sk) {
 // ROBUST DIRECT FILE UPLOAD (Contents API + Git Data API Conflict Retries)
 // ═══════════════════════════════════════════════════════════════
 async function contentUpload(params, adminEmail, githubToken, owner, repo, su, sk) {
-  const { path, contentBase64, isChunkedCommit } = params;
-  if (!contentBase64) throw err400('Missing contentBase64');
+  const { path, isChunkedCommit } = params;
+  let contentBase64 = params.contentBase64;
+
+  if (params.url) {
+    try {
+      const fetchRes = await fetch(params.url);
+      if (!fetchRes.ok) throw new Error(`Failed to fetch file from URL: ${fetchRes.statusText}`);
+      const arrayBuffer = await fetchRes.arrayBuffer();
+      contentBase64 = Buffer.from(arrayBuffer).toString('base64');
+    } catch (fetchErr) {
+      throw err400(`Failed to fetch file from url "${params.url}": ${fetchErr.message}`);
+    }
+  }
+
+  if (!contentBase64) throw err400('Missing contentBase64 or url');
 
   const base64Len = contentBase64.length;
-  // If called directly (not via chunked commit), enforce single-request serverless payload limit
-  if (!isChunkedCommit && base64Len > 3.5 * 1024 * 1024) {
-    throw err400(`Single-request payload too large (${(base64Len / (1024 * 1024)).toFixed(2)}MB). Maximum payload for direct content_upload is 3.5MB to fit within serverless gateway limits. Please use chunked upload tools (upload_init -> upload_chunk -> upload_commit) to upload large files of any size reliably.`);
+  // If called directly (not via chunked commit) and not using url, enforce single-request serverless payload limit
+  if (!isChunkedCommit && !params.url && base64Len > 3.5 * 1024 * 1024) {
+    throw err400(`Single-request payload too large (${(base64Len / (1024 * 1024)).toFixed(2)}MB). Maximum payload for direct contentBase64 upload is 3.5MB. For larger files, please pass a public 'url' instead to fetch and commit directly without chunking, or use chunked upload tools.`);
   }
 
   // ATTEMPT 1: GitHub Contents API (Atomic single-call for files < 100MB)
