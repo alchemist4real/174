@@ -2500,45 +2500,19 @@ async function logAction(adminEmail, action, details, su, sk) {
 // ═══════════════════════════════════════════════════════════════
 
 async function handleMcpStreamableGet(req, res, su, sk) {
-  const authHeader = (req.headers.authorization || '').trim();
   const host = req.headers['x-forwarded-host'] || req.headers.host || 'mr-capsules.vercel.app';
-  const url = new URL(req.url, `https://${host}`);
-  const keyFromQuery = (url.searchParams.get('key') || '').trim();
-
-  let rawKey = keyFromQuery;
-  if (!rawKey && authHeader.startsWith('Bearer ')) {
-    rawKey = authHeader.slice(7).trim();
-  } else if (!rawKey && authHeader.startsWith('ApiKey ')) {
-    rawKey = authHeader.slice(7).trim();
-  } else if (!rawKey && authHeader.startsWith('mrc_')) {
-    rawKey = authHeader;
-  }
-
-  // Validate token if provided
-  if (rawKey) {
-    let authResult = null;
-    if (rawKey.startsWith('mrc_at_')) {
-      authResult = await authenticateOAuthAccessToken(rawKey, su, sk, host);
-    } else if (rawKey.startsWith('mrc_')) {
-      authResult = await authenticateApiKey(rawKey, su, sk);
-    } else {
-      authResult = await authenticateJWT(rawKey, su, sk);
-    }
-
-    if (!authResult || authResult.error) {
-      return res.status(401).json({ error: authResult?.error || 'Invalid authentication token' });
-    }
-  }
+  const sessionId = `mrc-${Date.now()}`;
 
   // Return SSE stream per Streamable HTTP / SSE spec
+  // Claude.ai web uses this GET stream to establish connection reachability
   res.setHeader('Content-Type', 'text/event-stream');
   res.setHeader('Cache-Control', 'no-cache, no-transform');
   res.setHeader('Connection', 'keep-alive');
   res.setHeader('X-Accel-Buffering', 'no');
-  res.setHeader('Mcp-Session-Id', `mrc-${Date.now()}`);
+  res.setHeader('Mcp-Session-Id', sessionId);
 
-  // Send the server's endpoint event (Streamable HTTP pattern: data MUST be URI string)
-  res.write(`event: endpoint\ndata: https://${host}/api/mcp\n\n`);
+  // Send the server's endpoint event (relative URI /api/mcp per MCP SSE spec)
+  res.write(`event: endpoint\ndata: /api/mcp\n\n`);
 
   // Heartbeat to keep Vercel connection alive
   const heartbeat = setInterval(() => {
