@@ -119,10 +119,10 @@ export default async function handler(req, res) {
             resources: { listChanged: false }
           },
           serverInfo: {
-            name: 'mr-capsules-mcp-server',
+            name: '💊 Mr. Capsules MCP Server',
             version: '2.0.0',
-            title: 'Mr. Capsules',
-            description: 'Mr. Capsules Medical Education Platform MCP Server',
+            title: '💊 Mr. Capsules',
+            description: '💊 Mr. Capsules Medical Education Platform MCP Server',
             icon_url: `${issuer}/logo.png`,
             logo_uri: `${issuer}/logo.png`,
             icons: [
