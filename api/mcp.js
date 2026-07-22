@@ -125,17 +125,16 @@ export default async function handler(req, res) {
 
     // MCP initialize handshake — respond immediately, no auth needed
     if (method === 'initialize') {
-      const negotiatedVersion = (params && params.protocolVersion) ? params.protocolVersion : '2025-06-18';
       return res.status(200).json({
         jsonrpc: '2.0',
         id: mcpRequestId,
         result: {
-          protocolVersion: negotiatedVersion,
+          protocolVersion: '2025-06-18',
           capabilities: {
             tools: { listChanged: false },
             resources: { listChanged: false }
           },
-          instructions: 'Mr. Capsules MCP server provides access to medical education content, tasks board, organization divisions, and management tools.'
+          serverInfo: { name: 'mr-capsules-v2', version: '1.0.1' }
         }
       });
     }
