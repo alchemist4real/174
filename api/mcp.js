@@ -352,6 +352,7 @@ function getMcpToolsList() {
     { name: 'divisions_my', description: 'Get your division membership', inputSchema: { type: 'object', properties: {} } },
     { name: 'users_list', description: 'List all registered users (SuperAdmin only)', inputSchema: { type: 'object', properties: {} } },
     { name: 'users_ban', description: 'Ban or unban a user (SuperAdmin only)', inputSchema: { type: 'object', properties: { user_id: { type: 'string' }, banned: { type: 'boolean' } }, required: ['user_id', 'banned'] } },
+    { name: 'users_reset_password', description: 'Reset a user password by user_id or email (Admin / SuperAdmin only)', inputSchema: { type: 'object', properties: { user_id: { type: 'string' }, email: { type: 'string' }, new_password: { type: 'string' } }, required: ['new_password'] } },
     { name: 'config_get', description: 'Get app configuration settings (Admin only)', inputSchema: { type: 'object', properties: {} } },
     { name: 'config_update', description: 'Update app settings (Admin only)', inputSchema: { type: 'object', properties: { allowSignup: { type: 'boolean' }, maintenanceMode: { type: 'boolean' } } } },
     { name: 'contributions_leaderboard', description: 'Get the contribution points leaderboard', inputSchema: { type: 'object', properties: {} } },
@@ -860,6 +861,11 @@ async function routeMethod(method, params, auth, roles, cfg) {
     if (!roles.isSuperAdmin) throw err403('SuperAdmin only');
     if (!params.user_id || params.banned === undefined) throw err400('Missing params.user_id or params.banned');
     return usersBan(params.user_id, params.banned, auth.email, su, sk);
+  }
+  if (m === 'users_reset_password') {
+    if (!roles.isAdmin && !roles.isSuperAdmin) throw err403('Admin only');
+    if (!params.new_password) throw err400('Missing params.new_password');
+    return usersResetPassword(params.user_id, params.email, params.new_password, auth.email, su, sk);
   }
   if (m === 'users_delete') {
     if (!roles.isSuperAdmin) throw err403('SuperAdmin only');
@@ -2033,6 +2039,33 @@ async function usersDelete(userId, su, sk) {
   });
   if (!res.ok) throw new Error(await res.text());
   return { success: true, deleted_user_id: userId };
+}
+
+async function usersResetPassword(userId, email, newPassword, adminEmail, su, sk) {
+  let targetId = userId;
+  if (!targetId && email) {
+    const res = await fetch(`${su}/auth/v1/admin/users?page=1&per_page=1000`, {
+      headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}` }
+    });
+    if (!res.ok) throw new Error(await res.text());
+    const data = await res.json();
+    const found = (data.users || []).find(u => u.email === email || (u.user_metadata && u.user_metadata.email === email));
+    if (!found) throw new Error(`User with email "${email}" not found`);
+    targetId = found.id;
+  }
+  if (!targetId) throw new Error('Missing user_id or email');
+  if (!newPassword || newPassword.length < 6) throw new Error('Password must be at least 6 characters long');
+
+  const res = await fetch(`${su}/auth/v1/admin/users/${targetId}`, {
+    method: 'PUT',
+    headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ password: newPassword })
+  });
+
+  if (!res.ok) throw new Error(await res.text());
+  const userData = await res.json();
+  await logAction(adminEmail, 'mcp_reset_user_password', { target: userData.email || email, targetId }, su, sk);
+  return { success: true, message: `Password for ${userData.email || email} reset successfully` };
 }
 
 // ═══════════════════════════════════════════════════════════════
