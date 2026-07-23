@@ -453,7 +453,7 @@ export default async function handler(req, res) {
       if (!sbKey) return res.status(500).json({ error: 'SUPABASE_SERVICE_ROLE_KEY not configured' });
 
       // Permission check: regular user can delete their own, Admin can delete non-admins, SuperAdmin can delete anyone
-      const isSelf = user.id === userId;
+      const isSelf = userData && userData.id === userId;
       if (!isSelf && !isAdmin && !isSuperAdmin) {
         return res.status(403).json({ error: 'Permission denied' });
       }
@@ -467,8 +467,8 @@ export default async function handler(req, res) {
         headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
       });
       if (getSbRes.ok) {
-        const userData = await getSbRes.json();
-        const userMeta = userData.user_metadata || {};
+        const targetUserData = await getSbRes.json();
+        const userMeta = targetUserData.user_metadata || {};
         let devices = Array.isArray(userMeta.devices) ? userMeta.devices : [];
         devices = devices.filter(d => d.id !== deviceId);
 
