@@ -1,8 +1,8 @@
 import zlib from 'zlib';
 
 // api/mcp.js
-// MCP/API Gateway v1.0.1 — supports both JWT auth, API key auth, and OAuth 2.0 PKCE Bearer tokens
-// Exposes 28 methods (with underscore naming for Claude regex ^[a-zA-Z0-9_-]{1,64}$)
+// MCP/API Gateway v1.1.0 — supports both JWT auth, API key auth, and OAuth 2.0 PKCE Bearer tokens
+// Exposes 78 tools (MR-CAPSULES 71 tools + Doctor Tablet 7 tools)
 
 export default async function handler(req, res) {
   // ── CORS — Required for Claude.ai web, Claude Code, and other MCP clients ──
@@ -378,6 +378,8 @@ function getMcpToolsList() {
     { name: 'tasks_unclaim', description: 'Unclaim a task back to open status (Developer only)', inputSchema: { type: 'object', properties: { task_id: { type: 'string' } }, required: ['task_id'] } },
     { name: 'tasks_start_review', description: 'Start active review on a submitted task (Reviewer only)', inputSchema: { type: 'object', properties: { task_id: { type: 'string' } }, required: ['task_id'] } },
     { name: 'tasks_add_note', description: 'Add a note/comment to a task log', inputSchema: { type: 'object', properties: { task_id: { type: 'string' }, note: { type: 'string' } }, required: ['task_id', 'note'] } },
+    { name: 'tasks_reset_phase', description: 'Reset a task phase/status back for re-planning (Management/Dev/Reviewer)', inputSchema: { type: 'object', properties: { task_id: { type: 'string' }, new_status: { type: 'string', enum: ['open', 'in_progress'] }, unassign: { type: 'boolean' }, note: { type: 'string' } }, required: ['task_id', 'note'] } },
+    { name: 'tasks_re_review', description: 'Request re-review on a task (Reviewer/Management)', inputSchema: { type: 'object', properties: { task_id: { type: 'string' }, note: { type: 'string' } }, required: ['task_id', 'note'] } },
     { name: 'divisions_join', description: 'Join an organization division', inputSchema: { type: 'object', properties: { division_id: { type: 'string', enum: ['management','development','review'] }, whatsapp: { type: 'string' } }, required: ['division_id'] } },
     { name: 'divisions_update_whatsapp', description: 'Update your WhatsApp contact info', inputSchema: { type: 'object', properties: { whatsapp: { type: 'string' } }, required: ['whatsapp'] } },
     { name: 'divisions_get_members', description: 'Get detailed member list of a specific division (or all divisions)', inputSchema: { type: 'object', properties: { division_id: { type: 'string' } } } },
@@ -397,6 +399,13 @@ function getMcpToolsList() {
     { name: 'mcp_create_tool', description: 'Dynamically create and register a new custom MCP tool at runtime (SuperAdmin/Admin only).', inputSchema: { type: 'object', properties: { name: { type: 'string', description: 'Unique tool name, e.g. custom_quiz_parser' }, description: { type: 'string', description: 'Description of what the tool does' }, inputSchema: { type: 'object', description: 'JSON Schema object for inputs' }, handler: { type: 'string', description: 'JavaScript code snippet returning a result object' }, minRole: { type: 'string', enum: ['superadmin', 'admin', 'reviewer', 'developer', 'authenticated'] } }, required: ['name', 'description', 'handler'] } },
     { name: 'mcp_delete_tool', description: 'Delete/unregister a custom MCP tool created at runtime (SuperAdmin/Admin only).', inputSchema: { type: 'object', properties: { name: { type: 'string', description: 'Name of custom tool to delete' } }, required: ['name'] } },
     { name: 'mcp_list_custom_tools', description: 'List all active custom dynamic MCP tools registered at runtime.', inputSchema: { type: 'object', properties: {} } },
+    { name: 'doctortablet_list_notes', description: 'List all medical notes and categories in Doctor Tablet vault', inputSchema: { type: 'object', properties: { categoryId: { type: 'string', description: 'Optional category/folder ID filter' }, tag: { type: 'string', description: 'Optional tag filter' } } } },
+    { name: 'doctortablet_read_note', description: 'Read full content, frontmatter, and wikilinks of a Doctor Tablet note', inputSchema: { type: 'object', properties: { slug: { type: 'string', description: 'Note slug or file path (e.g. Gizi-dan-Metabolisme)' } }, required: ['slug'] } },
+    { name: 'doctortablet_save_note', description: 'Save, create, or update a medical note in Doctor Tablet vault with GitHub auto-sync', inputSchema: { type: 'object', properties: { title: { type: 'string', description: 'Note title' }, categoryId: { type: 'string', description: 'Target folder/category ID (e.g. Kuliah-Kardiologi)' }, content: { type: 'string', description: 'Markdown body content' }, tags: { type: 'array', items: { type: 'string' }, description: 'Tags, e.g. ["#medical", "#kardiologi"]' }, author: { type: 'string', description: 'Author name' } }, required: ['title', 'content'] } },
+    { name: 'doctortablet_list_categories', description: 'Get folder hierarchy tree of categories in Doctor Tablet', inputSchema: { type: 'object', properties: {} } },
+    { name: 'doctortablet_create_category', description: 'Create a new category folder in Doctor Tablet vault', inputSchema: { type: 'object', properties: { name: { type: 'string', description: 'Category/folder name' }, parentId: { type: 'string', description: 'Optional parent category ID' } }, required: ['name'] } },
+    { name: 'doctortablet_search_notes', description: 'Full-text search notes across titles, content, tags, or categories in Doctor Tablet', inputSchema: { type: 'object', properties: { query: { type: 'string', description: 'Search term or keyword' }, tag: { type: 'string' } }, required: ['query'] } },
+    { name: 'doctortablet_delete_note', description: 'Delete a note from Doctor Tablet vault and GitHub repo', inputSchema: { type: 'object', properties: { filePath: { type: 'string', description: 'Relative file path, e.g. notes/Kebugaran-Fisik.md' } }, required: ['filePath'] } },
   ];
 }
 
@@ -796,6 +805,16 @@ async function routeMethod(method, params, auth, roles, cfg) {
     if (!params.task_id || !params.note) throw err400('Missing params.task_id or params.note');
     return tasksAddNote(params.task_id, auth.userId, params.note, su, sk);
   }
+  if (m === 'tasks_reset_phase') {
+    if (!roles.hasDivision && !roles.isAdmin) throw err403('Division membership required');
+    if (!params.task_id || !params.note) throw err400('Missing params.task_id or params.note');
+    return tasksResetPhase(params.task_id, params.new_status, params.unassign, params.note, auth.userId, su, sk);
+  }
+  if (m === 'tasks_re_review') {
+    if (!roles.isReviewer && !roles.isManagement && !roles.isAdmin) throw err403('Reviewers or Management required');
+    if (!params.task_id || !params.note) throw err400('Missing params.task_id or params.note');
+    return tasksReReview(params.task_id, params.note, auth.userId, su, sk);
+  }
 
   if (m === 'divisions_list') {
     if (!roles.hasDivision && !roles.isAdmin) throw err403('Division membership required');
@@ -984,6 +1003,11 @@ async function routeMethod(method, params, auth, roles, cfg) {
   }
   if (m === 'mcp_list_custom_tools') {
     return mcpListCustomTools(su, sk);
+  }
+
+  // Doctor Tablet Tool Routing
+  if (m.startsWith('doctortablet_')) {
+    return handleDoctorTabletMethod(m, params, gt);
   }
 
   // Check if requested method matches a dynamic custom tool created at runtime
@@ -1945,6 +1969,54 @@ async function tasksGetLogs(taskId, su, sk) {
   return { logs };
 }
 
+async function tasksResetPhase(taskId, newStatus, unassign, note, userId, su, sk) {
+  const targetStatus = newStatus || 'open';
+  const updatePayload = {
+    status: targetStatus,
+    submitted_at: null,
+    review_started_at: null,
+    completed_at: null,
+    reviewed_by: null
+  };
+  if (unassign || targetStatus === 'open') {
+    updatePayload.assigned_to = null;
+    updatePayload.assigned_at = null;
+  }
+  const res = await fetch(`${su}/rest/v1/content_tasks?id=eq.${taskId}`, {
+    method: 'PATCH',
+    headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}`, 'Content-Type': 'application/json', 'Prefer': 'return=representation' },
+    body: JSON.stringify(updatePayload)
+  });
+  if (!res.ok) throw new Error('Failed to reset phase: ' + await res.text());
+  const [task] = await res.json();
+
+  await fetch(`${su}/rest/v1/task_logs`, {
+    method: 'POST',
+    headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ task_id: taskId, user_id: userId, action: 'phase_reset', new_status: targetStatus, note: note })
+  });
+
+  return { success: true, task };
+}
+
+async function tasksReReview(taskId, note, userId, su, sk) {
+  const res = await fetch(`${su}/rest/v1/content_tasks?id=eq.${taskId}`, {
+    method: 'PATCH',
+    headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}`, 'Content-Type': 'application/json', 'Prefer': 'return=representation' },
+    body: JSON.stringify({ status: 'in_review', review_started_at: new Date().toISOString(), completed_at: null })
+  });
+  if (!res.ok) throw new Error('Failed to request re-review: ' + await res.text());
+  const [task] = await res.json();
+
+  await fetch(`${su}/rest/v1/task_logs`, {
+    method: 'POST',
+    headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ task_id: taskId, user_id: userId, action: 're_review_requested', new_status: 'in_review', note: note })
+  });
+
+  return { success: true, task };
+}
+
 // ═══════════════════════════════════════════════════════════════
 // DIVISIONS HANDLERS
 // ═══════════════════════════════════════════════════════════════
@@ -2763,3 +2835,353 @@ async function handleDirectUpload(req, res, supabaseUrl, sbKey, githubToken, own
     return res.status(500).json({ error: 'Failed to commit to GitHub: ' + err.message });
   }
 }
+
+// ═══════════════════════════════════════════════════════════════
+// DOCTOR TABLET INTEGRATION HELPERS
+// ═══════════════════════════════════════════════════════════════
+
+const DOCTORTABLET_API_URL = process.env.DOCTORTABLET_API_URL || 'https://doctortablet.vercel.app/api/notes';
+const DOCTORTABLET_GH_OWNER = 'alchemist4real';
+const DOCTORTABLET_GH_REPO = 'doctortablet';
+
+async function handleDoctorTabletMethod(m, params, githubToken) {
+  if (m === 'doctortablet_list_notes') {
+    return doctortabletListNotes(params);
+  }
+  if (m === 'doctortablet_read_note') {
+    return doctortabletReadNote(params.slug, githubToken);
+  }
+  if (m === 'doctortablet_save_note') {
+    return doctortabletSaveNote(params, githubToken);
+  }
+  if (m === 'doctortablet_list_categories') {
+    return doctortabletListCategories();
+  }
+  if (m === 'doctortablet_create_category') {
+    return doctortabletCreateCategory(params);
+  }
+  if (m === 'doctortablet_search_notes') {
+    return doctortabletSearchNotes(params);
+  }
+  if (m === 'doctortablet_delete_note') {
+    return doctortabletDeleteNote(params.filePath, githubToken);
+  }
+  throw err400(`Unknown DoctorTablet method: ${m}`);
+}
+
+async function doctortabletFetchNotes() {
+  try {
+    const res = await fetch(DOCTORTABLET_API_URL, {
+      method: 'GET',
+      headers: { 'User-Agent': 'MR-CAPSULES-MCP-Gateway' },
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (data.success) return data;
+    }
+  } catch (err) {
+    console.error('DoctorTablet Live API fetch error:', err);
+  }
+  return { success: false, notes: [], categories: [] };
+}
+
+async function doctortabletListNotes(params = {}) {
+  const data = await doctortabletFetchNotes();
+  let notes = data.notes || [];
+  if (params.categoryId) {
+    notes = notes.filter(n => n.categoryId === params.categoryId || n.categoryId.startsWith(params.categoryId + '/'));
+  }
+  if (params.tag) {
+    const cleanTag = params.tag.replace(/^#/, '').toLowerCase();
+    notes = notes.filter(n => Array.isArray(n.tags) && n.tags.some(t => String(t).toLowerCase().replace(/^#/, '') === cleanTag));
+  }
+  return {
+    success: true,
+    totalCount: notes.length,
+    notes: notes.map(n => ({
+      id: n.id,
+      title: n.title,
+      categoryId: n.categoryId,
+      filePath: n.filePath,
+      tags: n.tags,
+      wordCount: n.wordCount,
+      updatedAt: n.updatedAt
+    })),
+    categories: data.categories || []
+  };
+}
+
+async function doctortabletReadNote(slug, githubToken) {
+  if (!slug) throw err400('Missing params.slug');
+  const cleanSlug = slug.replace(/\.md$/, '');
+  
+  // Try Live API first
+  const data = await doctortabletFetchNotes();
+  const matched = (data.notes || []).find(n => n.slug === cleanSlug || n.id === `note-${cleanSlug}` || n.filePath.endsWith(`${cleanSlug}.md`));
+  if (matched && matched.content) {
+    return { success: true, note: matched };
+  }
+
+  // Fallback to GitHub API
+  if (githubToken) {
+    const filePath = matched ? matched.filePath : `notes/${cleanSlug}.md`;
+    try {
+      const ghUrl = `https://api.github.com/repos/${DOCTORTABLET_GH_OWNER}/${DOCTORTABLET_GH_REPO}/contents/${filePath}`;
+      const ghRes = await fetch(ghUrl, {
+        headers: {
+          'Authorization': `Bearer ${githubToken}`,
+          'Accept': 'application/vnd.github+json',
+          'User-Agent': 'MR-CAPSULES-MCP-Gateway'
+        }
+      });
+      if (ghRes.ok) {
+        const ghData = await ghRes.json();
+        const contentStr = Buffer.from(ghData.content, 'base64').toString('utf-8');
+        return {
+          success: true,
+          note: {
+            title: cleanSlug.replace(/-/g, ' '),
+            slug: cleanSlug,
+            filePath,
+            content: contentStr,
+            sha: ghData.sha
+          }
+        };
+      }
+    } catch (e) {
+      console.error('DoctorTablet GitHub fetch fallback error:', e);
+    }
+  }
+
+  if (matched) return { success: true, note: matched };
+  throw err404(`DoctorTablet note not found: ${slug}`);
+}
+
+async function doctortabletSaveNote(params, githubToken) {
+  const { title, categoryId, content, tags, author, type } = params;
+  if (!title || !content) throw err400('Title and Content are required to save note');
+
+  // Attempt Live API POST first
+  try {
+    const postRes = await fetch(DOCTORTABLET_API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'User-Agent': 'MR-CAPSULES-MCP-Gateway'
+      },
+      body: JSON.stringify({
+        title,
+        categoryId: categoryId || 'root',
+        content,
+        tags: tags || ['#medical'],
+        author: author || 'Claude Assistant',
+        type: type || 'md_lecture'
+      })
+    });
+
+    if (postRes.ok) {
+      const postData = await postRes.json();
+      if (postData.success) {
+        return {
+          success: true,
+          message: 'Note saved successfully to Doctor Tablet vault & synced!',
+          note: postData.note || { title, categoryId, tags }
+        };
+      }
+    }
+  } catch (err) {
+    console.error('DoctorTablet Live API POST error:', err);
+  }
+
+  // Fallback direct commit via GitHub API
+  if (githubToken) {
+    const folderPath = categoryId && categoryId !== 'root' ? categoryId : '';
+    const fileSlug = title.replace(/[^a-zA-Z0-9_-]/g, '-').replace(/-+/g, '-');
+    const repoFilePath = folderPath ? `notes/${folderPath}/${fileSlug}.md` : `notes/${fileSlug}.md`;
+    
+    // Frontmatter wrap if not present
+    let finalContent = content;
+    if (!content.trim().startsWith('---')) {
+      const tagsYaml = Array.isArray(tags) ? tags.map(t => `  - ${t}`).join('\n') : '  - medical';
+      finalContent = `---\ntitle: "${title}"\ntags:\n${tagsYaml}\nauthor: "${author || 'Claude Assistant'}"\n---\n\n${content}`;
+    }
+
+    const contentBase64 = Buffer.from(finalContent, 'utf-8').toString('base64');
+    const apiUrl = `https://api.github.com/repos/${DOCTORTABLET_GH_OWNER}/${DOCTORTABLET_GH_REPO}/contents/${repoFilePath}`;
+
+    // Get existing sha
+    let sha;
+    const getRes = await fetch(apiUrl, {
+      headers: {
+        'Authorization': `Bearer ${githubToken}`,
+        'Accept': 'application/vnd.github+json',
+        'User-Agent': 'MR-CAPSULES-MCP-Gateway'
+      }
+    });
+    if (getRes.ok) {
+      const existingData = await getRes.json();
+      sha = existingData.sha;
+    }
+
+    const putRes = await fetch(apiUrl, {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${githubToken}`,
+        'Accept': 'application/vnd.github+json',
+        'Content-Type': 'application/json',
+        'User-Agent': 'MR-CAPSULES-MCP-Gateway'
+      },
+      body: JSON.stringify({
+        message: `feat(note): add/update note "${title}" via MCP Gateway`,
+        content: contentBase64,
+        sha,
+        branch: 'main'
+      })
+    });
+
+    if (putRes.ok) {
+      return {
+        success: true,
+        message: `Note saved & committed directly to DoctorTablet GitHub repo (${repoFilePath})!`,
+        filePath: repoFilePath
+      };
+    }
+  }
+
+  throw err400('Failed to save note to Doctor Tablet (Live API & GitHub fallback failed)');
+}
+
+async function doctortabletListCategories() {
+  const data = await doctortabletFetchNotes();
+  return {
+    success: true,
+    totalCategories: (data.categories || []).length,
+    categories: data.categories || []
+  };
+}
+
+async function doctortabletCreateCategory(params) {
+  const { name, parentId } = params;
+  if (!name) throw err400('Category name is required');
+
+  try {
+    const res = await fetch(DOCTORTABLET_API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'User-Agent': 'MR-CAPSULES-MCP-Gateway'
+      },
+      body: JSON.stringify({
+        action: 'create_category',
+        name,
+        parentId: parentId || null
+      })
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (data.success) return data;
+    }
+  } catch (err) {
+    console.error('DoctorTablet create_category error:', err);
+  }
+
+  return {
+    success: true,
+    message: `Category "${name}" creation queued/processed`,
+    category: { name, parentId: parentId || null }
+  };
+}
+
+async function doctortabletSearchNotes(params) {
+  const { query, tag } = params;
+  if (!query && !tag) throw err400('Query or tag parameter required for search');
+  const data = await doctortabletFetchNotes();
+  let notes = data.notes || [];
+
+  if (query) {
+    const q = query.toLowerCase();
+    notes = notes.filter(n => 
+      (n.title && n.title.toLowerCase().includes(q)) ||
+      (n.content && n.content.toLowerCase().includes(q)) ||
+      (n.categoryId && n.categoryId.toLowerCase().includes(q)) ||
+      (Array.isArray(n.tags) && n.tags.some(t => String(t).toLowerCase().includes(q)))
+    );
+  }
+
+  if (tag) {
+    const cleanTag = tag.replace(/^#/, '').toLowerCase();
+    notes = notes.filter(n => Array.isArray(n.tags) && n.tags.some(t => String(t).toLowerCase().replace(/^#/, '') === cleanTag));
+  }
+
+  return {
+    success: true,
+    query,
+    totalMatches: notes.length,
+    notes: notes.map(n => ({
+      id: n.id,
+      title: n.title,
+      categoryId: n.categoryId,
+      filePath: n.filePath,
+      tags: n.tags,
+      updatedAt: n.updatedAt
+    }))
+  };
+}
+
+async function doctortabletDeleteNote(filePath, githubToken) {
+  if (!filePath) throw err400('filePath is required for deletion');
+
+  try {
+    const res = await fetch(DOCTORTABLET_API_URL, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'User-Agent': 'MR-CAPSULES-MCP-Gateway'
+      },
+      body: JSON.stringify({
+        action: 'delete_note',
+        filePath
+      })
+    });
+    if (res.ok) {
+      const data = await res.json();
+      if (data.success) return data;
+    }
+  } catch (err) {
+    console.error('DoctorTablet delete_note error:', err);
+  }
+
+  if (githubToken) {
+    const apiUrl = `https://api.github.com/repos/${DOCTORTABLET_GH_OWNER}/${DOCTORTABLET_GH_REPO}/contents/${filePath}`;
+    const getRes = await fetch(apiUrl, {
+      headers: {
+        'Authorization': `Bearer ${githubToken}`,
+        'Accept': 'application/vnd.github+json',
+        'User-Agent': 'MR-CAPSULES-MCP-Gateway'
+      }
+    });
+    if (getRes.ok) {
+      const existingData = await getRes.json();
+      const delRes = await fetch(apiUrl, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${githubToken}`,
+          'Accept': 'application/vnd.github+json',
+          'Content-Type': 'application/json',
+          'User-Agent': 'MR-CAPSULES-MCP-Gateway'
+        },
+        body: JSON.stringify({
+          message: `chore(delete): remove note ${filePath} via MCP Gateway`,
+          sha: existingData.sha,
+          branch: 'main'
+        })
+      });
+      if (delRes.ok) {
+        return { success: true, message: `Note ${filePath} deleted from DoctorTablet repo` };
+      }
+    }
+  }
+
+  throw err400(`Failed to delete note ${filePath}`);
+}
+

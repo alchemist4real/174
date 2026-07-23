@@ -263,6 +263,70 @@ export default async function handler(req, res) {
       return res.status(200).json({ success: true });
     }
 
+    if (action === 'delete_task') {
+      if (!isManagement) return res.status(403).json({ error: 'Management or Admin only' });
+
+      // Cascade cleanups
+      await fetch(`${supabaseUrl}/rest/v1/task_logs?task_id=eq.${task_id}`, {
+        method: 'DELETE', headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
+      });
+      await fetch(`${supabaseUrl}/rest/v1/contributions?task_id=eq.${task_id}`, {
+        method: 'DELETE', headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
+      });
+      await fetch(`${supabaseUrl}/rest/v1/notifications?task_id=eq.${task_id}`, {
+        method: 'DELETE', headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
+      });
+
+      const delRes = await fetch(`${supabaseUrl}/rest/v1/content_tasks?id=eq.${task_id}`, {
+        method: 'DELETE', headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
+      });
+      if (!delRes.ok) throw new Error(await delRes.text());
+      return res.status(200).json({ success: true });
+    }
+
+    if (action === 'reset_phase') {
+      const { new_status, unassign } = req.body;
+      const targetStatus = new_status || 'open';
+      const updatePayload = {
+        status: targetStatus,
+        submitted_at: null,
+        review_started_at: null,
+        completed_at: null,
+        reviewed_by: null
+      };
+
+      if (unassign || targetStatus === 'open') {
+        updatePayload.assigned_to = null;
+        updatePayload.assigned_at = null;
+      }
+
+      const fetchRes = await fetch(`${supabaseUrl}/rest/v1/content_tasks?id=eq.${task_id}`, {
+        method: 'PATCH',
+        headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}`, 'Content-Type': 'application/json', 'Prefer': 'return=representation' },
+        body: JSON.stringify(updatePayload)
+      });
+      if (!fetchRes.ok) throw new Error(await fetchRes.text());
+      const data = await fetchRes.json();
+
+      await logAction(task_id, 'phase_reset', null, targetStatus, note || 'Phase reset / task re-planned');
+      return res.status(200).json({ success: true, task: data[0] });
+    }
+
+    if (action === 're_review_task') {
+      if (!isReviewer && !isManagement) return res.status(403).json({ error: 'Reviewers or Management only' });
+
+      const fetchRes = await fetch(`${supabaseUrl}/rest/v1/content_tasks?id=eq.${task_id}`, {
+        method: 'PATCH',
+        headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}`, 'Content-Type': 'application/json', 'Prefer': 'return=representation' },
+        body: JSON.stringify({ status: 'in_review', review_started_at: new Date().toISOString(), completed_at: null })
+      });
+      if (!fetchRes.ok) throw new Error(await fetchRes.text());
+      const data = await fetchRes.json();
+
+      await logAction(task_id, 're_review_requested', null, 'in_review', note || 'Re-review requested');
+      return res.status(200).json({ success: true, task: data[0] });
+    }
+
     if (action === 'get_task_logs') {
       const fetchRes = await fetch(`${supabaseUrl}/rest/v1/task_logs?task_id=eq.${task_id}&select=*&order=created_at.desc`, {
         headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}`, 'Cache-Control': 'no-cache' },
