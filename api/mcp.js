@@ -406,6 +406,7 @@ function getMcpToolsList() {
     { name: 'doctortablet_create_category', description: 'Create a new category folder in Doctor Tablet vault', inputSchema: { type: 'object', properties: { name: { type: 'string', description: 'Category/folder name' }, parentId: { type: 'string', description: 'Optional parent category ID' } }, required: ['name'] } },
     { name: 'doctortablet_search_notes', description: 'Full-text search notes across titles, content, tags, or categories in Doctor Tablet', inputSchema: { type: 'object', properties: { query: { type: 'string', description: 'Search term or keyword' }, tag: { type: 'string' } }, required: ['query'] } },
     { name: 'doctortablet_delete_note', description: 'Delete a note from Doctor Tablet vault and GitHub repo', inputSchema: { type: 'object', properties: { filePath: { type: 'string', description: 'Relative file path, e.g. notes/Kebugaran-Fisik.md' } }, required: ['filePath'] } },
+    { name: 'doctortablet_export_merged_document', description: 'Export and merge all medical notes under a category and subcategories into a single continuous Markdown document with Table of Contents', inputSchema: { type: 'object', properties: { categoryId: { type: 'string', description: 'Target category/folder ID (e.g. Kuliah-Kardiologi)' }, title: { type: 'string', description: 'Custom document title' } } } },
   ];
 }
 
@@ -2866,6 +2867,9 @@ async function handleDoctorTabletMethod(m, params, githubToken) {
   if (m === 'doctortablet_delete_note') {
     return doctortabletDeleteNote(params.filePath, githubToken);
   }
+  if (m === 'doctortablet_export_merged_document') {
+    return doctortabletExportMergedDocument(params);
+  }
   throw err400(`Unknown DoctorTablet method: ${m}`);
 }
 
@@ -3184,4 +3188,50 @@ async function doctortabletDeleteNote(filePath, githubToken) {
 
   throw err400(`Failed to delete note ${filePath}`);
 }
+
+async function doctortabletExportMergedDocument(params = {}) {
+  const data = await doctortabletFetchNotes();
+  const categories = data.categories || [];
+  let notes = data.notes || [];
+
+  let targetCatName = 'All Doctor Tablet Notes';
+  if (params.categoryId) {
+    const selectedCat = categories.find(c => c.id === params.categoryId);
+    if (selectedCat) targetCatName = selectedCat.name;
+    notes = notes.filter(n => n.categoryId === params.categoryId || n.categoryId.startsWith(params.categoryId + '/'));
+  }
+
+  const docTitle = params.title || `Merged Document: ${targetCatName}`;
+  let merged = `# ${docTitle}\n\n`;
+  merged += `> Automatically generated from **${notes.length} notes** in vault.\n\n---\n\n`;
+
+  // Table of contents
+  merged += `## Table of Contents\n\n`;
+  notes.forEach((note, idx) => {
+    const anchorId = `note-${(note.id || idx).toString().replace(/[^a-zA-Z0-9_-]/g, '-')}`;
+    merged += `${idx + 1}. [${note.title}](#${anchorId})\n`;
+  });
+  merged += `\n---\n\n`;
+
+  // Append note contents
+  notes.forEach((note, idx) => {
+    const anchorId = `note-${(note.id || idx).toString().replace(/[^a-zA-Z0-9_-]/g, '-')}`;
+    merged += `<a id="${anchorId}"></a>\n\n`;
+    merged += `### ${note.title}\n`;
+    merged += `*Category:* \`${note.categoryId || 'root'}\` | *Updated:* ${note.updatedAt || 'N/A'}\n\n`;
+    if (Array.isArray(note.tags) && note.tags.length > 0) {
+      merged += `*Tags:* ${note.tags.map(t => `\`#${t.replace(/^#/, '')}\``).join(' ')}\n\n`;
+    }
+    merged += `${note.content || ''}\n\n`;
+    merged += `---\n\n`;
+  });
+
+  return {
+    success: true,
+    title: docTitle,
+    totalNotesMerged: notes.length,
+    mergedContent: merged
+  };
+}
+
 

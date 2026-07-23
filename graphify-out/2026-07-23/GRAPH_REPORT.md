@@ -1,16 +1,16 @@
-# Graph Report - MR-CAPSULES-main  (2026-07-23)
+# Graph Report - MR-CAPSULES-main  (2026-07-22)
 
 ## Corpus Check
-- 349 files · ~27,359,591 words
+- 337 files · ~27,355,937 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 8352 nodes · 15096 edges · 347 communities (335 shown, 12 thin omitted)
+- 8338 nodes · 15059 edges · 343 communities (331 shown, 12 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 343 edges (avg confidence: 0.5)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `8975e398`
+- Built from commit: `dc6e8d83`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -323,9 +323,9 @@
 - PULL_REQUEST_TEMPLATE.md
 
 ## God Nodes (most connected - your core abstractions)
-1. `routeMethod()` - 76 edges
-2. `logAction()` - 26 edges
-3. `err400()` - 25 edges
+1. `routeMethod()` - 72 edges
+2. `logAction()` - 25 edges
+3. `err400()` - 19 edges
 4. `4b. Workflow Logic Enhancements — `admin-workflow.js`` - 18 edges
 5. `4b. Workflow Logic Enhancements — `admin-workflow.js`` - 18 edges
 6. `makeQ()` - 17 edges
@@ -343,7 +343,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (347 total, 12 thin omitted)
+## Communities (343 total, 12 thin omitted)
 
 ### Community 0 - "2.4 CBT 2_K20C AM I CINEMATIC.html"
 Cohesion: 0.06
@@ -922,8 +922,8 @@ Cohesion: 0.60
 Nodes (5): err(), info(), ok(), gpush.sh script, warn()
 
 ### Community 166 - "mcp.js"
-Cohesion: 0.05
-Nodes (106): activityLogsList(), authenticateApiKey(), authenticateJWT(), authenticateOAuthAccessToken(), canonicalizeUrl(), checkRateLimit(), codebaseDeleteFile(), codebaseReadFile() (+98 more)
+Cohesion: 0.06
+Nodes (94): activityLogsList(), authenticateApiKey(), authenticateJWT(), authenticateOAuthAccessToken(), canonicalizeUrl(), checkRateLimit(), codebaseDeleteFile(), codebaseReadFile() (+86 more)
 
 ### Community 167 - "authorize.js"
 Cohesion: 0.50
@@ -1529,11 +1529,11 @@ Nodes (3): ✅ Checklist, 📌 Summary of Changes, 🧪 Type of Change
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `4b. Workflow Logic Enhancements — `admin-workflow.js`` connect `4b. Workflow Logic Enhancements — `admin-workflow.js`` to `Priority Badges injection logic inside Kanban Board and Syllabus Tables:`, `4. Frontend Application Logic`?**
+- **Why does `Priority Badges injection logic inside Kanban Board and Syllabus Tables:` connect `Priority Badges injection logic inside Kanban Board and Syllabus Tables:` to `4b. Workflow Logic Enhancements — `admin-workflow.js``?**
   _High betweenness centrality (0.000) - this node is a cross-community bridge._
 - **Why does `4a. Core Core Infrastructure Modifications — `admin.js`` connect `4a. Core Core Infrastructure Modifications — `admin.js`` to `4. Frontend Application Logic`?**
   _High betweenness centrality (0.000) - this node is a cross-community bridge._
-- **Why does `4. Frontend Application Logic` connect `4. Frontend Application Logic` to `4b. Workflow Logic Enhancements — `admin-workflow.js``, `Admin Page Feature Expansion — Unified Comprehensive Implementation Plan`, `4a. Core Core Infrastructure Modifications — `admin.js``?**
+- **Why does `4b. Workflow Logic Enhancements — `admin-workflow.js`` connect `4b. Workflow Logic Enhancements — `admin-workflow.js`` to `Priority Badges injection logic inside Kanban Board and Syllabus Tables:`, `4. Frontend Application Logic`?**
   _High betweenness centrality (0.000) - this node is a cross-community bridge._
 - **What connects `fileCache`, `_statusTextEl`, `_statusBarEl` to the rest of the system?**
   _2377 weakly-connected nodes found - possible documentation gaps or missing edges._

@@ -341,9 +341,5 @@
   "339": "check_oauth_logs.js",
   "340": "generate_logos.py",
   "341": "test_bearer_token.js",
-  "342": "test_full_flow.js",
-  "343": "Welcome.md",
-  "344": "app.json",
-  "345": "Untitled.md",
-  "346": "Welcome.md"
+  "342": "test_full_flow.js"
 }
