@@ -1224,6 +1224,7 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
           }
           actionsHtml += '<button class="btn-card ' + (isBanned ? 'primary' : 'danger') + ' btn-ban" data-id="' + u.id + '" data-banned="' + isBanned + '">';
           actionsHtml += (isBanned ? 'Unban' : 'Ban') + '</button>';
+          actionsHtml += '<button class="btn-card primary btn-reset-pwd" data-id="' + u.id + '">Reset Pwd</button>';
           actionsHtml += '<button class="btn-card danger btn-del-user" data-id="' + u.id + '">Delete</button>';
         }
 
@@ -1263,6 +1264,31 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
             if(await customConfirm(`Are you sure you want to ${actionText} ${email}?`)) {
               e.target.textContent = '...';
               adminAction('ban_user', { userId: u.id, banned: !isBanned }).catch(() => e.target.textContent = actionText === 'ban' ? 'Ban' : 'Unban');
+            }
+          };
+        }
+
+        if (card.querySelector('.btn-reset-pwd')) {
+          card.querySelector('.btn-reset-pwd').onclick = async (e) => {
+            const newPassword = await customPrompt(`Enter new password for ${email}:`, 'MrCapsules2026!');
+            if (newPassword && newPassword.trim() !== '') {
+              if (newPassword.trim().length < 6) {
+                alert('Password must be at least 6 characters long.');
+                return;
+              }
+              e.target.textContent = '...';
+              adminAction('reset_user_password', { userId: u.id, newPassword: newPassword.trim() })
+                .then(res => {
+                  e.target.textContent = 'Reset Pwd';
+                  if (res && res.success) {
+                    if (window.showToast) window.showToast('Password for ' + email + ' reset successfully!');
+                    else alert('Password for ' + email + ' reset successfully!');
+                  }
+                })
+                .catch(err => {
+                  e.target.textContent = 'Reset Pwd';
+                  alert('Failed to reset password: ' + (err.message || err));
+                });
             }
           };
         }

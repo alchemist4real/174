@@ -418,6 +418,34 @@ export default async function handler(req, res) {
       return res.status(200).json({ success: true });
     }
 
+    if (action === 'reset_user_password') {
+      if (!isAdmin && !isSuperAdmin) return res.status(403).json({ error: 'Admin access required' });
+      const { userId, newPassword } = req.body;
+      if (!userId || !newPassword) return res.status(400).json({ error: 'Missing userId or newPassword' });
+      if (newPassword.length < 6) return res.status(400).json({ error: 'Password must be at least 6 characters' });
+
+      const sbKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+      if (!sbKey) return res.status(500).json({ error: 'SUPABASE_SERVICE_ROLE_KEY not configured' });
+
+      const sbRes = await fetch(`${supabaseUrl}/auth/v1/admin/users/${userId}`, {
+        method: 'PUT',
+        headers: {
+          'apikey': sbKey,
+          'Authorization': `Bearer ${sbKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ password: newPassword })
+      });
+
+      if (!sbRes.ok) {
+        const errText = await sbRes.text();
+        return res.status(500).json({ error: 'Failed to reset password: ' + errText });
+      }
+
+      await logAdminAction('reset_user_password', { targetUserId: userId });
+      return res.status(200).json({ success: true, message: 'Password updated successfully' });
+    }
+
     if (action === 'remove_user_device') {
       const { userId, deviceId } = req.body;
       if (!userId || !deviceId) return res.status(400).json({ error: 'Missing userId or deviceId' });
