@@ -1198,15 +1198,17 @@ try {
     }
 
     btnSignIn.addEventListener('click', async () => {
-      if (!authEmail.value || !authPassword.value) return;
-      if (!isValidEmail(authEmail.value)) {
+      const email = authEmail.value ? authEmail.value.trim() : '';
+      const password = authPassword.value ? authPassword.value.trim() : '';
+      if (!email || !password) return;
+      if (!isValidEmail(email)) {
         showAuthMsg("INVALID EMAIL FORMAT", true);
         return;
       }
       btnSignIn.textContent = '...';
       const { error } = await supabase.auth.signInWithPassword({
-        email: authEmail.value,
-        password: authPassword.value,
+        email: email,
+        password: password,
       });
       btnSignIn.textContent = 'LOG IN';
       if (error) showAuthMsg(error.message, true);
@@ -1217,15 +1219,17 @@ try {
         showAuthMsg("Pendaftaran saat ini dinonaktifkan oleh administrator.", true);
         return;
       }
-      if (!authEmail.value || !authPassword.value) return;
-      if (!isValidEmail(authEmail.value)) {
+      const email = authEmail.value ? authEmail.value.trim() : '';
+      const password = authPassword.value ? authPassword.value.trim() : '';
+      if (!email || !password) return;
+      if (!isValidEmail(email)) {
         showAuthMsg("INVALID EMAIL FORMAT", true);
         return;
       }
       showAuthMsg("Signing up...", false);
       const { data, error } = await supabase.auth.signUp({
-        email: authEmail.value,
-        password: authPassword.value,
+        email: email,
+        password: password,
       });
       if (error) {
         showAuthMsg(error.message, true);
