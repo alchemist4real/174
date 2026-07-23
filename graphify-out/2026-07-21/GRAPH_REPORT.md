@@ -1,16 +1,16 @@
 # Graph Report - MR-CAPSULES-main  (2026-07-21)
 
 ## Corpus Check
-- 318 files · ~27,337,045 words
+- 317 files · ~27,345,127 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 8202 nodes · 14790 edges · 325 communities (313 shown, 12 thin omitted)
-- Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 341 edges (avg confidence: 0.5)
+- 8231 nodes · 14900 edges · 323 communities (311 shown, 12 thin omitted)
+- Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 343 edges (avg confidence: 0.5)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `4237ac2e`
+- Built from commit: `086c5160`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -164,6 +164,7 @@
 - 2.1 Ident Fisio_Praktikum 1.html
 - graphify.md
 - graphify.md
+- gpush.sh
 - vercel.json
 - mcp.js
 - authorize.js
@@ -306,20 +307,18 @@
 - 5. Verification & Testing Protocol
 - 1.3 CBT 1_card generator.html
 - 2.3 CBT_Kicaw.html
-- gpush.sh
+- mock_server.js
 - 4. Frontend Application Logic
-- build.js
 - 1.2 other_Pull up 1.html
 - 1.2 other_Pull up 2.html
 - docs.html
 - Priority Badges injection logic inside Kanban Board and Syllabus Tables:
 - 1.4 Ident Biokim_eakeak fc.html
 - 2.1 Ident Fisio_Praktikum 1.html
-- mock_server.js
 - vercel.json
 
 ## God Nodes (most connected - your core abstractions)
-1. `routeMethod()` - 33 edges
+1. `routeMethod()` - 54 edges
 2. `4b. Workflow Logic Enhancements — `admin-workflow.js`` - 18 edges
 3. `4b. Workflow Logic Enhancements — `admin-workflow.js`` - 18 edges
 4. `makeQ()` - 17 edges
@@ -337,7 +336,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (325 total, 12 thin omitted)
+## Communities (323 total, 12 thin omitted)
 
 ### Community 0 - "2.4 CBT 2_K20C AM I CINEMATIC.html"
 Cohesion: 0.06
@@ -348,7 +347,7 @@ Cohesion: 0.07
 Nodes (51): activeTypes, DEF_POOL, endSession(), genIMTQ(), genPersenLemakQ(), genPinggangQ(), genSitReachQ(), genWHRQ() (+43 more)
 
 ### Community 2 - "index.html"
-Cohesion: 0.06
+Cohesion: 0.08
 Nodes (46): ./fp.js, apply(), applyData(), applyPerfMode(), applyTheme(), backgroundSync(), buildCoverflow(), cards (+38 more)
 
 ### Community 3 - "2.5 PRAKTIKUM_PRAKTIKUM 1.html"
@@ -413,7 +412,7 @@ Nodes (45): activeTypes, DEF_POOL, endSession(), genHarvardCepatQ(), genHarvardL
 
 ### Community 18 - "admin.js"
 Cohesion: 0.09
-Nodes (50): adminAction(), adminThemeBtns, applyAdminTheme(), authMessage, authOverlay, bindKeyEvents(), btnGuestCleanup, copyRevealedKey() (+42 more)
+Nodes (51): adminAction(), adminThemeBtns, applyAdminTheme(), authMessage, authOverlay, bindKeyEvents(), btnGuestCleanup, copyRevealedKey() (+43 more)
 
 ### Community 19 - "2.5 LECTURE_K13B am-i-special-2.html"
 Cohesion: 0.07
@@ -824,8 +823,8 @@ Cohesion: 0.18
 Nodes (14): handleAskteriSave(), questionPool, quizData, renderAskteri(), renderContent(), renderKuisMenu(), renderRingkasan(), renderSandisk() (+6 more)
 
 ### Community 121 - "💊 MR-CAPSULES"
-Cohesion: 0.12
-Nodes (16): 📖 About, ❤️ Acknowledgements, 📚 Content Division, 🤝 Contributing, ✅ Correction Division, 💻 Developer Division, ⚠️ Disclaimer, ✨ Features (+8 more)
+Cohesion: 0.11
+Nodes (17): 1. 🤖 Model Context Protocol (MCP) & API Gateway Integration, 2. 🎛️ Comprehensive Admin Portal (`admin.html`), 3. 📖 Modernized Interactive Documentation (`docs.html`), 4. ⚡ Live Study Room Engine (`live.html`), 📖 About MR-CAPSULES, 🛠️ Architecture & Tech Stack, 🔌 Connecting AI Assistants via MCP, Core Technologies (+9 more)
 
 ### Community 122 - "1.3 IDENT_GASAK LIBAS FISIOX 2.html"
 Cohesion: 0.13
@@ -904,16 +903,20 @@ Cohesion: 0.83
 Nodes (3): renderQuestion(), selectAnswer(), updateNavButtons()
 
 ### Community 143 - "docs.html"
-Cohesion: 0.67
+Cohesion: 0.50
 Nodes (3): savedTheme, themeButtons, updateActiveThemeBtn()
 
 ### Community 144 - "Priority Badges injection logic inside Kanban Board and Syllabus Tables:"
 Cohesion: 0.67
 Nodes (3): Inside `renderKanban(tasks)` (~line 228):, Inside `renderTasksAsSyllabus(tasks)` (~line 416):, Priority Badges injection logic inside Kanban Board and Syllabus Tables:
 
+### Community 151 - "gpush.sh"
+Cohesion: 0.60
+Nodes (5): err(), info(), ok(), gpush.sh script, warn()
+
 ### Community 166 - "mcp.js"
-Cohesion: 0.10
-Nodes (45): authenticateApiKey(), authenticateJWT(), authenticateOAuthAccessToken(), canonicalizeUrl(), checkRateLimit(), configGet(), configUpdate(), contentDelete() (+37 more)
+Cohesion: 0.07
+Nodes (70): activityLogsList(), authenticateApiKey(), authenticateJWT(), authenticateOAuthAccessToken(), canonicalizeUrl(), checkRateLimit(), configGet(), configUpdate() (+62 more)
 
 ### Community 167 - "authorize.js"
 Cohesion: 0.50
@@ -937,7 +940,7 @@ Nodes (45): ./fp.js, apply(), applyData(), applyPerfMode(), applyTheme(), backgr
 
 ### Community 173 - "admin.js"
 Cohesion: 0.09
-Nodes (50): adminAction(), adminThemeBtns, applyAdminTheme(), authMessage, authOverlay, bindKeyEvents(), btnGuestCleanup, copyRevealedKey() (+42 more)
+Nodes (51): adminAction(), adminThemeBtns, applyAdminTheme(), authMessage, authOverlay, bindKeyEvents(), btnGuestCleanup, copyRevealedKey() (+43 more)
 
 ### Community 174 - "2.5 PRAKTIKUM_PRAKTIKUM 1.html"
 Cohesion: 0.08
@@ -1432,8 +1435,8 @@ Cohesion: 0.14
 Nodes (14): 2. Backend Serverless API Implementation, 2a. Notifications Endpoint — `api/notifications.js` [NEW File], 2b. Invitation Links Endpoint — `api/invites.js` [NEW File], 2c. Task Management Modifications — `api/tasks.js`, 2d. Division Request Modifications — `api/divisions.js`, 2e. Admin System Actions & Rate Limits — `api/admin.js`, Add notification hooks inside existing status updates:, Append administrative actions after the admin check: (+6 more)
 
 ### Community 297 - "3a. Document Markup Changes — `admin.html`"
-Cohesion: 0.14
-Nodes (14): 3a. Document Markup Changes — `admin.html`, Add CSV import button next to task board controls inside `#viewTasks`:, Add view toggle calendars options inside `#tasksViewToggle`:, Append calendar layout container and grid inside `#viewTasks` (beneath table container):, Append new file modals overlays for histories and batch uploads at bottom of file:, Append notification bell and unread badge in `#adminTabs` (Dock area):, Append pending requests dashboard inside `#viewUsers`:, Append rebuilding button and orphan checks inside files browser toolbar in `#viewFiles`: (+6 more)
+Cohesion: 0.11
+Nodes (18): 3. Frontend Client Implementation, 3a. Document Markup Changes — `admin.html`, 3b. Design Aesthetics & Colors Variables — `tokens.css`, 3c. Component Styles — `admin-styles.css`, Add CSV import button next to task board controls inside `#viewTasks`:, Add inside `tokens.css` root scopes (~line 13):, Add view toggle calendars options inside `#tasksViewToggle`:, Append calendar layout container and grid inside `#viewTasks` (beneath table container): (+10 more)
 
 ### Community 298 - "live.js"
 Cohesion: 0.38
@@ -1456,8 +1459,8 @@ Cohesion: 0.29
 Nodes (5): activeTypes, KEYS, makePicker(), makeQ_K21, rnd()
 
 ### Community 303 - "Admin Page Feature Expansion — Unified Comprehensive Implementation Plan"
-Cohesion: 0.29
-Nodes (6): 1. System Architecture & Database Schema Migrations, 3. Frontend Client Implementation, 3b. Design Aesthetics & Colors Variables — `tokens.css`, 3c. Component Styles — `admin-styles.css`, Add inside `tokens.css` root scopes (~line 13):, Admin Page Feature Expansion — Unified Comprehensive Implementation Plan
+Cohesion: 0.83
+Nodes (3): build(), copyRecursiveSync(), walkDir()
 
 ### Community 304 - "5. Verification & Testing Protocol"
 Cohesion: 0.29
@@ -1471,17 +1474,9 @@ Nodes (6): generateBadges(), generateCard(), getIcon(), thresholds, updateSpider
 Cohesion: 0.38
 Nodes (3): bankSoal, renderQuestions(), titles
 
-### Community 307 - "gpush.sh"
-Cohesion: 0.60
-Nodes (5): err(), info(), ok(), gpush.sh script, warn()
-
 ### Community 308 - "4. Frontend Application Logic"
-Cohesion: 0.40
-Nodes (5): 4. Frontend Application Logic, 4c. Main Page Integration — `index.html` & `fp.js`, Filter broadcasts target divisions:, Intercept Invitation token query parameter during onboarding:, Verify and consume token during Auth Sign Up callback:
-
-### Community 309 - "build.js"
-Cohesion: 0.83
-Nodes (3): build(), copyRecursiveSync(), walkDir()
+Cohesion: 0.25
+Nodes (7): 1. System Architecture & Database Schema Migrations, 4. Frontend Application Logic, 4c. Main Page Integration — `index.html` & `fp.js`, Admin Page Feature Expansion — Unified Comprehensive Implementation Plan, Filter broadcasts target divisions:, Intercept Invitation token query parameter during onboarding:, Verify and consume token during Auth Sign Up callback:
 
 ### Community 310 - "1.2 other_Pull up 1.html"
 Cohesion: 0.83
@@ -1492,7 +1487,7 @@ Cohesion: 0.83
 Nodes (3): renderQuestion(), selectAnswer(), updateNavButtons()
 
 ### Community 312 - "docs.html"
-Cohesion: 0.67
+Cohesion: 0.50
 Nodes (3): savedTheme, themeButtons, updateActiveThemeBtn()
 
 ### Community 313 - "Priority Badges injection logic inside Kanban Board and Syllabus Tables:"
@@ -1500,24 +1495,24 @@ Cohesion: 0.67
 Nodes (3): Inside `renderKanban(tasks)` (~line 228):, Inside `renderTasksAsSyllabus(tasks)` (~line 416):, Priority Badges injection logic inside Kanban Board and Syllabus Tables:
 
 ## Knowledge Gaps
-- **2345 isolated node(s):** `fileCache`, `_statusTextEl`, `_statusBarEl`, `_itemCountEl`, `fileInput` (+2340 more)
+- **2334 isolated node(s):** `fileCache`, `_statusTextEl`, `_statusBarEl`, `_itemCountEl`, `fileInput` (+2329 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **12 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `5. Verification & Testing Protocol` connect `5. Verification & Testing Protocol` to `Admin Page Feature Expansion — Unified Comprehensive Implementation Plan`?**
+- **Why does `4b. Workflow Logic Enhancements — `admin-workflow.js`` connect `4b. Workflow Logic Enhancements — `admin-workflow.js`` to `Priority Badges injection logic inside Kanban Board and Syllabus Tables:`, `4. Frontend Application Logic`?**
   _High betweenness centrality (0.000) - this node is a cross-community bridge._
-- **Why does `5. Verification & Testing Protocol` connect `5. Verification & Testing Protocol` to `Admin Page Feature Expansion — Unified Comprehensive Implementation Plan`?**
+- **Why does `4a. Core Core Infrastructure Modifications — `admin.js`` connect `4a. Core Core Infrastructure Modifications — `admin.js`` to `4. Frontend Application Logic`?**
   _High betweenness centrality (0.000) - this node is a cross-community bridge._
-- **Why does `Admin Page Feature Expansion — Unified Comprehensive Implementation Plan` connect `Admin Page Feature Expansion — Unified Comprehensive Implementation Plan` to `4. Frontend Application Logic`, `5. Verification & Testing Protocol`, `2. Backend Serverless API Implementation`?**
+- **Why does `4. Frontend Application Logic` connect `4. Frontend Application Logic` to `4b. Workflow Logic Enhancements — `admin-workflow.js``, `4a. Core Core Infrastructure Modifications — `admin.js``?**
   _High betweenness centrality (0.000) - this node is a cross-community bridge._
 - **What connects `fileCache`, `_statusTextEl`, `_statusBarEl` to the rest of the system?**
-  _2345 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _2334 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `2.4 CBT 2_K20C AM I CINEMATIC.html` be split into smaller, more focused modules?**
   _Cohesion score 0.06398730830248546 - nodes in this community are weakly interconnected._
 - **Should `2.5 PRAKTIKUM_PRAKTIKUM 2.html` be split into smaller, more focused modules?**
   _Cohesion score 0.06821480406386067 - nodes in this community are weakly interconnected._
 - **Should `index.html` be split into smaller, more focused modules?**
-  _Cohesion score 0.06184012066365008 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.08144796380090498 - nodes in this community are weakly interconnected._

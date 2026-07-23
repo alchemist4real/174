@@ -455,6 +455,109 @@ export default async function handler(req, res) {
       return res.status(200).json({ success: true });
     }
 
+    if (action === 'cleanup_guests') {
+      const maxAge = typeof req.body?.max_age_hours === 'number' ? req.body.max_age_hours : 24; 
+      const cutoff = new Date(Date.now() - maxAge * 60 * 60 * 1000).toISOString();
+
+      let allUsers = [];
+      let page = 1;
+      let hasMore = true;
+      while (hasMore) {
+        const usersRes = await fetch(`${supabaseUrl}/auth/v1/admin/users?page=${page}&per_page=100`, {
+          headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
+        });
+        if (!usersRes.ok) {
+           const err = await usersRes.text();
+           return res.status(500).json({ error: 'Failed to fetch users: ' + err });
+        }
+        const usersData = await usersRes.json();
+        const users = usersData.users || [];
+        allUsers = allUsers.concat(users);
+        if (users.length < 100) hasMore = false;
+        page++;
+      }
+
+      const guestUsers = allUsers.filter(u => {
+        const isGuestEmail = u.email && u.email.match(/^guest_\d+_\d+@mrcapsules\.com$/);
+        const isGuestMeta = u.user_metadata && u.user_metadata.is_guest;
+        const isOldEnough = new Date(u.created_at) <= new Date(cutoff);
+        return (isGuestEmail || isGuestMeta) && isOldEnough;
+      });
+
+      let deleted = 0;
+      let errors = [];
+
+      for (let i = 0; i < guestUsers.length; i += 5) {
+        const batch = guestUsers.slice(i, i + 5);
+        await Promise.all(batch.map(async (guest) => {
+          try {
+            await fetch(`${supabaseUrl}/rest/v1/division_members?user_id=eq.${guest.id}`, { method: 'DELETE', headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` } });
+            await fetch(`${supabaseUrl}/rest/v1/user_stats?user_id=eq.${guest.id}`, { method: 'DELETE', headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` } });
+            await fetch(`${supabaseUrl}/rest/v1/user_devices?user_id=eq.${guest.id}`, { method: 'DELETE', headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` } });
+            await fetch(`${supabaseUrl}/rest/v1/division_requests?user_id=eq.${guest.id}`, { method: 'DELETE', headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` } });
+            if (guest.email) {
+              await fetch(`${supabaseUrl}/rest/v1/user_roles?identifier=eq.${encodeURIComponent(guest.email)}`, { method: 'DELETE', headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` } });
+            }
+            if (guest.user_metadata?.username) {
+              await fetch(`${supabaseUrl}/rest/v1/user_roles?identifier=eq.${encodeURIComponent(guest.user_metadata.username)}`, { method: 'DELETE', headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` } });
+            }
+
+            const delRes = await fetch(`${supabaseUrl}/auth/v1/admin/users/${guest.id}`, { method: 'DELETE', headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` } });
+            if (delRes.ok) deleted++;
+            else errors.push({ email: guest.email, error: await delRes.text() });
+          } catch(e) {
+            errors.push({ email: guest.email, error: e.message });
+          }
+        }));
+      }
+
+      await logAdminAction('cleanup_guests', { totalFound: guestUsers.length, deleted });
+      return res.status(200).json({
+        success: true,
+        total_guests_found: guestUsers.length,
+        deleted,
+        errors: errors.length > 0 ? errors : undefined
+      });
+    }
+
+    if (action === 'report_issue') {
+      const { task_id, issue_type, question_index, description } = req.body;
+      const resData = await fetch(`${supabaseUrl}/rest/v1/review_issues`, {
+        method: 'POST',
+        headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          task_id,
+          reviewer_id: userId,
+          issue_type,
+          question_index,
+          description,
+          status: 'open'
+        })
+      });
+      if (!resData.ok) throw new Error(await resData.text());
+      return res.status(200).json({ success: true });
+    }
+
+    if (action === 'get_issues') {
+      const task_id = req.body?.task_id || new URL(req.url, `https://${host}`).searchParams.get('task_id');
+      const resData = await fetch(`${supabaseUrl}/rest/v1/review_issues?task_id=eq.${task_id}&order=created_at.desc`, {
+        headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
+      });
+      const data = await resData.json();
+      return res.status(200).json({ success: true, issues: data });
+    }
+
+    if (action === 'resolve_issue') {
+      const { issue_id } = req.body;
+      const resData = await fetch(`${supabaseUrl}/rest/v1/review_issues?id=eq.${issue_id}`, {
+        method: 'PATCH',
+        headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ status: 'fixed', resolved_at: new Date().toISOString() })
+      });
+      if (!resData.ok) throw new Error(await resData.text());
+      return res.status(200).json({ success: true });
+    }
+
     return res.status(400).json({ error: 'Unknown action' });
   } catch (error) {
     return res.status(500).json({ error: error.message });

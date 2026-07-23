@@ -10,7 +10,7 @@
     "semantic_hash": "511c92bfc998e8788857aab66990aca2"
   },
   "admin.html": {
-    "mtime": 1784626677.074896,
+    "mtime": 1784645844.0644984,
     "ast_hash": "14154efc1a6b36efda3e385425a29910",
     "semantic_hash": ""
   },
@@ -725,13 +725,13 @@
     "semantic_hash": "9a4ce52b5ae1fd97684b9f35a9cd04a6"
   },
   "data.js": {
-    "mtime": 1784643450.9251301,
-    "ast_hash": "d02a7b4d6b7b324ac2fd33aca867a087",
-    "semantic_hash": "d02a7b4d6b7b324ac2fd33aca867a087"
+    "mtime": 1784677456.155924,
+    "ast_hash": "d38288e55e340dcc9335a77ca6369366",
+    "semantic_hash": ""
   },
   "docs.html": {
-    "mtime": 1784643501.259267,
-    "ast_hash": "f7e0d621121fd642efd108d4ed4b828f",
+    "mtime": 1784677441.2363207,
+    "ast_hash": "7bbb1038f1860ecbb8288102a4c61ea5",
     "semantic_hash": ""
   },
   "gpush.sh": {
@@ -740,12 +740,12 @@
     "semantic_hash": "794b3b4c39f4c920d7dbe0fffbd3e10c"
   },
   "index.html": {
-    "mtime": 1784626673.092913,
+    "mtime": 1784645844.080497,
     "ast_hash": "d70fff6aebf0a66066292d687992467d",
     "semantic_hash": ""
   },
   "live.html": {
-    "mtime": 1784626684.1785915,
+    "mtime": 1784645844.0837524,
     "ast_hash": "8722a1f23a521d604ffc28711f8db9cc",
     "semantic_hash": ""
   },
@@ -760,8 +760,8 @@
     "semantic_hash": "a66c365f95ca69ccc96e7dbebafe5e86"
   },
   "package.json": {
-    "mtime": 1784605890.1392088,
-    "ast_hash": "d695c490650cd548b2500c12a476e363",
+    "mtime": 1784645576.406296,
+    "ast_hash": "e548c7fff6973268865b1d78bb6f5a54",
     "semantic_hash": ""
   },
   "vercel.json": {
@@ -770,8 +770,8 @@
     "semantic_hash": ""
   },
   "api/mcp.js": {
-    "mtime": 1784643497.4982016,
-    "ast_hash": "7bf1f0e48691f3f80e8b2e292962432a",
+    "mtime": 1784678144.4622421,
+    "ast_hash": "4e227a90959ea62e0bc24ee24e171c16",
     "semantic_hash": ""
   },
   ".agents/rules/graphify.md": {
@@ -805,8 +805,8 @@
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1783646418.1552024,
-    "ast_hash": "d2ecfebe345462fba17d9d0399d64ffc",
+    "mtime": 1784645199.2451036,
+    "ast_hash": "f7e1befca831121a6324ac0c395cafca",
     "semantic_hash": ""
   },
   "cover/04094a2a2088424b488e130b94859bc1.gif": {
@@ -1055,8 +1055,8 @@
     "semantic_hash": ""
   },
   "api/authorize.js": {
-    "mtime": 1784626687.773655,
-    "ast_hash": "d907adbdeecc028b24fe370eded29640",
+    "mtime": 1784678122.624655,
+    "ast_hash": "30e702ba73514ef4009f54ac5410086e",
     "semantic_hash": ""
   },
   "api/token.js": {
@@ -1090,12 +1090,12 @@
     "semantic_hash": ""
   },
   "public/admin.html": {
-    "mtime": 1784626677.074896,
+    "mtime": 1784645844.0644984,
     "ast_hash": "14154efc1a6b36efda3e385425a29910",
     "semantic_hash": ""
   },
   "public/admin.js": {
-    "mtime": 1784643497.8865197,
+    "mtime": 1784643497.4930696,
     "ast_hash": "8611467591155a81026b82e6dbe3092e",
     "semantic_hash": ""
   },
@@ -1765,22 +1765,22 @@
     "semantic_hash": ""
   },
   "public/data.js": {
-    "mtime": 1784643450.9251301,
-    "ast_hash": "d02a7b4d6b7b324ac2fd33aca867a087",
+    "mtime": 1784677456.155924,
+    "ast_hash": "d38288e55e340dcc9335a77ca6369366",
     "semantic_hash": ""
   },
   "public/docs.html": {
-    "mtime": 1784643497.8895195,
-    "ast_hash": "4793c2dd0804a5669315099d83bd2684",
+    "mtime": 1784677441.2363207,
+    "ast_hash": "7bbb1038f1860ecbb8288102a4c61ea5",
     "semantic_hash": ""
   },
   "public/index.html": {
-    "mtime": 1784626673.092913,
+    "mtime": 1784645844.080497,
     "ast_hash": "d70fff6aebf0a66066292d687992467d",
     "semantic_hash": ""
   },
   "public/live.html": {
-    "mtime": 1784626684.1785915,
+    "mtime": 1784645844.0837524,
     "ast_hash": "8722a1f23a521d604ffc28711f8db9cc",
     "semantic_hash": ""
   },
@@ -1790,8 +1790,8 @@
     "semantic_hash": ""
   },
   "public/package.json": {
-    "mtime": 1784605890.1392088,
-    "ast_hash": "d695c490650cd548b2500c12a476e363",
+    "mtime": 1784645576.406296,
+    "ast_hash": "e548c7fff6973268865b1d78bb6f5a54",
     "semantic_hash": ""
   },
   "public/vercel.json": {
@@ -1820,8 +1820,8 @@
     "semantic_hash": ""
   },
   "public/README.md": {
-    "mtime": 1783646418.1552024,
-    "ast_hash": "d2ecfebe345462fba17d9d0399d64ffc",
+    "mtime": 1784645199.2451036,
+    "ast_hash": "f7e1befca831121a6324ac0c395cafca",
     "semantic_hash": ""
   },
   "public/cover/04094a2a2088424b488e130b94859bc1.gif": {
@@ -2087,6 +2087,96 @@
   "public/favicon.svg": {
     "mtime": 1784626653.322068,
     "ast_hash": "48f4fff0d3d37faaa581f872935a931f",
+    "semantic_hash": ""
+  },
+  "public/build.js": {
+    "mtime": 1784643497.5000324,
+    "ast_hash": "0f9d7c95b7dbac913a7c80938264588b",
+    "semantic_hash": ""
+  },
+  "public/contributions_setup.sql": {
+    "mtime": 1783434012.964951,
+    "ast_hash": "9a4ce52b5ae1fd97684b9f35a9cd04a6",
+    "semantic_hash": ""
+  },
+  "public/gpush.sh": {
+    "mtime": 1784080684.2899246,
+    "ast_hash": "794b3b4c39f4c920d7dbe0fffbd3e10c",
+    "semantic_hash": ""
+  },
+  "public/mock_server.js": {
+    "mtime": 1783488253.8427522,
+    "ast_hash": "a66c365f95ca69ccc96e7dbebafe5e86",
+    "semantic_hash": ""
+  },
+  "public/oauth_setup.sql": {
+    "mtime": 1784619761.0102048,
+    "ast_hash": "fd2ac96b848f21d62376330b8e7f880d",
+    "semantic_hash": ""
+  },
+  "assets/animated-banner.svg": {
+    "mtime": 1784645250.8042624,
+    "ast_hash": "4722f95af82170c7bfd6dce17ee24f96",
+    "semantic_hash": ""
+  },
+  "public/animated-banner.svg": {
+    "mtime": 1784645257.2353797,
+    "ast_hash": "4722f95af82170c7bfd6dce17ee24f96",
+    "semantic_hash": ""
+  },
+  "content/semester 3/3.1/3.1 LECTURE_Am I Kinetic - Farmakokinetik.html": {
+    "mtime": 1784676350.8275683,
+    "ast_hash": "3f238e509661e466280a56f2b7ce3270",
+    "semantic_hash": ""
+  },
+  "public/content/semester 3/3.1/3.1 LECTURE_Am I Kinetic - Farmakokinetik.html": {
+    "mtime": 1784676350.8275683,
+    "ast_hash": "3f238e509661e466280a56f2b7ce3270",
+    "semantic_hash": ""
+  },
+  ".github/ISSUE_TEMPLATE/bug_report.md": {
+    "mtime": 1784646070.5455618,
+    "ast_hash": "b1f664d0dd71b5aa7ffd11ae27808f7e",
+    "semantic_hash": ""
+  },
+  ".github/ISSUE_TEMPLATE/feature_request.md": {
+    "mtime": 1784646074.8282657,
+    "ast_hash": "ba76ce930fdf4df063f6d6513cb0b63f",
+    "semantic_hash": ""
+  },
+  ".github/PULL_REQUEST_TEMPLATE.md": {
+    "mtime": 1784646079.630386,
+    "ast_hash": "4614b929607750ca5d250dee911b2f59",
+    "semantic_hash": ""
+  },
+  "CONTRIBUTING.md": {
+    "mtime": 1784646065.4834716,
+    "ast_hash": "424569d5b9eabb7627cdaf4aacad9eb3",
+    "semantic_hash": ""
+  },
+  "public/.github/ISSUE_TEMPLATE/bug_report.md": {
+    "mtime": 1784646070.5455618,
+    "ast_hash": "b1f664d0dd71b5aa7ffd11ae27808f7e",
+    "semantic_hash": ""
+  },
+  "public/.github/ISSUE_TEMPLATE/feature_request.md": {
+    "mtime": 1784646074.8282657,
+    "ast_hash": "ba76ce930fdf4df063f6d6513cb0b63f",
+    "semantic_hash": ""
+  },
+  "public/.github/PULL_REQUEST_TEMPLATE.md": {
+    "mtime": 1784646079.630386,
+    "ast_hash": "4614b929607750ca5d250dee911b2f59",
+    "semantic_hash": ""
+  },
+  "public/CONTRIBUTING.md": {
+    "mtime": 1784646065.4834716,
+    "ast_hash": "424569d5b9eabb7627cdaf4aacad9eb3",
+    "semantic_hash": ""
+  },
+  "public/assets/animated-banner.svg": {
+    "mtime": 1784645250.8042624,
+    "ast_hash": "4722f95af82170c7bfd6dce17ee24f96",
     "semantic_hash": ""
   }
 }

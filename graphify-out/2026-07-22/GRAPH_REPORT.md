@@ -1,16 +1,16 @@
 # Graph Report - MR-CAPSULES-main  (2026-07-22)
 
 ## Corpus Check
-- 337 files · ~27,355,937 words
+- 327 files · ~27,350,398 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 8338 nodes · 15059 edges · 343 communities (331 shown, 12 thin omitted)
+- 8315 nodes · 15034 edges · 334 communities (322 shown, 12 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 343 edges (avg confidence: 0.5)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `dc6e8d83`
+- Built from commit: `029b6b45`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -323,8 +323,8 @@
 - PULL_REQUEST_TEMPLATE.md
 
 ## God Nodes (most connected - your core abstractions)
-1. `routeMethod()` - 72 edges
-2. `logAction()` - 25 edges
+1. `routeMethod()` - 71 edges
+2. `logAction()` - 24 edges
 3. `err400()` - 19 edges
 4. `4b. Workflow Logic Enhancements — `admin-workflow.js`` - 18 edges
 5. `4b. Workflow Logic Enhancements — `admin-workflow.js`` - 18 edges
@@ -335,15 +335,13 @@
 10. `renderQuestion()` - 17 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `testLocal()` --calls--> `handler()`  [EXTRACTED]
-  scratch/test_mcp_local.js → api/mcp.js
 - `makeQ()` --calls--> `wrap`  [INFERRED]
   public/content/semester 2/2.5/2.5 PRAKTIKUM_PRAKTIKUM 1.html → public/index.html
 
 ## Import Cycles
 - None detected.
 
-## Communities (343 total, 12 thin omitted)
+## Communities (334 total, 12 thin omitted)
 
 ### Community 0 - "2.4 CBT 2_K20C AM I CINEMATIC.html"
 Cohesion: 0.06
@@ -923,7 +921,7 @@ Nodes (5): err(), info(), ok(), gpush.sh script, warn()
 
 ### Community 166 - "mcp.js"
 Cohesion: 0.06
-Nodes (94): activityLogsList(), authenticateApiKey(), authenticateJWT(), authenticateOAuthAccessToken(), canonicalizeUrl(), checkRateLimit(), codebaseDeleteFile(), codebaseReadFile() (+86 more)
+Nodes (90): activityLogsList(), authenticateApiKey(), authenticateJWT(), authenticateOAuthAccessToken(), canonicalizeUrl(), checkRateLimit(), codebaseDeleteFile(), codebaseReadFile() (+82 more)
 
 ### Community 167 - "authorize.js"
 Cohesion: 0.50
@@ -1529,11 +1527,9 @@ Nodes (3): ✅ Checklist, 📌 Summary of Changes, 🧪 Type of Change
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `Priority Badges injection logic inside Kanban Board and Syllabus Tables:` connect `Priority Badges injection logic inside Kanban Board and Syllabus Tables:` to `4b. Workflow Logic Enhancements — `admin-workflow.js``?**
+- **Why does `4. Frontend Application Logic` connect `4. Frontend Application Logic` to `4b. Workflow Logic Enhancements — `admin-workflow.js``, `Admin Page Feature Expansion — Unified Comprehensive Implementation Plan`, `4a. Core Core Infrastructure Modifications — `admin.js``?**
   _High betweenness centrality (0.000) - this node is a cross-community bridge._
-- **Why does `4a. Core Core Infrastructure Modifications — `admin.js`` connect `4a. Core Core Infrastructure Modifications — `admin.js`` to `4. Frontend Application Logic`?**
-  _High betweenness centrality (0.000) - this node is a cross-community bridge._
-- **Why does `4b. Workflow Logic Enhancements — `admin-workflow.js`` connect `4b. Workflow Logic Enhancements — `admin-workflow.js`` to `Priority Badges injection logic inside Kanban Board and Syllabus Tables:`, `4. Frontend Application Logic`?**
+- **Why does `Admin Page Feature Expansion — Unified Comprehensive Implementation Plan` connect `Admin Page Feature Expansion — Unified Comprehensive Implementation Plan` to `2. Backend Serverless API Implementation`, `5. Verification & Testing Protocol`, `4. Frontend Application Logic`?**
   _High betweenness centrality (0.000) - this node is a cross-community bridge._
 - **What connects `fileCache`, `_statusTextEl`, `_statusBarEl` to the rest of the system?**
   _2377 weakly-connected nodes found - possible documentation gaps or missing edges._
@@ -1543,3 +1539,5 @@ _Questions this graph is uniquely positioned to answer:_
   _Cohesion score 0.06821480406386067 - nodes in this community are weakly interconnected._
 - **Should `index.html` be split into smaller, more focused modules?**
   _Cohesion score 0.08144796380090498 - nodes in this community are weakly interconnected._
+- **Should `2.5 PRAKTIKUM_PRAKTIKUM 1.html` be split into smaller, more focused modules?**
+  _Cohesion score 0.07142857142857142 - nodes in this community are weakly interconnected._
