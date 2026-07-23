@@ -2847,7 +2847,7 @@ const DOCTORTABLET_GH_REPO = 'doctortablet';
 
 async function handleDoctorTabletMethod(m, params, githubToken) {
   if (m === 'doctortablet_list_notes') {
-    return doctortabletListNotes(params);
+    return doctortabletListNotes(params, githubToken);
   }
   if (m === 'doctortablet_read_note') {
     return doctortabletReadNote(params.slug, githubToken);
@@ -2856,24 +2856,25 @@ async function handleDoctorTabletMethod(m, params, githubToken) {
     return doctortabletSaveNote(params, githubToken);
   }
   if (m === 'doctortablet_list_categories') {
-    return doctortabletListCategories();
+    return doctortabletListCategories(githubToken);
   }
   if (m === 'doctortablet_create_category') {
-    return doctortabletCreateCategory(params);
+    return doctortabletCreateCategory(params, githubToken);
   }
   if (m === 'doctortablet_search_notes') {
-    return doctortabletSearchNotes(params);
+    return doctortabletSearchNotes(params, githubToken);
   }
   if (m === 'doctortablet_delete_note') {
     return doctortabletDeleteNote(params.filePath, githubToken);
   }
   if (m === 'doctortablet_export_merged_document') {
-    return doctortabletExportMergedDocument(params);
+    return doctortabletExportMergedDocument(params, githubToken);
   }
   throw err400(`Unknown DoctorTablet method: ${m}`);
 }
 
-async function doctortabletFetchNotes() {
+async function doctortabletFetchNotes(githubToken) {
+  // 1. Try Live API first
   try {
     const res = await fetch(DOCTORTABLET_API_URL, {
       method: 'GET',
@@ -2881,16 +2882,100 @@ async function doctortabletFetchNotes() {
     });
     if (res.ok) {
       const data = await res.json();
-      if (data.success) return data;
+      if (data && data.success && Array.isArray(data.notes) && data.notes.length > 0) {
+        return data;
+      }
     }
   } catch (err) {
     console.error('DoctorTablet Live API fetch error:', err);
   }
+
+  // 2. Fallback to GitHub REST Git Tree API if Live API returned empty or failed
+  if (githubToken) {
+    try {
+      const treeUrl = `https://api.github.com/repos/${DOCTORTABLET_GH_OWNER}/${DOCTORTABLET_GH_REPO}/git/trees/main?recursive=1`;
+      const ghRes = await fetch(treeUrl, {
+        headers: {
+          'Authorization': `Bearer ${githubToken}`,
+          'Accept': 'application/vnd.github+json',
+          'User-Agent': 'MR-CAPSULES-MCP-Gateway'
+        }
+      });
+
+      if (ghRes.ok) {
+        const treeData = await ghRes.json();
+        const rawTree = treeData.tree || [];
+        const notesItems = rawTree.filter(item => item.path.startsWith('notes/'));
+
+        const categoriesMap = new Map();
+        const notes = [];
+
+        for (const item of notesItems) {
+          const relPath = item.path.replace(/^notes\//, '');
+          if (!relPath || relPath === '.gitkeep') continue;
+
+          const parts = relPath.split('/');
+
+          if (item.type === 'tree') {
+            const folderName = parts[parts.length - 1];
+            const parentId = parts.length > 1 ? parts.slice(0, -1).join('/') : null;
+            categoriesMap.set(relPath, {
+              id: relPath,
+              name: folderName.replace(/-/g, ' '),
+              path: relPath,
+              parentId: parentId,
+              type: 'custom',
+              color: '#8A9A7E'
+            });
+          } else if (item.type === 'blob' && relPath.endsWith('.md')) {
+            const filename = parts[parts.length - 1];
+            const slug = filename.replace(/\.md$/, '');
+            const categoryId = parts.length > 1 ? parts.slice(0, -1).join('/') : 'root';
+
+            if (categoryId !== 'root' && !categoriesMap.has(categoryId)) {
+              const catParts = categoryId.split('/');
+              const folderName = catParts[catParts.length - 1];
+              const parentId = catParts.length > 1 ? catParts.slice(0, -1).join('/') : null;
+              categoriesMap.set(categoryId, {
+                id: categoryId,
+                name: folderName.replace(/-/g, ' '),
+                path: categoryId,
+                parentId: parentId,
+                type: 'custom',
+                color: '#8A9A7E'
+              });
+            }
+
+            notes.push({
+              id: `note-${slug}`,
+              title: slug.replace(/-/g, ' '),
+              categoryId,
+              slug,
+              filePath: item.path,
+              tags: ['#medical'],
+              updatedAt: new Date().toISOString().split('T')[0],
+              sha: item.sha
+            });
+          }
+        }
+
+        return {
+          success: true,
+          notes,
+          categories: Array.from(categoriesMap.values()),
+          source: 'github'
+        };
+      }
+    } catch (err) {
+      console.error('DoctorTablet GitHub tree fallback fetch error:', err);
+    }
+  }
+
   return { success: false, notes: [], categories: [] };
 }
 
-async function doctortabletListNotes(params = {}) {
-  const data = await doctortabletFetchNotes();
+async function doctortabletListNotes(params = {}, githubToken) {
+  const data = await doctortabletFetchNotes(githubToken);
   let notes = data.notes || [];
   if (params.categoryId) {
     notes = notes.filter(n => n.categoryId === params.categoryId || n.categoryId.startsWith(params.categoryId + '/'));
@@ -2911,7 +2996,8 @@ async function doctortabletListNotes(params = {}) {
       wordCount: n.wordCount,
       updatedAt: n.updatedAt
     })),
-    categories: data.categories || []
+    categories: data.categories || [],
+    source: data.source || 'live_api'
   };
 }
 
@@ -2919,14 +3005,14 @@ async function doctortabletReadNote(slug, githubToken) {
   if (!slug) throw err400('Missing params.slug');
   const cleanSlug = slug.replace(/\.md$/, '');
   
-  // Try Live API first
-  const data = await doctortabletFetchNotes();
-  const matched = (data.notes || []).find(n => n.slug === cleanSlug || n.id === `note-${cleanSlug}` || n.filePath.endsWith(`${cleanSlug}.md`));
+  const data = await doctortabletFetchNotes(githubToken);
+  const notes = data.notes || [];
+  const matched = notes.find(n => n.slug === cleanSlug || n.id === `note-${cleanSlug}` || (n.filePath && n.filePath.endsWith(`${cleanSlug}.md`)));
+
   if (matched && matched.content) {
     return { success: true, note: matched };
   }
 
-  // Fallback to GitHub API
   if (githubToken) {
     const filePath = matched ? matched.filePath : `notes/${cleanSlug}.md`;
     try {
@@ -2944,8 +3030,9 @@ async function doctortabletReadNote(slug, githubToken) {
         return {
           success: true,
           note: {
-            title: cleanSlug.replace(/-/g, ' '),
+            title: matched ? matched.title : cleanSlug.replace(/-/g, ' '),
             slug: cleanSlug,
+            categoryId: matched ? matched.categoryId : 'root',
             filePath,
             content: contentStr,
             sha: ghData.sha
@@ -2985,7 +3072,7 @@ async function doctortabletSaveNote(params, githubToken) {
 
     if (postRes.ok) {
       const postData = await postRes.json();
-      if (postData.success) {
+      if (postData && postData.success) {
         return {
           success: true,
           message: 'Note saved successfully to Doctor Tablet vault & synced!',
@@ -3055,12 +3142,11 @@ async function doctortabletSaveNote(params, githubToken) {
   throw err400('Failed to save note to Doctor Tablet (Live API & GitHub fallback failed)');
 }
 
-async function doctortabletListCategories() {
-  const data = await doctortabletFetchNotes();
+async function doctortabletListCategories(githubToken) {
+  const data = await doctortabletFetchNotes(githubToken);
   return {
     success: true,
     totalCategories: (data.categories || []).length,
-    categories: data.categories || []
   };
 }
 
