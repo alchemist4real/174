@@ -473,19 +473,35 @@ function openTaskModal(task) {
     window.currentOpenedTask = task;
     const isDev = currentUserDivision === 'development' || isAdminUser;
     const isRev = currentUserDivision === 'review' || isAdminUser;
+    const isMgmt = currentUserDivision === 'management' || isAdminUser;
     const isMyTask = task.assigned_to === currentUserId;
 
     let actionsHtml = '';
     if (task.status === 'open' && isDev) {
         actionsHtml += `<button class="btn-unified primary" onclick="updateTask('${task.id}', 'claim_task')">Claim Task</button>`;
-      } else if (task.status === 'in_progress' && isMyTask) {
-        actionsHtml += `<button class="btn-unified" onclick="updateTask('${task.id}', 'unclaim_task')">Unclaim</button>`;
+    } else if (task.status === 'in_progress' && (isMyTask || isMgmt)) {
+        if (isMyTask) actionsHtml += `<button class="btn-unified" onclick="updateTask('${task.id}', 'unclaim_task')">Unclaim</button>`;
         actionsHtml += `<button class="btn-unified primary" onclick="updateTask('${task.id}', 'submit_task')">Submit for Review</button>`;
     } else if (task.status === 'developed' && isRev) {
         actionsHtml += `<button class="btn-unified primary" onclick="updateTask('${task.id}', 'start_review')">Start Review</button>`;
     } else if (task.status === 'in_review' && isRev) {
         actionsHtml += `<button class="btn-unified" onclick="updateTask('${task.id}', 'reject_task')" style="border-color:var(--danger); color:var(--danger)">Reject</button>`;
         actionsHtml += `<button class="btn-unified primary" onclick="updateTask('${task.id}', 'approve_task')">Approve (Done)</button>`;
+    }
+
+    // Re-Review Button (for done or developed tasks)
+    if ((isRev || isMgmt) && (task.status === 'done' || task.status === 'developed')) {
+        actionsHtml += `<button class="btn-unified" onclick="updateTask('${task.id}', 're_review_task')" style="border-color:var(--accent); color:var(--accent)">Re-Review Task</button>`;
+    }
+
+    // Reset Phase / Re-Plan Button (for active roles)
+    if (isMgmt || isDev || isRev) {
+        actionsHtml += `<button class="btn-unified" onclick="updateTask('${task.id}', 'reset_phase')" style="border-color:var(--border-medium); color:var(--text-main);">Reset Phase / Re-Plan</button>`;
+    }
+
+    // Delete Task Button (for Management or Admin)
+    if (isMgmt) {
+        actionsHtml += `<button class="btn-unified" onclick="updateTask('${task.id}', 'delete_task')" style="background:var(--danger); color:#fff; border-color:var(--danger);">Delete Task</button>`;
     }
 
     const modal = document.getElementById('contextModal');
@@ -552,8 +568,13 @@ window.loadTaskLogs = async function(taskId) {
 
         container.innerHTML = rejectNoteHtml + res.logs.map(l => {
             let noteHtml = l.note ? `<div style="color:var(--text-main); font-style:italic; margin-top:4px; padding-left:8px; border-left:2px solid var(--border-medium);">"${l.note}"</div>` : '';
+            let actionColor = 'var(--accent)';
+            if (l.action === 'rejected' || l.action === 'deleted') actionColor = 'var(--danger)';
+            else if (l.action === 'phase_reset') actionColor = 'var(--warning, #e6a23c)';
+            else if (l.action === 're_review_requested') actionColor = 'var(--accent)';
+
             return `<div style="font-size:11px; border-bottom:1px solid var(--border-light); padding:8px 0;">
-                <div><span style="color:var(--accent); font-weight:600;">${l.action.toUpperCase()}</span> by <b>${l.user ? (l.user.username || l.user.email.split('@')[0]) : 'System'}</b></div>
+                <div><span style="color:${actionColor}; font-weight:600;">${l.action.replace(/_/g, ' ').toUpperCase()}</span> by <b>${l.user ? (l.user.username || l.user.email.split('@')[0]) : 'System'}</b></div>
                 <div style="color:var(--text-muted); font-size:10px; margin-top:2px;">${new Date(l.created_at).toLocaleString()}</div>
                 ${noteHtml}
             </div>`;
@@ -565,8 +586,28 @@ window.loadTaskLogs = async function(taskId) {
 
 window.updateTask = async function(taskId, action) {
     let note = '';
-    
-    if (action === 'reject_task') {
+    let payloadExtra = {};
+
+    if (action === 'delete_task') {
+        const confirmDelete = await customConfirm("Are you sure you want to permanently delete this task? This action cannot be undone.");
+        if (!confirmDelete) return;
+    } else if (action === 'reset_phase') {
+        const reason = await customPrompt("Mandatory: Please state the reason for resetting / re-planning this task phase:");
+        if (!reason || !reason.trim()) {
+            showToast('Reset reason is required.', 'error');
+            return;
+        }
+        note = reason.trim();
+        const unassignConfirm = await customConfirm("Do you also want to UNASSIGN the developer so anyone can claim this task again?");
+        payloadExtra = { new_status: 'open', unassign: unassignConfirm };
+    } else if (action === 're_review_task') {
+        const reReviewNote = await customPrompt("Mandatory: Please provide notes / feedback for re-reviewing this task:");
+        if (!reReviewNote || !reReviewNote.trim()) {
+            showToast('Re-review note is required.', 'error');
+            return;
+        }
+        note = reReviewNote.trim();
+    } else if (action === 'reject_task') {
         note = await customPrompt("Mandatory: Please provide a reason for rejecting this task:");
         if (!note || !note.trim()) {
             showToast('Rejection reason is required.', 'error');
@@ -580,9 +621,10 @@ window.updateTask = async function(taskId, action) {
 
     document.getElementById('contextModal').classList.remove('active');
     showToast('Updating task...');
-    const res = await apiCall('tasks', { action, task_id: taskId, note: note ? note.trim() : null });
+    const payload = { action, task_id: taskId, note: note ? note.trim() : null, ...payloadExtra };
+    const res = await apiCall('tasks', payload);
     if(res.success) {
-        showToast('Task updated', 'success');
+        showToast(action === 'delete_task' ? 'Task deleted' : 'Task updated', 'success');
         loadTasks();
     } else {
         showToast('Error: ' + res.error, 'error');
