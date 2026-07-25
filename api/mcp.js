@@ -2843,7 +2843,7 @@ async function handleDirectUpload(req, res, supabaseUrl, sbKey, githubToken, own
 
 const DOCTORTABLET_API_URL = process.env.DOCTORTABLET_API_URL || 'https://doctortablet.vercel.app/api/notes';
 const DOCTORTABLET_GH_OWNER = 'alchemist4real';
-const DOCTORTABLET_GH_REPO = 'dr.-been';
+const DOCTORTABLET_GH_REPO = 'doctortablet';
 
 async function handleDoctorTabletMethod(m, params, githubToken) {
   if (m === 'doctortablet_list_notes') {
