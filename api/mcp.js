@@ -2843,7 +2843,7 @@ async function handleDirectUpload(req, res, supabaseUrl, sbKey, githubToken, own
 
 const DOCTORTABLET_API_URL = process.env.DOCTORTABLET_API_URL || 'https://doctortablet.vercel.app/api/notes';
 const DOCTORTABLET_GH_OWNER = 'alchemist4real';
-const DOCTORTABLET_GH_REPO = 'doctortablet';
+const DOCTORTABLET_GH_REPO = 'dr.-been';
 
 async function handleDoctorTabletMethod(m, params, githubToken) {
   if (m === 'doctortablet_list_notes') {
@@ -3147,13 +3147,15 @@ async function doctortabletListCategories(githubToken) {
   return {
     success: true,
     totalCategories: (data.categories || []).length,
+    categories: data.categories || [],
   };
 }
 
-async function doctortabletCreateCategory(params) {
+async function doctortabletCreateCategory(params, githubToken) {
   const { name, parentId } = params;
   if (!name) throw err400('Category name is required');
 
+  // Try Live API first
   try {
     const res = await fetch(DOCTORTABLET_API_URL, {
       method: 'POST',
@@ -3175,6 +3177,51 @@ async function doctortabletCreateCategory(params) {
     console.error('DoctorTablet create_category error:', err);
   }
 
+  // GitHub fallback: create .gitkeep in new folder
+  if (githubToken) {
+    try {
+      const folderSlug = name.replace(/[^a-zA-Z0-9_-]/g, '-').replace(/-+/g, '-');
+      const folderPath = parentId ? `notes/${parentId}/${folderSlug}` : `notes/${folderSlug}`;
+      const gitkeepPath = `${folderPath}/.gitkeep`;
+      const contentBase64 = Buffer.from('', 'utf-8').toString('base64');
+
+      const putRes = await fetch(
+        `https://api.github.com/repos/${DOCTORTABLET_GH_OWNER}/${DOCTORTABLET_GH_REPO}/contents/${gitkeepPath}`,
+        {
+          method: 'PUT',
+          headers: {
+            'Authorization': `Bearer ${githubToken}`,
+            'Accept': 'application/vnd.github+json',
+            'Content-Type': 'application/json',
+            'User-Agent': 'MR-CAPSULES-MCP-Gateway'
+          },
+          body: JSON.stringify({
+            message: `chore(folder): create ${folderPath} via MCP Gateway`,
+            content: contentBase64,
+            branch: 'main'
+          })
+        }
+      );
+      if (putRes.ok) {
+        const catId = parentId ? `${parentId}/${folderSlug}` : folderSlug;
+        return {
+          success: true,
+          message: `Category "${name}" created via GitHub`,
+          category: {
+            id: catId,
+            name,
+            path: catId,
+            parentId: parentId || null,
+            type: 'custom',
+            color: '#8A9A7E'
+          }
+        };
+      }
+    } catch (e) {
+      console.error('DoctorTablet create_category GitHub fallback error:', e);
+    }
+  }
+
   return {
     success: true,
     message: `Category "${name}" creation queued/processed`,
@@ -3182,10 +3229,10 @@ async function doctortabletCreateCategory(params) {
   };
 }
 
-async function doctortabletSearchNotes(params) {
+async function doctortabletSearchNotes(params, githubToken) {
   const { query, tag } = params;
   if (!query && !tag) throw err400('Query or tag parameter required for search');
-  const data = await doctortabletFetchNotes();
+  const data = await doctortabletFetchNotes(githubToken);
   let notes = data.notes || [];
 
   if (query) {
@@ -3221,17 +3268,19 @@ async function doctortabletSearchNotes(params) {
 async function doctortabletDeleteNote(filePath, githubToken) {
   if (!filePath) throw err400('filePath is required for deletion');
 
+  // Normalize filePath — ensure it starts with notes/ for GitHub API
+  const cleanPath = filePath.replace(/\\/g, '/').replace(/^notes\//, '');
+  const repoPath = `notes/${cleanPath}`;
+
+  // Try Live API DELETE first (not POST)
   try {
-    const res = await fetch(DOCTORTABLET_API_URL, {
-      method: 'POST',
+    const slug = cleanPath.replace(/\.md$/, '').split('/').pop() || '';
+    const deleteUrl = `${DOCTORTABLET_API_URL}?slug=${encodeURIComponent(slug)}&filePath=${encodeURIComponent(cleanPath)}`;
+    const res = await fetch(deleteUrl, {
+      method: 'DELETE',
       headers: {
-        'Content-Type': 'application/json',
         'User-Agent': 'MR-CAPSULES-MCP-Gateway'
-      },
-      body: JSON.stringify({
-        action: 'delete_note',
-        filePath
-      })
+      }
     });
     if (res.ok) {
       const data = await res.json();
@@ -3242,7 +3291,7 @@ async function doctortabletDeleteNote(filePath, githubToken) {
   }
 
   if (githubToken) {
-    const apiUrl = `https://api.github.com/repos/${DOCTORTABLET_GH_OWNER}/${DOCTORTABLET_GH_REPO}/contents/${filePath}`;
+    const apiUrl = `https://api.github.com/repos/${DOCTORTABLET_GH_OWNER}/${DOCTORTABLET_GH_REPO}/contents/${repoPath}`;
     const getRes = await fetch(apiUrl, {
       headers: {
         'Authorization': `Bearer ${githubToken}`,
@@ -3261,13 +3310,13 @@ async function doctortabletDeleteNote(filePath, githubToken) {
           'User-Agent': 'MR-CAPSULES-MCP-Gateway'
         },
         body: JSON.stringify({
-          message: `chore(delete): remove note ${filePath} via MCP Gateway`,
+          message: `chore(delete): remove note ${cleanPath} via MCP Gateway`,
           sha: existingData.sha,
           branch: 'main'
         })
       });
       if (delRes.ok) {
-        return { success: true, message: `Note ${filePath} deleted from DoctorTablet repo` };
+        return { success: true, message: `Note ${cleanPath} deleted from DoctorTablet repo` };
       }
     }
   }
@@ -3275,8 +3324,8 @@ async function doctortabletDeleteNote(filePath, githubToken) {
   throw err400(`Failed to delete note ${filePath}`);
 }
 
-async function doctortabletExportMergedDocument(params = {}) {
-  const data = await doctortabletFetchNotes();
+async function doctortabletExportMergedDocument(params = {}, githubToken) {
+  const data = await doctortabletFetchNotes(githubToken);
   const categories = data.categories || [];
   let notes = data.notes || [];
 
