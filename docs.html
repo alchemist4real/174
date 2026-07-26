@@ -282,29 +282,107 @@
       <!-- SECTION 1: IDENTIFIKASI KONTEN -->
       <div class="docs-section">
         <h2>1. Mengidentifikasi Konten yang Dibutuhkan per Blok</h2>
-        <p>Tugas pertama Management adalah memetakan <strong>gap</strong> antara materi yang sudah ada di platform dan materi yang <em>seharusnya</em> ada. Ini dilakukan sebelum task apapun dibuat.</p>
-
-        <h3>A. Langkah Audit Konten</h3>
-        <ol>
-          <li>Buka tab <strong>Files</strong> di Admin Panel &rarr; navigasi ke folder blok yang ingin diaudit (contoh: <code>content/semester 2/2.5/</code>).</li>
-          <li>Bandingkan file yang ada dengan <strong>silabus blok</strong> (daftar kuliah/praktikum resmi dari prodi). Catat materi yang belum punya file HTML.</li>
-          <li>Cek tab <strong>Tasks</strong> di Kanban Board — pastikan materi yang belum ada <em>belum</em> punya task aktif (Open / In Progress / In Review) agar tidak duplikat assignment.</li>
-        </ol>
-
-        <h3>B. Jenis Konten HTML yang Dibutuhkan</h3>
-        <p>Semua konten di MR-CAPSULES berbentuk <strong>soal pilihan ganda pool (HTML interaktif)</strong> &mdash; tidak ada tipe file Summary, Video, atau Flashcard terpisah. Format ini dipakai seragam untuk dua jenis ujian yang berbeda:</p>
-        <table class="docs-table">
-          <thead>
-            <tr><th>Peruntukan</th><th>Isi Soal</th><th>Sumber Utama</th></tr>
-          </thead>
-          <tbody>
-            <tr><td><strong>CBT</strong> (Computer Based Test)</td><td>Soal teori dari materi kuliah &mdash; patofisiologi, farmakologi, anatomi, dll.</td><td>PPT Lecture / modul tertulis</td></tr>
-            <tr><td><strong>SOE</strong> (Skill / OSCE)</td><td>Soal berbasis prosedur dan keterampilan klinik &mdash; tetap format pilihan ganda</td><td>Modul praktikum / panduan skill lab</td></tr>
-          </tbody>
-        </table>
         <div class="alert-box">
-          <strong>CATATAN:</strong> Baik soal CBT maupun SOE diwujudkan dalam format file <code>.html</code> pilihan ganda yang sama. Yang membedakan hanya <em>isi soalnya</em> (teori vs. prosedural), bukan format filenya.
-        </div>
+  <strong>📖 ISTILAH PENTING (buat yang masih awam):</strong>
+  <ul>
+    <li><strong>Gap konten</strong> = materi yang seharusnya ada di silabus tapi belum tersedia file HTML-nya di platform</li>
+    <li><strong>Silabus</strong> = daftar resmi kuliah/praktikum dari program studi untuk satu blok</li>
+    <li><strong>Template Lecture</strong> = format file HTML berisi rangkuman materi kuliah + kuis (lihat detail lengkap di tab <em>Division Development</em>)</li>
+    <li><strong>Template CBT / Quiz Engine</strong> = format file HTML khusus soal ujian murni tanpa rangkuman materi, dengan mode Study/Exam/Drill (lihat detail lengkap di tab <em>Division Development</em>)</li>
+    <li><strong>Task duplikat</strong> = dua task berbeda yang ternyata membahas topik yang sama, sehingga membuang waktu Developer</li>
+  </ul>
+</div>
+
+<p>Tugas pertama Management adalah memetakan <strong>gap</strong> antara materi yang sudah ada di platform dan materi yang <em>seharusnya</em> ada. Ini dilakukan sebelum task apapun dibuat.</p>
+
+<h3>A. Langkah Audit Konten</h3>
+<ol>
+  <li>Buka tab <strong>Files</strong> di Admin Panel &rarr; navigasi ke folder blok yang ingin diaudit (contoh: <code>content/semester 2/2.5/</code>).</li>
+  <li>Bandingkan file yang ada dengan <strong>silabus blok</strong> (daftar kuliah/praktikum resmi dari prodi). Catat materi yang belum punya file HTML.</li>
+  <li>Cek tab <strong>Tasks</strong> di Kanban Board — pastikan materi yang belum ada <em>belum</em> punya task aktif (Open / In Progress / In Review) agar tidak duplikat assignment.</li>
+</ol>
+
+<h3>B. Jenis Konten HTML yang Dibutuhkan</h3>
+<p>Semua konten di MR-CAPSULES berbentuk file <code>.html</code> interaktif. Sesuai penjelasan lengkap di tab <strong>Division Development</strong>, ada <strong>dua jenis template</strong> yang dipakai, tergantung sumber materinya:</p>
+
+<table class="docs-table">
+  <thead>
+    <tr>
+      <th>Fitur / Karakteristik</th>
+      <th>Template HTML Lecture</th>
+      <th>Template HTML CBT</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Dipakai untuk task</strong></td>
+      <td>Materi kuliah teori & modul praktikum yang belum pernah dirangkum</td>
+      <td>Naskah soal ujian CBT tahun lalu / bank soal siap pakai</td>
+    </tr>
+    <tr>
+      <td><strong>Sumber Utama</strong></td>
+      <td>PPT Kuliah / Modul Praktikum</td>
+      <td>Naskah Soal CBT Tahun Lalu / Bank Soal</td>
+    </tr>
+    <tr>
+      <td><strong>Elemen Utama</strong></td>
+      <td>Tab 📋 Materi (Rangkuman) + Tab 🎯 Quiz</td>
+      <td>Pure Engine Kuis (Study, Exam, Drill Mode)</td>
+    </tr>
+    <tr>
+      <td><strong>Penyajian Materi</strong></td>
+      <td>Sub-tabs, Note boxes, Data tables, Diagram SVG</td>
+      <td>Tidak ada (hanya lewat penjelasan di kuis)</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="alert-box">
+  <strong>CATATAN UNTUK MANAGEMENT:</strong> Saat membuat task (lihat Section 2), tentukan dulu sumbernya termasuk materi kuliah/praktikum baru (&rarr; Template Lecture) atau naskah soal ujian siap pakai (&rarr; Template CBT). Ini membantu Developer langsung tahu template mana yang harus dipakai tanpa perlu bertanya ulang.
+</div>
+
+<h3>C. Aturan Prioritas Sumber: PPT Lecture vs. Modul Praktikum</h3>
+<p>Jika untuk <strong>satu topik yang sama</strong> tersedia dua sumber (PPT lecture <em>dan</em> modul praktikum), ikuti hierarki berikut:</p>
+
+<div class="alert-box">
+  <strong>ATURAN EMAS:</strong> Pilih <em>satu</em> sumber yang paling lengkap — jangan buat dua file HTML terpisah untuk materi yang identik. Tujuannya menghindari duplikasi konten yang membingungkan pengguna.
+</div>
+
+<table class="docs-table">
+  <thead>
+    <tr><th>Kondisi</th><th>Sumber yang Dipakai</th><th>Alasan</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>PPT Lecture &amp; Modul Praktikum membahas <strong>topik identik</strong>, kedalaman berbeda</td>
+      <td>Pilih yang <strong>lebih lengkap</strong> (biasanya modul praktikum — mencakup prosedur + teori)</td>
+      <td>Modul praktikum umumnya sudah merangkum teori dari PPT plus penerapan klinis</td>
+    </tr>
+    <tr>
+      <td>PPT Lecture lebih lengkap (lebih banyak slide, lebih detail patofisiologi)</td>
+      <td>Pakai <strong>PPT Lecture</strong> sebagai basis</td>
+      <td>Materi teori kuliah lebih banyak terangkum di sini</td>
+    </tr>
+    <tr>
+      <td>Modul Praktikum membahas <strong>prosedur / skill</strong> yang tidak ada di PPT</td>
+      <td>Buat <strong>dua file terpisah</strong>: satu dari PPT (Template Lecture, fokus teori), satu dari modul (Template Lecture juga, fokus prosedur)</td>
+      <td>Isi materi berbeda meski format template sama &mdash; tidak redundan</td>
+    </tr>
+    <tr>
+      <td>Konten benar-benar <strong>sama persis</strong> (PPT = ringkasan modul)</td>
+      <td>Pakai <strong>modul praktikum</strong>, abaikan PPT</td>
+      <td>Hindari duplikasi; modul lebih terstruktur untuk dijadikan materi + soal</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>D. Cara Mengecek Kelengkapan via Files</h3>
+<ol>
+  <li>Di tab <strong>Files</strong>, buka folder blok target.</li>
+  <li>Klik kanan (atau ikon titik tiga) pada file HTML yang ada &rarr; pilih <strong>Edit Code</strong> &rarr; gunakan <em>Live Preview</em> untuk melihat konten file tersebut secara cepat.</li>
+  <li>Jika file HTML yang ada sudah mencakup materi dari PPT <em>dan</em> modul secara memadai, tidak perlu task baru. Jika belum lengkap, catat untuk di-update dengan membuat task revisi baru.</li>
+</ol>
+      </div>
 
         <h3>C. Aturan Prioritas Sumber: PPT Lecture vs. Modul Praktikum</h3>
         <p>Jika untuk <strong>satu topik yang sama</strong> tersedia dua sumber (PPT lecture <em>dan</em> modul praktikum), ikuti hierarki berikut:</p>
