@@ -34,6 +34,14 @@
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
         MCP &amp; API Gateway
       </div>
+      <div class="tab" data-target="docsManagement">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        Division Management
+      </div>
+      <div class="tab" data-target="docsDevelopment">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+        Division Development
+      </div>
     </div>
 
     <div id="adminThemeToggles" class="docs-theme-toggles">
@@ -250,6 +258,499 @@
 
         <div class="alert-box">
           <strong>CATATAN:</strong> Tabel di atas merepresentasikan role minimum yang dibutuhkan. Role yang lebih tinggi dalam hierarki (SuperAdmin &gt; Admin &gt; Reviewer/Developer) otomatis mewarisi akses baca dari role di bawahnya.
+        </div>
+      </div>
+
+    </div>
+
+    <!-- TAB 3: DIVISION MANAGEMENT GUIDE -->
+    <div class="docs-container" id="docsManagement">
+
+      <div class="docs-title">PANDUAN DIVISION MANAGEMENT</div>
+
+      <!-- SECTION 1: IDENTIFIKASI KONTEN -->
+      <div class="docs-section">
+        <h2>1. Mengidentifikasi Konten yang Dibutuhkan per Blok</h2>
+        <p>Tugas pertama Management adalah memetakan <strong>gap</strong> antara materi yang sudah ada di platform dan materi yang <em>seharusnya</em> ada. Ini dilakukan sebelum task apapun dibuat.</p>
+
+        <h3>A. Langkah Audit Konten</h3>
+        <ol>
+          <li>Buka tab <strong>Files</strong> di Admin Panel &rarr; navigasi ke folder blok yang ingin diaudit (contoh: <code>content/semester 2/2.5/</code>).</li>
+          <li>Bandingkan file yang ada dengan <strong>silabus blok</strong> (daftar kuliah/praktikum resmi dari prodi). Catat materi yang belum punya file HTML.</li>
+          <li>Cek tab <strong>Tasks</strong> di Kanban Board — pastikan materi yang belum ada <em>belum</em> punya task aktif (Open / In Progress / In Review) agar tidak duplikat assignment.</li>
+        </ol>
+
+        <h3>B. Jenis Konten HTML yang Dibutuhkan</h3>
+        <p>Semua konten di MR-CAPSULES berbentuk <strong>soal pilihan ganda pool (HTML interaktif)</strong> &mdash; tidak ada tipe file Summary, Video, atau Flashcard terpisah. Format ini dipakai seragam untuk dua jenis ujian yang berbeda:</p>
+        <table class="docs-table">
+          <thead>
+            <tr><th>Peruntukan</th><th>Isi Soal</th><th>Sumber Utama</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>CBT</strong> (Computer Based Test)</td><td>Soal teori dari materi kuliah &mdash; patofisiologi, farmakologi, anatomi, dll.</td><td>PPT Lecture / modul tertulis</td></tr>
+            <tr><td><strong>SOE</strong> (Skill / OSCE)</td><td>Soal berbasis prosedur dan keterampilan klinik &mdash; tetap format pilihan ganda</td><td>Modul praktikum / panduan skill lab</td></tr>
+          </tbody>
+        </table>
+        <div class="alert-box">
+          <strong>CATATAN:</strong> Baik soal CBT maupun SOE diwujudkan dalam format file <code>.html</code> pilihan ganda yang sama. Yang membedakan hanya <em>isi soalnya</em> (teori vs. prosedural), bukan format filenya.
+        </div>
+
+        <h3>C. Aturan Prioritas Sumber: PPT Lecture vs. Modul Praktikum</h3>
+        <p>Jika untuk <strong>satu topik yang sama</strong> tersedia dua sumber (PPT lecture <em>dan</em> modul praktikum), ikuti hierarki berikut:</p>
+
+        <div class="alert-box">
+          <strong>ATURAN EMAS:</strong> Pilih <em>satu</em> sumber yang paling lengkap — jangan buat dua file HTML terpisah untuk materi yang identik. Tujuannya menghindari duplikasi konten yang membingungkan pengguna.
+        </div>
+
+        <table class="docs-table">
+          <thead>
+            <tr><th>Kondisi</th><th>Sumber yang Dipakai</th><th>Alasan</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>PPT Lecture &amp; Modul Praktikum membahas <strong>topik identik</strong>, kedalaman berbeda</td>
+              <td>Pilih yang <strong>lebih lengkap</strong> (biasanya modul praktikum — mencakup prosedur + teori)</td>
+              <td>Modul praktikum umumnya sudah merangkum teori dari PPT plus penerapan klinis</td>
+            </tr>
+            <tr>
+              <td>PPT Lecture lebih lengkap (lebih banyak slide, lebih detail patofisiologi)</td>
+              <td>Pakai <strong>PPT Lecture</strong> sebagai basis</td>
+              <td>Konten CBT lebih banyak muncul dari materi teori kuliah</td>
+            </tr>
+            <tr>
+              <td>Modul Praktikum membahas <strong>prosedur / skill</strong> yang tidak ada di PPT</td>
+              <td>Buat <strong>dua file terpisah</strong>: satu dari PPT (soal teori/CBT), satu dari modul (soal prosedural/SOE)</td>
+              <td>Isi soal berbeda meski format HTML sama &mdash; tidak redundan</td>
+            </tr>
+            <tr>
+              <td>Konten benar-benar <strong>sama persis</strong> (PPT = ringkasan modul)</td>
+              <td>Pakai <strong>modul praktikum</strong>, abaikan PPT</td>
+              <td>Hindari duplikasi; modul lebih terstruktur untuk dijadikan soal</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>D. Cara Mengecek Kelengkapan via Files</h3>
+        <ol>
+          <li>Di tab <strong>Files</strong>, buka folder blok target.</li>
+          <li>Klik kanan (atau ikon titik tiga) pada file HTML yang ada &rarr; pilih <strong>Edit Code</strong> &rarr; gunakan <em>Live Preview</em> untuk melihat konten file tersebut secara cepat.</li>
+          <li>Jika file HTML yang ada sudah mencakup materi dari PPT <em>dan</em> modul secara memadai, tidak perlu task baru. Jika belum lengkap, catat untuk di-update dengan membuat task revisi baru.</li>
+        </ol>
+      </div>
+
+      <!-- SECTION 2: INPUT TASK -->
+      <div class="docs-section">
+        <h2>2. Menginput Task ke Task Board</h2>
+        <p>Setelah audit selesai dan daftar gap konten tersusun, langkah berikutnya adalah membuat task di Kanban Board. Ada dua cara: <strong>manual</strong> via Admin Panel, atau <strong>otomatis</strong> via MCP (Claude.ai / Antigravity).</p>
+
+        <h3>A. Cara Manual (via Admin Panel)</h3>
+        <ol>
+          <li>Buka tab <strong>Tasks</strong> di Admin Panel.</li>
+          <li>Klik tombol <strong>+ Create Task</strong> (tombol ini hanya muncul untuk akun Management/Admin).</li>
+          <li>Isi form dengan ketentuan berikut:
+            <ul>
+              <li><strong>Title:</strong> Nama materi spesifik, jelas, dan konsisten. Format yang direkomendasikan: <code>[Mata Kuliah] [Topik] &mdash; [Tipe]</code><br>Contoh: <code>Fisiologi Saraf Otonom &mdash; CBT</code> atau <code>Histologi Epitel &mdash; Identifikasi</code></li>
+              <li><strong>Semester:</strong> Pilih semester yang sesuai (contoh: <code>semester 2</code>).</li>
+              <li><strong>Block:</strong> Isi nomor blok (contoh: <code>2.5</code>). Wajib diisi agar task muncul di tampilan Silabus.</li>
+              <li><strong>Category:</strong> Isi sesuai peruntukan ujian: <code>CBT</code> untuk soal teori, atau nama blok/kategori custom (misal <code>SOE 2.5</code>, <code>Praktikum Fisio</code>). Field ini bebas diisi &mdash; gunakan nama yang konsisten agar mudah difilter di Kanban Board.</li>
+              <li><strong>Priority:</strong> Sesuaikan urgensi:
+                <ul>
+                  <li><code>urgent</code> &mdash; ujian &lt; 2 minggu lagi</li>
+                  <li><code>high</code> &mdash; ujian 2&ndash;4 minggu</li>
+                  <li><code>normal</code> &mdash; standar</li>
+                  <li><code>low</code> &mdash; cadangan / tidak mendesak</li>
+                </ul>
+              </li>
+              <li><strong>Description:</strong> Cantumkan detail sumber materi, misalnya: <em>&ldquo;Buat soal CBT dari PPT K10 am-i-counseling. Fokus pada prinsip dasar konseling dan hambatan komunikasi. Target ~20 soal.&rdquo;</em></li>
+              <li><strong>Target Path (opsional):</strong> Jika sudah tahu path file tujuan, isi di sini (contoh: <code>content/semester 2/2.5/2.5 CBT_K10 am-i-counseling.html</code>). Ini memudahkan Developer tahu di mana menyimpan hasil kerjanya.</li>
+              <li><strong>Assign To (opsional):</strong> Pilih Developer tertentu dari dropdown jika ingin mendelegasikan secara langsung. Kosongkan jika ingin open claim.</li>
+            </ul>
+          </li>
+          <li>Klik <strong>Confirm</strong>. Task akan muncul di kolom <em>Open</em> pada Kanban Board.</li>
+        </ol>
+
+        <div class="alert-box">
+          <strong>TIPS:</strong> Dari tab <strong>Files</strong>, kamu bisa klik kanan file yang sudah ada &rarr; <strong>Create Task</strong> untuk pre-fill otomatis Target Path dan langsung membuka form task. Jauh lebih cepat daripada input manual satu per satu.
+        </div>
+
+        <h3>B. Cara via MCP (Claude.ai / Antigravity) &mdash; Batch Input</h3>
+        <p>Cara ini sangat efisien untuk membuat <strong>banyak task sekaligus</strong> (misalnya satu blok penuh) tanpa klik-klik berulang di Admin Panel.</p>
+
+        <p><strong>Prasyarat:</strong> Pastikan sudah terhubung ke MCP MR-CAPSULES (lihat tab <em>MCP &amp; API Gateway</em> untuk panduan koneksi). Gunakan akun Management/Admin agar <code>tasks_create</code> tidak ditolak.</p>
+
+        <p><strong>Langkah di Claude.ai Web:</strong></p>
+        <ol>
+          <li>Pastikan connector <strong>mr capsules</strong> sudah aktif (ikon puzzle di sidebar chat).</li>
+          <li>Kirim prompt seperti berikut ke Claude:
+            <p class="docs-note-block">Contoh prompt batch task creation:</p>
+          </li>
+        </ol>
+        <pre style="background:var(--bg-inset);border:var(--border-main);border-radius:8px;padding:16px;font-family:var(--font-mono);font-size:13px;color:var(--text-muted);overflow-x:auto;white-space:pre-wrap;line-height:1.6;">&ldquo;Gunakan tool tasks_create untuk membuat task berikut di MR-CAPSULES:
+
+1. Title: &ldquo;Fisiologi Saraf Otonom &mdash; CBT&rdquo;
+   semester: &ldquo;semester 1&rdquo;, block: &ldquo;1.3&rdquo;
+   category: &ldquo;CBT&rdquo;, priority: &ldquo;high&rdquo;
+   description: &ldquo;Buat pool soal pilihan ganda dari PPT K12 Fungsi SSO. Target ~15 soal teori.&rdquo;
+
+2. Title: &ldquo;Histologi Epitel &mdash; SOE&rdquo;
+   semester: &ldquo;semester 1&rdquo;, block: &ldquo;1.2&rdquo;
+   category: &ldquo;SOE&rdquo;, priority: &ldquo;normal&rdquo;
+   description: &ldquo;Buat pool soal pilihan ganda prosedural dari modul praktikum Histo Epitel.&rdquo;
+
+Buat semua task tersebut satu per satu.&rdquo;</pre>
+
+        <p><strong>Langkah di Antigravity (agy CLI):</strong></p>
+        <ol>
+          <li>Pastikan MCP MR-CAPSULES sudah dikonfigurasi di Antigravity.</li>
+          <li>Gunakan perintah langsung di chat Antigravity, misalnya:<br><code>Buat task CBT untuk semua kuliah di blok 2.5 yang belum ada filenya. Gunakan tasks_create via MCP.</code></li>
+          <li>Antigravity akan mengeksekusi <code>tasks_create</code> secara berurutan untuk setiap item.</li>
+        </ol>
+
+        <div class="alert-box">
+          <strong>PENTING:</strong> Sebelum minta AI membuat task batch, selalu sertakan daftar materi yang sudah ada (hasil audit dari Files) agar AI tidak membuat task untuk konten yang <em>sudah selesai</em>.
+        </div>
+
+        <h3>C. Parameter Lengkap <code>tasks_create</code></h3>
+        <table class="docs-table">
+          <thead>
+            <tr><th>Parameter</th><th>Tipe</th><th>Wajib</th><th>Keterangan</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>title</code></td><td>string</td><td>Ya</td><td>Nama task, tampil di Kanban Board</td></tr>
+            <tr><td><code>description</code></td><td>string</td><td>Tidak</td><td>Detail sumber, jumlah soal, instruksi Developer</td></tr>
+            <tr><td><code>semester</code></td><td>string</td><td>Tidak</td><td>Contoh: <code>semester 1</code>, <code>semester 2</code></td></tr>
+            <tr><td><code>block</code></td><td>string</td><td>Tidak</td><td>Contoh: <code>1.3</code>, <code>2.5</code> &mdash; tampil di Silabus</td></tr>
+            <tr><td><code>category</code></td><td>string</td><td>Tidak</td><td>Bebas diisi. Gunakan <code>CBT</code> untuk soal teori, <code>SOE</code> untuk soal prosedural, atau nama kategori lain yang konsisten</td></tr>
+            <tr><td><code>priority</code></td><td>enum</td><td>Tidak</td><td><code>low</code> / <code>normal</code> / <code>high</code> / <code>urgent</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- SECTION 3: ANTI-REDUNDANSI -->
+      <div class="docs-section">
+        <h2>3. Memastikan Developer &amp; Reviewer Tidak Redundan</h2>
+        <p>Redundansi terjadi ketika satu anggota <strong>mengerjakan sekaligus mereview</strong> konten miliknya sendiri, atau ketika <strong>dua Developer</strong> membuat file untuk topik yang sama. Ini harus dicegah secara sistematis.</p>
+
+        <h3>A. Prinsip Pemisahan Peran</h3>
+        <ul>
+          <li><strong>Developer</strong> hanya boleh mengerjakan (claim) dan mengumpulkan (submit) task. Mereka <em>tidak boleh</em> mereview hasil kerja mereka sendiri.</li>
+          <li><strong>Reviewer</strong> hanya boleh mereview task yang <em>bukan</em> miliknya. Jika seorang anggota merangkap Developer &amp; Reviewer, Management harus memastikan ia tidak ditempatkan pada tugas yang sama.</li>
+          <li>Management (Admin/SuperAdmin) boleh memantau semua alur, namun sebaiknya <em>tidak terlibat langsung</em> dalam produksi konten agar bisa bertindak netral saat eskalasi.</li>
+        </ul>
+
+        <h3>B. Langkah Pencegahan Redundansi Developer</h3>
+        <ol>
+          <li>
+            <strong>Sebelum membuat task:</strong> Cek di Kanban Board (kolom Open, In Progress) apakah topik sudah ada task-nya. Gunakan filter atau search di tab Tasks.
+          </li>
+          <li>
+            <strong>Saat assign task:</strong> Jika meng-assign langsung via form (bukan open claim), pastikan tidak ada dua task dengan topik identik di-assign ke Developer yang sama.
+          </li>
+          <li>
+            <strong>Jika dua Developer mengklaim topik yang sama secara tidak sengaja:</strong> Management gunakan <code>tasks_delete</code> pada task duplikat, atau tambahkan note via <code>tasks_add_note</code> untuk mengarahkan Developer yang kedua ke topik lain.
+          </li>
+          <li>
+            <strong>Pantau kolom <em>Developed (Wait for Review)</em>:</strong> Jika ada dua file masuk untuk topik yang sama, Management menentukan mana yang lebih lengkap, lalu reject yang lebih lemah dengan catatan (melalui Reviewer).
+          </li>
+        </ol>
+
+        <h3>C. Langkah Pencegahan Redundansi Reviewer</h3>
+        <ol>
+          <li>Saat task masuk kolom <strong>In Review</strong>, Reviewer yang meng-klaim <em>tidak boleh</em> sama dengan Developer yang mengerjakan task tersebut. Cek nama di log task (<code>tasks_logs</code>) sebelum memulai review.</li>
+          <li>Jika tim kecil dan tidak ada Reviewer lain yang tersedia, <strong>eskalasi ke Management</strong> — Management yang melakukan review sementara, atau tunda task hingga Reviewer tersedia.</li>
+          <li>Gunakan field <strong>Note</strong> (<code>tasks_add_note</code>) untuk mendokumentasikan siapa yang sudah mereview sesi mana, terutama pada materi besar yang direview bertahap.</li>
+        </ol>
+
+        <h3>D. Monitoring via Kanban Board &amp; Leaderboard</h3>
+        <table class="docs-table">
+          <thead>
+            <tr><th>Sinyal</th><th>Apa yang Harus Dilakukan Management</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Satu Developer dominasi kolom <em>In Progress</em> (&gt;5 task sekaligus)</td>
+              <td>Batasi claim &mdash; tambahkan note di task agar Developer fokus menyelesaikan yang ada dulu</td>
+            </tr>
+            <tr>
+              <td>Tidak ada aktivitas di kolom <em>In Review</em> &gt;3 hari</td>
+              <td>Ping Reviewer via <strong>Broadcast</strong> (tab Team) atau tambahkan note urgency</td>
+            </tr>
+            <tr>
+              <td>Task di kolom <em>Open</em> sudah lama tidak diklaim</td>
+              <td>Assign langsung ke Developer via form edit task, atau naikkan priority ke <code>urgent</code></td>
+            </tr>
+            <tr>
+              <td>Satu anggota top Leaderboard tapi seluruh task belum Done</td>
+              <td>Cek apakah ada task yang stagnan di <em>In Review</em> &mdash; review pipeline mungkin macet</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>E. Checklist Harian Management</h3>
+        <ul>
+          <li>Buka Kanban Board &rarr; pastikan tidak ada task yang stuck lebih dari 48 jam di satu kolom.</li>
+          <li>Cek Dashboard &rarr; Activity Log untuk mendeteksi aksi tak wajar (misal: submit tanpa claim, atau approve oleh Developer).</li>
+          <li>Review kolom <em>Done</em> mingguan &rarr; pastikan file HTML-nya benar-benar ada di tab Files (path sesuai).</li>
+          <li>Bandingkan jumlah task <em>Done</em> vs task <em>Open</em> untuk ukuran produktivitas divisi secara keseluruhan.</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- TAB 4: DIVISION DEVELOPMENT GUIDE -->
+    <div class="docs-container" id="docsDevelopment">
+
+      <div class="docs-title">PANDUAN DIVISION DEVELOPMENT</div>
+
+      <!-- SECTION 1: WORKFLOW UTAMA (VIBE CODING) -->
+      <div class="docs-section">
+        <h2>1. Workflow Utama Divisi Development (Vibe Coding)</h2>
+        <p>Tugas utama Divisi Development adalah meracik materi kuliah/modul mentah atau naskah soal menjadi file <code>.html</code> interaktif yang siap dipublikasikan ke MR-CAPSULES.</p>
+
+        <div class="alert-box">
+          <strong>PRINSIP UTAMA: 100% VIBE CODING</strong><br>
+          Developer <strong>TIDAK PERLU</strong> menulis kode HTML/CSS/JS secara manual baris demi baris! Seluruh pembuatan kode dilakukan dengan men-<em>generate</em> dan memperbaikinya menggunakan AI Assistant (seperti <strong>Claude.ai</strong> atau <strong>Antigravity CLI</strong>). Peran Anda adalah sebagai <em>Prompt Engineer</em> dan pengontrol kualitas materi.
+        </div>
+
+        <div class="alert-box" style="border-left-color:var(--red);">
+          <strong>PERINGATAN EDITOR ADMIN PANEL:</strong><br>
+          Code Editor di tab <strong>Files</strong> Admin Panel saat ini <strong>masih dalam tahap pengembangan (eksperimental)</strong>. Editor bawaan ini aman untuk melihat <em>Live Preview</em> atau melakukan edit ringan, namun <strong>SANGAT TIDAK DIREKOMENDASIKAN</strong> untuk membuat atau mengedit file HTML besar secara langsung di sana. Gunakan AI eksternal (Claude/Antigravity) untuk generate file utuh lalu upload.
+        </div>
+
+        <h3>A. Tahapan Alur Kerja Developer</h3>
+        <ol>
+          <li>
+            <strong>Claim Task di Kanban Board</strong>
+            <ul>
+              <li>Buka tab <strong>Tasks</strong> di Admin Panel (atau via MCP tool <code>tasks_list</code>).</li>
+              <li>Cari task berstatus <em>Open</em> yang ingin dikerjakan di kolom Kanban.</li>
+              <li>Klik tombol <strong>Claim Task</strong> (atau jalankan MCP <code>tasks_claim</code>). Status task akan berubah menjadi <strong>In Progress</strong> dan nama Anda akan tercatat sebagai Developer.</li>
+            </ul>
+          </li>
+          <li>
+            <strong>Download Template HTML Acuan</strong>
+            <ul>
+              <li><strong>Via Admin Panel:</strong> Buka tab <strong>Files</strong> &rarr; navigasi ke folder blok target (contoh: <code>content/semester 2/2.5/</code>) &rarr; klik kanan pada salah satu file acuan &rarr; pilih <strong>Download File</strong>.</li>
+              <li><strong>Via MCP:</strong> Minta AI (Claude/Antigravity) membaca file template acuan dari server dengan tool <code>content_get</code>.</li>
+            </ul>
+          </li>
+          <li>
+            <strong>Siapkan Bahan Referensi Materi</strong>
+            <ul>
+              <li>Unduh PPT lecture, modul praktikum (PDF/Word), atau naskah soal CBT tahun lalu yang sesuai dengan task yang Anda klaim.</li>
+            </ul>
+          </li>
+          <li>
+            <strong>Beri Pemahaman Template ke AI Terlebih Dahulu</strong>
+            <ul>
+              <li>Unggah file template <code>.html</code> yang sudah diunduh ke chat AI (Claude / Antigravity).</li>
+              <li>Instruksikan AI untuk membaca dan mempelajari struktur CSS, layout HTML, dan skrip JavaScript-nya terlebih dahulu sebelum memproses materi.</li>
+            </ul>
+          </li>
+          <li>
+            <strong>Masukkan File Referensi &amp; Eksekusi Prompting</strong>
+            <ul>
+              <li>Lampirkan materi/soal mentah ke dalam chat AI.</li>
+              <li>Gunakan <strong>Prompt Formal</strong> yang telah disediakan di bagian 3 dokumentasi ini.</li>
+            </ul>
+          </li>
+          <li>
+            <strong>Upload Hasil &amp; Submit Task</strong>
+            <ul>
+              <li>Simpan hasil kode dari AI menjadi file ber-ekstensi <code>.html</code> di komputer Anda.</li>
+              <li>Upload file tersebut ke folder yang sesuai di tab <strong>Files</strong> (atau gunakan MCP tool <code>content_upload</code> / <code>upload_init</code>).</li>
+              <li>Buka kembali tab <strong>Tasks</strong> &rarr; klik <strong>Submit Task</strong> (atau MCP <code>tasks_submit</code>). Task akan berpindah ke kolom <strong>Developed (Wait for Review)</strong> untuk diperiksa oleh Divisi Review.</li>
+            </ul>
+          </li>
+        </ol>
+      </div>
+
+      <!-- SECTION 2: PERBEDAAN TEMPLATE HTML -->
+      <div class="docs-section">
+        <h2>2. Memahami 2 Jenis Template HTML &amp; Perbedaannya</h2>
+        <p>Di MR-CAPSULES (khususnya standar Blok 2.5 FK), terdapat <strong>dua jenis template HTML utama</strong>. Sangat penting bagi Developer untuk memilih template yang tepat sesuai jenis task yang diklaim.</p>
+
+        <h3>A. Template HTML Lecture (Materi &amp; Quiz)</h3>
+        <p>Template ini digunakan saat membuat file dari <strong>PPT Lecture</strong> atau <strong>Modul Praktikum</strong>. Contoh file acuan: <code>2.5 LECTURE_K10 am-i-counseling.html</code>.</p>
+        <ul>
+          <li><strong>Struktur 2 Tab Utama:</strong> Terdiri dari tab <strong>📋 Materi</strong> dan tab <strong>🎯 Quiz</strong> di bagian atas.</li>
+          <li><strong>Bagian Materi (Interaktif):</strong>
+            <ul>
+              <li>Materi dipecah menjadi beberapa <strong>Sub-Tabs</strong> per bab/topik.</li>
+              <li>Memiliki elemen <strong>Note Box</strong> berwarna (gold, blue, green, red, purp, teal) untuk poin-poin penting.</li>
+              <li>Memiliki <strong>Data Tables</strong> (<code>dtable-wrap</code>) untuk klasifikasi, dosis, atau kriteria diagnostik.</li>
+              <li>Mendukung diagram/flowchart SVG interaktif (misalnya alur komunikasi atau skema patofisiologi).</li>
+            </ul>
+          </li>
+          <li><strong>Bagian Quiz:</strong> Menyediakan kuis interaktif dengan pilihan ganda dan pembahasan langsung di tempat untuk menguji pemahaman materi kuliah tersebut.</li>
+          <li><strong>Desain &amp; Tipografi:</strong> Menggunakan variabel CSS modern dengan kombinasi font Google Fonts: <em>Syne</em> (Header), <em>DM Sans</em> (Body), dan <em>DM Mono</em> (Code/Data).</li>
+        </ul>
+
+        <h3>B. Template HTML CBT / Soal Ujian (Pure Quiz Engine)</h3>
+        <p>Template ini digunakan khusus saat memasukkan <strong>Naskah Soal Ujian Tahun Lalu</strong> atau bank soal ujian murni. Contoh file acuan: <code>2.5 CBT_21 REECHARD GANTENG.html</code>.</p>
+        <ul>
+          <li><strong>Tanpa Tab Materi:</strong> Berisi 100% engine kuis tanpa penyajian rangkuman kuliah di depannya.</li>
+          <li><strong>3 Mode Belajar Utama:</strong>
+            <ul>
+              <li><strong>Study Mode:</strong> Menampilkan kunci dan pembahasan komprehensif segera setelah memilih opsi.</li>
+              <li><strong>Exam Mode:</strong> Simulasi ujian terwaktu, jawaban tersembunyi hingga kumpul ujian, dilengkapi modal konfirmasi.</li>
+              <li><strong>Drill Mode:</strong> Mode pengulangan tanpa skor — pengguna harus memilih opsi yang benar untuk maju.</li>
+            </ul>
+          </li>
+          <li><strong>Fitur Ujian Lengkap:</strong> Question Map (peta nomor), penanda soal (flag ⚑), statistik &amp; riwayat skor lokal (<code>localStorage</code>), serta analisis akurasi per topik.</li>
+          <li><strong>Struktur Data JS:</strong> Soal disimpan dalam array JavaScript utuh di bagian bawah file:<br>
+            <code>const QUESTIONS = [{n:1, t:"Topik", q:"Pertanyaan...", o:["A","B","C","D","E"], a:"Kunci Jawaban", exp:"Pembahasan...", src:"Sumber"}, ...];</code>
+          </li>
+          <li><strong>Desain &amp; Tipografi:</strong> Menggunakan gaya retro-minimalist yang bersih dengan font <em>Georgia</em> untuk judul dan <em>Courier New</em> untuk elemen data.</li>
+        </ul>
+
+        <h3>C. Tabel Perbandingan Ringkas Template</h3>
+        <table class="docs-table">
+          <thead>
+            <tr>
+              <th>Fitur / Karakteristik</th>
+              <th>Template HTML Lecture</th>
+              <th>Template HTML CBT</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Sumber Utama</strong></td>
+              <td>PPT Kuliah / Modul Praktikum</td>
+              <td>Naskah Soal CBT Tahun Lalu / Bank Soal</td>
+            </tr>
+            <tr>
+              <td><strong>Elemen Utama</strong></td>
+              <td>Tab 📋 Materi (Rangkuman) + Tab 🎯 Quiz</td>
+              <td>Pure Engine Kuis (Study, Exam, Drill Mode)</td>
+            </tr>
+            <tr>
+              <td><strong>Penyajian Materi</strong></td>
+              <td>Sub-tabs, Note boxes, Data tables, Diagram SVG</td>
+              <td>Tidak ada (hanya lewat penjelasan di kuis)</td>
+            </tr>
+            <tr>
+              <td><strong>Penyimpanan Soal</strong></td>
+              <td>Terintegrasi dalam fungsi JS kuis interaktif</td>
+              <td>Array JS terstruktur <code>const QUESTIONS = [...]</code></td>
+            </tr>
+            <tr>
+              <td><strong>Tema &amp; Font</strong></td>
+              <td>Modern HSL (Syne + DM Sans + DM Mono)</td>
+              <td>Retro Minimalist (Georgia + Courier New)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- SECTION 3: PANDUAN PROMPTING & FORMULASI -->
+      <div class="docs-section">
+        <h2>3. Panduan Prompting AI &amp; Formulasi Resmi (Dengan Breakdown)</h2>
+        <p>Agar hasil <em>generate</em> kode AI konsisten dan langsung sesuai dengan standar MR-CAPSULES, gunakan formulasi prompt resmi berikut saat melakukan Vibe Coding.</p>
+
+        <!-- FORMULA 1: LECTURE / MODUL -->
+        <h3>A. Prompt untuk PPT Lecture / Modul Praktikum (Template Lecture)</h3>
+        <p>Gunakan prompt ini ketika Anda mengunggah file <strong>Template HTML Lecture</strong> dan file <strong>PPT/Modul Materi</strong> ke AI.</p>
+
+        <p class="docs-note-block">Formulasi Prompt Resmi (Copy &amp; Paste ke AI):</p>
+        <pre style="background:var(--bg-inset);border:var(--border-main);border-radius:8px;padding:16px;font-family:var(--font-mono);font-size:13px;color:var(--text-muted);overflow-x:auto;white-space:pre-wrap;line-height:1.6;">Pahami seluruh struktur, CSS, dan skrip JavaScript dari file template HTML Lecture yang saya berikan.
+
+Tugasmu adalah membuat file HTML lengkap baru berdasarkan materi kuliah/modul yang saya unggah ini, dengan ketentuan berikut:
+
+1. PEMAHAMAN SLIDE/MATERI UTUH:
+   Pahami seluruh isi slide/modul dari awal sampai akhir. JANGAN SAMPAI ADA ILUSTRASI, TABEL, DIAGRAM, ATAU MATERI PENTING YANG KELEWAT. Jika ada diagram alur atau hubungan konsep di PPT, sajikan dalam bentuk diagram SVG/Mermaid atau tabel CSS yang rapi di dalam tab Materi.
+
+2. SAJIKAN SESUAI TEMPLATE:
+   - Bagi materi ke dalam sub-tabs yang logis (misal: Overview, Patofisiologi, Diagnosis, Tata Laksana, Referensi).
+   - Gunakan komponen note box (gold, blue, green, red, purp, teal) untuk menyoroti poin kunci, definisi, atau peringatan klinis.
+   - Buat POOL SOAL QUIZ YANG BANYAK di tab Quiz (minimal 15-20 soal pilihan ganda) yang mencakup seluruh poin materi kuliah tersebut, lengkap dengan pembahasannya.
+
+3. JUDUL DAN AKSEN WARNA KUSTOM:
+   - Berikan judul yang sesuai dan menarik di bagian header (contoh: "Am I Counseling? — Quiz Keterampilan Dasar Konseling").
+   - Pilih aksen warna khas di variabel CSS :root (--teal, --blue, --purp, atau --red) yang cocok dengan tema materi medis ini.
+
+Keluarkan seluruh kode HTML utuh dalam satu block code tanpa ada bagian yang dipotong (no placeholders/TODO).</pre>
+
+        <h4>Breakdown Komponen Prompt Lecture:</h4>
+        <table class="docs-table">
+          <thead>
+            <tr><th>Aturan / Elemen</th><th>Tujuan &amp; Instruksi Khusus untuk AI</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Rule 1: Pemahaman Template</strong></td>
+              <td>Memaksa AI membaca variabel CSS, kelas CSS (<code>dtable-wrap</code>, <code>note</code>, <code>sub-tab</code>), dan fungsi pembuka tab JS agar hasil keluaran tidak merusak layout.</td>
+            </tr>
+            <tr>
+              <td><strong>Rule 2: Kelengkapan Slide &amp; Ilustrasi</strong></td>
+              <td>Mencegah AI meringkas secara berlebihan. AI diinstruksikan mengonversi tabel PPT menjadi tabel HTML dan gambar alur menjadi SVG/diagram agar tidak ada informasi medis yang hilang.</td>
+            </tr>
+            <tr>
+              <td><strong>Rule 3: Penyajian &amp; Pool Soal</strong></td>
+              <td>Memastikan materi terbagi rapi ke dalam sub-tabs serta menghasilkan pool soal kuis yang cukup banyak untuk latihan mahasiswa.</td>
+            </tr>
+            <tr>
+              <td><strong>Rule 4: Judul &amp; Aksen Warna</strong></td>
+              <td>Menjaga estetika visual. Warna aksen disesuaikan dengan topik (contoh: Merah untuk Kardiologi/Vaskular, Biru/Teal untuk Psikiatri/Konseling, Hijau untuk Nutrisi/Gizi).</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- FORMULA 2: CBT TAHUN KEMARIN -->
+        <h3 style="margin-top:28px;">B. Prompt untuk Soal CBT Tahun Kemarin (Template CBT)</h3>
+        <p>Gunakan prompt ini ketika Anda mengunggah file <strong>Template HTML CBT</strong> dan naskah/dokumen <strong>Soal Ujian CBT Tahun Lalu</strong> ke AI.</p>
+
+        <p class="docs-note-block">Formulasi Prompt Resmi (Copy &amp; Paste ke AI):</p>
+        <pre style="background:var(--bg-inset);border:var(--border-main);border-radius:8px;padding:16px;font-family:var(--font-mono);font-size:13px;color:var(--text-muted);overflow-x:auto;white-space:pre-wrap;line-height:1.6;">Pahami seluruh engine kuis, struktur CSS, dan array JavaScript `QUESTIONS` dari file template HTML CBT yang saya berikan.
+
+Tugasmu adalah menyajikan seluruh naskah soal ujian ini ke dalam template HTML CBT tersebut, dengan ketentuan berikut:
+
+1. PRESERVASI KELENGKAPAN SOAL:
+   Sajikan TEPAT [masukkan jumlah soal, misal: 105] SOAL dari naskah ini ke dalam array `QUESTIONS`. JANGAN SAMPAI ADA SATU PUN SOAL, OPSI JAWABAN, ATAU NOMOR YANG TERLEWAT ATAU DIPOTONG.
+
+2. FORMULASI ARRAY QUESTIONS:
+   Setiap objek soal harus memiliki struktur:
+   - `n`: Nomor urut soal (1, 2, 3, dst.)
+   - `t`: Nama topik/sub-materi singkat (misal: "Fisiologi Saraf", "Farmakologi", "Gizi Daur Hidup")
+   - `q`: Teks pertanyaan lengkap (sertakan kasus/vignette jika ada)
+   - `o`: Array 5 pilihan jawaban `["A", "B", "C", "D", "E"]`
+   - `a`: Teks string kunci jawaban yang BENAR (harus persis sama dengan salah satu opsi di `o`)
+   - `exp`: Pembahasan lengkap dan rinci mengapa jawaban tersebut benar dan mengapa opsi lain kurang tepat, berdasarkan teori medis di PPT/Modul.
+   - `src`: Referensi slide/PPT (contoh: "PPT Merokok dan Alkoholisme — dr. Yudhi")
+
+3. JUDUL DAN AKSEN WARNA:
+   - Sesuaikan bagian `.logo-wordmark` dan `.logo-tag` di header (contoh: "21 PILL SAPI", Blok "2.5").
+   - Atur warna aksen visual yang sesuai di CSS :root.
+
+Keluarkan seluruh kode HTML utuh tanpa potongan agar siap saya simpan langsung ke file .html.</pre>
+
+        <h4>Breakdown Komponen Prompt CBT:</h4>
+        <table class="docs-table">
+          <thead>
+            <tr><th>Aturan / Elemen</th><th>Tujuan &amp; Instruksi Khusus untuk AI</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Rule 1: Pemahaman Engine CBT</strong></td>
+              <td>Memastikan AI mempertahankan fungsi 3 mode (Study, Exam, Drill), Question Map, dan sistem kalkulasi akurasi tanpa mengubah skrip JS bawaan.</td>
+            </tr>
+            <tr>
+              <td><strong>Rule 2: Preservasi Presisi Soal</strong></td>
+              <td>Menyebutkan jumlah pasti soal (misal 105 soal) agar AI tidak berhenti di tengah jalan atau sengaja memotong soal dengan komentar <code>/* soal 10-100 disingkat */</code>.</td>
+            </tr>
+            <tr>
+              <td><strong>Rule 3: Formulasi Array &amp; Pembahasan</strong></td>
+              <td>Mewajibkan bidang <code>exp</code> (explanation) terisi pembahasan medis yang kaya dan bidang <code>src</code> mencantumkan pemateri/PPT acuan untuk membantu mahasiswa belajar.</td>
+            </tr>
+            <tr>
+              <td><strong>Rule 4: Judul &amp; Brand Tag</strong></td>
+              <td>Menjaga identitas file acuan (misalnya nama angkatan/sandi blok seperti "21 PILL SAPI" pada Blok 2.5) agar mudah dikenali di platform.</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="alert-box" style="margin-top:20px;">
+          <strong>TIPS DEVELOPER:</strong> Jika naskah soal sangat banyak (misalnya >100 soal), AI mungkin mengalami <em>output limit</em>. Jika terpotong, minta AI melanjutkan dengan prompt: <code>"Lanjutkan array QUESTIONS dari nomor [X] sampai selesai dengan format JSON yang sama."</code> Lalu gabungkan kodenya.
         </div>
       </div>
 

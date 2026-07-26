@@ -698,6 +698,12 @@ body { margin: 0; overflow: hidden; }
   margin: 40px auto 80px auto;
   position: relative;
   z-index: 10;
+  display: none;
+  flex-direction: column;
+}
+
+.docs-container.active {
+  display: flex;
 }
 
 .docs-title {
