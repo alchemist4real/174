@@ -235,11 +235,125 @@
 
       <div class="docs-section">
         <h2>2. Referensi Lengkap MCP Tools & Hak Akses</h2>
-        <p>Bagian ini merinci seluruh <strong>70 method/tools</strong> yang tersedia lewat MCP Gateway, dikelompokkan berdasarkan fungsinya, beserta siapa saja yang berwenang menggunakannya.</p>
-
         <div class="alert-box">
-          <strong>PENTING:</strong> Meskipun sebuah tool "tampak" di daftar AI Assistant Anda, eksekusinya tetap divalidasi ulang oleh server berdasarkan role akun yang terhubung. Jika Anda tidak memiliki hak akses, permintaan akan ditolak (403/permission error) walau tool sempat dipanggil.
-        </div>
+  <strong>💬 CARA BACA TABEL DI BAWAH INI:</strong><br>
+  Tabel-tabel berikut adalah <em>daftar referensi teknis</em> untuk yang penasaran ada fungsi apa saja di baliknya. Tapi dalam praktiknya, Anda <strong>tidak perlu mengetik nama tool ini secara manual</strong>. Cukup chat biasa ke Claude (misalnya: <em>"tolong lihat siapa saja anggota divisi Development"</em>), dan Claude sendiri yang akan mencocokkan permintaan itu dengan tool yang tepat (<code>divisions_get_members</code>) lalu menjalankannya.
+</div>
+
+<p>Bagian ini merinci seluruh <strong>70 method/tools</strong> yang tersedia lewat MCP Gateway, dikelompokkan berdasarkan fungsinya, beserta siapa saja yang berwenang menggunakannya.</p>
+
+<div class="alert-box">
+  <strong>PENTING:</strong> Meskipun sebuah tool "tampak" di daftar AI Assistant Anda, eksekusinya tetap divalidasi ulang oleh server berdasarkan role akun yang terhubung. Jika Anda tidak memiliki hak akses, permintaan akan ditolak (403/permission error) walau tool sempat dipanggil.
+</div>
+
+<h3>A. Level Akses (Role Hierarchy)</h3>
+<ul>
+  <li><strong>SuperAdmin:</strong> Pemegang kendali penuh sistem &amp; codebase. Satu-satunya yang dapat mengedit file codebase backend/frontend, mengangkat/menurunkan Admin, dan menghapus akun secara permanen.</li>
+  <li><strong>Admin:</strong> Diangkat oleh SuperAdmin. Mengelola konfigurasi sistem, konten, dan moderasi pengguna, namun tidak bisa mengubah hak Admin lain.</li>
+  <li><strong>Reviewer:</strong> Anggota Divisi Review & QA. Berwenang atas siklus review tugas (start review, approve, reject, lapor isu).</li>
+  <li><strong>Developer:</strong> Anggota Divisi Development. Berwenang mengambil (claim) dan mengumpulkan (submit) tugas.</li>
+  <li><strong>Semua Pengguna Terautentikasi:</strong> Akses baca umum serta pengelolaan data milik sendiri (API key, kontribusi, WhatsApp, dsb).</li>
+</ul>
+
+<h3>B. Materi, Cover & Upload File Besar</h3>
+<table class="docs-table">
+  <thead>
+    <tr><th>Tool</th><th>Fungsi</th><th>Akses</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>content_list</code>, <code>content_get</code>, <code>content_tree</code></td><td>Melihat/membaca materi HTML</td><td>Semua pengguna terautentikasi</td></tr>
+    <tr><td><code>content_upload</code>, <code>content_rename</code></td><td>Upload langsung (Base64, max ~3.5MB per request) & move file</td><td>Developer, Reviewer, Admin, SuperAdmin</td></tr>
+    <tr><td><code>upload_init</code>, <code>upload_chunk</code>, <code>upload_commit</code></td><td>Sistem upload terfragmentasi untuk file besar (video/PDF/pool ZIP tanpa batas ukuran)</td><td>Developer, Reviewer, Admin, SuperAdmin</td></tr>
+    <tr><td><code>upload_status</code>, <code>upload_cancel</code></td><td>Mengecek status & membatalkan sesi upload terfragmentasi</td><td>Developer, Reviewer, Admin, SuperAdmin</td></tr>
+    <tr><td><code>content_delete</code>, <code>content_delete_files</code></td><td>Menghapus materi</td><td>Admin, SuperAdmin</td></tr>
+    <tr><td><code>cover_list</code></td><td>Melihat cover</td><td>Semua pengguna terautentikasi</td></tr>
+    <tr><td><code>cover_upload</code>, <code>cover_delete</code></td><td>Mengelola cover semester/blok</td><td>Admin, SuperAdmin</td></tr>
+  </tbody>
+</table>
+
+<h3>C. Pengelolaan Codebase Repository</h3>
+<table class="docs-table">
+  <thead>
+    <tr><th>Tool</th><th>Fungsi</th><th>Akses</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>codebase_read_file</code></td><td>Membaca isi file apa saja di seluruh codebase (misal `api/admin.js`, `build.js`)</td><td>SuperAdmin Only</td></tr>
+    <tr><td><code>codebase_write_file</code></td><td>Membuat atau mengedit file apa saja di repository codebase</td><td>SuperAdmin Only</td></tr>
+    <tr><td><code>codebase_delete_file</code></td><td>Menghapus file apapun di repository codebase</td><td>SuperAdmin Only</td></tr>
+    <tr><td><code>codebase_search</code></td><td>Mencari kata kunci/kode di seluruh repository codebase</td><td>SuperAdmin Only</td></tr>
+    <tr><td><code>codebase_git_history</code></td><td>Melihat riwayat commit &amp; log aktivitas git di repository</td><td>SuperAdmin Only</td></tr>
+  </tbody>
+</table>
+
+<h3>D. Task Board & Workflow</h3>
+<table class="docs-table">
+  <thead>
+    <tr><th>Tool</th><th>Fungsi</th><th>Akses</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>tasks_list</code>, <code>tasks_logs</code></td><td>Melihat papan tugas & riwayat</td><td>Semua pengguna terautentikasi</td></tr>
+    <tr><td><code>tasks_create</code>, <code>tasks_delete</code></td><td>Membuat/menghapus tugas</td><td>Management (Admin/SuperAdmin)</td></tr>
+    <tr><td><code>tasks_claim</code>, <code>tasks_unclaim</code>, <code>tasks_submit</code></td><td>Mengambil & mengumpulkan tugas</td><td>Developer</td></tr>
+    <tr><td><code>tasks_start_review</code>, <code>tasks_approve</code>, <code>tasks_reject</code></td><td>Siklus review tugas</td><td>Reviewer</td></tr>
+    <tr><td><code>tasks_add_note</code></td><td>Menambah catatan di log tugas</td><td>Semua pengguna terautentikasi</td></tr>
+  </tbody>
+</table>
+
+<h3>E. Review & QA</h3>
+<table class="docs-table">
+  <thead>
+    <tr><th>Tool</th><th>Fungsi</th><th>Akses</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>review_issues</code></td><td>Melihat isu review pada tugas</td><td>Reviewer</td></tr>
+    <tr><td><code>review_report</code>, <code>review_resolve</code>, <code>review_delete_issue</code></td><td>Melaporkan/menyelesaikan/menghapus isu</td><td>Reviewer, Admin, SuperAdmin</td></tr>
+  </tbody>
+</table>
+
+<h3>F. Organisasi & Divisi</h3>
+<table class="docs-table">
+  <thead>
+    <tr><th>Tool</th><th>Fungsi</th><th>Akses</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>divisions_list</code>, <code>divisions_my</code></td><td>Melihat daftar/status divisi sendiri</td><td>Semua pengguna terautentikasi</td></tr>
+    <tr><td><code>divisions_join</code>, <code>divisions_update_whatsapp</code></td><td>Bergabung ke divisi & update kontak</td><td>Semua pengguna terautentikasi</td></tr>
+    <tr><td><code>divisions_get_members</code></td><td>Melihat anggota divisi tertentu</td><td>Admin, SuperAdmin</td></tr>
+    <tr><td><code>divisions_add_member</code>, <code>divisions_remove_member</code></td><td>Menambah/mengeluarkan anggota divisi</td><td>Admin, SuperAdmin</td></tr>
+  </tbody>
+</table>
+
+<h3>G. User, Perangkat & Hak Akses</h3>
+<table class="docs-table">
+  <thead>
+    <tr><th>Tool</th><th>Fungsi</th><th>Akses</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>users_list</code></td><td>Melihat semua pengguna terdaftar</td><td>SuperAdmin</td></tr>
+    <tr><td><code>users_ban</code>, <code>users_delete</code>, <code>users_remove_device</code>, <code>users_block_device</code></td><td>Moderasi & keamanan akun/perangkat</td><td>SuperAdmin</td></tr>
+    <tr><td><code>users_add_admin</code>, <code>users_remove_admin</code></td><td>Mengangkat/menurunkan hak Admin</td><td>SuperAdmin</td></tr>
+    <tr><td><code>contributions_leaderboard</code>, <code>contributions_my</code></td><td>Melihat papan peringkat & riwayat sendiri</td><td>Semua pengguna terautentikasi</td></tr>
+  </tbody>
+</table>
+
+<h3>H. Dokumentasi & Sistem</h3>
+<table class="docs-table">
+  <thead>
+    <tr><th>Tool</th><th>Fungsi</th><th>Akses</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>docs_get</code>, <code>system_health</code></td><td>Membaca dokumentasi & status sistem</td><td>Semua pengguna terautentikasi</td></tr>
+    <tr><td><code>docs_update_section</code>, <code>docs_add_section</code>, <code>docs_add_tab</code>, <code>docs_update_tab</code>, <code>docs_delete_tab</code></td><td>Mengedit & mengelola tab/halaman dokumentasi</td><td>Admin, SuperAdmin</td></tr>
+    <tr><td><code>config_get</code>, <code>config_update</code>, <code>activity_logs</code>, <code>system_cleanup_guests</code></td><td>Konfigurasi global & pemeliharaan sistem</td><td>Admin, SuperAdmin</td></tr>
+    <tr><td><code>apikeys_list</code>, <code>apikeys_create</code>, <code>apikeys_revoke</code></td><td>Mengelola API key milik sendiri</td><td>Semua pengguna terautentikasi</td></tr>
+    <tr><td><code>oauth_tokens_list</code>, <code>oauth_tokens_revoke</code></td><td>Mengelola koneksi OAuth (Claude/MCP) milik sendiri</td><td>Semua pengguna terautentikasi</td></tr>
+  </tbody>
+</table>
+
+<div class="alert-box">
+  <strong>CATATAN:</strong> Tabel di atas merepresentasikan role minimum yang dibutuhkan. Role yang lebih tinggi dalam hierarki (SuperAdmin &gt; Admin &gt; Reviewer/Developer) otomatis mewarisi akses baca dari role di bawahnya.
+</div>
+      </div>
 
         <h3>A. Level Akses (Role Hierarchy)</h3>
         <ul>
