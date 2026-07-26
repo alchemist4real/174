@@ -594,12 +594,77 @@ Buat semua task tersebut satu per satu.&rdquo;</pre>
       <!-- SECTION 1: WORKFLOW UTAMA (VIBE CODING) -->
       <div class="docs-section">
         <h2>1. Workflow Utama Divisi Development (Vibe Coding)</h2>
-        <p>Tugas utama Divisi Development adalah meracik materi kuliah/modul mentah atau naskah soal menjadi file <code>.html</code> interaktif yang siap dipublikasikan ke MR-CAPSULES.</p>
-
         <div class="alert-box">
-          <strong>PRINSIP UTAMA: 100% VIBE CODING</strong><br>
-          Developer <strong>TIDAK PERLU</strong> menulis kode HTML/CSS/JS secara manual baris demi baris! Seluruh pembuatan kode dilakukan dengan men-<em>generate</em> dan memperbaikinya menggunakan AI Assistant (seperti <strong>Claude.ai</strong> atau <strong>Antigravity CLI</strong>). Peran Anda adalah sebagai <em>Prompt Engineer</em> dan pengontrol kualitas materi.
-        </div>
+  <strong>📖 ISTILAH PENTING (buat yang masih awam):</strong>
+  <ul>
+    <li><strong>Vibe Coding</strong> = cara membuat kode dengan menyuruh AI (Claude/Antigravity) yang menuliskan kodenya, bukan mengetik manual baris per baris</li>
+    <li><strong>Prompt Engineer</strong> = peran menyusun instruksi (prompt) yang jelas ke AI supaya hasilnya sesuai kebutuhan, tanpa perlu jago coding</li>
+    <li><strong>Template</strong> = file HTML contoh/acuan yang sudah punya struktur baku, dipakai AI sebagai "cetakan" saat membuat file baru</li>
+    <li><strong>Claim Task</strong> = mengambil satu pekerjaan dari papan tugas (Kanban Board) supaya jadi tanggung jawab kita mengerjakannya</li>
+    <li><strong>Submit Task</strong> = mengumpulkan hasil kerja untuk selanjutnya diperiksa oleh Divisi Review</li>
+    <li><strong>MCP</strong> = "jembatan" yang membuat AI bisa langsung baca/tulis file di server MR-CAPSULES, tanpa perlu buka Admin Panel manual</li>
+  </ul>
+</div>
+
+<p>Tugas utama Divisi Development adalah meracik materi kuliah/modul mentah atau naskah soal menjadi file <code>.html</code> interaktif yang siap dipublikasikan ke MR-CAPSULES.</p>
+
+<div class="alert-box">
+  <strong>PRINSIP UTAMA: 100% VIBE CODING</strong><br>
+  Developer <strong>TIDAK PERLU</strong> menulis kode HTML/CSS/JS secara manual baris demi baris! Seluruh pembuatan kode dilakukan dengan men-<em>generate</em> dan memperbaikinya menggunakan AI Assistant (seperti <strong>Claude.ai</strong> atau <strong>Antigravity CLI</strong>). Peran Anda adalah sebagai <em>Prompt Engineer</em> dan pengontrol kualitas materi.
+</div>
+
+<div class="alert-box">
+  <strong>PERINGATAN EDITOR ADMIN PANEL:</strong><br>
+  Code Editor di tab <strong>Files</strong> Admin Panel saat ini <strong>masih dalam tahap pengembangan (eksperimental)</strong>. Editor bawaan ini aman untuk melihat <em>Live Preview</em> atau melakukan edit ringan, namun <strong>SANGAT TIDAK DIREKOMENDASIKAN</strong> untuk membuat atau mengedit file HTML besar secara langsung di sana. Gunakan AI eksternal (Claude/Antigravity) untuk generate file utuh lalu upload.
+</div>
+
+<h3>A. Tahapan Alur Kerja Developer</h3>
+<ol>
+  <li>
+    <strong>Claim Task di Kanban Board</strong>
+    <ul>
+      <li>Buka tab <strong>Tasks</strong> di Admin Panel (atau via MCP tool <code>tasks_list</code>).</li>
+      <li>Cari task berstatus <em>Open</em> yang ingin dikerjakan di kolom Kanban.</li>
+      <li>Klik tombol <strong>Claim Task</strong> (atau jalankan MCP <code>tasks_claim</code>). Status task akan berubah menjadi <strong>In Progress</strong> dan nama Anda akan tercatat sebagai Developer.</li>
+    </ul>
+  </li>
+  <li>
+    <strong>Download Template HTML Acuan</strong>
+    <ul>
+      <li><strong>Via Admin Panel:</strong> Buka tab <strong>Files</strong> &rarr; navigasi ke folder blok target (contoh: <code>content/semester 2/2.5/</code>) &rarr; klik kanan pada salah satu file acuan &rarr; pilih <strong>Download File</strong>.</li>
+      <li><strong>Via MCP:</strong> Minta AI (Claude/Antigravity) membaca file template acuan dari server dengan tool <code>content_get</code>.</li>
+    </ul>
+  </li>
+  <li>
+    <strong>Siapkan Bahan Referensi Materi</strong>
+    <ul>
+      <li>Unduh PPT lecture, modul praktikum (PDF/Word), atau naskah soal CBT tahun lalu yang sesuai dengan task yang Anda klaim.</li>
+    </ul>
+  </li>
+  <li>
+    <strong>Beri Pemahaman Template ke AI Terlebih Dahulu</strong>
+    <ul>
+      <li>Unggah file template <code>.html</code> yang sudah diunduh ke chat AI (Claude / Antigravity).</li>
+      <li>Instruksikan AI untuk membaca dan mempelajari struktur CSS, layout HTML, dan skrip JavaScript-nya terlebih dahulu sebelum memproses materi.</li>
+    </ul>
+  </li>
+  <li>
+    <strong>Masukkan File Referensi &amp; Eksekusi Prompting</strong>
+    <ul>
+      <li>Lampirkan materi/soal mentah ke dalam chat AI.</li>
+      <li>Gunakan <strong>Prompt Formal</strong> yang telah disediakan di bagian 3 dokumentasi ini.</li>
+    </ul>
+  </li>
+  <li>
+    <strong>Upload Hasil &amp; Submit Task</strong>
+    <ul>
+      <li>Simpan hasil kode dari AI menjadi file ber-ekstensi <code>.html</code> di komputer Anda.</li>
+      <li>Upload file tersebut ke folder yang sesuai di tab <strong>Files</strong> (atau gunakan MCP tool <code>content_upload</code> / <code>upload_init</code>).</li>
+      <li>Buka kembali tab <strong>Tasks</strong> &rarr; klik <strong>Submit Task</strong> (atau MCP <code>tasks_submit</code>). Task akan berpindah ke kolom <strong>Developed (Wait for Review)</strong> untuk diperiksa oleh Divisi Review.</li>
+    </ul>
+  </li>
+</ol>
+      </div>
 
         <div class="alert-box" style="border-left-color:var(--red);">
           <strong>PERINGATAN EDITOR ADMIN PANEL:</strong><br>
