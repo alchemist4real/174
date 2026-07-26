@@ -128,13 +128,57 @@
         <div class="alert-box">
   <strong>📖 ISTILAH PENTING (buat yang masih awam):</strong>
   <ul>
-    <li><strong>MCP (Model Context Protocol)</strong> = standar yang memungkinkan AI Assistant (Claude, dll) terhubung dan mengakses aplikasi lain secara langsung, seperti "colokan universal" antar AI dan aplikasi</li>
+    <li><strong>MCP (Model Context Protocol)</strong> = standar yang memungkinkan AI Assistant (Claude, dll) terhubung ke aplikasi lain. <u>Cara pakainya BUKAN seperti coding atau "manggil fungsi"</u> &mdash; Anda cukup <strong>chat/ngobrol biasa</strong> dengan Claude, lalu Claude sendiri yang otomatis menjalankan aksinya di belakang layar (mengambil task, upload file, dsb). Sama persis seperti Anda minta tolong asisten manusia, hanya saja asistennya AI yang langsung bisa "menyentuh" data di MR-CAPSULES.</li>
     <li><strong>API Gateway</strong> = pintu masuk yang mengatur lalu lintas permintaan dari luar (misalnya dari AI) ke sistem MR-CAPSULES</li>
     <li><strong>API Key</strong> = kunci rahasia berbentuk teks untuk membuktikan identitas saat AI/aplikasi luar mengakses server</li>
     <li><strong>OAuth 2.0</strong> = metode login aman tanpa perlu membagikan password langsung ke aplikasi pihak ketiga</li>
     <li><strong>Connector</strong> = fitur di Claude.ai untuk menyambungkan Claude ke layanan luar, termasuk MR-CAPSULES</li>
   </ul>
 </div>
+
+<div class="alert-box">
+  <strong>💬 INTINYA: MCP = NGOBROL, BUKAN CODING</strong><br>
+  Yang perlu Anda lakukan hanyalah <strong>mengetik permintaan dalam bahasa biasa</strong> ke chat Claude, misalnya: <em>"Buatkan task baru untuk materi Fisiologi Saraf blok 1.3"</em> atau <em>"Cek file apa saja yang ada di folder blok 2.5"</em>. Claude yang akan menerjemahkan permintaan itu menjadi aksi teknis (memanggil tool <code>tasks_create</code>, <code>content_list</code>, dsb) secara otomatis di balik layar. Anda tidak perlu menghafal nama tool atau menulis kode apapun.
+</div>
+
+<p><strong>MR-CAPSULES</strong> menyediakan API Gateway & Model Context Protocol (MCP) serverless endpoint berbasis <em>Streamable HTTP (MCP 2025-06-18)</em>. Fitur ini memungkinkan AI Assistant seperti <strong>Claude.ai Web</strong>, <strong>Claude Desktop</strong>, atau AI Agent eksternal untuk mengakses konten dan melakukan tugas secara otomatis di Admin Panel.</p>
+
+<h3>A. Cara Mengoperasikan & Mengisi API Key</h3>
+<ol>
+  <li>Buka <strong>Admin Panel</strong> dan pastikan Anda sudah terhubung ke salah satu Divisi (Management, Development, atau Review).</li>
+  <li>Pilih tab <strong>API Keys</strong> di navigasi utama.</li>
+  <li>Masukkan nama kunci pada bidang <strong>Key Name</strong> (contoh: <code>Claude Web MCP</code>) serta tentukan masa berlaku (<em>Expires In</em>).</li>
+  <li>Klik tombol <strong>+ Generate Key</strong>. Kunci rahasia berawalan <code>mrc_...</code> akan ditampilkan dalam kotak kuning.</li>
+  <li>Klik tombol <strong>Copy</strong> dan simpan kunci tersebut segera karena tidak dapat ditampilkan kembali demi alasan keamanan.</li>
+</ol>
+
+<h3>B. Menghubungkan ke Claude.ai Web (Custom Connector)</h3>
+<p>Integrasi MCP MR-CAPSULES mendukung <strong>OAuth 2.0 PKCE Auto-Discovery (RFC 8414 &amp; RFC 7591)</strong> resmi.</p>
+<ol>
+  <li>Buka <strong>Claude.ai</strong> &rarr; <strong>Settings</strong> &rarr; <strong>Connectors</strong> &rarr; Klik <strong>Add Custom Connector (BETA)</strong>.</li>
+  <li><strong>Name:</strong> Isi dengan <code>mr capsules</code> (atau nama pilihan Anda).</li>
+  <li><strong>URL:</strong> Isi dengan <code>https://mr-capsules.vercel.app/api/mcp</code></li>
+  <li><strong>Advanced settings:</strong> <em>BIARKAN KOSONG / JANGAN DIISI</em> (Otorisasi OAuth 2.0 PKCE bekerja secara otomatis lewat Auto-Discovery).</li>
+  <li>Klik <strong>Add</strong> &rarr; Klik <strong>Connect</strong> &rarr; Anda akan diarahkan ke halaman Login Mr. Capsules. Log in menggunakan akun Anda dan otorisasi selesai!</li>
+</ol>
+
+<div class="alert-box">
+  <strong>CATATAN:</strong> Penggunaan API Key dibatasi maksimum 5 kunci aktif per pengguna dengan batasan <em>rate limit</em> 60 request/menit untuk mencegah penyalahgunaan.
+</div>
+
+<h3>C. Ringkasan Kemampuan MCP Tools (70 Method)</h3>
+<p>Setelah tersambung, Anda tidak perlu tahu nama-nama fungsi di bawah ini secara teknis &mdash; cukup <strong>minta dengan bahasa biasa</strong> ke Claude, dan Claude akan otomatis memilih dan menjalankan fungsi yang sesuai:</p>
+<ul>
+  <li><strong>Materi, Cover &amp; Upload File Besar:</strong> <code>content_list</code>, <code>content_get</code>, <code>content_tree</code>, <code>content_upload</code>, <code>upload_init</code>, <code>upload_chunk</code>, <code>upload_commit</code>, <code>upload_status</code>, <code>upload_cancel</code>, <code>content_delete</code>, <code>content_delete_files</code>, <code>content_rename</code>, <code>cover_list</code>, <code>cover_upload</code>, <code>cover_delete</code></li>
+  <li><strong>Pengelolaan Codebase (SuperAdmin):</strong> <code>codebase_read_file</code>, <code>codebase_write_file</code>, <code>codebase_delete_file</code>, <code>codebase_search</code>, <code>codebase_git_history</code></li>
+  <li><strong>Meta-Tools (Pembuatan Tool MCP Dinamis):</strong> <code>mcp_create_tool</code>, <code>mcp_delete_tool</code>, <code>mcp_list_custom_tools</code></li>
+  <li><strong>Task Board &amp; Workflow:</strong> <code>tasks_list</code>, <code>tasks_create</code>, <code>tasks_claim</code>, <code>tasks_unclaim</code>, <code>tasks_submit</code>, <code>tasks_start_review</code>, <code>tasks_approve</code>, <code>tasks_reject</code>, <code>tasks_add_note</code>, <code>tasks_delete</code>, <code>tasks_logs</code></li>
+  <li><strong>Review &amp; QA:</strong> <code>review_issues</code>, <code>review_report</code>, <code>review_resolve</code>, <code>review_delete_issue</code></li>
+  <li><strong>Organisasi &amp; Divisi:</strong> <code>divisions_list</code>, <code>divisions_my</code>, <code>divisions_join</code>, <code>divisions_update_whatsapp</code>, <code>divisions_get_members</code>, <code>divisions_add_member</code>, <code>divisions_remove_member</code></li>
+  <li><strong>User, Perangkat &amp; Hak Akses:</strong> <code>users_list</code>, <code>users_ban</code>, <code>users_add_admin</code>, <code>users_remove_admin</code>, <code>users_delete</code>, <code>users_remove_device</code>, <code>users_block_device</code>, <code>contributions_leaderboard</code>, <code>contributions_my</code></li>
+  <li><strong>Dokumentasi &amp; Sistem:</strong> <code>docs_get</code>, <code>docs_update_section</code>, <code>docs_add_section</code>, <code>docs_add_tab</code>, <code>docs_update_tab</code>, <code>docs_delete_tab</code>, <code>system_health</code>, <code>system_cleanup_guests</code>, <code>activity_logs</code>, <code>config_get</code>, <code>config_update</code>, <code>apikeys_list</code>, <code>apikeys_create</code>, <code>apikeys_revoke</code>, <code>oauth_tokens_list</code>, <code>oauth_tokens_revoke</code></li>
+</ul>
+      </div>
 
 <p><strong>MR-CAPSULES</strong> menyediakan API Gateway & Model Context Protocol (MCP) serverless endpoint berbasis <em>Streamable HTTP (MCP 2025-06-18)</em>. Fitur ini memungkinkan AI Assistant seperti <strong>Claude.ai Web</strong>, <strong>Claude Desktop</strong>, atau AI Agent eksternal untuk mengakses konten dan melakukan tugas secara otomatis di Admin Panel.</p>
 
