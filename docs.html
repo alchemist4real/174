@@ -714,37 +714,92 @@
       <!-- SECTION 2: INPUT TASK -->
       <div class="docs-section">
         <h2>2. Menginput Task ke Task Board</h2>
-        <p>Setelah audit selesai dan daftar gap konten tersusun, langkah berikutnya adalah membuat task di Kanban Board. Ada dua cara: <strong>manual</strong> via Admin Panel, atau <strong>otomatis</strong> via MCP (Claude.ai / Antigravity).</p>
+        <p>Setelah audit selesai dan daftar gap konten tersusun, langkah berikutnya adalah membuat task di Kanban Board. Ada dua cara: <strong>manual</strong> via Admin Panel, atau <strong>chat ke AI</strong> via MCP (Claude.ai / Antigravity).</p>
 
-        <h3>A. Cara Manual (via Admin Panel)</h3>
-        <ol>
-          <li>Buka tab <strong>Tasks</strong> di Admin Panel.</li>
-          <li>Klik tombol <strong>+ Create Task</strong> (tombol ini hanya muncul untuk akun Management/Admin).</li>
-          <li>Isi form dengan ketentuan berikut:
-            <ul>
-              <li><strong>Title:</strong> Nama materi spesifik, jelas, dan konsisten. Format yang direkomendasikan: <code>[Mata Kuliah] [Topik] &mdash; [Tipe]</code><br>Contoh: <code>Fisiologi Saraf Otonom &mdash; CBT</code> atau <code>Histologi Epitel &mdash; Identifikasi</code></li>
-              <li><strong>Semester:</strong> Pilih semester yang sesuai (contoh: <code>semester 2</code>).</li>
-              <li><strong>Block:</strong> Isi nomor blok (contoh: <code>2.5</code>). Wajib diisi agar task muncul di tampilan Silabus.</li>
-              <li><strong>Category:</strong> Isi sesuai peruntukan ujian: <code>CBT</code> untuk soal teori, atau nama blok/kategori custom (misal <code>SOE 2.5</code>, <code>Praktikum Fisio</code>). Field ini bebas diisi &mdash; gunakan nama yang konsisten agar mudah difilter di Kanban Board.</li>
-              <li><strong>Priority:</strong> Sesuaikan urgensi:
-                <ul>
-                  <li><code>urgent</code> &mdash; ujian &lt; 2 minggu lagi</li>
-                  <li><code>high</code> &mdash; ujian 2&ndash;4 minggu</li>
-                  <li><code>normal</code> &mdash; standar</li>
-                  <li><code>low</code> &mdash; cadangan / tidak mendesak</li>
-                </ul>
-              </li>
-              <li><strong>Description:</strong> Cantumkan detail sumber materi, misalnya: <em>&ldquo;Buat soal CBT dari PPT K10 am-i-counseling. Fokus pada prinsip dasar konseling dan hambatan komunikasi. Target ~20 soal.&rdquo;</em></li>
-              <li><strong>Target Path (opsional):</strong> Jika sudah tahu path file tujuan, isi di sini (contoh: <code>content/semester 2/2.5/2.5 CBT_K10 am-i-counseling.html</code>). Ini memudahkan Developer tahu di mana menyimpan hasil kerjanya.</li>
-              <li><strong>Assign To (opsional):</strong> Pilih Developer tertentu dari dropdown jika ingin mendelegasikan secara langsung. Kosongkan jika ingin open claim.</li>
-            </ul>
-          </li>
-          <li>Klik <strong>Confirm</strong>. Task akan muncul di kolom <em>Open</em> pada Kanban Board.</li>
-        </ol>
+<h3>A. Cara Manual (via Admin Panel)</h3>
+<ol>
+  <li>Buka tab <strong>Tasks</strong> di Admin Panel.</li>
+  <li>Klik tombol <strong>+ Create Task</strong> (tombol ini hanya muncul untuk akun Management/Admin).</li>
+  <li>Isi form dengan ketentuan berikut:
+    <ul>
+      <li><strong>Title:</strong> Nama materi spesifik, jelas, dan konsisten. Format yang direkomendasikan: <code>[Mata Kuliah] [Topik] &mdash; [Tipe]</code><br>Contoh: <code>Fisiologi Saraf Otonom &mdash; CBT</code> atau <code>Histologi Epitel &mdash; Identifikasi</code></li>
+      <li><strong>Semester:</strong> Pilih semester yang sesuai (contoh: <code>semester 2</code>).</li>
+      <li><strong>Block:</strong> Isi nomor blok (contoh: <code>2.5</code>). Wajib diisi agar task muncul di tampilan Silabus.</li>
+      <li><strong>Category:</strong> Isi sesuai peruntukan ujian: <code>CBT</code> untuk soal teori, atau nama blok/kategori custom (misal <code>Praktikum Fisio</code>). Field ini bebas diisi &mdash; gunakan nama yang konsisten agar mudah difilter di Kanban Board.</li>
+      <li><strong>Priority:</strong> Sesuaikan urgensi:
+        <ul>
+          <li><code>urgent</code> &mdash; ujian &lt; 2 minggu lagi</li>
+          <li><code>high</code> &mdash; ujian 2&ndash;4 minggu</li>
+          <li><code>normal</code> &mdash; standar</li>
+          <li><code>low</code> &mdash; cadangan / tidak mendesak</li>
+        </ul>
+      </li>
+      <li><strong>Description:</strong> Cantumkan detail sumber materi, misalnya: <em>&ldquo;Buat soal CBT dari PPT K10 am-i-counseling. Fokus pada prinsip dasar konseling dan hambatan komunikasi. Target ~20 soal.&rdquo;</em></li>
+      <li><strong>Target Path (opsional):</strong> Jika sudah tahu path file tujuan, isi di sini (contoh: <code>content/semester 2/2.5/2.5 CBT_K10 am-i-counseling.html</code>). Ini memudahkan Developer tahu di mana menyimpan hasil kerjanya.</li>
+      <li><strong>Assign To (opsional):</strong> Pilih Developer tertentu dari dropdown jika ingin mendelegasikan secara langsung. Kosongkan jika ingin open claim.</li>
+    </ul>
+  </li>
+  <li>Klik <strong>Confirm</strong>. Task akan muncul di kolom <em>Open</em> pada Kanban Board.</li>
+</ol>
 
-        <div class="alert-box">
-          <strong>TIPS:</strong> Dari tab <strong>Files</strong>, kamu bisa klik kanan file yang sudah ada &rarr; <strong>Create Task</strong> untuk pre-fill otomatis Target Path dan langsung membuka form task. Jauh lebih cepat daripada input manual satu per satu.
-        </div>
+<div class="alert-box">
+  <strong>TIPS:</strong> Dari tab <strong>Files</strong>, kamu bisa klik kanan file yang sudah ada &rarr; <strong>Create Task</strong> untuk pre-fill otomatis Target Path dan langsung membuka form task. Jauh lebih cepat daripada input manual satu per satu.
+</div>
+
+<h3>B. Cara via MCP (Claude.ai / Antigravity) &mdash; Chat Biasa, Bukan Coding</h3>
+<p>Cara ini sangat efisien untuk membuat <strong>banyak task sekaligus</strong> (misalnya satu blok penuh) tanpa klik-klik berulang di Admin Panel.</p>
+
+<div class="alert-box">
+  <strong>💬 PENTING DIPAHAMI:</strong> Meski di bawah ini contoh promptnya menyebut nama-nama seperti <code>tasks_create</code>, Anda <strong>tidak sedang menulis kode</strong>. Itu tetap kalimat chat biasa yang Anda ketik ke Claude &mdash; menyebut nama tool hanyalah cara memperjelas maksud ke Claude, bukan syntax pemrograman. Anda bisa juga cukup menulis dengan bahasa sehari-hari tanpa menyebut nama tool sama sekali, dan Claude tetap akan mengerti serta menjalankannya.
+</div>
+
+<p><strong>Prasyarat:</strong> Pastikan sudah terhubung ke MCP MR-CAPSULES (lihat tab <em>MCP &amp; API Gateway</em> untuk panduan koneksi). Gunakan akun Management/Admin agar permintaan pembuatan task tidak ditolak.</p>
+
+<p><strong>Langkah di Claude.ai Web:</strong></p>
+<ol>
+  <li>Pastikan connector <strong>mr capsules</strong> sudah aktif (ikon puzzle di sidebar chat).</li>
+  <li>Ketik permintaan dalam bahasa biasa ke Claude, seperti contoh berikut:
+    <p class="docs-note-block">Contoh chat untuk membuat beberapa task sekaligus:</p>
+  </li>
+</ol>
+<pre>&ldquo;Tolong buatkan task berikut di MR-CAPSULES:
+
+1. &ldquo;Fisiologi Saraf Otonom &mdash; CBT&rdquo;
+   semester 1, block 1.3, kategori CBT, prioritas tinggi
+   deskripsi: Buat pool soal pilihan ganda dari PPT K12 Fungsi SSO. Target ~15 soal teori.
+
+2. &ldquo;Histologi Epitel &mdash; Praktikum&rdquo;
+   semester 1, block 1.2, kategori Praktikum, prioritas normal
+   deskripsi: Buat pool soal pilihan ganda prosedural dari modul praktikum Histo Epitel.
+
+Buat semua task tersebut satu per satu ya.&rdquo;</pre>
+
+<p><strong>Langkah di Antigravity (agy CLI):</strong></p>
+<ol>
+  <li>Pastikan MCP MR-CAPSULES sudah dikonfigurasi di Antigravity.</li>
+  <li>Ketik permintaan langsung di chat Antigravity, misalnya:<br><code>"Buat task CBT untuk semua kuliah di blok 2.5 yang belum ada filenya."</code></li>
+  <li>Antigravity akan menerjemahkan permintaan itu ke aksi teknis dan menjalankannya berurutan untuk setiap item &mdash; sama seperti minta tolong ke asisten yang paham data MR-CAPSULES.</li>
+</ol>
+
+<div class="alert-box">
+  <strong>PENTING:</strong> Sebelum minta AI membuat task batch, selalu sertakan daftar materi yang sudah ada (hasil audit dari Files) agar AI tidak membuat task untuk konten yang <em>sudah selesai</em>.
+</div>
+
+<h3>C. Detail Informasi yang Bisa Disertakan Saat Membuat Task</h3>
+<table class="docs-table">
+  <thead>
+    <tr><th>Informasi</th><th>Wajib</th><th>Keterangan</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Judul (Title)</td><td>Ya</td><td>Nama task, tampil di Kanban Board</td></tr>
+    <tr><td>Deskripsi</td><td>Tidak</td><td>Detail sumber, jumlah soal, instruksi Developer</td></tr>
+    <tr><td>Semester</td><td>Tidak</td><td>Contoh: <code>semester 1</code>, <code>semester 2</code></td></tr>
+    <tr><td>Blok</td><td>Tidak</td><td>Contoh: <code>1.3</code>, <code>2.5</code> &mdash; tampil di Silabus</td></tr>
+    <tr><td>Kategori</td><td>Tidak</td><td>Bebas diisi. Gunakan nama yang konsisten agar mudah difilter</td></tr>
+    <tr><td>Prioritas</td><td>Tidak</td><td><code>low</code> / <code>normal</code> / <code>high</code> / <code>urgent</code></td></tr>
+  </tbody>
+</table>
+      </div>
 
         <h3>B. Cara via MCP (Claude.ai / Antigravity) &mdash; Batch Input</h3>
         <p>Cara ini sangat efisien untuk membuat <strong>banyak task sekaligus</strong> (misalnya satu blok penuh) tanpa klik-klik berulang di Admin Panel.</p>
