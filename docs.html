@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="id">
 <head>
   <meta charset="UTF-8">
@@ -64,7 +64,7 @@
       <div class="docs-section">
         <h2>1. Pengantar MR-CAPSULES</h2>
         <div class="alert-box">
-  <strong>ðŸ“– ISTILAH PENTING (buat yang masih awam):</strong>
+  <strong>📖 ISTILAH PENTING (buat yang masih awam):</strong>
   <ul>
     <li><strong>Open-source</strong> = kode dan pengelolaannya terbuka, siapa saja boleh ikut berkontribusi</li>
     <li><strong>CBT pool</strong> = kumpulan soal pilihan ganda yang bisa dipakai berulang untuk latihan/ujian</li>
@@ -78,7 +78,7 @@
       <div class="docs-section">
         <h2>2. Pengenalan Admin Panel</h2>
         <div class="alert-box">
-  <strong>ðŸ“– ISTILAH PENTING (buat yang masih awam):</strong>
+  <strong>📖 ISTILAH PENTING (buat yang masih awam):</strong>
   <ul>
     <li><strong>CBT</strong> = Computer Based Test, ujian teori lewat komputer (bukan kertas)</li>
     <li><strong>Kanban Board</strong> = papan tugas dengan kolom-kolom (Open &rarr; In Progress &rarr; Done) supaya progres kerja gampang dipantau</li>
@@ -130,7 +130,7 @@
       <div class="docs-section">
         <h2>1. Integrasi MCP & API Gateway (AI Assistant Integration)</h2>
         <div class="alert-box">
-  <strong>ðŸ“– ISTILAH PENTING (buat yang masih awam):</strong>
+  <strong>📖 ISTILAH PENTING (buat yang masih awam):</strong>
   <ul>
     <li><strong>MCP (Model Context Protocol)</strong> = standar yang memungkinkan AI Assistant (Claude, dll) terhubung ke aplikasi lain. <u>Cara pakainya BUKAN seperti coding atau "manggil fungsi"</u> &mdash; Anda cukup <strong>chat/ngobrol biasa</strong> dengan Claude, lalu Claude sendiri yang otomatis menjalankan aksinya di belakang layar (mengambil task, upload file, dsb). Sama persis seperti Anda minta tolong asisten manusia, hanya saja asistennya AI yang langsung bisa "menyentuh" data di MR-CAPSULES.</li>
     <li><strong>API Gateway</strong> = pintu masuk yang mengatur lalu lintas permintaan dari luar (misalnya dari AI) ke sistem MR-CAPSULES</li>
@@ -141,7 +141,7 @@
 </div>
 
 <div class="alert-box">
-  <strong>ðŸ’¬ INTINYA: MCP = NGOBROL, BUKAN CODING</strong><br>
+  <strong>💬 INTINYA: MCP = NGOBROL, BUKAN CODING</strong><br>
   Yang perlu Anda lakukan hanyalah <strong>mengetik permintaan dalam bahasa biasa</strong> ke chat Claude, misalnya: <em>"Buatkan task baru untuk materi Fisiologi Saraf blok 1.3"</em> atau <em>"Cek file apa saja yang ada di folder blok 2.5"</em>. Claude yang akan menerjemahkan permintaan itu menjadi aksi teknis (memanggil tool <code>tasks_create</code>, <code>content_list</code>, dsb) secara otomatis di balik layar. Anda tidak perlu menghafal nama tool atau menulis kode apapun.
 </div>
 
@@ -240,7 +240,7 @@
       <div class="docs-section">
         <h2>2. Referensi Lengkap MCP Tools & Hak Akses</h2>
         <div class="alert-box">
-  <strong>ðŸ’¬ CARA BACA TABEL DI BAWAH INI:</strong><br>
+  <strong>💬 CARA BACA TABEL DI BAWAH INI:</strong><br>
   Tabel-tabel berikut adalah <em>daftar referensi teknis</em> untuk yang penasaran ada fungsi apa saja di baliknya. Tapi dalam praktiknya, Anda <strong>tidak perlu mengetik nama tool ini secara manual</strong>. Cukup chat biasa ke Claude (misalnya: <em>"tolong lihat siapa saja anggota divisi Development"</em>), dan Claude sendiri yang akan mencocokkan permintaan itu dengan tool yang tepat (<code>divisions_get_members</code>) lalu menjalankannya.
 </div>
 
@@ -479,7 +479,7 @@
       <div class="docs-section">
         <h2>1. Mengidentifikasi Konten yang Dibutuhkan per Blok</h2>
         <div class="alert-box">
-  <strong>ðŸ“– ISTILAH PENTING (buat yang masih awam):</strong>
+  <strong>📖 ISTILAH PENTING (buat yang masih awam):</strong>
   <ul>
     <li><strong>Gap konten</strong> = materi yang seharusnya ada di silabus tapi belum tersedia file HTML-nya di platform</li>
     <li><strong>Silabus</strong> = daftar resmi kuliah/praktikum dari program studi untuk satu blok</li>
@@ -496,7 +496,7 @@
 <ol>
   <li>Buka tab <strong>Files</strong> di Admin Panel &rarr; navigasi ke folder blok yang ingin diaudit (contoh: <code>content/semester 2/2.5/</code>).</li>
   <li>Bandingkan file yang ada dengan <strong>silabus blok</strong> (daftar kuliah/praktikum resmi dari prodi). Catat materi yang belum punya file HTML.</li>
-  <li>Cek tab <strong>Tasks</strong> di Kanban Board â€” pastikan materi yang belum ada <em>belum</em> punya task aktif (Open / In Progress / In Review) agar tidak duplikat assignment.</li>
+  <li>Cek tab <strong>Tasks</strong> di Kanban Board — pastikan materi yang belum ada <em>belum</em> punya task aktif (Open / In Progress / In Review) agar tidak duplikat assignment.</li>
 </ol>
 
 <h3>B. Jenis Konten HTML yang Dibutuhkan</h3>
@@ -523,7 +523,7 @@
     </tr>
     <tr>
       <td><strong>Elemen Utama</strong></td>
-      <td>Tab ðŸ“‹ Materi (Rangkuman) + Tab ðŸŽ¯ Quiz</td>
+      <td>Tab 📋 Materi (Rangkuman) + Tab 🎯 Quiz</td>
       <td>Pure Engine Kuis (Study, Exam, Drill Mode)</td>
     </tr>
     <tr>
@@ -542,7 +542,7 @@
 <p>Jika untuk <strong>satu topik yang sama</strong> tersedia dua sumber (PPT lecture <em>dan</em> modul praktikum), ikuti hierarki berikut:</p>
 
 <div class="alert-box">
-  <strong>ATURAN EMAS:</strong> Pilih <em>satu</em> sumber yang paling lengkap â€” jangan buat dua file HTML terpisah untuk materi yang identik. Tujuannya menghindari duplikasi konten yang membingungkan pengguna.
+  <strong>ATURAN EMAS:</strong> Pilih <em>satu</em> sumber yang paling lengkap — jangan buat dua file HTML terpisah untuk materi yang identik. Tujuannya menghindari duplikasi konten yang membingungkan pengguna.
 </div>
 
 <table class="docs-table">
@@ -552,7 +552,7 @@
   <tbody>
     <tr>
       <td>PPT Lecture &amp; Modul Praktikum membahas <strong>topik identik</strong>, kedalaman berbeda</td>
-      <td>Pilih yang <strong>lebih lengkap</strong> (biasanya modul praktikum â€” mencakup prosedur + teori)</td>
+      <td>Pilih yang <strong>lebih lengkap</strong> (biasanya modul praktikum — mencakup prosedur + teori)</td>
       <td>Modul praktikum umumnya sudah merangkum teori dari PPT plus penerapan klinis</td>
     </tr>
     <tr>
@@ -620,7 +620,7 @@
 <p>Cara ini sangat efisien untuk membuat <strong>banyak task sekaligus</strong> (misalnya satu blok penuh) tanpa klik-klik berulang di Admin Panel.</p>
 
 <div class="alert-box">
-  <strong>ðŸ’¬ PENTING DIPAHAMI:</strong> Meski di bawah ini contoh promptnya menyebut nama-nama seperti <code>tasks_create</code>, Anda <strong>tidak sedang menulis kode</strong>. Itu tetap kalimat chat biasa yang Anda ketik ke Claude &mdash; menyebut nama tool hanyalah cara memperjelas maksud ke Claude, bukan syntax pemrograman. Anda bisa juga cukup menulis dengan bahasa sehari-hari tanpa menyebut nama tool sama sekali, dan Claude tetap akan mengerti serta menjalankannya.
+  <strong>💬 PENTING DIPAHAMI:</strong> Meski di bawah ini contoh promptnya menyebut nama-nama seperti <code>tasks_create</code>, Anda <strong>tidak sedang menulis kode</strong>. Itu tetap kalimat chat biasa yang Anda ketik ke Claude &mdash; menyebut nama tool hanyalah cara memperjelas maksud ke Claude, bukan syntax pemrograman. Anda bisa juga cukup menulis dengan bahasa sehari-hari tanpa menyebut nama tool sama sekali, dan Claude tetap akan mengerti serta menjalankannya.
 </div>
 
 <p><strong>Prasyarat:</strong> Pastikan sudah terhubung ke MCP MR-CAPSULES (lihat tab <em>MCP &amp; API Gateway</em> untuk guide koneksi). Gunakan akun Management/Admin agar permintaan pembuatan task tidak ditolak.</p>
@@ -755,7 +755,7 @@ Buat semua task tersebut satu per satu.&rdquo;</pre>
         <h3>C. Langkah Pencegahan Redundansi Reviewer</h3>
         <ol>
           <li>Saat task masuk kolom <strong>In Review</strong>, Reviewer yang meng-klaim <em>tidak boleh</em> sama dengan Developer yang mengerjakan task tersebut. Cek nama di log task (<code>tasks_logs</code>) sebelum memulai review.</li>
-          <li>Jika tim kecil dan tidak ada Reviewer lain yang tersedia, <strong>eskalasi ke Management</strong> â€” Management yang melakukan review sementara, atau tunda task hingga Reviewer tersedia.</li>
+          <li>Jika tim kecil dan tidak ada Reviewer lain yang tersedia, <strong>eskalasi ke Management</strong> — Management yang melakukan review sementara, atau tunda task hingga Reviewer tersedia.</li>
           <li>Gunakan field <strong>Note</strong> (<code>tasks_add_note</code>) untuk mendokumentasikan siapa yang sudah mereview sesi mana, terutama pada materi besar yang direview bertahap.</li>
         </ol>
 
@@ -804,7 +804,7 @@ Buat semua task tersebut satu per satu.&rdquo;</pre>
       <div class="docs-section">
         <h2>1. Workflow Utama Divisi Development (Vibe Coding)</h2>
         <div class="alert-box">
-  <strong>ðŸ“– ISTILAH PENTING (buat yang masih awam):</strong>
+  <strong>📖 ISTILAH PENTING (buat yang masih awam):</strong>
   <ul>
     <li><strong>Vibe Coding</strong> = cara membuat kode dengan menyuruh AI (Claude/Antigravity) yang menuliskan kodenya, bukan mengetik manual baris per baris</li>
     <li><strong>Prompt Engineer</strong> = peran menyusun instruksi (prompt) yang jelas ke AI supaya hasilnya sesuai kebutuhan, tanpa perlu jago coding</li>
@@ -984,7 +984,7 @@ Buat semua task tersebut satu per satu.&rdquo;</pre>
         <h3>A. Template HTML Lecture (Materi &amp; Quiz)</h3>
         <p>Template ini digunakan saat membuat file dari <strong>PPT Lecture</strong> atau <strong>Modul Praktikum</strong>. Contoh file acuan: <code>2.5 LECTURE_K10 am-i-counseling.html</code>.</p>
         <ul>
-          <li><strong>Struktur 2 Tab Utama:</strong> Terdiri dari tab <strong>ðŸ“‹ Materi</strong> dan tab <strong>ðŸŽ¯ Quiz</strong> di bagian atas.</li>
+          <li><strong>Struktur 2 Tab Utama:</strong> Terdiri dari tab <strong>📋 Materi</strong> dan tab <strong>🎯 Quiz</strong> di bagian atas.</li>
           <li><strong>Bagian Materi (Interaktif):</strong>
             <ul>
               <li>Materi dipecah menjadi beberapa <strong>Sub-Tabs</strong> per bab/topik.</li>
@@ -1005,10 +1005,10 @@ Buat semua task tersebut satu per satu.&rdquo;</pre>
             <ul>
               <li><strong>Study Mode:</strong> Menampilkan kunci dan pembahasan komprehensif segera setelah memilih opsi.</li>
               <li><strong>Exam Mode:</strong> Simulasi ujian terwaktu, jawaban tersembunyi hingga kumpul ujian, dilengkapi modal konfirmasi.</li>
-              <li><strong>Drill Mode:</strong> Mode pengulangan tanpa skor â€” pengguna harus memilih opsi yang benar untuk maju.</li>
+              <li><strong>Drill Mode:</strong> Mode pengulangan tanpa skor — pengguna harus memilih opsi yang benar untuk maju.</li>
             </ul>
           </li>
-          <li><strong>Fitur Ujian Lengkap:</strong> Question Map (peta nomor), penanda soal (flag âš‘), statistik &amp; riwayat skor lokal (<code>localStorage</code>), serta analisis akurasi per topik.</li>
+          <li><strong>Fitur Ujian Lengkap:</strong> Question Map (peta nomor), penanda soal (flag ⚑), statistik &amp; riwayat skor lokal (<code>localStorage</code>), serta analisis akurasi per topik.</li>
           <li><strong>Struktur Data JS:</strong> Soal disimpan dalam array JavaScript utuh di bagian bawah file:<br>
             <code>const QUESTIONS = [{n:1, t:"Topik", q:"Pertanyaan...", o:["A","B","C","D","E"], a:"Kunci Jawaban", exp:"Pembahasan...", src:"Sumber"}, ...];</code>
           </li>
@@ -1032,7 +1032,7 @@ Buat semua task tersebut satu per satu.&rdquo;</pre>
             </tr>
             <tr>
               <td><strong>Elemen Utama</strong></td>
-              <td>Tab ðŸ“‹ Materi (Rangkuman) + Tab ðŸŽ¯ Quiz</td>
+              <td>Tab 📋 Materi (Rangkuman) + Tab 🎯 Quiz</td>
               <td>Pure Engine Kuis (Study, Exam, Drill Mode)</td>
             </tr>
             <tr>
@@ -1077,7 +1077,7 @@ Tugasmu adalah membuat file HTML lengkap baru berdasarkan materi kuliah/modul ya
    - Buat POOL SOAL QUIZ YANG BANYAK di tab Quiz (minimal 15-20 soal pilihan ganda) yang mencakup seluruh poin materi kuliah tersebut, lengkap dengan pembahasannya.
 
 3. JUDUL DAN AKSEN WARNA KUSTOM:
-   - Berikan judul yang sesuai dan menarik di bagian header (contoh: "Am I Counseling? â€” Quiz Keterampilan Dasar Konseling").
+   - Berikan judul yang sesuai dan menarik di bagian header (contoh: "Am I Counseling? — Quiz Keterampilan Dasar Konseling").
    - Pilih aksen warna khas di variabel CSS :root (--teal, --blue, --purp, atau --red) yang cocok dengan tema materi medis ini.
 
 Keluarkan seluruh kode HTML utuh dalam satu block code tanpa ada bagian yang dipotong (no placeholders/TODO).</pre>
@@ -1127,7 +1127,7 @@ Tugasmu adalah menyajikan seluruh naskah soal ujian ini ke dalam template HTML C
    - `o`: Array 5 pilihan jawaban `["A", "B", "C", "D", "E"]`
    - `a`: Teks string kunci jawaban yang BENAR (harus persis sama dengan salah satu opsi di `o`)
    - `exp`: Pembahasan lengkap dan rinci mengapa jawaban tersebut benar dan mengapa opsi lain kurang tepat, berdasarkan teori medis di PPT/Modul.
-   - `src`: Referensi slide/PPT (contoh: "PPT Merokok dan Alkoholisme â€” dr. Yudhi")
+   - `src`: Referensi slide/PPT (contoh: "PPT Merokok dan Alkoholisme — dr. Yudhi")
 
 3. JUDUL DAN AKSEN WARNA:
    - Sesuaikan bagian `.logo-wordmark` dan `.logo-tag` di header (contoh: "21 PILL SAPI", Blok "2.5").
@@ -1183,9 +1183,9 @@ Keluarkan seluruh kode HTML utuh tanpa potongan agar siap saya simpan langsung k
         <h3>A. Apa yang Diperiksa oleh Reviewer?</h3>
         <ul>
           <li><strong>Kunci Jawaban:</strong> Pastikan field <code>a</code> (answer) dalam setiap soal benar-benar merupakan opsi yang paling tepat secara medis.</li>
-          <li><strong>Pembahasan (Explanation):</strong> Pastikan field <code>exp</code> menjelaskan <em>mengapa</em> jawaban benar dan <em>mengapa</em> opsi lain salah secara ilmiah â€” bukan hanya menyebutkan ulang jawabannya.</li>
+          <li><strong>Pembahasan (Explanation):</strong> Pastikan field <code>exp</code> menjelaskan <em>mengapa</em> jawaban benar dan <em>mengapa</em> opsi lain salah secara ilmiah — bukan hanya menyebutkan ulang jawabannya.</li>
           <li><strong>Referensi Sumber:</strong> Pastikan field <code>src</code> mencantumkan PPT atau modul yang relevan dan benar.</li>
-          <li><strong>Konsistensi Opsi:</strong> Kunci jawaban di field <code>a</code> harus persis sama (karakter demi karakter) dengan salah satu opsi di array <code>o</code> â€” jika tidak cocok, soal akan tidak berfungsi.</li>
+          <li><strong>Konsistensi Opsi:</strong> Kunci jawaban di field <code>a</code> harus persis sama (karakter demi karakter) dengan salah satu opsi di array <code>o</code> — jika tidak cocok, soal akan tidak berfungsi.</li>
           <li><strong>Tata Bahasa &amp; Ejaan:</strong> Tidak ada typo, kalimat ambigu, atau istilah medis yang keliru penulisannya.</li>
         </ul>
 
@@ -1223,7 +1223,7 @@ Keluarkan seluruh kode HTML utuh tanpa potongan agar siap saya simpan langsung k
         </table>
       </div>
 
-      <!-- SECTION 3: JALUR A â€” PATCH LANGSUNG VIA MCP -->
+      <!-- SECTION 3: JALUR A — PATCH LANGSUNG VIA MCP -->
       <div class="docs-section">
         <h2>3. Jalur A &mdash; Patch Langsung via MCP (Claude Connector)</h2>
         <p>Ini adalah jalur tercepat untuk memperbaiki kesalahan minor tanpa harus melibatkan Developer. Reviewer cukup chat ke Claude.ai (dengan MCP MR-CAPSULES aktif) atau Antigravity CLI.</p>
@@ -1243,7 +1243,7 @@ soal nomor [X] tentang [topik soal] salah.
 Kunci jawaban yang benar adalah: [teks jawaban yang benar, harus persis sama dengan salah satu opsi]
 
 Penjelasan (explanation) yang benar:
-[Tulis pembahasan baru di sini â€” jelaskan mengapa jawaban benar dan mengapa opsi lain kurang tepat]
+[Tulis pembahasan baru di sini — jelaskan mengapa jawaban benar dan mengapa opsi lain kurang tepat]
 
 Referensi sumber: [PPT/Modul mana, siapa dosennya]
 
@@ -1297,7 +1297,7 @@ Tolong update explanation soal nomor 13 di file tersebut."</pre>
         </div>
       </div>
 
-      <!-- SECTION 4: JALUR B â€” ESKALASI KE DEVELOPMENT -->
+      <!-- SECTION 4: JALUR B — ESKALASI KE DEVELOPMENT -->
       <div class="docs-section">
         <h2>4. Jalur B &mdash; Eskalasi ke Divisi Development</h2>
         <p>Gunakan jalur ini jika masalah yang ditemukan terlalu besar atau terlalu struktural untuk dipatch satu per satu.</p>
@@ -1316,7 +1316,7 @@ Tolong update explanation soal nomor 13 di file tersebut."</pre>
             <tr>
               <td>Template HTML rusak</td>
               <td>Mode Study/Exam/Drill tidak berfungsi, soal tidak ter-render, layout berantakan</td>
-              <td>Kembalikan ke Developer â€” ini masalah kode, bukan konten</td>
+              <td>Kembalikan ke Developer — ini masalah kode, bukan konten</td>
             </tr>
             <tr>
               <td>Materi tidak sesuai task</td>
