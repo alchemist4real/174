@@ -28,18 +28,30 @@
     <div class="tabs">
       <div class="tab active" data-target="docsGeneral">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-        General Guide
+        GENERAL GUIDE
       </div>
       <div class="tab" data-target="docsMcp">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>
-        MCP &amp; API Gateway
+        MCP &amp; API GATEWAY
+      </div>
+      <div class="tab" data-target="docsManagement">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect></svg>
+        MANAGEMENT DIVISION
+      </div>
+      <div class="tab" data-target="docsDevelopment">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="16 18 22 12 16 6"></polyline><polyline points="8 6 2 12 8 18"></polyline></svg>
+        DEVELOPMENT DIVISION
+      </div>
+      <div class="tab" data-target="docsReview">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11l3 3L22 4"></path><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"></path></svg>
+        REVIEW &amp; QA DIVISION
       </div>
     </div>
 
     <div id="adminThemeToggles" class="docs-theme-toggles">
       <button class="btn-unified admin-theme-btn-unified theme-toggle-btn" data-theme-val="light">LIGHT</button>
       <button class="btn-unified admin-theme-btn-unified theme-toggle-btn" data-theme-val="dark">DARK</button>
-      <button class="btn-unified admin-theme-btn-unified theme-toggle-btn" data-theme-val="mrs">Mrs.</button>
+      <button class="btn-unified admin-theme-btn-unified theme-toggle-btn" data-theme-val="mrs">MRS.</button>
     </div>
   </div>
   
@@ -47,45 +59,65 @@
     <!-- TAB 1: GENERAL GUIDE -->
     <div class="docs-container active" id="docsGeneral">
       
-      <div class="docs-title">DOKUMENTASI PANDUAN UMUM</div>
+      <div class="docs-title">DOKUMENTASI GUIDE UMUM</div>
       
       <div class="docs-section">
         <h2>1. Pengantar MR-CAPSULES</h2>
-        <p><strong>MR-CAPSULES</strong> adalah platform edukasi open-source yang didedikasikan untuk melestarikan dan mendistribusikan sumber belajar mahasiswa kedokteran/kesehatan secara terpusat. Platform ini mengubah materi kuliah, praktikum, dan soal tahun lalu menjadi basis data HTML pilihan ganda yang interaktif (CBT pool).</p>
+        <div class="alert-box">
+  <strong>📖 ISTILAH PENTING (buat yang masih awam):</strong>
+  <ul>
+    <li><strong>Open-source</strong> = kode dan pengelolaannya terbuka, siapa saja boleh ikut berkontribusi</li>
+    <li><strong>CBT pool</strong> = kumpulan soal pilihan ganda yang bisa dipakai berulang untuk latihan/ujian</li>
+    <li><strong>HTML</strong> = format file dasar halaman web; semua materi/soal di platform ini disimpan sebagai file <code>.html</code></li>
+  </ul>
+</div>
+
+<p><strong>MR-CAPSULES</strong> adalah platform edukasi open-source untuk melestarikan dan mendistribusikan bahan belajar mahasiswa kedokteran/kesehatan di satu tempat. Materi kuliah, praktikum, dan soal tahun-tahun sebelumnya diubah jadi basis data HTML pilihan ganda yang bisa dipakai berulang (CBT pool).</p>
       </div>
 
       <div class="docs-section">
         <h2>2. Pengenalan Admin Panel</h2>
-        <p>Seluruh kontributor akan bekerja menggunakan <strong>Admin Panel</strong> yang memiliki 4 fitur utama:</p>
-        <ul>
-          <li><strong>Dashboard:</strong> Melacak analitik aplikasi (Uptime, Total Pengguna, Member Online), log aktivitas hybrid, serta melihat papan peringkat kontributor (Leaderboard).</li>
-          <li><strong>Files (File Manager):</strong> Mengelola struktur folder dan file HTML secara langsung. Terdapat <em>HTML Editor</em> berbasis CodeMirror bawaan dengan fitur <em>live preview</em> untuk mengecek materi.</li>
-          <li><strong>Team (Organization):</strong> Manajemen anggota divisi, filter pengguna (Admin, Banned, Online), serta fitur <em>Broadcast</em> pengumuman dan pengaturan global (Maintenance / Sign-up).</li>
-          <li><strong>Tasks (Task Board):</strong> Papan manajemen proyek dengan sistem <em>Kanban</em> (Open, In Progress, Developed, In Review, Done) dan tampilan Silabus. Penugasan dapat dibagi berdasarkan semester dan kategori materi (CBT, OSCE, Video, Summary).</li>
-        </ul>
+        <div class="alert-box">
+  <strong>📖 ISTILAH PENTING (buat yang masih awam):</strong>
+  <ul>
+    <li><strong>CBT</strong> = Computer Based Test, ujian teori lewat komputer (bukan kertas)</li>
+    <li><strong>Kanban Board</strong> = papan tugas dengan kolom-kolom (Open &rarr; In Progress &rarr; Done) supaya progres kerja gampang dipantau</li>
+    <li><strong>MCP</strong> = "jembatan" yang memungkinkan AI seperti Claude terhubung langsung ke Admin Panel dan menjalankan tugas otomatis</li>
+    <li><strong>HTML</strong> = format file dasar halaman web; semua materi/soal di platform ini disimpan dalam bentuk file <code>.html</code></li>
+    <li><strong>Live Preview</strong> = fitur untuk langsung melihat tampilan file HTML tanpa perlu upload dulu</li>
+  </ul>
+</div>
+
+<p>Semua kontributor bekerja lewat <strong>Admin Panel</strong>, yang punya 4 fitur utama:</p>
+<ul>
+  <li><strong>Dashboard:</strong> Analitik aplikasi (uptime, total pengguna, member online), log aktivitas, dan papan peringkat kontributor (Leaderboard).</li>
+  <li><strong>Files (File Manager):</strong> Tempat mengelola folder dan file HTML langsung. Ada <em>HTML Editor</em> berbasis CodeMirror dengan <em>live preview</em> buat ngecek materi.</li>
+  <li><strong>Team (Organization):</strong> Manajemen anggota divisi, filter pengguna (Admin, Banned, Online), fitur <em>Broadcast</em> pengumuman, dan pengaturan global (Maintenance / Sign-up).</li>
+  <li><strong>Tasks (Task Board):</strong> Papan proyek dengan sistem <em>Kanban</em> (Open, In Progress, Developed, In Review, Done) plus tampilan Silabus. Tugas bisa dibagi per semester dan kategori materi (CBT, OSCE, Video, Summary).</li>
+</ul>
       </div>
 
       <div class="docs-section">
         <h2>3. Pembagian Divisi Kontributor</h2>
-        <p>Kontribusi dalam MR-CAPSULES dibagi menjadi beberapa divisi utama. Anda dapat mendaftar tanpa rasa ragu, karena sistem ini didesain agar mudah dipelajari oleh siapa saja.</p>
+        <p>Kontribusi di MR-CAPSULES dibagi ke beberapa divisi. Tidak perlu ragu untuk daftar — sistemnya didesain supaya gampang dipelajari siapa saja.</p>
         
         <div class="alert-box">
-          <strong>PENTING:</strong> Tidak perlu pengalaman (baik itu coding, IT, maupun organisasi) untuk masuk ke divisi mana pun! Workflow kerja teknis akan diberikan lebih lanjut setelah Anda bergabung.
+          <strong>PENTING:</strong> Tidak perlu pengalaman coding, IT, atau organisasi untuk masuk divisi mana pun. Alur kerja teknisnya akan dijelaskan setelah kamu bergabung.
         </div>
 
-        <h3>A. Division Management (Pengurus)</h3>
-        <p>Bertugas memastikan kelancaran alur kerja dari Task Board hingga publikasi. Melakukan assign tugas di <em>Kanban Board</em>, mengelola pengguna di tab <em>Team</em>, serta menyiarkan pengumuman.</p>
+        <h3>A. Management Division (Pengurus)</h3>
+        <p>Menjaga kelancaran alur kerja dari Task Board sampai publikasi: assign tugas di <em>Kanban Board</em>, kelola pengguna di tab <em>Team</em>, dan menyiarkan pengumuman.</p>
 
-        <h3>B. Division Development (Pembuat Konten)</h3>
-        <p>Bertugas meracik materi mentah menjadi file HTML/CBT yang interaktif. Mengambil tugas di <em>Task Board</em>, mengerjakannya, lalu memindahkannya ke kolom <strong>Developed (Wait for Review)</strong>.</p>
+        <h3>B. Development Division (Pembuat Konten)</h3>
+        <p>Meracik materi mentah jadi file HTML/CBT yang interaktif. Ambil tugas di <em>Task Board</em>, kerjakan, lalu pindahkan ke kolom <strong>Developed (Wait for Review)</strong>.</p>
         <p class="docs-note-block">
-          Catatan Teknis: KITA TIDAK MELAKUKAN CODING ASLI / MANUAL.
+          Catatan Teknis: kita tidak melakukan coding asli/manual.
         </p>
-        <p>Pembuatan dan perbaikan kode seluruhnya menggunakan <strong>Viebo Code</strong> (istilah untuk men-<em>generate</em> kode menggunakan AI seperti <strong>Claude</strong> atau <strong>Antigravity</strong>). Peran developer lebih sebagai <em>Prompt Engineer</em>: menyuruh AI membuatkan soal dengan <em>template</em> yang sudah ada, lalu memasukkannya ke <em>HTML Editor</em> di tab <strong>Files</strong>.</p>
+        <p>Pembuatan dan perbaikan kode semuanya lewat <strong>Viebo Code</strong> — istilah untuk men-<em>generate</em> kode pakai AI seperti <strong>Claude</strong> atau <strong>Antigravity</strong>. Peran developer lebih ke <em>Prompt Engineer</em>: menyuruh AI membuat soal dengan <em>template</em> yang sudah ada, lalu memasukkannya ke <em>HTML Editor</em> di tab <strong>Files</strong>.</p>
 
-        <h3>C. Division Review & QA (Koreksi)</h3>
-        <p>Memastikan setiap materi yang masuk kolom <strong>In Review</strong> di <em>Task Board</em> terbebas dari kesalahan ketik (typo) atau konsep yang keliru.</p>
-        <p>Mereka membedah <em>live preview</em> di <em>HTML Editor</em>, mencocokkan kunci jawaban dengan referensi asli. Jika lolos, tugas digeser ke <strong>Done</strong>. Jika salah, dikembalikan ke kolom <em>In Progress</em> agar Developer memperbaikinya via AI kembali.</p>
+        <h3>C. Review & QA Division (Koreksi)</h3>
+        <p>Memastikan setiap materi yang masuk kolom <strong>In Review</strong> di <em>Task Board</em> bebas dari typo atau konsep yang keliru.</p>
+        <p>Reviewer mengecek <em>live preview</em> di <em>HTML Editor</em>, mencocokkan kunci jawaban dengan referensi asli. Kalau lolos, tugas digeser ke <strong>Done</strong>. Kalau ada yang salah, dikembalikan ke kolom <em>In Progress</em> supaya Developer memperbaikinya lewat AI lagi.</p>
       </div>
 
     </div>
@@ -97,159 +129,965 @@
 
       <div class="docs-section">
         <h2>1. Integrasi MCP & API Gateway (AI Assistant Integration)</h2>
-        <p><strong>MR-CAPSULES</strong> menyediakan API Gateway & Model Context Protocol (MCP) serverless endpoint berbasis <em>Streamable HTTP (MCP 2025-06-18)</em>. Fitur ini memungkinkan AI Assistant seperti <strong>Claude.ai Web</strong>, <strong>Claude Desktop</strong>, atau AI Agent eksternal untuk mengakses konten dan melakukan tugas secara otomatis di Admin Panel.</p>
-
-        <h3>A. Cara Mengoperasikan & Mengisi API Key</h3>
-        <ol>
-          <li>Buka <strong>Admin Panel</strong> dan pastikan Anda sudah terhubung ke salah satu Divisi (Management, Development, atau Review).</li>
-          <li>Pilih tab <strong>API Keys</strong> di navigasi utama.</li>
-          <li>Masukkan nama kunci pada bidang <strong>Key Name</strong> (contoh: <code>Claude Web MCP</code>) serta tentukan masa berlaku (<em>Expires In</em>).</li>
-          <li>Klik tombol <strong>+ Generate Key</strong>. Kunci rahasia berawalan <code>mrc_...</code> akan ditampilkan dalam kotak kuning.</li>
-          <li>Klik tombol <strong>Copy</strong> dan simpan kunci tersebut segera karena tidak dapat ditampilkan kembali demi alasan keamanan.</li>
-        </ol>
-
-        <h3>B. Menghubungkan ke Claude.ai Web (Custom Connector)</h3>
-        <p>Integrasi MCP MR-CAPSULES mendukung <strong>OAuth 2.0 PKCE Auto-Discovery (RFC 8414 &amp; RFC 7591)</strong> resmi.</p>
-        <ol>
-          <li>Buka <strong>Claude.ai</strong> &rarr; <strong>Settings</strong> &rarr; <strong>Connectors</strong> &rarr; Klik <strong>Add Custom Connector (BETA)</strong>.</li>
-          <li><strong>Name:</strong> Isi dengan <code>mr capsules</code> (atau nama pilihan Anda).</li>
-          <li><strong>URL:</strong> Isi dengan <code>https://mr-capsules.vercel.app/api/mcp</code></li>
-          <li><strong>Advanced settings:</strong> <em>BIARKAN KOSONG / JANGAN DIISI</em> (Otorisasi OAuth 2.0 PKCE bekerja secara otomatis lewat Auto-Discovery).</li>
-          <li>Klik <strong>Add</strong> &rarr; Klik <strong>Connect</strong> &rarr; Anda akan diarahkan ke halaman Login Mr. Capsules. Log in menggunakan akun Anda dan otorisasi selesai!</li>
-        </ol>
-
         <div class="alert-box">
-          <strong>CATATAN:</strong> Penggunaan API Key dibatasi maksimum 5 kunci aktif per pengguna dengan batasan <em>rate limit</em> 60 request/menit untuk mencegah penyalahgunaan.
-        </div>
+  <strong>📖 ISTILAH PENTING (buat yang masih awam):</strong>
+  <ul>
+    <li><strong>MCP (Model Context Protocol)</strong> = standar yang memungkinkan AI Assistant (Claude, dll) terhubung ke aplikasi lain. <u>Cara pakainya BUKAN seperti coding atau "manggil fungsi"</u> &mdash; Anda cukup <strong>chat/ngobrol biasa</strong> dengan Claude, lalu Claude sendiri yang otomatis menjalankan aksinya di belakang layar (mengambil task, upload file, dsb). Sama persis seperti Anda minta tolong asisten manusia, hanya saja asistennya AI yang langsung bisa "menyentuh" data di MR-CAPSULES.</li>
+    <li><strong>API Gateway</strong> = pintu masuk yang mengatur lalu lintas permintaan dari luar (misalnya dari AI) ke sistem MR-CAPSULES</li>
+    <li><strong>API Key</strong> = kunci rahasia berbentuk teks untuk membuktikan identitas saat AI/aplikasi luar mengakses server</li>
+    <li><strong>OAuth 2.0</strong> = metode login aman tanpa perlu membagikan password langsung ke aplikasi pihak ketiga</li>
+    <li><strong>Connector</strong> = fitur di Claude.ai untuk menyambungkan Claude ke layanan luar, termasuk MR-CAPSULES</li>
+  </ul>
+</div>
 
-        <h3>C. Ringkasan Kemampuan MCP Tools (70 Method)</h3>
-        <p>AI Assistant yang terhubung dapat mengeksekusi fungsi-fungsi berikut secara langsung:</p>
-        <ul>
-          <li><strong>Materi, Cover &amp; Upload File Besar:</strong> <code>content_list</code>, <code>content_get</code>, <code>content_tree</code>, <code>content_upload</code>, <code>upload_init</code>, <code>upload_chunk</code>, <code>upload_commit</code>, <code>upload_status</code>, <code>upload_cancel</code>, <code>content_delete</code>, <code>content_delete_files</code>, <code>content_rename</code>, <code>cover_list</code>, <code>cover_upload</code>, <code>cover_delete</code></li>
-          <li><strong>Pengelolaan Codebase (SuperAdmin):</strong> <code>codebase_read_file</code>, <code>codebase_write_file</code>, <code>codebase_delete_file</code>, <code>codebase_search</code>, <code>codebase_git_history</code></li>
-          <li><strong>Meta-Tools (Pembuatan Tool MCP Dinamis):</strong> <code>mcp_create_tool</code>, <code>mcp_delete_tool</code>, <code>mcp_list_custom_tools</code></li>
-          <li><strong>Task Board &amp; Workflow:</strong> <code>tasks_list</code>, <code>tasks_create</code>, <code>tasks_claim</code>, <code>tasks_unclaim</code>, <code>tasks_submit</code>, <code>tasks_start_review</code>, <code>tasks_approve</code>, <code>tasks_reject</code>, <code>tasks_add_note</code>, <code>tasks_delete</code>, <code>tasks_logs</code></li>
-          <li><strong>Review &amp; QA:</strong> <code>review_issues</code>, <code>review_report</code>, <code>review_resolve</code>, <code>review_delete_issue</code></li>
-          <li><strong>Organisasi &amp; Divisi:</strong> <code>divisions_list</code>, <code>divisions_my</code>, <code>divisions_join</code>, <code>divisions_update_whatsapp</code>, <code>divisions_get_members</code>, <code>divisions_add_member</code>, <code>divisions_remove_member</code></li>
-          <li><strong>User, Perangkat &amp; Hak Akses:</strong> <code>users_list</code>, <code>users_ban</code>, <code>users_add_admin</code>, <code>users_remove_admin</code>, <code>users_delete</code>, <code>users_remove_device</code>, <code>users_block_device</code>, <code>contributions_leaderboard</code>, <code>contributions_my</code></li>
-          <li><strong>Dokumentasi &amp; Sistem:</strong> <code>docs_get</code>, <code>docs_update_section</code>, <code>docs_add_section</code>, <code>docs_add_tab</code>, <code>docs_update_tab</code>, <code>docs_delete_tab</code>, <code>system_health</code>, <code>system_cleanup_guests</code>, <code>activity_logs</code>, <code>config_get</code>, <code>config_update</code>, <code>apikeys_list</code>, <code>apikeys_create</code>, <code>apikeys_revoke</code>, <code>oauth_tokens_list</code>, <code>oauth_tokens_revoke</code></li>
-        </ul>
+<div class="alert-box">
+  <strong>Ã°Å¸'Â¬ INTINYA: MCP = NGOBROL, BUKAN CODING</strong><br>
+  Cukup ketik permintaan dalam bahasa biasa ke chat Claude, misalnya: <em>"Buatkan task baru untuk materi Fisiologi Saraf blok 1.3"</em> atau <em>"Cek file apa saja yang ada di folder blok 2.5"</em>. Claude yang menerjemahkan permintaan itu jadi aksi teknis (memanggil tool <code>tasks_create</code>, <code>content_list</code>, dsb) di belakang layar. Tidak perlu menghafal nama tool atau menulis kode.
+</div>
+
+<p><strong>MR-CAPSULES</strong> menyediakan API Gateway & Model Context Protocol (MCP) lewat serverless endpoint berbasis <em>Streamable HTTP (MCP 2025-06-18)</em>. Lewat ini, AI Assistant seperti <strong>Claude.ai Web</strong>, <strong>Claude Desktop</strong>, atau AI Agent eksternal bisa mengakses konten dan menjalankan tugas otomatis di Admin Panel.</p>
+
+<h3>A. Cara Mengoperasikan & Mengisi API Key</h3>
+<ol>
+  <li>Buka <strong>Admin Panel</strong> dan pastikan sudah terhubung ke salah satu Divisi (Management, Development, atau Review).</li>
+  <li>Pilih tab <strong>API Keys</strong> di navigasi utama.</li>
+  <li>Isi nama kunci di bidang <strong>Key Name</strong> (contoh: <code>Claude Web MCP</code>) dan tentukan masa berlaku (<em>Expires In</em>).</li>
+  <li>Klik <strong>+ Generate Key</strong>. Kunci rahasia berawalan <code>mrc_...</code> akan muncul di kotak kuning.</li>
+  <li>Klik <strong>Copy</strong> dan simpan kuncinya segera — kunci ini tidak bisa ditampilkan lagi setelah itu demi keamanan.</li>
+</ol>
+
+<h3>B. Menghubungkan ke Claude.ai Web (Custom Connector)</h3>
+<p>Integrasi MCP MR-CAPSULES mendukung <strong>OAuth 2.0 PKCE Auto-Discovery (RFC 8414 &amp; RFC 7591)</strong> resmi.</p>
+<ol>
+  <li>Buka <strong>Claude.ai</strong> &rarr; <strong>Settings</strong> &rarr; <strong>Connectors</strong> &rarr; klik <strong>Add Custom Connector (BETA)</strong>.</li>
+  <li><strong>Name:</strong> isi dengan <code>mr capsules</code> (atau nama lain sesuai selera).</li>
+  <li><strong>URL:</strong> isi dengan <code>https://mr-capsules.vercel.app/api/mcp</code></li>
+  <li><strong>Advanced settings:</strong> biarkan kosong — otorisasi OAuth 2.0 PKCE jalan otomatis lewat Auto-Discovery.</li>
+  <li>Klik <strong>Add</strong> &rarr; <strong>Connect</strong> &rarr; kamu akan diarahkan ke halaman login Mr. Capsules. Log in, dan otorisasi selesai.</li>
+</ol>
+
+<div class="alert-box">
+  <strong>CATATAN:</strong> API Key dibatasi maksimum 5 kunci aktif per pengguna, dengan <em>rate limit</em> 60 request/menit untuk mencegah penyalahgunaan.
+</div>
+
+<h3>C. Ringkasan Kemampuan MCP Tools (70 Method)</h3>
+<p>Setelah tersambung, kamu tidak perlu hafal nama-nama fungsi di bawah ini &mdash; cukup minta dengan bahasa biasa ke Claude, dan Claude akan otomatis memilih serta menjalankan fungsi yang sesuai:</p>
+<ul>
+  <li><strong>Materi, Cover &amp; Upload File Besar:</strong> <code>content_list</code>, <code>content_get</code>, <code>content_tree</code>, <code>content_upload</code>, <code>upload_init</code>, <code>upload_chunk</code>, <code>upload_commit</code>, <code>upload_status</code>, <code>upload_cancel</code>, <code>content_delete</code>, <code>content_delete_files</code>, <code>content_rename</code>, <code>cover_list</code>, <code>cover_upload</code>, <code>cover_delete</code></li>
+  <li><strong>Pengelolaan Codebase (SuperAdmin):</strong> <code>codebase_read_file</code>, <code>codebase_write_file</code>, <code>codebase_delete_file</code>, <code>codebase_search</code>, <code>codebase_git_history</code></li>
+  <li><strong>Meta-Tools (Pembuatan Tool MCP Dinamis):</strong> <code>mcp_create_tool</code>, <code>mcp_delete_tool</code>, <code>mcp_list_custom_tools</code></li>
+  <li><strong>Task Board &amp; Workflow:</strong> <code>tasks_list</code>, <code>tasks_create</code>, <code>tasks_claim</code>, <code>tasks_unclaim</code>, <code>tasks_submit</code>, <code>tasks_start_review</code>, <code>tasks_approve</code>, <code>tasks_reject</code>, <code>tasks_add_note</code>, <code>tasks_delete</code>, <code>tasks_logs</code></li>
+  <li><strong>Review &amp; QA:</strong> <code>review_issues</code>, <code>review_report</code>, <code>review_resolve</code>, <code>review_delete_issue</code></li>
+  <li><strong>Organisasi &amp; Divisi:</strong> <code>divisions_list</code>, <code>divisions_my</code>, <code>divisions_join</code>, <code>divisions_update_whatsapp</code>, <code>divisions_get_members</code>, <code>divisions_add_member</code>, <code>divisions_remove_member</code></li>
+  <li><strong>User, Perangkat &amp; Hak Akses:</strong> <code>users_list</code>, <code>users_ban</code>, <code>users_add_admin</code>, <code>users_remove_admin</code>, <code>users_delete</code>, <code>users_remove_device</code>, <code>users_block_device</code>, <code>contributions_leaderboard</code>, <code>contributions_my</code></li>
+  <li><strong>Dokumentasi &amp; Sistem:</strong> <code>docs_get</code>, <code>docs_update_section</code>, <code>docs_add_section</code>, <code>docs_add_tab</code>, <code>docs_update_tab</code>, <code>docs_delete_tab</code>, <code>system_health</code>, <code>system_cleanup_guests</code>, <code>activity_logs</code>, <code>config_get</code>, <code>config_update</code>, <code>apikeys_list</code>, <code>apikeys_create</code>, <code>apikeys_revoke</code>, <code>oauth_tokens_list</code>, <code>oauth_tokens_revoke</code></li>
+</ul>
       </div>
 
       <div class="docs-section">
         <h2>2. Referensi Lengkap MCP Tools & Hak Akses</h2>
-        <p>Bagian ini merinci seluruh <strong>70 method/tools</strong> yang tersedia lewat MCP Gateway, dikelompokkan berdasarkan fungsinya, beserta siapa saja yang berwenang menggunakannya.</p>
+        <div class="alert-box">
+  <strong>Ã°Å¸'Â¬ CARA BACA TABEL DI BAWAH INI:</strong><br>
+  Tabel-tabel berikut adalah <em>referensi teknis</em> buat yang penasaran ada fungsi apa saja di baliknya. Tapi dalam praktiknya, kamu tidak perlu mengetik nama tool ini secara manual — cukup chat biasa ke Claude (misalnya: <em>"tolong lihat siapa saja anggota divisi Development"</em>), dan Claude yang akan mencocokkan permintaan itu dengan tool yang tepat (<code>divisions_get_members</code>) lalu menjalankannya.
+</div>
+
+<p>Bagian ini merinci seluruh <strong>70 method/tools</strong> yang tersedia lewat MCP Gateway, dikelompokkan berdasarkan fungsinya, beserta siapa saja yang berwenang memakainya.</p>
+
+<div class="alert-box">
+  <strong>PENTING:</strong> Meski sebuah tool "tampak" di daftar AI Assistant kamu, eksekusinya tetap divalidasi ulang oleh server berdasarkan role akun yang terhubung. Kalau tidak punya hak akses, permintaan akan ditolak (403/permission error) walau tool-nya sempat dipanggil.
+</div>
+
+<h3>A. Level Akses (Role Hierarchy)</h3>
+<ul>
+  <li><strong>SuperAdmin:</strong> Pemegang kendali penuh sistem &amp; codebase. Satu-satunya yang dapat mengedit file codebase backend/frontend, mengangkat/menurunkan Admin, dan menghapus akun secara permanen.</li>
+  <li><strong>Admin:</strong> Diangkat oleh SuperAdmin. Mengelola konfigurasi sistem, konten, dan moderasi pengguna, namun tidak bisa mengubah hak Admin lain.</li>
+  <li><strong>Reviewer:</strong> Anggota Divisi Review & QA. Berwenang atas siklus review tugas (start review, approve, reject, lapor isu).</li>
+  <li><strong>Developer:</strong> Anggota Divisi Development. Berwenang mengambil (claim) dan mengumpulkan (submit) tugas.</li>
+  <li><strong>Semua Pengguna Terautentikasi:</strong> Akses baca umum serta pengelolaan data milik sendiri (API key, kontribusi, WhatsApp, dsb).</li>
+</ul>
+
+<h3>B. Materi, Cover & Upload File Besar</h3>
+<table class="docs-table">
+  <thead>
+    <tr><th>Tool</th><th>Fungsi</th><th>Akses</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>content_list</code>, <code>content_get</code>, <code>content_tree</code></td><td>Melihat/membaca materi HTML</td><td>Semua pengguna terautentikasi</td></tr>
+    <tr><td><code>content_upload</code>, <code>content_rename</code></td><td>Upload langsung (Base64, max ~3.5MB per request) & move file</td><td>Developer, Reviewer, Admin, SuperAdmin</td></tr>
+    <tr><td><code>upload_init</code>, <code>upload_chunk</code>, <code>upload_commit</code></td><td>Sistem upload terfragmentasi untuk file besar (video/PDF/pool ZIP tanpa batas ukuran)</td><td>Developer, Reviewer, Admin, SuperAdmin</td></tr>
+    <tr><td><code>upload_status</code>, <code>upload_cancel</code></td><td>Mengecek status & membatalkan sesi upload terfragmentasi</td><td>Developer, Reviewer, Admin, SuperAdmin</td></tr>
+    <tr><td><code>content_delete</code>, <code>content_delete_files</code></td><td>Menghapus materi</td><td>Admin, SuperAdmin</td></tr>
+    <tr><td><code>cover_list</code></td><td>Melihat cover</td><td>Semua pengguna terautentikasi</td></tr>
+    <tr><td><code>cover_upload</code>, <code>cover_delete</code></td><td>Mengelola cover semester/blok</td><td>Admin, SuperAdmin</td></tr>
+  </tbody>
+</table>
+
+<h3>C. Pengelolaan Codebase Repository</h3>
+<table class="docs-table">
+  <thead>
+    <tr><th>Tool</th><th>Fungsi</th><th>Akses</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>codebase_read_file</code></td><td>Membaca isi file apa saja di seluruh codebase (misal `api/admin.js`, `build.js`)</td><td>SuperAdmin Only</td></tr>
+    <tr><td><code>codebase_write_file</code></td><td>Membuat atau mengedit file apa saja di repository codebase</td><td>SuperAdmin Only</td></tr>
+    <tr><td><code>codebase_delete_file</code></td><td>Menghapus file apapun di repository codebase</td><td>SuperAdmin Only</td></tr>
+    <tr><td><code>codebase_search</code></td><td>Mencari kata kunci/kode di seluruh repository codebase</td><td>SuperAdmin Only</td></tr>
+    <tr><td><code>codebase_git_history</code></td><td>Melihat riwayat commit &amp; log aktivitas git di repository</td><td>SuperAdmin Only</td></tr>
+  </tbody>
+</table>
+
+<h3>D. Task Board & Workflow</h3>
+<table class="docs-table">
+  <thead>
+    <tr><th>Tool</th><th>Fungsi</th><th>Akses</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>tasks_list</code>, <code>tasks_logs</code></td><td>Melihat papan tugas & riwayat</td><td>Semua pengguna terautentikasi</td></tr>
+    <tr><td><code>tasks_create</code>, <code>tasks_delete</code></td><td>Membuat/menghapus tugas</td><td>Management (Admin/SuperAdmin)</td></tr>
+    <tr><td><code>tasks_claim</code>, <code>tasks_unclaim</code>, <code>tasks_submit</code></td><td>Mengambil & mengumpulkan tugas</td><td>Developer</td></tr>
+    <tr><td><code>tasks_start_review</code>, <code>tasks_approve</code>, <code>tasks_reject</code></td><td>Siklus review tugas</td><td>Reviewer</td></tr>
+    <tr><td><code>tasks_add_note</code></td><td>Menambah catatan di log tugas</td><td>Semua pengguna terautentikasi</td></tr>
+  </tbody>
+</table>
+
+<h3>E. Review & QA</h3>
+<table class="docs-table">
+  <thead>
+    <tr><th>Tool</th><th>Fungsi</th><th>Akses</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>review_issues</code></td><td>Melihat isu review pada tugas</td><td>Reviewer</td></tr>
+    <tr><td><code>review_report</code>, <code>review_resolve</code>, <code>review_delete_issue</code></td><td>Melaporkan/menyelesaikan/menghapus isu</td><td>Reviewer, Admin, SuperAdmin</td></tr>
+  </tbody>
+</table>
+
+<h3>F. Organisasi & Divisi</h3>
+<table class="docs-table">
+  <thead>
+    <tr><th>Tool</th><th>Fungsi</th><th>Akses</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>divisions_list</code>, <code>divisions_my</code></td><td>Melihat daftar/status divisi sendiri</td><td>Semua pengguna terautentikasi</td></tr>
+    <tr><td><code>divisions_join</code>, <code>divisions_update_whatsapp</code></td><td>Bergabung ke divisi & update kontak</td><td>Semua pengguna terautentikasi</td></tr>
+    <tr><td><code>divisions_get_members</code></td><td>Melihat anggota divisi tertentu</td><td>Admin, SuperAdmin</td></tr>
+    <tr><td><code>divisions_add_member</code>, <code>divisions_remove_member</code></td><td>Menambah/mengeluarkan anggota divisi</td><td>Admin, SuperAdmin</td></tr>
+  </tbody>
+</table>
+
+<h3>G. User, Perangkat & Hak Akses</h3>
+<table class="docs-table">
+  <thead>
+    <tr><th>Tool</th><th>Fungsi</th><th>Akses</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>users_list</code></td><td>Melihat semua pengguna terdaftar</td><td>SuperAdmin</td></tr>
+    <tr><td><code>users_ban</code>, <code>users_delete</code>, <code>users_remove_device</code>, <code>users_block_device</code></td><td>Moderasi & keamanan akun/perangkat</td><td>SuperAdmin</td></tr>
+    <tr><td><code>users_add_admin</code>, <code>users_remove_admin</code></td><td>Mengangkat/menurunkan hak Admin</td><td>SuperAdmin</td></tr>
+    <tr><td><code>contributions_leaderboard</code>, <code>contributions_my</code></td><td>Melihat papan peringkat & riwayat sendiri</td><td>Semua pengguna terautentikasi</td></tr>
+  </tbody>
+</table>
+
+<h3>H. Dokumentasi & Sistem</h3>
+<table class="docs-table">
+  <thead>
+    <tr><th>Tool</th><th>Fungsi</th><th>Akses</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code>docs_get</code>, <code>system_health</code></td><td>Membaca dokumentasi & status sistem</td><td>Semua pengguna terautentikasi</td></tr>
+    <tr><td><code>docs_update_section</code>, <code>docs_add_section</code>, <code>docs_add_tab</code>, <code>docs_update_tab</code>, <code>docs_delete_tab</code></td><td>Mengedit & mengelola tab/halaman dokumentasi</td><td>Admin, SuperAdmin</td></tr>
+    <tr><td><code>config_get</code>, <code>config_update</code>, <code>activity_logs</code>, <code>system_cleanup_guests</code></td><td>Konfigurasi global & pemeliharaan sistem</td><td>Admin, SuperAdmin</td></tr>
+    <tr><td><code>apikeys_list</code>, <code>apikeys_create</code>, <code>apikeys_revoke</code></td><td>Mengelola API key milik sendiri</td><td>Semua pengguna terautentikasi</td></tr>
+    <tr><td><code>oauth_tokens_list</code>, <code>oauth_tokens_revoke</code></td><td>Mengelola koneksi OAuth (Claude/MCP) milik sendiri</td><td>Semua pengguna terautentikasi</td></tr>
+  </tbody>
+</table>
+
+<div class="alert-box">
+  <strong>CATATAN:</strong> Tabel di atas menunjukkan role minimum yang dibutuhkan. Role yang lebih tinggi dalam hierarki (SuperAdmin &gt; Admin &gt; Reviewer/Developer) otomatis mewarisi akses baca dari role di bawahnya.
+</div>
+      </div>
+    </div>
+
+    <!-- TAB 3: MANAGEMENT DIVISION GUIDE -->
+    <div class="docs-container" id="docsManagement">
+
+      <div class="docs-title">MANAGEMENT DIVISION GUIDE</div>
+
+      <!-- SECTION 1: IDENTIFIKASI KONTEN -->
+      <div class="docs-section">
+        <h2>1. Mengidentifikasi Konten yang Dibutuhkan per Blok</h2>
+        <div class="alert-box">
+  <strong>📖 ISTILAH PENTING (buat yang masih awam):</strong>
+  <ul>
+    <li><strong>Gap konten</strong> = materi yang seharusnya ada di silabus tapi belum tersedia file HTML-nya di platform</li>
+    <li><strong>Silabus</strong> = daftar resmi kuliah/praktikum dari program studi untuk satu blok</li>
+    <li><strong>Template Lecture</strong> = format file HTML berisi rangkuman materi kuliah + kuis (lihat detail lengkap di tab <em>Development Division</em>)</li>
+    <li><strong>Template CBT / Quiz Engine</strong> = format file HTML khusus soal ujian murni tanpa rangkuman materi, dengan mode Study/Exam/Drill (lihat detail lengkap di tab <em>Development Division</em>)</li>
+    <li><strong>Task duplikat</strong> = dua task berbeda yang ternyata membahas topik yang sama, sehingga membuang waktu Developer</li>
+    <li><strong>MCP</strong> = cara menghubungkan Claude ke MR-CAPSULES. <u>Penggunaannya seperti chat biasa</u>, bukan menulis kode &mdash; Anda cukup minta ke Claude dalam bahasa sehari-hari, Claude yang menjalankan aksinya</li>
+  </ul>
+</div>
+
+<p>Tugas pertama Management adalah memetakan <strong>gap</strong> antara materi yang sudah ada di platform dan yang <em>seharusnya</em> ada — dilakukan sebelum task apapun dibuat.</p>
+
+<h3>A. Langkah Audit Konten</h3>
+<ol>
+  <li>Buka tab <strong>Files</strong> di Admin Panel &rarr; navigasi ke folder blok yang mau diaudit (contoh: <code>content/semester 2/2.5/</code>).</li>
+  <li>Bandingkan file yang ada dengan <strong>silabus blok</strong> (daftar kuliah/praktikum resmi dari prodi). Catat materi yang belum punya file HTML.</li>
+  <li>Cek tab <strong>Tasks</strong> di Kanban Board — pastikan materi yang belum ada itu <em>belum</em> punya task aktif (Open / In Progress / In Review), supaya tidak dobel assignment.</li>
+</ol>
+
+<h3>B. Jenis Konten HTML yang Dibutuhkan</h3>
+<p>Semua konten di MR-CAPSULES berbentuk file <code>.html</code> interaktif. Sesuai penjelasan lengkap di tab <strong>Development Division</strong>, ada <strong>dua jenis template</strong>, tergantung sumber materinya:</p>
+
+<table class="docs-table">
+  <thead>
+    <tr>
+      <th>Fitur / Karakteristik</th>
+      <th>Template HTML Lecture</th>
+      <th>Template HTML CBT</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>Dipakai untuk task</strong></td>
+      <td>Materi kuliah teori & modul praktikum yang belum pernah dirangkum</td>
+      <td>Naskah soal ujian CBT tahun lalu / bank soal siap pakai</td>
+    </tr>
+    <tr>
+      <td><strong>Sumber Utama</strong></td>
+      <td>PPT Kuliah / Modul Praktikum</td>
+      <td>Naskah Soal CBT Tahun Lalu / Bank Soal</td>
+    </tr>
+    <tr>
+      <td><strong>Elemen Utama</strong></td>
+      <td>Tab 📋 Materi (Rangkuman) + Tab 🎯 Quiz</td>
+      <td>Pure Engine Kuis (Study, Exam, Drill Mode)</td>
+    </tr>
+    <tr>
+      <td><strong>Penyajian Materi</strong></td>
+      <td>Sub-tabs, Note boxes, Data tables, Diagram SVG</td>
+      <td>Tidak ada (hanya lewat penjelasan di kuis)</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="alert-box">
+  <strong>CATATAN UNTUK MANAGEMENT:</strong> Saat membuat task (lihat Section 2), tentukan dulu sumbernya: materi kuliah/praktikum baru (&rarr; Template Lecture) atau naskah soal ujian siap pakai (&rarr; Template CBT). Ini membantu Developer langsung tahu template mana yang harus dipakai tanpa perlu tanya lagi.
+</div>
+
+<h3>C. Aturan Prioritas Sumber: PPT Lecture vs. Modul Praktikum</h3>
+<p>Kalau untuk <strong>satu topik yang sama</strong> ada dua sumber (PPT lecture <em>dan</em> modul praktikum), ikuti hierarki berikut:</p>
+
+<div class="alert-box">
+  <strong>ATURAN EMAS:</strong> Pilih <em>satu</em> sumber yang paling lengkap — jangan buat dua file HTML terpisah untuk materi yang identik. Tujuannya menghindari duplikasi konten yang bikin bingung pengguna.
+</div>
+
+<table class="docs-table">
+  <thead>
+    <tr><th>Kondisi</th><th>Sumber yang Dipakai</th><th>Alasan</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>PPT Lecture &amp; Modul Praktikum membahas <strong>topik identik</strong>, kedalaman berbeda</td>
+      <td>Pilih yang <strong>lebih lengkap</strong> (biasanya modul praktikum — mencakup prosedur + teori)</td>
+      <td>Modul praktikum umumnya sudah merangkum teori dari PPT plus penerapan klinis</td>
+    </tr>
+    <tr>
+      <td>PPT Lecture lebih lengkap (lebih banyak slide, lebih detail patofisiologi)</td>
+      <td>Pakai <strong>PPT Lecture</strong> sebagai basis</td>
+      <td>Materi teori kuliah lebih banyak terangkum di sini</td>
+    </tr>
+    <tr>
+      <td>Modul Praktikum membahas <strong>prosedur / skill</strong> yang tidak ada di PPT</td>
+      <td>Buat <strong>dua file terpisah</strong>: satu dari PPT (Template Lecture, fokus teori), satu dari modul (Template Lecture juga, fokus prosedur)</td>
+      <td>Isi materi berbeda meski format template sama &mdash; tidak redundan</td>
+    </tr>
+    <tr>
+      <td>Konten benar-benar <strong>sama persis</strong> (PPT = ringkasan modul)</td>
+      <td>Pakai <strong>modul praktikum</strong>, abaikan PPT</td>
+      <td>Hindari duplikasi; modul lebih terstruktur untuk dijadikan materi + soal</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>D. Cara Mengecek Kelengkapan via Files</h3>
+<ol>
+  <li>Di tab <strong>Files</strong>, buka folder blok target.</li>
+  <li>Klik kanan (atau ikon titik tiga) pada file HTML yang ada &rarr; pilih <strong>Edit Code</strong> &rarr; pakai <em>Live Preview</em> untuk cepat lihat isinya.</li>
+  <li>Kalau file yang ada sudah mencakup materi dari PPT <em>dan</em> modul secara memadai, tidak perlu task baru. Kalau belum lengkap, catat untuk dibuatkan task revisi.</li>
+</ol>
+      </div>
+
+      <!-- SECTION 2: INPUT TASK -->
+      <div class="docs-section">
+        <h2>2. Menginput Task ke Task Board</h2>
+        <p>Setelah audit selesai dan daftar gap konten tersusun, langkah berikutnya adalah membuat task di Kanban Board. Ada dua cara: <strong>manual</strong> via Admin Panel, atau <strong>chat ke AI</strong> via MCP (Claude.ai / Antigravity).</p>
+
+<h3>A. Cara Manual (via Admin Panel)</h3>
+<ol>
+  <li>Buka tab <strong>Tasks</strong> di Admin Panel.</li>
+  <li>Klik <strong>+ Create Task</strong> (tombol ini hanya muncul untuk akun Management/Admin).</li>
+  <li>Isi form dengan ketentuan berikut:
+    <ul>
+      <li><strong>Title:</strong> Nama materi spesifik, jelas, dan konsisten. Format yang direkomendasikan: <code>[Mata Kuliah] [Topik] &mdash; [Tipe]</code><br>Contoh: <code>Fisiologi Saraf Otonom &mdash; CBT</code> atau <code>Histologi Epitel &mdash; Identifikasi</code></li>
+      <li><strong>Semester:</strong> Pilih semester yang sesuai (contoh: <code>semester 2</code>).</li>
+      <li><strong>Block:</strong> Isi nomor blok (contoh: <code>2.5</code>). Wajib diisi agar task muncul di tampilan Silabus.</li>
+      <li><strong>Category:</strong> Isi sesuai peruntukan ujian: <code>CBT</code> untuk soal teori, atau nama blok/kategori custom (misal <code>Praktikum Fisio</code>). Field ini bebas diisi &mdash; gunakan nama yang konsisten biar gampang difilter di Kanban Board.</li>
+      <li><strong>Priority:</strong> Sesuaikan urgensi:
+        <ul>
+          <li><code>urgent</code> &mdash; ujian &lt; 2 minggu lagi</li>
+          <li><code>high</code> &mdash; ujian 2&ndash;4 minggu</li>
+          <li><code>normal</code> &mdash; standar</li>
+          <li><code>low</code> &mdash; cadangan / tidak mendesak</li>
+        </ul>
+      </li>
+      <li><strong>Description:</strong> Cantumkan detail sumber materi, misalnya: <em>&ldquo;Buat soal CBT dari PPT K10 am-i-counseling. Fokus pada prinsip dasar konseling dan hambatan komunikasi. Target ~20 soal.&rdquo;</em></li>
+      <li><strong>Target Path (opsional):</strong> Kalau sudah tahu path file tujuan, isi di sini (contoh: <code>content/semester 2/2.5/2.5 CBT_K10 am-i-counseling.html</code>) — memudahkan Developer tahu di mana menyimpan hasil kerjanya.</li>
+      <li><strong>Assign To (opsional):</strong> Pilih Developer tertentu dari dropdown kalau mau mendelegasikan langsung. Kosongkan kalau mau open claim.</li>
+    </ul>
+  </li>
+  <li>Klik <strong>Confirm</strong>. Task akan muncul di kolom <em>Open</em> pada Kanban Board.</li>
+</ol>
+
+<div class="alert-box">
+  <strong>TIPS:</strong> Dari tab <strong>Files</strong>, kamu bisa klik kanan file yang sudah ada &rarr; <strong>Create Task</strong> untuk pre-fill otomatis Target Path dan langsung buka form task. Jauh lebih cepat daripada input manual satu per satu.
+</div>
+
+        <h3>B. Cara via MCP (Claude.ai / Antigravity) &mdash; Batch Input</h3>
+        <p>Cara ini efisien untuk bikin <strong>banyak task sekaligus</strong> (misalnya satu blok penuh) tanpa klik-klik berulang di Admin Panel.</p>
+
+        <p><strong>Prasyarat:</strong> pastikan sudah terhubung ke MCP MR-CAPSULES (lihat tab <em>MCP &amp; API Gateway</em> untuk cara koneksi). Gunakan akun Management/Admin supaya <code>tasks_create</code> tidak ditolak.</p>
+
+        <p><strong>Langkah di Claude.ai Web:</strong></p>
+        <ol>
+          <li>Pastikan connector <strong>mr capsules</strong> sudah aktif (ikon puzzle di sidebar chat).</li>
+          <li>Kirim prompt seperti berikut ke Claude:
+            <p class="docs-note-block">Contoh prompt batch task creation:</p>
+          </li>
+        </ol>
+        <pre style="background:color-mix(in srgb, var(--c3) 5%, var(--c1));border:var(--border-main);border-radius:8px;padding:16px;font-family:var(--font-mono);font-size:13px;color:var(--text-muted);overflow-x:auto;white-space:pre-wrap;line-height:1.6;max-width:100%;box-sizing:border-box;word-break:break-word;">&ldquo;Gunakan tool tasks_create untuk membuat task berikut di MR-CAPSULES:
+
+1. Title: &ldquo;Fisiologi Saraf Otonom &mdash; CBT&rdquo;
+   semester: &ldquo;semester 1&rdquo;, block: &ldquo;1.3&rdquo;
+   category: &ldquo;CBT&rdquo;, priority: &ldquo;high&rdquo;
+   description: &ldquo;Buat pool soal pilihan ganda dari PPT K12 Fungsi SSO. Target ~15 soal teori.&rdquo;
+
+2. Title: &ldquo;Histologi Epitel &mdash; SOE&rdquo;
+   semester: &ldquo;semester 1&rdquo;, block: &ldquo;1.2&rdquo;
+   category: &ldquo;SOE&rdquo;, priority: &ldquo;normal&rdquo;
+   description: &ldquo;Buat pool soal pilihan ganda prosedural dari modul praktikum Histo Epitel.&rdquo;
+
+Buat semua task tersebut satu per satu.&rdquo;</pre>
+
+        <p><strong>Langkah di Antigravity (agy CLI):</strong></p>
+        <ol>
+          <li>Pastikan MCP MR-CAPSULES sudah dikonfigurasi di Antigravity.</li>
+          <li>Gunakan perintah langsung di chat Antigravity, misalnya:<br><code>Buat task CBT untuk semua kuliah di blok 2.5 yang belum ada filenya. Gunakan tasks_create via MCP.</code></li>
+          <li>Antigravity akan menjalankan <code>tasks_create</code> berurutan untuk tiap item.</li>
+        </ol>
 
         <div class="alert-box">
-          <strong>PENTING:</strong> Meskipun sebuah tool "tampak" di daftar AI Assistant Anda, eksekusinya tetap divalidasi ulang oleh server berdasarkan role akun yang terhubung. Jika Anda tidak memiliki hak akses, permintaan akan ditolak (403/permission error) walau tool sempat dipanggil.
+          <strong>PENTING:</strong> Sebelum minta AI membuat task batch, selalu sertakan daftar materi yang sudah ada (hasil audit dari Files) supaya AI tidak bikin task untuk konten yang <em>sudah selesai</em>.
         </div>
 
-        <h3>A. Level Akses (Role Hierarchy)</h3>
+        <h3>C. Parameter Lengkap <code>tasks_create</code></h3>
+        <table class="docs-table">
+          <thead>
+            <tr><th>Parameter</th><th>Tipe</th><th>Wajib</th><th>Keterangan</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><code>title</code></td><td>string</td><td>Ya</td><td>Nama task, tampil di Kanban Board</td></tr>
+            <tr><td><code>description</code></td><td>string</td><td>Tidak</td><td>Detail sumber, jumlah soal, instruksi Developer</td></tr>
+            <tr><td><code>semester</code></td><td>string</td><td>Tidak</td><td>Contoh: <code>semester 1</code>, <code>semester 2</code></td></tr>
+            <tr><td><code>block</code></td><td>string</td><td>Tidak</td><td>Contoh: <code>1.3</code>, <code>2.5</code> &mdash; tampil di Silabus</td></tr>
+            <tr><td><code>category</code></td><td>string</td><td>Tidak</td><td>Bebas diisi. Gunakan <code>CBT</code> untuk soal teori, <code>SOE</code> untuk soal prosedural, atau nama kategori lain yang konsisten</td></tr>
+            <tr><td><code>priority</code></td><td>enum</td><td>Tidak</td><td><code>low</code> / <code>normal</code> / <code>high</code> / <code>urgent</code></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- SECTION 3: ANTI-REDUNDANSI -->
+      <div class="docs-section">
+        <h2>3. Memastikan Developer &amp; Reviewer Tidak Redundan</h2>
+        <p>Redundansi terjadi ketika satu anggota <strong>mengerjakan sekaligus mereview</strong> konten miliknya sendiri, atau ketika <strong>dua Developer</strong> membuat file untuk topik yang sama. Ini harus dicegah secara sistematis.</p>
+
+        <h3>A. Prinsip Pemisahan Peran</h3>
         <ul>
-          <li><strong>SuperAdmin:</strong> Pemegang kendali penuh sistem &amp; codebase. Satu-satunya yang dapat mengedit file codebase backend/frontend, mengangkat/menurunkan Admin, dan menghapus akun secara permanen.</li>
-          <li><strong>Admin:</strong> Diangkat oleh SuperAdmin. Mengelola konfigurasi sistem, konten, dan moderasi pengguna, namun tidak bisa mengubah hak Admin lain.</li>
-          <li><strong>Reviewer:</strong> Anggota Divisi Review & QA. Berwenang atas siklus review tugas (start review, approve, reject, lapor isu).</li>
-          <li><strong>Developer:</strong> Anggota Divisi Development. Berwenang mengambil (claim) dan mengumpulkan (submit) tugas.</li>
-          <li><strong>Semua Pengguna Terautentikasi:</strong> Akses baca umum serta pengelolaan data milik sendiri (API key, kontribusi, WhatsApp, dsb).</li>
+          <li><strong>Developer</strong> hanya boleh mengerjakan (claim) dan mengumpulkan (submit) task. Mereka <em>tidak boleh</em> mereview hasil kerja sendiri.</li>
+          <li><strong>Reviewer</strong> hanya boleh mereview task yang <em>bukan</em> miliknya. Kalau seorang anggota merangkap Developer &amp; Reviewer, Management harus memastikan dia tidak ditempatkan di tugas yang sama.</li>
+          <li>Management (Admin/SuperAdmin) boleh memantau semua alur, tapi sebaiknya <em>tidak terlibat langsung</em> dalam produksi konten supaya bisa bertindak netral saat eskalasi.</li>
         </ul>
 
-        <h3>B. Materi, Cover & Upload File Besar</h3>
+        <h3>B. Langkah Pencegahan Redundansi Developer</h3>
+        <ol>
+          <li>
+            <strong>Sebelum membuat task:</strong> cek di Kanban Board (kolom Open, In Progress) apakah topik sudah ada task-nya. Pakai filter atau search di tab Tasks.
+          </li>
+          <li>
+            <strong>Saat assign task:</strong> kalau assign langsung lewat form (bukan open claim), pastikan tidak ada dua task dengan topik identik yang di-assign ke Developer yang sama.
+          </li>
+          <li>
+            <strong>Kalau dua Developer tidak sengaja mengklaim topik yang sama:</strong> Management pakai <code>tasks_delete</code> pada task duplikat, atau tambahkan note lewat <code>tasks_add_note</code> untuk mengarahkan Developer kedua ke topik lain.
+          </li>
+          <li>
+            <strong>Pantau kolom <em>Developed (Wait for Review)</em>:</strong> kalau ada dua file masuk untuk topik yang sama, Management menentukan mana yang lebih lengkap, lalu reject yang lebih lemah dengan catatan (lewat Reviewer).
+          </li>
+        </ol>
+
+        <h3>C. Langkah Pencegahan Redundansi Reviewer</h3>
+        <ol>
+          <li>Saat task masuk kolom <strong>In Review</strong>, Reviewer yang mengklaim <em>tidak boleh</em> sama dengan Developer yang mengerjakan task itu. Cek nama di log task (<code>tasks_logs</code>) sebelum mulai review.</li>
+          <li>Kalau tim kecil dan tidak ada Reviewer lain yang tersedia, <strong>eskalasi ke Management</strong> — Management yang melakukan review sementara, atau tunda task sampai Reviewer tersedia.</li>
+          <li>Gunakan field <strong>Note</strong> (<code>tasks_add_note</code>) untuk mendokumentasikan siapa yang sudah mereview sesi mana, terutama pada materi besar yang direview bertahap.</li>
+        </ol>
+
+        <h3>D. Monitoring via Kanban Board &amp; Leaderboard</h3>
         <table class="docs-table">
           <thead>
-            <tr><th>Tool</th><th>Fungsi</th><th>Akses</th></tr>
+            <tr><th>Sinyal</th><th>Apa yang Harus Dilakukan Management</th></tr>
           </thead>
           <tbody>
-            <tr><td><code>content_list</code>, <code>content_get</code>, <code>content_tree</code></td><td>Melihat/membaca materi HTML</td><td>Semua pengguna terautentikasi</td></tr>
-            <tr><td><code>content_upload</code>, <code>content_rename</code></td><td>Upload langsung (Base64, max ~3.5MB per request) & move file</td><td>Developer, Reviewer, Admin, SuperAdmin</td></tr>
-            <tr><td><code>upload_init</code>, <code>upload_chunk</code>, <code>upload_commit</code></td><td>Sistem upload terfragmentasi untuk file besar (video/PDF/pool ZIP tanpa batas ukuran)</td><td>Developer, Reviewer, Admin, SuperAdmin</td></tr>
-            <tr><td><code>upload_status</code>, <code>upload_cancel</code></td><td>Mengecek status & membatalkan sesi upload terfragmentasi</td><td>Developer, Reviewer, Admin, SuperAdmin</td></tr>
-            <tr><td><code>content_delete</code>, <code>content_delete_files</code></td><td>Menghapus materi</td><td>Admin, SuperAdmin</td></tr>
-            <tr><td><code>cover_list</code></td><td>Melihat cover</td><td>Semua pengguna terautentikasi</td></tr>
-            <tr><td><code>cover_upload</code>, <code>cover_delete</code></td><td>Mengelola cover semester/blok</td><td>Admin, SuperAdmin</td></tr>
+            <tr>
+              <td>Satu Developer dominasi kolom <em>In Progress</em> (&gt;5 task sekaligus)</td>
+              <td>Batasi claim &mdash; tambahkan note di task agar Developer fokus menyelesaikan yang ada dulu</td>
+            </tr>
+            <tr>
+              <td>Tidak ada aktivitas di kolom <em>In Review</em> &gt;3 hari</td>
+              <td>Ping Reviewer via <strong>Broadcast</strong> (tab Team) atau tambahkan note urgency</td>
+            </tr>
+            <tr>
+              <td>Task di kolom <em>Open</em> sudah lama tidak diklaim</td>
+              <td>Assign langsung ke Developer via form edit task, atau naikkan priority ke <code>urgent</code></td>
+            </tr>
+            <tr>
+              <td>Satu anggota top Leaderboard tapi seluruh task belum Done</td>
+              <td>Cek apakah ada task yang stagnan di <em>In Review</em> &mdash; review pipeline mungkin macet</td>
+            </tr>
           </tbody>
         </table>
 
-        <h3>C. Pengelolaan Codebase Repository</h3>
+        <h3>E. Checklist Harian Management</h3>
+        <ul>
+          <li>Buka Kanban Board &rarr; pastikan tidak ada task yang stuck lebih dari 48 jam di satu kolom.</li>
+          <li>Cek Dashboard &rarr; Activity Log untuk mendeteksi aksi tak wajar (misal: submit tanpa claim, atau approve oleh Developer).</li>
+          <li>Review kolom <em>Done</em> mingguan &rarr; pastikan file HTML-nya benar-benar ada di tab Files (path sesuai).</li>
+          <li>Bandingkan jumlah task <em>Done</em> vs task <em>Open</em> untuk ukuran produktivitas divisi secara keseluruhan.</li>
+        </ul>
+      </div>
+
+    </div>
+
+    <!-- TAB 4: DEVELOPMENT DIVISION GUIDE -->
+    <div class="docs-container" id="docsDevelopment">
+
+      <div class="docs-title">DEVELOPMENT DIVISION GUIDE</div>
+
+      <!-- SECTION 1: WORKFLOW UTAMA (VIBE CODING) -->
+      <div class="docs-section">
+        <h2>1. Workflow Utama Divisi Development (Vibe Coding)</h2>
+        <div class="alert-box">
+  <strong>📖 ISTILAH PENTING (buat yang masih awam):</strong>
+  <ul>
+    <li><strong>Vibe Coding</strong> = cara membuat kode dengan menyuruh AI (Claude/Antigravity) yang menuliskan kodenya, bukan mengetik manual baris per baris</li>
+    <li><strong>Prompt Engineer</strong> = peran menyusun instruksi (prompt) yang jelas ke AI supaya hasilnya sesuai kebutuhan, tanpa perlu jago coding</li>
+    <li><strong>Template</strong> = file HTML contoh/acuan yang sudah punya struktur baku, dipakai AI sebagai "cetakan" saat membuat file baru</li>
+    <li><strong>Claim Task</strong> = mengambil satu pekerjaan dari papan tugas (Kanban Board) supaya jadi tanggung jawab kita mengerjakannya</li>
+    <li><strong>Submit Task</strong> = mengumpulkan hasil kerja untuk selanjutnya diperiksa oleh Divisi Review</li>
+    <li><strong>MCP</strong> = cara AI terhubung ke server MR-CAPSULES. Cukup <strong>chat biasa</strong> ke Claude/Antigravity (misal: "ambilkan task nomor sekian" atau "upload file ini ke folder blok 2.5") &mdash; tidak perlu menulis kode atau menghafal nama fungsi apapun</li>
+  </ul>
+</div>
+
+<p>Tugas utama Divisi Development adalah meracik materi kuliah/modul mentah atau naskah soal jadi file <code>.html</code> interaktif yang siap dipublikasikan ke MR-CAPSULES.</p>
+
+<div class="alert-box">
+  <strong>PRINSIP UTAMA: 100% VIBE CODING</strong><br>
+  Developer <strong>tidak perlu</strong> menulis kode HTML/CSS/JS manual baris demi baris. Semua pembuatan kode dilakukan dengan men-<em>generate</em> dan memperbaikinya lewat AI Assistant (seperti <strong>Claude.ai</strong> atau <strong>Antigravity CLI</strong>). Peran kamu adalah <em>Prompt Engineer</em> sekaligus pengontrol kualitas materi.
+</div>
+
+<div class="alert-box">
+  <strong>PERINGATAN EDITOR ADMIN PANEL:</strong><br>
+  Code Editor di tab <strong>Files</strong> Admin Panel masih dalam tahap pengembangan (eksperimental). Editor bawaan ini aman untuk <em>Live Preview</em> atau edit ringan, tapi <strong>tidak disarankan</strong> untuk membuat atau mengedit file HTML besar langsung di sana. Pakai AI eksternal (Claude/Antigravity) untuk generate file utuh, lalu upload.
+</div>
+
+<h3>A. Tahapan Alur Kerja Developer</h3>
+<ol>
+  <li>
+    <strong>Claim Task di Kanban Board</strong>
+    <ul>
+      <li>Buka tab <strong>Tasks</strong> di Admin Panel, atau cukup chat ke AI: <em>"tolong lihat task yang masih terbuka"</em>.</li>
+      <li>Cari task berstatus <em>Open</em> yang mau dikerjakan di kolom Kanban.</li>
+      <li>Klik <strong>Claim Task</strong> (atau chat ke AI: <em>"ambilkan/claim task ini untuk saya"</em>). Status task berubah jadi <strong>In Progress</strong> dan namamu tercatat sebagai Developer.</li>
+    </ul>
+  </li>
+  <li>
+    <strong>Download Template HTML Acuan</strong>
+    <ul>
+      <li><strong>Via Admin Panel:</strong> buka tab <strong>Files</strong> &rarr; navigasi ke folder blok target (contoh: <code>content/semester 2/2.5/</code>) &rarr; klik kanan pada salah satu file acuan &rarr; pilih <strong>Download File</strong>.</li>
+      <li><strong>Via chat ke AI:</strong> minta saja, misalnya <em>"tolong ambilkan file template acuan dari folder blok 2.5"</em> — AI akan membacanya langsung dari server.</li>
+    </ul>
+  </li>
+  <li>
+    <strong>Siapkan Bahan Referensi Materi</strong>
+    <ul>
+      <li>Unduh PPT lecture, modul praktikum (PDF/Word), atau naskah soal CBT tahun lalu yang sesuai dengan task yang kamu klaim.</li>
+    </ul>
+  </li>
+  <li>
+    <strong>Beri Pemahaman Template ke AI Terlebih Dahulu</strong>
+    <ul>
+      <li>Unggah file template <code>.html</code> yang sudah diunduh ke chat AI (Claude / Antigravity).</li>
+      <li>Instruksikan AI membaca dan mempelajari struktur CSS, layout HTML, dan skrip JavaScript-nya dulu sebelum memproses materi.</li>
+    </ul>
+  </li>
+  <li>
+    <strong>Masukkan File Referensi &amp; Eksekusi Prompting</strong>
+    <ul>
+      <li>Lampirkan materi/soal mentah ke chat AI.</li>
+      <li>Gunakan <strong>Prompt Formal</strong> yang sudah disediakan di bagian 3 dokumentasi ini.</li>
+    </ul>
+  </li>
+<div class="alert-box" style="border-left-color:#22c55e;">
+  <strong>SELURUH WORKFLOW BISA DIJALANKAN MURNI VIA CLAUDE CONNECTOR</strong><br>
+  Semua langkah di atas — dari claim task, membaca template, prompting, sampai upload &amp; submit — bisa dilakukan <strong>100% lewat chat Claude.ai</strong> yang terhubung ke MCP MR-CAPSULES, <em>tanpa perlu membuka Admin Panel sama sekali</em>.<br><br>
+  <strong>Satu-satunya pengecualian:</strong> upload file referensi materi (PPT Lecture, Modul Praktikum, Naskah Soal) <strong>tidak bisa lewat Claude Connector</strong> karena file itu ada di perangkat lokal kamu. File referensi harus dilampirkan langsung ke chat Claude secara manual sebelum prompting.
+</div>
+  <li>
+    <strong>Upload Hasil &amp; Submit Task</strong>
+    <ul>
+      <li>Simpan hasil kode dari AI jadi file ber-ekstensi <code>.html</code> di komputermu.</li>
+      <li>Upload file itu ke folder yang sesuai di tab <strong>Files</strong> (atau pakai MCP tool <code>content_upload</code> / <code>upload_init</code>).</li>
+      <li>Buka lagi tab <strong>Tasks</strong> &rarr; klik <strong>Submit Task</strong> (atau MCP <code>tasks_submit</code>). Task akan pindah ke kolom <strong>Developed (Wait for Review)</strong> untuk diperiksa Divisi Review.</li>
+    </ul>
+  </li>
+</ol>
+      </div>
+      <!-- SECTION 2: PERBEDAAN TEMPLATE HTML -->
+      <div class="docs-section">
+        <h2>2. Memahami 2 Jenis Template HTML &amp; Perbedaannya</h2>
+        <p>Di MR-CAPSULES (khususnya standar Blok 2.5 FK), ada <strong>dua jenis template HTML utama</strong>. Developer perlu memilih template yang tepat sesuai jenis task yang diklaim.</p>
+
+        <h3>A. Template HTML Lecture (Materi &amp; Quiz)</h3>
+        <p>Dipakai saat membuat file dari <strong>PPT Lecture</strong> atau <strong>Modul Praktikum</strong>. Contoh file acuan: <code>2.5 LECTURE_K10 am-i-counseling.html</code>.</p>
+        <ul>
+          <li><strong>Struktur 2 Tab Utama:</strong> Terdiri dari tab <strong>📋 Materi</strong> dan tab <strong>🎯 Quiz</strong> di bagian atas.</li>
+          <li><strong>Bagian Materi (Interaktif):</strong>
+            <ul>
+              <li>Materi dipecah menjadi beberapa <strong>Sub-Tabs</strong> per bab/topik.</li>
+              <li>Memiliki elemen <strong>Note Box</strong> berwarna (gold, blue, green, red, purp, teal) untuk poin-poin penting.</li>
+              <li>Memiliki <strong>Data Tables</strong> (<code>dtable-wrap</code>) untuk klasifikasi, dosis, atau kriteria diagnostik.</li>
+              <li>Mendukung diagram/flowchart SVG interaktif (misalnya alur komunikasi atau skema patofisiologi).</li>
+            </ul>
+          </li>
+          <li><strong>Bagian Quiz:</strong> Menyediakan kuis interaktif dengan pilihan ganda dan pembahasan langsung di tempat untuk menguji pemahaman materi kuliah tersebut.</li>
+          <li><strong>Desain &amp; Tipografi:</strong> Menggunakan variabel CSS modern dengan kombinasi font Google Fonts: <em>Syne</em> (Header), <em>DM Sans</em> (Body), dan <em>DM Mono</em> (Code/Data).</li>
+        </ul>
+
+        <h3>B. Template HTML CBT / Soal Ujian (Pure Quiz Engine)</h3>
+        <p>Dipakai khusus saat memasukkan <strong>Naskah Soal Ujian Tahun Lalu</strong> atau bank soal ujian murni. Contoh file acuan: <code>2.5 CBT_21 REECHARD GANTENG.html</code>.</p>
+        <ul>
+          <li><strong>Tanpa Tab Materi:</strong> Berisi 100% engine kuis tanpa penyajian rangkuman kuliah di depannya.</li>
+          <li><strong>3 Mode Belajar Utama:</strong>
+            <ul>
+              <li><strong>Study Mode:</strong> Menampilkan kunci dan pembahasan komprehensif segera setelah memilih opsi.</li>
+              <li><strong>Exam Mode:</strong> Simulasi ujian terwaktu, jawaban tersembunyi hingga kumpul ujian, dilengkapi modal konfirmasi.</li>
+              <li><strong>Drill Mode:</strong> Mode pengulangan tanpa skor — pengguna harus memilih opsi yang benar untuk maju.</li>
+            </ul>
+          </li>
+          <li><strong>Fitur Ujian Lengkap:</strong> Question Map (peta nomor), penanda soal (flag 🏳️), statistik &amp; riwayat skor lokal (<code>localStorage</code>), serta analisis akurasi per topik.</li>
+          <li><strong>Struktur Data JS:</strong> Soal disimpan dalam array JavaScript utuh di bagian bawah file:<br>
+            <code>const QUESTIONS = [{n:1, t:"Topik", q:"Pertanyaan...", o:["A","B","C","D","E"], a:"Kunci Jawaban", exp:"Pembahasan...", src:"Sumber"}, ...];</code>
+          </li>
+          <li><strong>Desain &amp; Tipografi:</strong> Menggunakan gaya retro-minimalist yang bersih dengan font <em>Georgia</em> untuk judul dan <em>Courier New</em> untuk elemen data.</li>
+        </ul>
+
+        <h3>C. Tabel Perbandingan Ringkas Template</h3>
         <table class="docs-table">
           <thead>
-            <tr><th>Tool</th><th>Fungsi</th><th>Akses</th></tr>
+            <tr>
+              <th>Fitur / Karakteristik</th>
+              <th>Template HTML Lecture</th>
+              <th>Template HTML CBT</th>
+            </tr>
           </thead>
           <tbody>
-            <tr><td><code>codebase_read_file</code></td><td>Membaca isi file apa saja di seluruh codebase (misal `api/admin.js`, `build.js`)</td><td>SuperAdmin Only</td></tr>
-            <tr><td><code>codebase_write_file</code></td><td>Membuat atau mengedit file apa saja di repository codebase</td><td>SuperAdmin Only</td></tr>
-            <tr><td><code>codebase_delete_file</code></td><td>Menghapus file apapun di repository codebase</td><td>SuperAdmin Only</td></tr>
-            <tr><td><code>codebase_search</code></td><td>Mencari kata kunci/kode di seluruh repository codebase</td><td>SuperAdmin Only</td></tr>
-            <tr><td><code>codebase_git_history</code></td><td>Melihat riwayat commit &amp; log aktivitas git di repository</td><td>SuperAdmin Only</td></tr>
+            <tr>
+              <td><strong>Sumber Utama</strong></td>
+              <td>PPT Kuliah / Modul Praktikum</td>
+              <td>Naskah Soal CBT Tahun Lalu / Bank Soal</td>
+            </tr>
+            <tr>
+              <td><strong>Elemen Utama</strong></td>
+              <td>Tab 📋 Materi (Rangkuman) + Tab 🎯 Quiz</td>
+              <td>Pure Engine Kuis (Study, Exam, Drill Mode)</td>
+            </tr>
+            <tr>
+              <td><strong>Penyajian Materi</strong></td>
+              <td>Sub-tabs, Note boxes, Data tables, Diagram SVG</td>
+              <td>Tidak ada (hanya lewat penjelasan di kuis)</td>
+            </tr>
+            <tr>
+              <td><strong>Penyimpanan Soal</strong></td>
+              <td>Terintegrasi dalam fungsi JS kuis interaktif</td>
+              <td>Array JS terstruktur <code>const QUESTIONS = [...]</code></td>
+            </tr>
+            <tr>
+              <td><strong>Tema &amp; Font</strong></td>
+              <td>Modern HSL (Syne + DM Sans + DM Mono)</td>
+              <td>Retro Minimalist (Georgia + Courier New)</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- SECTION 3: GUIDE PROMPTING & FORMULASI -->
+      <div class="docs-section">
+        <h2>3. Guide Prompting AI &amp; Formulasi Resmi (Dengan Breakdown)</h2>
+        <p>Supaya hasil <em>generate</em> kode AI konsisten dan langsung sesuai standar MR-CAPSULES, pakai formulasi prompt resmi berikut saat Vibe Coding.</p>
+
+        <!-- FORMULA 1: LECTURE / MODUL -->
+        <h3>A. Prompt untuk PPT Lecture / Modul Praktikum (Template Lecture)</h3>
+        <p>Pakai prompt ini kalau kamu mengunggah file <strong>Template HTML Lecture</strong> dan file <strong>PPT/Modul Materi</strong> ke AI.</p>
+
+        <p class="docs-note-block">Formulasi Prompt Resmi (Copy &amp; Paste ke AI):</p>
+        <pre style="background:color-mix(in srgb, var(--c3) 5%, var(--c1));border:var(--border-main);border-radius:8px;padding:16px;font-family:var(--font-mono);font-size:13px;color:var(--text-muted);overflow-x:auto;white-space:pre-wrap;line-height:1.6;max-width:100%;box-sizing:border-box;word-break:break-word;">Pahami seluruh struktur, CSS, dan skrip JavaScript dari file template HTML Lecture yang saya berikan.
+
+Tugasmu adalah membuat file HTML lengkap baru berdasarkan materi kuliah/modul yang saya unggah ini, dengan ketentuan berikut:
+
+1. PEMAHAMAN SLIDE/MATERI UTUH:
+   Pahami seluruh isi slide/modul dari awal sampai akhir. JANGAN SAMPAI ADA ILUSTRASI, TABEL, DIAGRAM, ATAU MATERI PENTING YANG KELEWAT. Jika ada diagram alur atau hubungan konsep di PPT, sajikan dalam bentuk diagram SVG/Mermaid atau tabel CSS yang rapi di dalam tab Materi.
+
+2. SAJIKAN SESUAI TEMPLATE:
+   - Bagi materi ke dalam sub-tabs yang logis (misal: Overview, Patofisiologi, Diagnosis, Tata Laksana, Referensi).
+   - Gunakan komponen note box (gold, blue, green, red, purp, teal) untuk menyoroti poin kunci, definisi, atau peringatan klinis.
+   - Buat POOL SOAL QUIZ YANG BANYAK di tab Quiz (minimal 15-20 soal pilihan ganda) yang mencakup seluruh poin materi kuliah tersebut, lengkap dengan pembahasannya.
+
+3. JUDUL DAN AKSEN WARNA KUSTOM:
+   - Berikan judul yang sesuai dan menarik di bagian header (contoh: "Am I Counseling? — Quiz Keterampilan Dasar Konseling").
+   - Pilih aksen warna khas di variabel CSS :root (--teal, --blue, --purp, atau --red) yang cocok dengan tema materi medis ini.
+
+Keluarkan seluruh kode HTML utuh dalam satu block code tanpa ada bagian yang dipotong (no placeholders/TODO).</pre>
+
+        <h4>Breakdown Komponen Prompt Lecture:</h4>
+        <table class="docs-table">
+          <thead>
+            <tr><th>Aturan / Elemen</th><th>Tujuan &amp; Instruksi Khusus untuk AI</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Rule 1: Pemahaman Template</strong></td>
+              <td>Memaksa AI membaca variabel CSS, kelas CSS (<code>dtable-wrap</code>, <code>note</code>, <code>sub-tab</code>), dan fungsi pembuka tab JS agar hasil keluaran tidak merusak layout.</td>
+            </tr>
+            <tr>
+              <td><strong>Rule 2: Kelengkapan Slide &amp; Ilustrasi</strong></td>
+              <td>Mencegah AI meringkas secara berlebihan. AI diinstruksikan mengonversi tabel PPT menjadi tabel HTML dan gambar alur menjadi SVG/diagram agar tidak ada informasi medis yang hilang.</td>
+            </tr>
+            <tr>
+              <td><strong>Rule 3: Penyajian &amp; Pool Soal</strong></td>
+              <td>Memastikan materi terbagi rapi ke dalam sub-tabs serta menghasilkan pool soal kuis yang cukup banyak untuk latihan mahasiswa.</td>
+            </tr>
+            <tr>
+              <td><strong>Rule 4: Judul &amp; Aksen Warna</strong></td>
+              <td>Menjaga estetika visual. Warna aksen disesuaikan dengan topik (contoh: Merah untuk Kardiologi/Vaskular, Biru/Teal untuk Psikiatri/Konseling, Hijau untuk Nutrisi/Gizi).</td>
+            </tr>
           </tbody>
         </table>
 
-        <h3>C. Task Board & Workflow</h3>
+        <!-- FORMULA 2: CBT TAHUN KEMARIN -->
+        <h3 style="margin-top:28px;">B. Prompt untuk Soal CBT Tahun Kemarin (Template CBT)</h3>
+        <p>Gunakan prompt ini ketika Anda mengunggah file <strong>Template HTML CBT</strong> dan naskah/dokumen <strong>Soal Ujian CBT Tahun Lalu</strong> ke AI.</p>
+
+        <p class="docs-note-block">Formulasi Prompt Resmi (Copy &amp; Paste ke AI):</p>
+        <pre style="background:color-mix(in srgb, var(--c3) 5%, var(--c1));border:var(--border-main);border-radius:8px;padding:16px;font-family:var(--font-mono);font-size:13px;color:var(--text-muted);overflow-x:auto;white-space:pre-wrap;line-height:1.6;max-width:100%;box-sizing:border-box;word-break:break-word;">Pahami seluruh engine kuis, struktur CSS, dan array JavaScript `QUESTIONS` dari file template HTML CBT yang saya berikan.
+
+Tugasmu adalah menyajikan seluruh naskah soal ujian ini ke dalam template HTML CBT tersebut, dengan ketentuan berikut:
+
+1. PRESERVASI KELENGKAPAN SOAL:
+   Sajikan TEPAT [masukkan jumlah soal, misal: 105] SOAL dari naskah ini ke dalam array `QUESTIONS`. JANGAN SAMPAI ADA SATU PUN SOAL, OPSI JAWABAN, ATAU NOMOR YANG TERLEWAT ATAU DIPOTONG.
+
+2. FORMULASI ARRAY QUESTIONS:
+   Setiap objek soal harus memiliki struktur:
+   - `n`: Nomor urut soal (1, 2, 3, dst.)
+   - `t`: Nama topik/sub-materi singkat (misal: "Fisiologi Saraf", "Farmakologi", "Gizi Daur Hidup")
+   - `q`: Teks pertanyaan lengkap (sertakan kasus/vignette jika ada)
+   - `o`: Array 5 pilihan jawaban `["A", "B", "C", "D", "E"]`
+   - `a`: Teks string kunci jawaban yang BENAR (harus persis sama dengan salah satu opsi di `o`)
+   - `exp`: Pembahasan lengkap dan rinci mengapa jawaban tersebut benar dan mengapa opsi lain kurang tepat, berdasarkan teori medis di PPT/Modul.
+   - `src`: Referensi slide/PPT (contoh: "PPT Merokok dan Alkoholisme — dr. Yudhi")
+
+3. JUDUL DAN AKSEN WARNA:
+   - Sesuaikan bagian `.logo-wordmark` dan `.logo-tag` di header (contoh: "21 PILL SAPI", Blok "2.5").
+   - Atur warna aksen visual yang sesuai di CSS :root.
+
+Keluarkan seluruh kode HTML utuh tanpa potongan agar siap saya simpan langsung ke file .html.</pre>
+
+        <h4>Breakdown Komponen Prompt CBT:</h4>
         <table class="docs-table">
           <thead>
-            <tr><th>Tool</th><th>Fungsi</th><th>Akses</th></tr>
+            <tr><th>Aturan / Elemen</th><th>Tujuan &amp; Instruksi Khusus untuk AI</th></tr>
           </thead>
           <tbody>
-            <tr><td><code>tasks_list</code>, <code>tasks_logs</code></td><td>Melihat papan tugas & riwayat</td><td>Semua pengguna terautentikasi</td></tr>
-            <tr><td><code>tasks_create</code>, <code>tasks_delete</code></td><td>Membuat/menghapus tugas</td><td>Management (Admin/SuperAdmin)</td></tr>
-            <tr><td><code>tasks_claim</code>, <code>tasks_unclaim</code>, <code>tasks_submit</code></td><td>Mengambil & mengumpulkan tugas</td><td>Developer</td></tr>
-            <tr><td><code>tasks_start_review</code>, <code>tasks_approve</code>, <code>tasks_reject</code></td><td>Siklus review tugas</td><td>Reviewer</td></tr>
-            <tr><td><code>tasks_add_note</code></td><td>Menambah catatan di log tugas</td><td>Semua pengguna terautentikasi</td></tr>
+            <tr>
+              <td><strong>Rule 1: Pemahaman Engine CBT</strong></td>
+              <td>Memastikan AI mempertahankan fungsi 3 mode (Study, Exam, Drill), Question Map, dan sistem kalkulasi akurasi tanpa mengubah skrip JS bawaan.</td>
+            </tr>
+            <tr>
+              <td><strong>Rule 2: Preservasi Presisi Soal</strong></td>
+              <td>Menyebutkan jumlah pasti soal (misal 105 soal) agar AI tidak berhenti di tengah jalan atau sengaja memotong soal dengan komentar <code>/* soal 10-100 disingkat */</code>.</td>
+            </tr>
+            <tr>
+              <td><strong>Rule 3: Formulasi Array &amp; Pembahasan</strong></td>
+              <td>Mewajibkan bidang <code>exp</code> (explanation) terisi pembahasan medis yang kaya dan bidang <code>src</code> mencantumkan pemateri/PPT acuan untuk membantu mahasiswa belajar.</td>
+            </tr>
+            <tr>
+              <td><strong>Rule 4: Judul &amp; Brand Tag</strong></td>
+              <td>Menjaga identitas file acuan (misalnya nama angkatan/sandi blok seperti "21 PILL SAPI" pada Blok 2.5) agar mudah dikenali di platform.</td>
+            </tr>
           </tbody>
         </table>
 
-        <h3>D. Review & QA</h3>
-        <table class="docs-table">
-          <thead>
-            <tr><th>Tool</th><th>Fungsi</th><th>Akses</th></tr>
-          </thead>
-          <tbody>
-            <tr><td><code>review_issues</code></td><td>Melihat isu review pada tugas</td><td>Reviewer</td></tr>
-            <tr><td><code>review_report</code>, <code>review_resolve</code>, <code>review_delete_issue</code></td><td>Melaporkan/menyelesaikan/menghapus isu</td><td>Reviewer, Admin, SuperAdmin</td></tr>
-          </tbody>
-        </table>
+        <div class="alert-box" style="margin-top:20px;">
+          <strong>TIPS DEVELOPER:</strong> Jika naskah soal sangat banyak (misalnya >100 soal), AI mungkin mengalami <em>output limit</em>. Jika terpotong, minta AI melanjutkan dengan prompt: <code>"Lanjutkan array QUESTIONS dari nomor [X] sampai selesai dengan format JSON yang sama."</code> Lalu gabungkan kodenya.
+        </div>
+      </div>
 
-        <h3>E. Organisasi & Divisi</h3>
-        <table class="docs-table">
-          <thead>
-            <tr><th>Tool</th><th>Fungsi</th><th>Akses</th></tr>
-          </thead>
-          <tbody>
-            <tr><td><code>divisions_list</code>, <code>divisions_my</code></td><td>Melihat daftar/status divisi sendiri</td><td>Semua pengguna terautentikasi</td></tr>
-            <tr><td><code>divisions_join</code>, <code>divisions_update_whatsapp</code></td><td>Bergabung ke divisi & update kontak</td><td>Semua pengguna terautentikasi</td></tr>
-            <tr><td><code>divisions_get_members</code></td><td>Melihat anggota divisi tertentu</td><td>Admin, SuperAdmin</td></tr>
-            <tr><td><code>divisions_add_member</code>, <code>divisions_remove_member</code></td><td>Menambah/mengeluarkan anggota divisi</td><td>Admin, SuperAdmin</td></tr>
-          </tbody>
-        </table>
+    </div>
 
-        <h3>F. User, Perangkat & Hak Akses</h3>
-        <table class="docs-table">
-          <thead>
-            <tr><th>Tool</th><th>Fungsi</th><th>Akses</th></tr>
-          </thead>
-          <tbody>
-            <tr><td><code>users_list</code></td><td>Melihat semua pengguna terdaftar</td><td>SuperAdmin</td></tr>
-            <tr><td><code>users_ban</code>, <code>users_delete</code>, <code>users_remove_device</code>, <code>users_block_device</code></td><td>Moderasi & keamanan akun/perangkat</td><td>SuperAdmin</td></tr>
-            <tr><td><code>users_add_admin</code>, <code>users_remove_admin</code></td><td>Mengangkat/menurunkan hak Admin</td><td>SuperAdmin</td></tr>
-            <tr><td><code>contributions_leaderboard</code>, <code>contributions_my</code></td><td>Melihat papan peringkat & riwayat sendiri</td><td>Semua pengguna terautentikasi</td></tr>
-          </tbody>
-        </table>
+    <!-- TAB 5: REVIEW & QA DIVISION GUIDE -->
+    <div class="docs-container" id="docsReview">
 
-        <h3>G. Dokumentasi & Sistem</h3>
+      <div class="docs-title">REVIEW &amp; QA DIVISION GUIDE</div>
+
+      <!-- SECTION 1: PERAN & TANGGUNG JAWAB -->
+      <div class="docs-section">
+        <h2>1. Peran &amp; Tanggung Jawab Divisi Review</h2>
+        <div class="alert-box">
+          <strong>PRINSIP DASAR REVIEW:</strong><br>
+          Divisi Review bertugas memastikan setiap file HTML yang masuk dari Developer <strong>akurat secara konten medis</strong> sebelum dipublikasikan. Satu soal yang salah kunci atau penjelasannya menyesatkan lebih berbahaya daripada tidak ada konten sama sekali.
+        </div>
+
+        <h3>A. Apa yang Diperiksa oleh Reviewer?</h3>
+        <ul>
+          <li><strong>Kunci Jawaban:</strong> Pastikan field <code>a</code> (answer) dalam setiap soal benar-benar merupakan opsi yang paling tepat secara medis.</li>
+          <li><strong>Pembahasan (Explanation):</strong> Pastikan field <code>exp</code> menjelaskan <em>mengapa</em> jawaban benar dan <em>mengapa</em> opsi lain salah secara ilmiah — bukan hanya menyebutkan ulang jawabannya.</li>
+          <li><strong>Referensi Sumber:</strong> Pastikan field <code>src</code> mencantumkan PPT atau modul yang relevan dan benar.</li>
+          <li><strong>Konsistensi Opsi:</strong> Kunci jawaban di field <code>a</code> harus persis sama (karakter demi karakter) dengan salah satu opsi di array <code>o</code> — jika tidak cocok, soal akan tidak berfungsi.</li>
+          <li><strong>Tata Bahasa &amp; Ejaan:</strong> Tidak ada typo, kalimat ambigu, atau istilah medis yang keliru penulisannya.</li>
+        </ul>
+
+        <h3>B. Aturan Pemisahan Peran (Anti-Redundansi)</h3>
+        <div class="alert-box" style="border-left-color:var(--c4);">
+          <strong>ATURAN WAJIB:</strong> Developer dan Reviewer untuk satu task yang sama <strong>TIDAK BOLEH orang yang sama</strong>. Tujuannya adalah memastikan ada perspektif kedua yang independen dalam proses QA. Jika tidak ada Reviewer lain yang tersedia, eskalasikan ke Management untuk reassignment.
+        </div>
+      </div>
+
+      <!-- SECTION 2: DUA JALUR KOREKSI -->
+      <div class="docs-section">
+        <h2>2. Dua Jalur Koreksi</h2>
+        <p>Saat Reviewer menemukan kesalahan pada file HTML, tersedia dua jalur tindakan tergantung <strong>jenis dan skala</strong> kesalahannya:</p>
+
         <table class="docs-table">
           <thead>
-            <tr><th>Tool</th><th>Fungsi</th><th>Akses</th></tr>
+            <tr>
+              <th>Jalur</th>
+              <th>Kapan Digunakan</th>
+              <th>Cara Kerja</th>
+            </tr>
           </thead>
           <tbody>
-            <tr><td><code>docs_get</code>, <code>system_health</code></td><td>Membaca dokumentasi & status sistem</td><td>Semua pengguna terautentikasi</td></tr>
-            <tr><td><code>docs_update_section</code>, <code>docs_add_section</code>, <code>docs_add_tab</code>, <code>docs_update_tab</code>, <code>docs_delete_tab</code></td><td>Mengedit & mengelola tab/halaman dokumentasi</td><td>Admin, SuperAdmin</td></tr>
-            <tr><td><code>config_get</code>, <code>config_update</code>, <code>activity_logs</code>, <code>system_cleanup_guests</code></td><td>Konfigurasi global & pemeliharaan sistem</td><td>Admin, SuperAdmin</td></tr>
-            <tr><td><code>apikeys_list</code>, <code>apikeys_create</code>, <code>apikeys_revoke</code></td><td>Mengelola API key milik sendiri</td><td>Semua pengguna terautentikasi</td></tr>
-            <tr><td><code>oauth_tokens_list</code>, <code>oauth_tokens_revoke</code></td><td>Mengelola koneksi OAuth (Claude/MCP) milik sendiri</td><td>Semua pengguna terautentikasi</td></tr>
+            <tr>
+              <td><strong>Jalur A &mdash; Patch Langsung via MCP</strong></td>
+              <td>Kesalahan spesifik dan terisolasi: satu soal salah kunci, satu pembahasan keliru, typo pada penjelasan, atau referensi sumber salah nama</td>
+              <td>Reviewer chat ke Claude/Antigravity &rarr; Claude langsung patch file HTML di server via MCP</td>
+            </tr>
+            <tr>
+              <td><strong>Jalur B &mdash; Eskalasi ke Development</strong></td>
+              <td>Kesalahan struktural / masif: &gt;30% soal salah, template HTML rusak, urutan soal kacau, atau soal tidak sesuai materi sama sekali</td>
+              <td>Reviewer hubungi Developer via catatan task atau Broadcast &rarr; Developer revisi file ulang &rarr; kembali ke Review</td>
+            </tr>
           </tbody>
         </table>
+      </div>
+
+      <!-- SECTION 3: JALUR A — PATCH LANGSUNG VIA MCP -->
+      <div class="docs-section">
+        <h2>3. Jalur A &mdash; Patch Langsung via MCP (Claude Connector)</h2>
+        <p>Ini adalah jalur tercepat untuk memperbaiki kesalahan minor tanpa harus melibatkan Developer. Reviewer cukup chat ke Claude.ai (dengan MCP MR-CAPSULES aktif) atau Antigravity CLI.</p>
+
+        <div class="alert-box" style="border-left-color:#22c55e;">
+          <strong>SELURUH PROSES PATCH BISA DILAKUKAN MURNI VIA CLAUDE CONNECTOR</strong><br>
+          Tidak perlu membuka code editor, tidak perlu tahu cara edit HTML. Cukup chat ke Claude dengan informasi yang jelas &mdash; Claude yang akan membaca file, menemukan soal yang dimaksud, dan memperbaikinya langsung di server.
+        </div>
+
+        <h3>A. Format Permintaan Patch ke Claude</h3>
+        <p>Gunakan format percakapan natural berikut. Semakin spesifik informasi yang Anda berikan, semakin akurat hasilnya:</p>
+
+        <p class="docs-note-block">Template Permintaan Patch (Sesuaikan dengan kasus Anda):</p>
+        <pre style="background:color-mix(in srgb, var(--c3) 5%, var(--c1));border:var(--border-main);border-radius:8px;padding:16px;font-family:var(--font-mono);font-size:13px;color:var(--text-muted);overflow-x:auto;white-space:pre-wrap;line-height:1.6;max-width:100%;box-sizing:border-box;word-break:break-word;">"Di file [nama file atau path lengkap, misal: content/semester 2/2.5/2.5 CBT_21 REECHARD GANTENG.html],
+soal nomor [X] tentang [topik soal] salah.
+
+Kunci jawaban yang benar adalah: [teks jawaban yang benar, harus persis sama dengan salah satu opsi]
+
+Penjelasan (explanation) yang benar:
+[Tulis pembahasan baru di sini — jelaskan mengapa jawaban benar dan mengapa opsi lain kurang tepat]
+
+Referensi sumber: [PPT/Modul mana, siapa dosennya]
+
+Tolong perbaiki soal tersebut di file HTML-nya langsung."</pre>
+
+        <h3>B. Contoh Nyata Permintaan Patch</h3>
+        <p class="docs-note-block">Contoh 1 &mdash; Salah Kunci Jawaban:</p>
+        <pre style="background:color-mix(in srgb, var(--c3) 5%, var(--c1));border:var(--border-main);border-radius:8px;padding:16px;font-family:var(--font-mono);font-size:13px;color:var(--text-muted);overflow-x:auto;white-space:pre-wrap;line-height:1.6;max-width:100%;box-sizing:border-box;word-break:break-word;">"Di file content/semester 2/2.5/2.5 CBT_21 REECHARD GANTENG.html,
+soal nomor 25 tentang latihan fisik pada obesitas, kunci jawabannya salah.
+
+Kunci yang benar adalah: Endurance training tipe non weight bearing
+
+Penjelasan:
+Pada pasien obesitas, latihan yang direkomendasikan adalah endurance training tipe NON weight bearing
+(seperti berenang atau bersepeda) karena meminimalkan beban pada sendi yang sudah terbebani
+berat badan berlebih. Resistance training boleh dilakukan tapi bukan yang pertama direkomendasikan
+karena risiko cedera sendi lebih tinggi pada penderita obesitas berat.
+
+Referensi: PPT Exercise for Special Population I - dr. Susi, Slide 14
+
+Tolong perbaiki di file HTML-nya."</pre>
+
+        <p class="docs-note-block">Contoh 2 &mdash; Pembahasan Keliru/Tidak Lengkap:</p>
+        <pre style="background:color-mix(in srgb, var(--c3) 5%, var(--c1));border:var(--border-main);border-radius:8px;padding:16px;font-family:var(--font-mono);font-size:13px;color:var(--text-muted);overflow-x:auto;white-space:pre-wrap;line-height:1.6;max-width:100%;box-sizing:border-box;word-break:break-word;">"Di file content/semester 2/2.5/2.5 CBT_21 REECHARD GANTENG.html,
+soal nomor 13 tentang Neural Tube Defect, kunci jawabannya benar (Asam Folat)
+tapi penjelasannya terlalu singkat dan tidak menyebut mekanismenya.
+
+Penjelasan yang lebih lengkap:
+Neural Tube Defect (NTD) seperti spina bifida dan anensefali terjadi akibat kekurangan asam folat
+pada trimester pertama kehamilan, khususnya saat periode penutupan tabung saraf (hari 21-28 pasca
+konsepsi). Asam folat berperan penting dalam sintesis DNA dan pembelahan sel saraf. WHO dan Kemenkes
+merekomendasikan suplementasi 400 mcg/hari sejak sebelum kehamilan hingga trimester pertama.
+Vitamin B12 juga terlibat dalam metabolisme folat, tapi defisiensi primer yang menyebabkan NTD
+adalah asam folat.
+
+Referensi: PPT Gizi dalam Daur Hidup 2 - dr. Madya, Slide 23
+
+Tolong update explanation soal nomor 13 di file tersebut."</pre>
+
+        <h3>C. Apa yang Dilakukan Claude Setelah Menerima Permintaan?</h3>
+        <ol>
+          <li>Claude membaca file HTML yang dimaksud via MCP tool <code>content_get</code>.</li>
+          <li>Claude menemukan soal dengan nomor yang disebutkan dalam array <code>QUESTIONS</code>.</li>
+          <li>Claude memperbarui field yang salah: <code>a</code> (kunci), <code>exp</code> (explanation), dan/atau <code>src</code> (referensi).</li>
+          <li>Claude menyimpan perubahan kembali ke server via MCP tool <code>content_upload</code> atau <code>content_patch</code>.</li>
+          <li>Claude melaporkan perubahan yang telah dilakukan untuk dikonfirmasi Reviewer.</li>
+        </ol>
 
         <div class="alert-box">
-          <strong>CATATAN:</strong> Tabel di atas merepresentasikan role minimum yang dibutuhkan. Role yang lebih tinggi dalam hierarki (SuperAdmin &gt; Admin &gt; Reviewer/Developer) otomatis mewarisi akses baca dari role di bawahnya.
+          <strong>TIPS REVIEWER:</strong> Setelah Claude selesai patch, minta Claude menampilkan soal yang sudah diperbaiki untuk verifikasi akhir sebelum mengubah status task. Contoh: <code>"Tampilkan soal nomor 25 yang sudah diperbaiki dari file tersebut"</code>.
+        </div>
+      </div>
+
+      <!-- SECTION 4: JALUR B — ESKALASI KE DEVELOPMENT -->
+      <div class="docs-section">
+        <h2>4. Jalur B &mdash; Eskalasi ke Divisi Development</h2>
+        <p>Gunakan jalur ini jika masalah yang ditemukan terlalu besar atau terlalu struktural untuk dipatch satu per satu.</p>
+
+        <h3>A. Kondisi yang Membutuhkan Eskalasi</h3>
+        <table class="docs-table">
+          <thead>
+            <tr><th>Kondisi</th><th>Contoh</th><th>Tindakan</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Banyak soal salah (&gt;30%)</td>
+              <td>Dari 50 soal, 20+ soal kunci atau pembahasannya keliru</td>
+              <td>Kembalikan ke Developer untuk revisi ulang, jangan patch satu per satu</td>
+            </tr>
+            <tr>
+              <td>Template HTML rusak</td>
+              <td>Mode Study/Exam/Drill tidak berfungsi, soal tidak ter-render, layout berantakan</td>
+              <td>Kembalikan ke Developer — ini masalah kode, bukan konten</td>
+            </tr>
+            <tr>
+              <td>Materi tidak sesuai task</td>
+              <td>Task adalah CBT Gizi tapi isinya soal Fisiologi Saraf</td>
+              <td>Kembalikan ke Developer untuk dibuat ulang sesuai deskripsi task</td>
+            </tr>
+            <tr>
+              <td>Soal tidak sesuai template yang diminta</td>
+              <td>Task meminta Template Lecture tapi Developer mengumpulkan Template CBT</td>
+              <td>Kembalikan ke Developer dengan catatan jenis template yang benar</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <h3>B. Cara Mengeskalasi ke Developer</h3>
+        <ol>
+          <li>
+            <strong>Via Catatan Task di Admin Panel:</strong>
+            <ul>
+              <li>Buka task yang bersangkutan di Kanban Board &rarr; klik <strong>Add Note / Comment</strong>.</li>
+              <li>Tulis catatan spesifik tentang apa yang perlu diperbaiki dan alasannya.</li>
+              <li>Ubah status task kembali ke <strong>In Progress</strong> (atau biarkan di <em>In Review</em> dengan catatan) agar Developer tahu ada pekerjaan yang perlu direvisi.</li>
+            </ul>
+          </li>
+          <li>
+            <strong>Via Chat ke Claude (MCP):</strong>
+            <ul>
+              <li>Minta Claude menambahkan catatan ke task: <em>"Tambahkan catatan ke task [ID/nama task]: File perlu direvisi karena [alasan]. Mohon Developer mengerjakan ulang bagian [spesifikasi]."</em></li>
+              <li>Atau minta Claude mengubah status task kembali: <em>"Set status task ini kembali ke In Progress dan tambahkan note bahwa perlu revisi ulang."</em></li>
+            </ul>
+          </li>
+          <li>
+            <strong>Via Broadcast (Tab Team):</strong>
+            <ul>
+              <li>Gunakan fitur Broadcast di tab Team untuk mengirim pesan ke Developer yang bersangkutan jika perlu komunikasi langsung dan mendesak.</li>
+            </ul>
+          </li>
+        </ol>
+      </div>
+
+      <!-- SECTION 5: ALUR REVIEW SETELAH APPROVE -->
+      <div class="docs-section">
+        <h2>5. Alur Lengkap Review sampai Approve</h2>
+
+        <table class="docs-table">
+          <thead>
+            <tr><th>Langkah</th><th>Aksi Reviewer</th><th>Status Task</th></tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>1. Ambil Task untuk Direview</td>
+              <td>Buka Kanban, cari task di kolom <em>Developed</em> &rarr; klik <strong>Claim Review</strong> (atau chat ke Claude: <em>"claim review task ini"</em>)</td>
+              <td><em>Developed</em> &rarr; <em>In Review</em></td>
+            </tr>
+            <tr>
+              <td>2. Baca &amp; Periksa File HTML</td>
+              <td>Buka file via tab Files (Live Preview) atau minta Claude membacakan isinya. Uji semua soal: kunci, pembahasan, referensi</td>
+              <td><em>In Review</em></td>
+            </tr>
+            <tr>
+              <td>3a. Jika ada kesalahan minor</td>
+              <td>Patch langsung via Claude Connector (Jalur A)</td>
+              <td><em>In Review</em> (tetap)</td>
+            </tr>
+            <tr>
+              <td>3b. Jika ada kesalahan mayor</td>
+              <td>Tambah catatan &amp; kembalikan ke Developer (Jalur B)</td>
+              <td><em>In Review</em> &rarr; <em>In Progress</em></td>
+            </tr>
+            <tr>
+              <td>4. Approve Task</td>
+              <td>Jika file sudah bersih: klik <strong>Approve</strong> (atau chat ke Claude: <em>"approve task ini"</em>)</td>
+              <td><em>In Review</em> &rarr; <em>Done</em></td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="alert-box" style="border-left-color:#22c55e;">
+          <strong>CHECKLIST SEBELUM APPROVE:</strong>
+          <ul style="margin:8px 0 0 0;padding-left:20px;">
+            <li>Semua kunci jawaban benar secara medis</li>
+            <li>Semua pembahasan menjelaskan <em>mengapa</em> benar dan <em>mengapa</em> opsi lain salah</li>
+            <li>Referensi sumber (<code>src</code>) sesuai dengan materi blok</li>
+            <li>File HTML berfungsi normal di browser (tidak ada error JS, mode Study/Exam/Drill bekerja)</li>
+            <li>Nama file sesuai konvensi penamaan blok</li>
+          </ul>
         </div>
       </div>
 
@@ -322,3 +1160,6 @@
   </script>
 </body>
 </html>
+
+
+

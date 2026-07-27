@@ -688,24 +688,31 @@ body { margin: 0; overflow: hidden; }
 .docs-content-area {
   height: calc(100vh - 60px);
   overflow-y: auto;
+  overflow-x: hidden;
   position: relative;
   padding: 0 24px;
 }
 
 .docs-container {
-  max-width: 800px;
+  max-width: 840px;
   width: 100%;
-  margin: 40px auto 80px auto;
+  margin: 32px auto 80px auto;
   position: relative;
   z-index: 10;
+  display: none;
+  flex-direction: column;
+}
+
+.docs-container.active {
+  display: flex;
 }
 
 .docs-title {
   font-family: var(--font-sans);
-  font-size: 28px;
+  font-size: 26px;
   font-weight: 700;
   color: var(--text-main);
-  margin-bottom: 32px;
+  margin-bottom: 28px;
   text-align: center;
   letter-spacing: 0.05em;
 }
@@ -714,11 +721,12 @@ body { margin: 0; overflow: hidden; }
   background: var(--bg-card);
   border: var(--border-main);
   border-radius: var(--radius-card);
-  padding: 24px;
+  padding: 24px 28px;
   margin-bottom: 24px;
   display: flex;
   flex-direction: column;
   gap: 16px;
+  box-sizing: border-box;
 }
 
 .docs-section h2 {
@@ -737,15 +745,15 @@ body { margin: 0; overflow: hidden; }
   font-family: var(--font-sans);
   font-size: 16px;
   color: var(--text-main);
-  margin-top: 8px;
+  margin-top: 12px;
   margin-bottom: 0;
 }
 
 .docs-section p, .docs-section ul, .docs-section ol {
-  font-family: var(--font-mono);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
   color: var(--text-muted);
   line-height: 1.7;
-  font-size: 15px;
+  font-size: 14.5px;
   margin: 0;
 }
 
@@ -754,7 +762,7 @@ body { margin: 0; overflow: hidden; }
 }
 
 .docs-section li {
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .docs-section strong {
