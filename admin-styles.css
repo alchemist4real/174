@@ -688,6 +688,7 @@ body { margin: 0; overflow: hidden; }
 .docs-content-area {
   height: calc(100vh - 60px);
   overflow-y: auto;
+  overflow-x: hidden;
   position: relative;
   padding: 0 24px;
 }
