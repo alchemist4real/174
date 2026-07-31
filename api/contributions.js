@@ -45,16 +45,22 @@ export default async function handler(req, res) {
       if (!Array.isArray(data)) console.error('get_leaderboard error:', data);
       const validData = Array.isArray(data) ? data : [];
       
-      const usersRes = await fetch(`${supabaseUrl}/auth/v1/admin/users?page=1&per_page=1000`, {
-        headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}`, 'Cache-Control': 'no-cache' },
-        cache: 'no-store'
-      });
       let allUsers = [];
-      if (usersRes.ok) {
-         try {
-             const usersData = await usersRes.json();
-             allUsers = usersData.users || [];
-         } catch(e) {}
+      let userPage = 1;
+      let hasMoreUsers = true;
+      while (hasMoreUsers) {
+        const usersRes = await fetch(`${supabaseUrl}/auth/v1/admin/users?page=${userPage}&per_page=1000`, {
+          headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}`, 'Cache-Control': 'no-cache' },
+          cache: 'no-store'
+        });
+        if (!usersRes.ok) break;
+        try {
+          const usersData = await usersRes.json();
+          const pageUsers = (usersData && Array.isArray(usersData.users)) ? usersData.users : [];
+          allUsers = allUsers.concat(pageUsers);
+          if (pageUsers.length < 1000) hasMoreUsers = false;
+          else userPage++;
+        } catch(e) { break; }
       }
       
       const scores = {};

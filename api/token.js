@@ -46,7 +46,11 @@ function verifyPkce(codeVerifier, codeChallenge, method = 'S256') {
 
 export default async function handler(req, res) {
   const SUPABASE_URL = 'https://hdhvrlkizorscvehttzd.supabase.co';
-  const SB_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhkaHZybGtpem9yc2N2ZWh0dHpkIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NzI2MzA3MiwiZXhwIjoyMDkyODM5MDcyfQ.1fW24fXFAZx98dtLelrWmw8ROvkRcap8ObsMkWpy-6E";
+  const SB_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+  if (!SB_SERVICE_KEY) {
+    return res.status(500).json({ error: 'server_error', error_description: 'Service role key not configured' });
+  }
 
   // RFC 6749 Section 5.1: MUST include Cache-Control: no-store and Pragma: no-cache
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -135,7 +139,7 @@ export default async function handler(req, res) {
       }
       const pkceValid = verifyPkce(codeVerifier, codeRecord.code_challenge, codeRecord.code_challenge_method);
       if (!pkceValid) {
-        console.error(`[OAuth PKCE Failure] timestamp="${new Date().toISOString()}" code="${code}" challenge="${codeRecord.code_challenge}" verifier="${codeVerifier}"`);
+        console.error(`[OAuth PKCE Failure] timestamp="${new Date().toISOString()}" code="${code.slice(0, 15)}..." challenge_len=${codeRecord.code_challenge?.length || 0}`);
         return res.status(400).json({ error: 'invalid_grant', error_description: 'PKCE verification failed' });
       }
     }

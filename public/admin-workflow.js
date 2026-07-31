@@ -281,17 +281,33 @@ function renderKanban(tasks) {
             meta += `<div style="margin-top:6px; font-size:12px;"><span style="color:var(--text-muted)">Due:</span> <span style="color:${dueColor}; font-weight:bold;">${dueDateStr}</span></div>`;
         }
         if (task.target_path) {
-            meta += `<div style="margin-top:6px; font-size:12px;"><span style="color:var(--text-muted)">File:</span> <span style="font-family:var(--font-mono); color:var(--accent);">${task.target_path}</span></div>`;
+            meta += `<div style="margin-top:6px; font-size:12px;"><span style="color:var(--text-muted)">File:</span> <span style="font-family:var(--font-mono); color:var(--accent);">${sanitize(task.target_path)}</span></div>`;
         }
 
+        el.dataset.taskId = task.id;
         el.innerHTML = `
-            <div style="font-weight:700; font-size:16px; margin-bottom:8px; line-height:1.3; color:var(--text-main);">${task.title}</div>
-            <div style="color:var(--text-muted); font-size:14px; margin-bottom:12px; line-height:1.5;">${displayDesc}</div>
+            <div style="font-weight:700; font-size:16px; margin-bottom:8px; line-height:1.3; color:var(--text-main);">${sanitize(task.title)}</div>
+            <div style="color:var(--text-muted); font-size:14px; margin-bottom:12px; line-height:1.5;">${sanitize(displayDesc)}</div>
             ${meta}
         `;
         
-        el.onclick = () => openTaskModal(task);
         col.appendChild(el);
+    });
+
+    initTaskKanbanDelegation();
+}
+
+function initTaskKanbanDelegation() {
+    const kanban = document.getElementById('taskKanban');
+    if (!kanban || kanban.dataset.delegated === 'true') return;
+    kanban.dataset.delegated = 'true';
+
+    kanban.addEventListener('click', (e) => {
+        const card = e.target.closest('.kanban-card');
+        if (!card || !kanban.contains(card)) return;
+        const taskId = card.dataset.taskId;
+        const task = (window.allTasks || []).find(t => String(t.id) === String(taskId));
+        if (task) openTaskModal(task);
     });
 }
 
@@ -829,7 +845,9 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     
     document.getElementById('btnLoadReviewFile')?.addEventListener('click', async () => {
-        const path = document.getElementById('reviewFilePath').value.trim();
+        const pathEl = document.getElementById('reviewFilePath');
+        if(!pathEl) return showToast('Review panel not available', 'error');
+        const path = pathEl.value.trim();
         if(!path) return showToast('Please enter a file path', 'error');
 
         showToast('Fetching HTML from GitHub...');
@@ -858,10 +876,12 @@ function parseCBTHtml(path, html) {
     currentReviewPath = path;
     parsedQuestions = [];
 
-    document.getElementById('reviewFileName').textContent = path.split('/').pop();
-    document.getElementById('reviewEditorArea').style.display = 'flex';
+    const fileNameEl = document.getElementById('reviewFileName');
+    if (fileNameEl) fileNameEl.textContent = path.split('/').pop();
+    const editorAreaEl = document.getElementById('reviewEditorArea');
+    if (editorAreaEl) editorAreaEl.style.display = 'flex';
     const listEl = document.getElementById('reviewQuestionsList');
-    listEl.innerHTML = '';
+    if (listEl) listEl.innerHTML = '';
 
     // A simple regex parser for CBT structure
     // Assumes structure: <div class="soal">...</div>, <div class="pilihan">...</div>, dll.
@@ -871,75 +891,79 @@ function parseCBTHtml(path, html) {
 
     // Trying to find standard question blocks. Usually encapsulated in cards or lists.
     // Let's look for elements that have text matching "Soal" or input radios.
-    const qContainers = doc.querySelectorAll('.soal-container, .card, .question-block, fieldset');
+    const questions = doc.querySelectorAll('.soal, [class*="question"]');
     
-    if(qContainers.length === 0) {
-        listEl.innerHTML = '<div style="padding:16px; background:transparent; color:var(--danger); border:1.5px solid var(--danger); border-radius:var(--radius-card);">No standard question blocks found. This scrapper supports specific CBT HTML formats. You can still use the raw HTML editor in the Files tab.</div>';
+    if(questions.length === 0) {
+        if (listEl) listEl.innerHTML = '<div style="padding:16px; background:transparent; color:var(--danger); border:1.5px solid var(--danger); border-radius:var(--radius-card);">No standard question blocks found. This scrapper supports specific CBT HTML formats. You can still use the raw HTML editor in the Files tab.</div>';
         return;
     }
 
-    showToast(`Found ${qContainers.length} questions`);
+    showToast(`Found ${questions.length} questions`);
     
     // For each container, render a minimal editor block.
     // (In a full implementation, we would extract exact text, bind to inputs, and rebuild HTML on save.
     // Since the actual format is unknown, we will provide a raw HTML block editor per question for the reviewer).
     
-    qContainers.forEach((q, idx) => {
-        const outerHTML = q.outerHTML;
-        const block = document.createElement('div');
-        block.style.cssText = 'background:var(--bg-main); padding:16px; border-radius:var(--radius-card); border:var(--border-main);';
-        
-        block.innerHTML = `
-            <div style="font-weight:600; margin-bottom:8px;">Question ${idx + 1}</div>
-            <textarea id="q_edit_${idx}" style="width:100%; height:150px; background:var(--c2); color:var(--text-main); font-family:var(--font-mono); font-size:12px; padding:12px; border:var(--border-main); border-radius:var(--radius-card); resize:vertical;">${outerHTML}</textarea>
-            <div style="margin-top:8px; display:flex; justify-content:flex-end;">
-               <button class="btn btn-report-issue" data-idx="${idx}" style="border-color:var(--danger); color:var(--danger);">Report Issue</button>
-            </div>
-        `;
-        listEl.appendChild(block);
+    questions.forEach((q, idx) => {
+        if (listEl) {
+            const block = document.createElement('div');
+            block.className = 'review-question-card';
+            block.style.cssText = 'background:var(--bg-main); padding:16px; border-radius:var(--radius-card); border:var(--border-main);';
+            
+            block.innerHTML = `
+                <div style="font-weight:bold; margin-bottom:8px;">Soal #${idx + 1}</div>
+                <textarea id="q_edit_${idx}" class="auth-input" style="width:100%; height:120px; font-family:var(--font-mono); font-size:12px; margin-bottom:8px;">${q.outerHTML}</textarea>
+                <button class="btn-unified danger btn-report-issue" style="font-size:11px; padding:4px 8px; border-color:var(--danger); color:var(--danger);">Report Issue</button>
+            `;
 
-        block.querySelector('.btn-report-issue').addEventListener('click', async () => {
-            const issue = await customPrompt('Describe the issue with this question:');
-            if(!issue) return;
-            showToast('Reporting issue...');
-            const r = await apiCall('review-tools', { 
-                action: 'report_issue', 
-                question_index: idx, 
-                file_path: path, 
-                issue_description: issue 
+            block.querySelector('.btn-report-issue').addEventListener('click', async () => {
+                const desc = await customPrompt(`Report issue for Question #${idx + 1}:`);
+                if(!desc) return;
+                const r = await apiCall('admin', {
+                    action: 'report_issue',
+                    task_id: window.currentReviewTaskId || 'manual',
+                    issue_type: 'content_error',
+                    question_index: idx + 1,
+                    description: desc
+                });
+                if(r.success) showToast('Issue reported!', 'success');
+                else showToast('Failed: ' + r.error, 'error');
             });
-            if(r.success) showToast('Issue reported!', 'success');
-            else showToast('Failed: ' + r.error, 'error');
-        });
 
+            listEl.appendChild(block);
+        }
         parsedQuestions.push({ node: q, idx });
     });
 
-    document.getElementById('btnSaveReview').onclick = async () => {
-        // Update doc with new HTML from textareas
-        parsedQuestions.forEach(pq => {
-            const newHtml = document.getElementById(`q_edit_${pq.idx}`).value;
-            const temp = document.createElement('div');
-            temp.innerHTML = newHtml;
-            if(temp.firstElementChild) {
-                pq.node.replaceWith(temp.firstElementChild);
+    const btnSave = document.getElementById('btnSaveReview');
+    if (btnSave) {
+        btnSave.onclick = async () => {
+            parsedQuestions.forEach(pq => {
+                const editEl = document.getElementById(`q_edit_${pq.idx}`);
+                if (!editEl) return;
+                const newHtml = editEl.value;
+                const temp = document.createElement('div');
+                temp.innerHTML = newHtml;
+                if(temp.firstElementChild) {
+                    pq.node.replaceWith(temp.firstElementChild);
+                }
+            });
+
+            const finalHtml = doc.documentElement.outerHTML;
+            const base64 = utf8ToBase64(finalHtml);
+
+            showToast('Saving to GitHub...');
+            const res = await fetch('/api/admin', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionToken}` },
+                body: JSON.stringify({ action: 'upload', path: currentReviewPath, contentBase64: base64 })
+            });
+            const data = await res.json();
+            if(data.success) {
+                showToast('Saved successfully!', 'success');
+            } else {
+                showToast('Save failed: ' + data.error, 'error');
             }
-        });
-
-        const finalHtml = doc.documentElement.outerHTML;
-        const base64 = utf8ToBase64(finalHtml);
-
-        showToast('Saving to GitHub...');
-        const res = await fetch('/api/admin', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionToken}` },
-            body: JSON.stringify({ action: 'upload', path: currentReviewPath, contentBase64: base64 })
-        });
-        const data = await res.json();
-        if(data.success) {
-            showToast('Saved successfully!', 'success');
-        } else {
-            showToast('Save failed: ' + data.error, 'error');
-        }
-    };
+        };
+    }
 }

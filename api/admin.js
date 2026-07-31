@@ -10,7 +10,7 @@ export default async function handler(req, res) {
 
   const token = authHeader.replace('Bearer ', '');
   const supabaseUrl = 'https://hdhvrlkizorscvehttzd.supabase.co';
-  const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhkaHZybGtpem9yc2N2ZWh0dHpkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyNjMwNzIsImV4cCI6MjA5MjgzOTA3Mn0.m6L3oEVAfyp2TjYmBCfDRo_30rdsWLEsGVZzRZIy3MU';
+  const supabaseKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhkaHZybGtpem9yc2N2ZWh0dHpkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyNjMwNzIsImV4cCI6MjA5MjgzOTA3Mn0.m6L3oEVAfyp2TjYmBCfDRo_30rdsWLEsGVZzRZIy3MU';
 
   const githubToken = process.env.GITHUB_TOKEN;
   const owner = 'alchemist4real';
@@ -69,16 +69,24 @@ export default async function handler(req, res) {
   if (divRes.ok) divData = await divRes.json();
   const hasDivision = divData && divData.length > 0;
   
-  const isAdmin = isSuperAdmin || hasAdminRole || hasDivision;
+  const isAdmin = isSuperAdmin || hasAdminRole;
+  const canAccessDashboard = isAdmin || hasDivision;
 
   const { action, path, contentBase64, sha } = req.body;
 
   if (action === 'check') {
-    return res.status(200).json({ success: true, isSuperAdmin, hasDivision, email: email });
+    return res.status(200).json({ success: true, isSuperAdmin, isAdmin, hasDivision, email: email });
   }
 
-  if (!isAdmin) {
+  if (!canAccessDashboard) {
     return res.status(403).json({ error: 'Forbidden. Not an admin or team member.' });
+  }
+
+  // Destructive operations check
+  if (['delete', 'delete_files', 'rename_file', 'upload', 'update_config', 'add_admin', 'remove_admin', 'ban_user'].includes(action)) {
+    if (!isAdmin) {
+      return res.status(403).json({ error: 'Forbidden. Admin privileges required.' });
+    }
   }
 
   if (path) {
@@ -154,7 +162,8 @@ export default async function handler(req, res) {
       if (!path) return res.status(400).json({ error: 'Missing path' });
       const owner = 'alchemist4real';
       const repo = 'MR-CAPSULES';
-      const fileRes = await ghApi('GET', `/contents/${encodeURIComponent(path)}`);
+      const encodedPath = path.split('/').map(s => encodeURIComponent(s)).join('/');
+      const fileRes = await ghApi('GET', `/contents/${encodedPath}`);
       if (!fileRes.ok) return res.status(404).json({ error: 'File not found on GitHub' });
       const fileData = await fileRes.json();
       return res.status(200).json({ success: true, contentBase64: fileData.content, sha: fileData.sha });
@@ -168,6 +177,18 @@ export default async function handler(req, res) {
     }
 
     if (action === 'upload') {
+      const { path, contentBase64, sha } = req.body;
+      if (sha) {
+        const encodedPath = path.split('/').map(s => encodeURIComponent(s)).join('/');
+        const checkRes = await ghApi('GET', `/contents/${encodedPath}`);
+        if (checkRes.ok) {
+          const remoteFile = await checkRes.json();
+          if (remoteFile.sha !== sha) {
+            return res.status(409).json({ error: '409 Conflict: File has been updated on GitHub by another user. Reload before saving.' });
+          }
+        }
+      }
+
       // 1. Create Blob
       const blobRes = await ghApi('POST', '/git/blobs', { content: contentBase64, encoding: 'base64' });
       const blobData = await blobRes.json();
@@ -276,16 +297,15 @@ export default async function handler(req, res) {
       const { newPath } = req.body;
       if (!newPath || !path) throw new Error("Missing path or newPath");
       
-      const ghRes = await ghApi('GET', `/git/trees/main?recursive=1`);
-      const data = await ghRes.json();
-      if (!ghRes.ok) throw new Error(`Failed to read tree: ${JSON.stringify(data)}`);
-      
-      const fileNode = data.tree.find(t => t.path === path);
-      if (!fileNode) throw new Error("Original file not found in tree");
+      const encodedPath = path.split('/').map(s => encodeURIComponent(s)).join('/');
+      const fileRes = await ghApi('GET', `/contents/${encodedPath}`);
+      if (!fileRes.ok) throw new Error("Original file not found on GitHub");
+      const fileData = await fileRes.json();
+      const fileSha = fileData.sha;
       
       const treeItems = [
         { path: path, mode: '100644', type: 'blob', sha: null },
-        { path: newPath, mode: '100644', type: 'blob', sha: fileNode.sha }
+        { path: newPath, mode: '100644', type: 'blob', sha: fileSha }
       ];
 
       const commitSha = await getBranchRef();
@@ -523,6 +543,16 @@ export default async function handler(req, res) {
             await fetch(`${supabaseUrl}/rest/v1/user_stats?user_id=eq.${guest.id}`, { method: 'DELETE', headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` } });
             await fetch(`${supabaseUrl}/rest/v1/user_devices?user_id=eq.${guest.id}`, { method: 'DELETE', headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` } });
             await fetch(`${supabaseUrl}/rest/v1/division_requests?user_id=eq.${guest.id}`, { method: 'DELETE', headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` } });
+            await fetch(`${supabaseUrl}/rest/v1/contributions?user_id=eq.${guest.id}`, { method: 'DELETE', headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` } });
+            await fetch(`${supabaseUrl}/rest/v1/oauth_tokens?user_id=eq.${guest.id}`, { method: 'DELETE', headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` } });
+            await fetch(`${supabaseUrl}/rest/v1/oauth_codes?user_id=eq.${guest.id}`, { method: 'DELETE', headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` } });
+
+            await fetch(`${supabaseUrl}/rest/v1/content_tasks?assigned_to=eq.${guest.id}`, {
+              method: 'PATCH',
+              headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}`, 'Content-Type': 'application/json' },
+              body: JSON.stringify({ assigned_to: null })
+            });
+
             if (guest.email) {
               await fetch(`${supabaseUrl}/rest/v1/user_roles?identifier=eq.${encodeURIComponent(guest.email)}`, { method: 'DELETE', headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` } });
             }

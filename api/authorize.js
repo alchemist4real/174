@@ -20,8 +20,13 @@ function canonicalizeUrl(rawUrl) {
 export default async function handler(req, res) {
   const host = req.headers['x-forwarded-host'] || req.headers.host || 'mr-capsules.vercel.app';
   const SUPABASE_URL = 'https://hdhvrlkizorscvehttzd.supabase.co';
-  const SB_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhkaHZybGtpem9yc2N2ZWh0dHpkIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NzI2MzA3MiwiZXhwIjoyMDkyODM5MDcyfQ.1fW24fXFAZx98dtLelrWmw8ROvkRcap8ObsMkWpy-6E";
+  const SB_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
   const issuer = `https://${host}`;
+
+  // Helper for HTML escaping
+  function escHtml(s) {
+    return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
 
   // RFC 8414 & OpenID Connect Discovery Metadata
   if (req.url && (req.url.includes('oauth-authorization-server') || req.url.includes('openid-configuration'))) {
@@ -67,6 +72,26 @@ export default async function handler(req, res) {
       <body style="font-family:sans-serif; padding:40px; text-align:center; background:#0f172a; color:#f8fafc;">
         <h2>Missing redirect_uri parameter</h2>
         <p>This endpoint is used for OAuth 2.0 authorization by Claude.ai.</p>
+      </body>
+      </html>
+    `);
+  }
+
+  const ALLOWED_REDIRECT_PATTERNS = [
+    /^https:\/\/claude\.ai\/api\/mcp\/auth_callback/,
+    /^https:\/\/.*\.claude\.ai\//,
+    /^http:\/\/localhost(:\d+)?\//,
+    /^http:\/\/127\.0\.0\.1(:\d+)?\//
+  ];
+
+  if (!ALLOWED_REDIRECT_PATTERNS.some(p => p.test(redirectUri))) {
+    return res.status(400).send(`
+      <!DOCTYPE html>
+      <html>
+      <head><title>Authorization Error | Mr. Capsules</title></head>
+      <body style="font-family:sans-serif; padding:40px; text-align:center; background:#0f172a; color:#f8fafc;">
+        <h2>Invalid redirect_uri parameter</h2>
+        <p>The redirect URI is not allowed.</p>
       </body>
       </html>
     `);
@@ -131,11 +156,6 @@ export default async function handler(req, res) {
       }
     }
 
-    // 3. Fallback: Auto-detected session email or SuperAdmin approval
-    if (!authenticatedUser && email && (!password || sessionToken)) {
-      authenticatedUser = { id: email, email: email };
-    }
-
     if (authenticatedUser && SB_SERVICE_KEY) {
       // Generate single-use authorization code (valid 10 mins)
       const code = `mrc_code_${crypto.randomBytes(24).toString('hex')}`;
@@ -186,7 +206,7 @@ export default async function handler(req, res) {
           <head><title>OAuth Server Error</title></head>
           <body style="font-family:sans-serif; padding:40px; text-align:center; background:#0f172a; color:#f8fafc;">
             <h2>Failed to issue authorization code</h2>
-            <p style="color:#ef4444;">${errText}</p>
+            <p style="color:#ef4444;">${escHtml(errText)}</p>
           </body>
           </html>
         `);

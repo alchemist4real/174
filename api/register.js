@@ -20,6 +20,16 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'invalid_request', error_description: 'Method not allowed' });
   }
 
+  const clientIp = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || 'unknown';
+  const rateLimitKey = `register_${clientIp}`;
+  if (!global._registerRateLimit) global._registerRateLimit = new Map();
+  const now = Date.now();
+  const lastCall = global._registerRateLimit.get(rateLimitKey) || 0;
+  if (now - lastCall < 60000) {
+    return res.status(429).json({ error: 'rate_limit', error_description: 'Too many registrations. Please wait a minute.' });
+  }
+  global._registerRateLimit.set(rateLimitKey, now);
+
   let body = req.body;
   if (Buffer.isBuffer(body)) {
     body = body.toString('utf-8');

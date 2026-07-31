@@ -53,23 +53,31 @@ export default async function handler(req, res) {
       const divRes = await fetch(`${supabaseUrl}/rest/v1/divisions?select=*`, {
         headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
       });
-      const divs = await divRes.json();
+      const rawDivs = divRes.ok ? await divRes.json() : [];
+      const divs = Array.isArray(rawDivs) ? rawDivs : [];
       
-      const sbUsersRes = await fetch(`${supabaseUrl}/auth/v1/admin/users?page=1&per_page=1000`, {
-        headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
-      });
       let allUsers = [];
-      if (sbUsersRes.ok) {
-         try {
-             const usersData = await sbUsersRes.json();
-             allUsers = usersData.users || [];
-         } catch(e) {}
+      let userPage = 1;
+      let hasMoreUsers = true;
+      while (hasMoreUsers) {
+        const sbUsersRes = await fetch(`${supabaseUrl}/auth/v1/admin/users?page=${userPage}&per_page=1000`, {
+          headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
+        });
+        if (!sbUsersRes.ok) break;
+        try {
+          const usersData = await sbUsersRes.json();
+          const pageUsers = (usersData && Array.isArray(usersData.users)) ? usersData.users : [];
+          allUsers = allUsers.concat(pageUsers);
+          if (pageUsers.length < 1000) hasMoreUsers = false;
+          else userPage++;
+        } catch(e) { break; }
       }
 
       const memResDirect = await fetch(`${supabaseUrl}/rest/v1/division_members?select=division_id,user_id`, {
         headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
       });
-      const mems = await memResDirect.json();
+      const rawMems = memResDirect.ok ? await memResDirect.json() : [];
+      const mems = Array.isArray(rawMems) ? rawMems : [];
       
       const stats = divs.map(d => {
         const divisionMems = mems.filter(m => m.division_id === d.id);
@@ -113,14 +121,32 @@ export default async function handler(req, res) {
 
     if (action === 'assign_member' || action === 'remove_member') {
       const { target_email } = req.body;
-      if(!target_email) return res.status(400).json({ error: 'Missing target_email' });
+      if (!target_email) return res.status(400).json({ error: 'Missing target_email' });
+
+      const ALLOWED_DIVISIONS = ['management', 'development', 'review'];
+      if (action === 'assign_member' && (!division_id || !ALLOWED_DIVISIONS.includes(division_id))) {
+        return res.status(400).json({ error: 'Invalid or missing division_id' });
+      }
       
-      const sbUsersRes = await fetch(`${supabaseUrl}/auth/v1/admin/users?per_page=1000`, {
-        headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
-      });
-      const sbUsers = await sbUsersRes.json();
-      const targetUser = (sbUsers.users || []).find(u => u.email === target_email);
-      if(!targetUser) return res.status(404).json({ error: 'User not found' });
+      let allUsers = [];
+      let userPage = 1;
+      let hasMoreUsers = true;
+      while (hasMoreUsers) {
+        const sbUsersRes = await fetch(`${supabaseUrl}/auth/v1/admin/users?page=${userPage}&per_page=1000`, {
+          headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
+        });
+        if (!sbUsersRes.ok) break;
+        try {
+          const usersData = await sbUsersRes.json();
+          const pageUsers = (usersData && Array.isArray(usersData.users)) ? usersData.users : [];
+          allUsers = allUsers.concat(pageUsers);
+          if (pageUsers.length < 1000) hasMoreUsers = false;
+          else userPage++;
+        } catch(e) { break; }
+      }
+
+      const targetUser = allUsers.find(u => u.email === target_email);
+      if (!targetUser) return res.status(404).json({ error: 'User not found' });
       
       if (action === 'assign_member') {
         const resRole = await fetch(`${supabaseUrl}/rest/v1/division_members`, {

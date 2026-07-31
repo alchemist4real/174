@@ -46,6 +46,10 @@ CREATE TABLE IF NOT EXISTS public.oauth_tokens (
 ALTER TABLE public.oauth_tokens ADD COLUMN IF NOT EXISTS resource TEXT;
 ALTER TABLE public.oauth_tokens ALTER COLUMN user_id TYPE TEXT;
 
+-- Performance indexes for oauth_tokens table
+CREATE INDEX IF NOT EXISTS idx_oauth_tokens_user_id ON public.oauth_tokens (user_id);
+CREATE INDEX IF NOT EXISTS idx_oauth_tokens_expires_at ON public.oauth_tokens (expires_at);
+
 -- Enable Row Level Security (Service role bypasses RLS)
 ALTER TABLE public.oauth_clients ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.oauth_codes ENABLE ROW LEVEL SECURITY;

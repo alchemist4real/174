@@ -1,5 +1,16 @@
 {
   "cleanUrls": true,
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        { "key": "X-Frame-Options", "value": "DENY" },
+        { "key": "X-Content-Type-Options", "value": "nosniff" },
+        { "key": "Referrer-Policy", "value": "strict-origin-when-cross-origin" },
+        { "key": "Strict-Transport-Security", "value": "max-age=63072000; includeSubDomains; preload" }
+      ]
+    }
+  ],
   "routes": [
     { "src": "/api/mcp/token", "dest": "/api/token" },
     { "src": "/api/mcp/authorize", "dest": "/api/authorize" },
@@ -15,6 +26,7 @@
     { "src": "/api/env", "dest": "/api/env" },
     { "src": "/api/config", "dest": "/api/env?type=config" },
     { "src": "/api/guest-cleanup", "dest": "/api/admin?action=cleanup_guests" },
+    { "src": "/api/uptime", "dest": "/api/_uptime" },
     { "src": "/api/review-tools", "dest": "/api/admin" },
     { "src": "/admin", "dest": "/admin.html" },
     { "src": "/docs", "dest": "/docs.html" },

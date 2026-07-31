@@ -20,7 +20,9 @@ export default async function handler(req, res) {
 
   // For requests with no Origin header (server-to-server calls, curl, etc.)
   if (requestOrigin) {
-    res.setHeader('Access-Control-Allow-Origin', requestOrigin);
+    if (isAllowedOrigin) {
+      res.setHeader('Access-Control-Allow-Origin', requestOrigin);
+    }
     res.setHeader('Vary', 'Origin');
   } else {
     res.setHeader('Access-Control-Allow-Origin', '*');
@@ -42,7 +44,7 @@ export default async function handler(req, res) {
 
   // ── Constants ─────────────────────────────────────────────────────────────
   const SUPABASE_URL = 'https://hdhvrlkizorscvehttzd.supabase.co';
-  const SB_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY || "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhkaHZybGtpem9yc2N2ZWh0dHpkIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3NzI2MzA3MiwiZXhwIjoyMDkyODM5MDcyfQ.1fW24fXFAZx98dtLelrWmw8ROvkRcap8ObsMkWpy-6E";
+  const SB_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
   const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
   const GH_OWNER = 'alchemist4real';
   const GH_REPO = 'MR-CAPSULES';
@@ -55,7 +57,7 @@ export default async function handler(req, res) {
   }
 
   if (!SB_SERVICE_KEY) {
-    return res.status(500).json({ success: false, error: 'Server config error' });
+    return res.status(500).json({ success: false, error: 'Server configuration error: missing service key' });
   }
 
   if (req.url && req.url.includes('oauth-protected-resource')) {
@@ -1456,8 +1458,20 @@ async function contentTree(githubToken, owner, repo) {
 // CHUNKED UPLOAD SESSION SYSTEM (In-Memory + Supabase Fallback)
 // ═══════════════════════════════════════════════════════════════
 const uploadSessions = new Map();
+const UPLOAD_SESSION_TTL_MS = 24 * 60 * 60 * 1000;
+
+function cleanExpiredUploadSessions() {
+  const now = Date.now();
+  for (const [uploadId, session] of uploadSessions.entries()) {
+    const createdTime = new Date(session.createdAt).getTime();
+    if (isNaN(createdTime) || (now - createdTime) > UPLOAD_SESSION_TTL_MS) {
+      uploadSessions.delete(uploadId);
+    }
+  }
+}
 
 async function uploadInit(params, adminEmail, su, sk) {
+  cleanExpiredUploadSessions();
   const { path, totalChunks, totalSizeBytes } = params;
   if (!path || !totalChunks || totalChunks < 1) throw err400('Missing path or valid totalChunks');
   validatePath(path);

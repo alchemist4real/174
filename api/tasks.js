@@ -161,26 +161,41 @@ export default async function handler(req, res) {
     if (action === 'claim_task') {
       if (!isDeveloper) return res.status(403).json({ error: 'Developers only' });
       
-      const fetchRes = await fetch(`${supabaseUrl}/rest/v1/content_tasks?id=eq.${task_id}`, {
+      const fetchRes = await fetch(`${supabaseUrl}/rest/v1/content_tasks?id=eq.${encodeURIComponent(task_id)}&status=eq.open`, {
         method: 'PATCH',
         headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}`, 'Content-Type': 'application/json', 'Prefer': 'return=representation' },
         body: JSON.stringify({ assigned_to: userId, status: 'in_progress', assigned_at: new Date().toISOString() })
       });
       if (!fetchRes.ok) throw new Error(await fetchRes.text());
       const data = await fetchRes.json();
+      if (!data || data.length === 0) {
+        return res.status(409).json({ error: 'Task has already been claimed or status has changed' });
+      }
       
       await logAction(task_id, 'claimed', 'open', 'in_progress', note);
       return res.status(200).json({ success: true, task: data[0] });
     }
 
     if (action === 'unclaim_task') {
-      const fetchRes = await fetch(`${supabaseUrl}/rest/v1/content_tasks?id=eq.${task_id}`, {
+      const taskRes = await fetch(`${supabaseUrl}/rest/v1/content_tasks?id=eq.${encodeURIComponent(task_id)}&select=assigned_to`, {
+        headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
+      });
+      const taskData = await taskRes.json();
+      const isAssignee = taskData.length > 0 && taskData[0].assigned_to === userId;
+      if (!isAssignee && !isManagement && !isAdmin) {
+        return res.status(403).json({ error: 'Only the assigned developer, management, or admins can unclaim tasks' });
+      }
+
+      const fetchRes = await fetch(`${supabaseUrl}/rest/v1/content_tasks?id=eq.${encodeURIComponent(task_id)}&status=eq.in_progress`, {
         method: 'PATCH',
         headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}`, 'Content-Type': 'application/json', 'Prefer': 'return=representation' },
         body: JSON.stringify({ assigned_to: null, status: 'open', assigned_at: null })
       });
       if (!fetchRes.ok) throw new Error(await fetchRes.text());
       const data = await fetchRes.json();
+      if (!data || data.length === 0) {
+        return res.status(409).json({ error: 'Task status has changed or is no longer in progress' });
+      }
       
       await logAction(task_id, 'unclaimed', 'in_progress', 'open', note);
       return res.status(200).json({ success: true, task: data[0] });
@@ -189,13 +204,16 @@ export default async function handler(req, res) {
     if (action === 'submit_task') {
       if (!isDeveloper) return res.status(403).json({ error: 'Developers only' });
       
-      const fetchRes = await fetch(`${supabaseUrl}/rest/v1/content_tasks?id=eq.${task_id}`, {
+      const fetchRes = await fetch(`${supabaseUrl}/rest/v1/content_tasks?id=eq.${encodeURIComponent(task_id)}&status=eq.in_progress`, {
         method: 'PATCH',
         headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}`, 'Content-Type': 'application/json', 'Prefer': 'return=representation' },
         body: JSON.stringify({ status: 'developed', submitted_at: new Date().toISOString() })
       });
       if (!fetchRes.ok) throw new Error(await fetchRes.text());
       const data = await fetchRes.json();
+      if (!data || data.length === 0) {
+        return res.status(409).json({ error: 'Task status has changed or is no longer in progress' });
+      }
       
       await logAction(task_id, 'submitted', 'in_progress', 'developed', note);
       await recordContribution(task_id, 'task_developed');
@@ -205,13 +223,16 @@ export default async function handler(req, res) {
     if (action === 'start_review') {
       if (!isReviewer) return res.status(403).json({ error: 'Reviewers only' });
       
-      const fetchRes = await fetch(`${supabaseUrl}/rest/v1/content_tasks?id=eq.${task_id}`, {
+      const fetchRes = await fetch(`${supabaseUrl}/rest/v1/content_tasks?id=eq.${encodeURIComponent(task_id)}&status=eq.developed`, {
         method: 'PATCH',
         headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}`, 'Content-Type': 'application/json', 'Prefer': 'return=representation' },
         body: JSON.stringify({ reviewed_by: userId, status: 'in_review', review_started_at: new Date().toISOString() })
       });
       if (!fetchRes.ok) throw new Error(await fetchRes.text());
       const data = await fetchRes.json();
+      if (!data || data.length === 0) {
+        return res.status(409).json({ error: 'Task status has changed or is no longer developed' });
+      }
       
       await logAction(task_id, 'review_started', 'developed', 'in_review', note);
       return res.status(200).json({ success: true, task: data[0] });
@@ -220,13 +241,16 @@ export default async function handler(req, res) {
     if (action === 'approve_task') {
       if (!isReviewer) return res.status(403).json({ error: 'Reviewers only' });
       
-      const fetchRes = await fetch(`${supabaseUrl}/rest/v1/content_tasks?id=eq.${task_id}`, {
+      const fetchRes = await fetch(`${supabaseUrl}/rest/v1/content_tasks?id=eq.${encodeURIComponent(task_id)}&status=eq.in_review`, {
         method: 'PATCH',
         headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}`, 'Content-Type': 'application/json', 'Prefer': 'return=representation' },
         body: JSON.stringify({ status: 'done', completed_at: new Date().toISOString() })
       });
       if (!fetchRes.ok) throw new Error(await fetchRes.text());
       const data = await fetchRes.json();
+      if (!data || data.length === 0) {
+        return res.status(409).json({ error: 'Task status has changed or is no longer in review' });
+      }
       
       await logAction(task_id, 'approved', 'in_review', 'done', note);
       await recordContribution(task_id, 'task_approved');
@@ -246,13 +270,16 @@ export default async function handler(req, res) {
     if (action === 'reject_task') {
       if (!isReviewer) return res.status(403).json({ error: 'Reviewers only' });
       
-      const fetchRes = await fetch(`${supabaseUrl}/rest/v1/content_tasks?id=eq.${task_id}`, {
+      const fetchRes = await fetch(`${supabaseUrl}/rest/v1/content_tasks?id=eq.${encodeURIComponent(task_id)}&status=eq.in_review`, {
         method: 'PATCH',
         headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}`, 'Content-Type': 'application/json', 'Prefer': 'return=representation' },
         body: JSON.stringify({ status: 'in_progress' }) // Send back to dev
       });
       if (!fetchRes.ok) throw new Error(await fetchRes.text());
       const data = await fetchRes.json();
+      if (!data || data.length === 0) {
+        return res.status(409).json({ error: 'Task status has changed or is no longer in review' });
+      }
       
       await logAction(task_id, 'rejected', 'in_review', 'in_progress', note);
       return res.status(200).json({ success: true, task: data[0] });

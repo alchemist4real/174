@@ -147,14 +147,17 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
     };
     const fileInput = document.getElementById('fileInput');
 
-    // Search Filter Logic
+    // Search Filter Logic (150ms debounced)
+    let searchTimeout;
     document.getElementById('searchInput').addEventListener('input', (e) => {
-      const val = e.target.value.toLowerCase();
-      document.querySelectorAll('.file-item').forEach(el => {
-        const name = el.querySelector('.file-name').textContent.toLowerCase();
-        if (name.includes(val)) el.classList.remove('hidden');
-        else el.classList.add('hidden');
-      });
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => {
+        const val = e.target.value.toLowerCase();
+        document.querySelectorAll('.file-item').forEach(el => {
+          const name = el.querySelector('.file-name')?.textContent.toLowerCase() || '';
+          el.classList.toggle('hidden', !name.includes(val));
+        });
+      }, 150);
     });
 
     // Custom Modals Logic
@@ -684,7 +687,7 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
           modal.classList.remove('active');
           const newDir = await customPrompt("Enter new directory path (e.g. content/semester 1/):", currentPath);
           if (!newDir || newDir === currentPath) return;
-          adminAction('rename_file', { path: item.path, newPath: newDir.replace(/\/$/, '') + '/' + item.name }).then(() => loadTree());
+          adminAction('rename_file', { path: item.path, newPath: newDir.replace(/\/$/, '') + '/' + item.name }).then(() => loadTree()).catch(e => showToast('Move failed: ' + e.message, 'error'));
         };
       }
       if (document.getElementById('ctxRename')) {
@@ -692,7 +695,7 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
           modal.classList.remove('active');
           const newName = await customPrompt("Enter new file name:", item.name);
           if (!newName || newName === item.name) return;
-          adminAction('rename_file', { path: item.path, newPath: currentPath + newName }).then(() => loadTree());
+          adminAction('rename_file', { path: item.path, newPath: currentPath + newName }).then(() => loadTree()).catch(e => showToast('Rename failed: ' + e.message, 'error'));
         };
       }
       if (document.getElementById('ctxCreateTask')) {
@@ -709,24 +712,26 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
           }
         };
       }
-      document.getElementById('ctxDelete').onclick = async () => {
-        modal.classList.remove('active');
-        if (item.type === 'folder') {
-          const folderFiles = currentTree.filter(f => f.path.startsWith(item.path) && f.type === 'blob');
-          if (folderFiles.length === 0) {
-            customAlert('Folder is already empty.');
+      if (document.getElementById('ctxDelete')) {
+        document.getElementById('ctxDelete').onclick = async () => {
+          modal.classList.remove('active');
+          if (item.type === 'folder') {
+            const folderFiles = currentTree.filter(f => f.path.startsWith(item.path) && f.type === 'blob');
+            if (folderFiles.length === 0) {
+              customAlert('Folder is already empty.');
+              return;
+            }
+            if (!await customConfirm(`Delete folder "${item.name}" and all ${folderFiles.length} files inside? This cannot be undone.`)) return;
+            const files = folderFiles.map(f => ({ path: f.path }));
+            statusText.textContent = `Deleting ${files.length} files...`;
+            await adminAction('delete_files', { files });
             return;
           }
-          if (!await customConfirm(`Delete folder "${item.name}" and all ${folderFiles.length} files inside? This cannot be undone.`)) return;
-          const files = folderFiles.map(f => ({ path: f.path }));
-          statusText.textContent = `Deleting ${files.length} files...`;
-          await adminAction('delete_files', { files });
-          return;
-        }
-        if(await customConfirm('Delete ' + item.path + '?')) {
-          adminAction('delete', { path: item.path, sha: item.sha }).then(() => loadTree());
-        }
-      };
+          if(await customConfirm('Delete ' + item.path + '?')) {
+            adminAction('delete', { path: item.path, sha: item.sha }).then(() => loadTree()).catch(e => showToast('Delete failed: ' + e.message, 'error'));
+          }
+        };
+      }
     }
 
     async function adminAction(action, payload) {
@@ -800,6 +805,9 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
         selectedFiles.clear();
         updateBulkDeleteUI();
         loadTree();
+      }).catch(e => {
+        showToast('Bulk delete failed: ' + e.message, 'error');
+        document.getElementById('btnBulkDelete').textContent = 'Delete Selected';
       });
     };
 
@@ -854,7 +862,7 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
       img.classList.add('hidden');
       txt.classList.add('hidden');
 
-      const rawUrl = `${GITHUB_RAW_BASE}/${item.path}`;
+      const rawUrl = `${GITHUB_RAW_BASE}/${encodeURI(item.path)}`;
 
       // Update Header
       document.getElementById('lightboxFilename').textContent = item.name;
@@ -897,7 +905,7 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
     window.openEditor = openEditor;
     async function openEditor(item) {
       window.currentEditorItem = item;
-      const rawUrl = `${GITHUB_RAW_BASE}/${item.path}`;
+      const rawUrl = `${GITHUB_RAW_BASE}/${encodeURI(item.path)}`;
       const emodal = document.getElementById('editorModal');
       const emodalContainer = document.getElementById('editorModalContainer');
       document.getElementById('editorTitle').textContent = `Editing: ${item.name}`;
@@ -1460,8 +1468,11 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
     window.lastKnownUptime = window.lastKnownUptime || 0;
     window.lastFetchTime = window.lastFetchTime || Date.now();
 
+    if (window._uptimeDisplayTimer) clearInterval(window._uptimeDisplayTimer);
+    if (window._uptimeFetchTimer) clearInterval(window._uptimeFetchTimer);
+
     // Smooth counter - update display every second
-    setInterval(() => {
+    window._uptimeDisplayTimer = setInterval(() => {
       const el = document.getElementById('dashTotalUptime');
       if (!el || !window.lastKnownUptime) return;
       const elapsed = Math.floor((Date.now() - window.lastFetchTime) / 1000);
@@ -1469,7 +1480,7 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
     }, 1000);
 
     // Fetch real value every 30 seconds
-    setInterval(async function() {
+    window._uptimeFetchTimer = setInterval(async function() {
       try {
         var res = await fetch('/api/uptime', {
           method: 'POST',
@@ -1484,48 +1495,35 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
       } catch(e) { console.error("Error fetching uptime logs:", e); }
     }, 30000);
 
-// Optimized: uses TreeWalker instead of recursive DOM walk (avoids stack overflow on deep DOMs)
-    function walkAndReplaceMR(rootNode, isMrs) {
-      const walker = document.createTreeWalker(
-        rootNode,
-        NodeFilter.SHOW_TEXT,
-        {
-          acceptNode(node) {
-            const parent = node.parentNode;
-            if (parent && (parent.nodeName === 'SCRIPT' || parent.nodeName === 'STYLE')) {
-              return NodeFilter.FILTER_REJECT;
-            }
-            return NodeFilter.FILTER_ACCEPT;
-          }
+// Optimized brand title updater (O(k) targeted query selection)
+    function updateBrandTitles(isMrs) {
+      const brandElements = document.querySelectorAll('.auth-brand-title');
+      brandElements.forEach(el => {
+        if (el.dataset.originalText === undefined) {
+          el.dataset.originalText = el.textContent;
         }
-      );
-      while (walker.nextNode()) {
-        const textNode = walker.currentNode;
         if (isMrs) {
-          if (textNode.originalValue === undefined) textNode.originalValue = textNode.nodeValue;
-          if (/mr/i.test(textNode.originalValue)) {
-            textNode.nodeValue = textNode.originalValue
-              .replace(/\bMr\./g, 'Mrs.')
-              .replace(/\bMR\b/g, 'MRS')
-              .replace(/\bMr\b/g, 'Mrs')
-              .replace(/\bmr\b/g, 'mrs');
-          }
+          el.textContent = el.dataset.originalText
+            .replace(/\bMr\./g, 'Mrs.')
+            .replace(/\bMR\b/g, 'MRS')
+            .replace(/\bMr\b/g, 'Mrs')
+            .replace(/\bmr\b/g, 'mrs');
         } else {
-          if (textNode.originalValue !== undefined) textNode.nodeValue = textNode.originalValue;
+          el.textContent = el.dataset.originalText;
         }
-      }
+      });
     }
 
     function applyAdminTheme(t) {
       if (t === 'mrs') {
         document.documentElement.setAttribute('data-theme', 'mrs');
-        walkAndReplaceMR(document.body, true);
+        updateBrandTitles(true);
       } else if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
         document.documentElement.setAttribute('data-theme', 'dark');
-        walkAndReplaceMR(document.body, false);
+        updateBrandTitles(false);
       } else {
         document.documentElement.removeAttribute('data-theme');
-        walkAndReplaceMR(document.body, false);
+        updateBrandTitles(false);
       }
     }
 
@@ -1563,10 +1561,242 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
     });
     updateAdminThemeBtns(initialThemeVal);
 
+    // ============================================================================
+    // UNIFIED TOAST MANAGER
+    // Enforces max 5 toast stack, textContent injection for XSS protection, 
+    // auto-dismiss, progress bar controls, and zero-emoji SVG icons.
+    // ============================================================================
+    const ToastManager = (function () {
+      const MAX_STACK = 5;
+      const DEFAULT_DURATION = 3000;
+      const activeToasts = [];
 
+      function getContainer() {
+        let container = document.getElementById('toastContainer');
+        if (!container) {
+          container = document.createElement('div');
+          container.id = 'toastContainer';
+          container.className = 'toast-container';
+          document.body.appendChild(container);
+        }
+        return container;
+      }
 
-    window.customAlert = customAlert;
-    function customAlert(title, msg) {
+      function createIconSvg(type) {
+        const svgMap = {
+          success: '<polyline points="20 6 9 17 4 12"></polyline>',
+          error: '<line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>',
+          warning: '<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line>',
+          info: '<circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line>'
+        };
+        const pathContent = svgMap[type] || svgMap.info;
+        const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+        svg.setAttribute('class', `toast-icon toast-icon-${type}`);
+        svg.setAttribute('viewBox', '0 0 24 24');
+        svg.setAttribute('width', '14');
+        svg.setAttribute('height', '14');
+        svg.setAttribute('stroke', 'currentColor');
+        svg.setAttribute('fill', 'none');
+        svg.setAttribute('stroke-linecap', 'round');
+        svg.setAttribute('stroke-linejoin', 'round');
+        svg.innerHTML = pathContent;
+        return svg;
+      }
+
+      function removeToast(toastObj) {
+        const idx = activeToasts.indexOf(toastObj);
+        if (idx === -1) return;
+        
+        activeToasts.splice(idx, 1);
+        clearTimeout(toastObj.timeoutId);
+
+        const el = toastObj.element;
+        el.style.animation = 'toastOut 0.3s ease forwards';
+        setTimeout(() => {
+          if (el.parentNode) el.parentNode.removeChild(el);
+        }, 300);
+      }
+
+      function show(msg, type = 'info', duration = DEFAULT_DURATION) {
+        const container = getContainer();
+
+        while (activeToasts.length >= MAX_STACK) {
+          removeToast(activeToasts[0]);
+        }
+
+        const toast = document.createElement('div');
+        toast.setAttribute('role', 'status');
+        toast.setAttribute('aria-live', 'polite');
+        toast.className = `toast toast-${type}`;
+
+        const contentDiv = document.createElement('div');
+        contentDiv.className = 'toast-content';
+
+        const iconSpan = document.createElement('span');
+        iconSpan.className = 'toast-icon-container';
+        iconSpan.appendChild(createIconSvg(type));
+
+        const msgSpan = document.createElement('span');
+        msgSpan.className = 'toast-message';
+        msgSpan.textContent = String(msg);
+
+        contentDiv.appendChild(iconSpan);
+        contentDiv.appendChild(msgSpan);
+
+        const closeBtn = document.createElement('button');
+        closeBtn.className = 'toast-close';
+        closeBtn.setAttribute('aria-label', 'Close toast');
+        closeBtn.innerHTML = '&times;';
+
+        const progressBar = document.createElement('div');
+        progressBar.className = 'toast-progress';
+        progressBar.style.animationDuration = `${duration}ms`;
+
+        toast.appendChild(contentDiv);
+        toast.appendChild(closeBtn);
+        toast.appendChild(progressBar);
+        container.appendChild(toast);
+
+        const toastObj = {
+          element: toast,
+          timeoutId: null,
+          remaining: duration,
+          startTime: Date.now()
+        };
+
+        function dismiss() {
+          removeToast(toastObj);
+        }
+
+        function startTimer() {
+          toastObj.startTime = Date.now();
+          toastObj.timeoutId = setTimeout(dismiss, toastObj.remaining);
+        }
+
+        function pauseTimer() {
+          clearTimeout(toastObj.timeoutId);
+          toastObj.remaining -= Date.now() - toastObj.startTime;
+          if (toastObj.remaining < 0) toastObj.remaining = 0;
+        }
+
+        closeBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          dismiss();
+        });
+
+        toast.addEventListener('mouseenter', () => {
+          pauseTimer();
+          progressBar.style.animationPlayState = 'paused';
+        });
+
+        toast.addEventListener('mouseleave', () => {
+          startTimer();
+          progressBar.style.animationPlayState = 'running';
+        });
+
+        activeToasts.push(toastObj);
+        startTimer();
+      }
+
+      return { show, removeToast };
+    })();
+
+    window.showToast = function (msg, type = 'info') {
+      ToastManager.show(msg, type);
+    };
+
+    // ============================================================================
+    // UNIFIED MODAL MANAGER
+    // Enforces Escape key close, focus trapping inside dialog, focus restoration.
+    // ============================================================================
+    const ModalManager = (function () {
+      const modalStack = [];
+      let keydownListenerAttached = false;
+      const FOCUSABLE_SELECTOR = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+
+      function handleGlobalKeydown(e) {
+        if (modalStack.length === 0) return;
+        const currentModalInfo = modalStack[modalStack.length - 1];
+        const { modalEl, options } = currentModalInfo;
+
+        if (e.key === 'Escape' || e.keyCode === 27) {
+          if (options.closeOnEscape !== false) {
+            e.preventDefault();
+            close(modalEl, { reason: 'escape' });
+          }
+          return;
+        }
+
+        if (e.key === 'Tab' || e.keyCode === 9) {
+          const focusables = Array.from(modalEl.querySelectorAll(FOCUSABLE_SELECTOR))
+            .filter(el => el.offsetWidth > 0 || el.offsetHeight > 0 || el === document.activeElement);
+
+          if (focusables.length === 0) {
+            e.preventDefault();
+            return;
+          }
+
+          const firstEl = focusables[0];
+          const lastEl = focusables[focusables.length - 1];
+
+          if (e.shiftKey) {
+            if (document.activeElement === firstEl || !modalEl.contains(document.activeElement)) {
+              e.preventDefault();
+              lastEl.focus();
+            }
+          } else {
+            if (document.activeElement === lastEl || !modalEl.contains(document.activeElement)) {
+              e.preventDefault();
+              firstEl.focus();
+            }
+          }
+        }
+      }
+
+      function ensureListener() {
+        if (!keydownListenerAttached) {
+          document.addEventListener('keydown', handleGlobalKeydown, true);
+          keydownListenerAttached = true;
+        }
+      }
+
+      function open(modalEl, options = {}) {
+        if (!modalEl) return;
+        ensureListener();
+        const previousActiveElement = document.activeElement;
+        const modalInfo = { modalEl, previousActiveElement, options, onClose: options.onClose || null };
+        modalStack.push(modalInfo);
+        modalEl.classList.add('active');
+        modalEl.setAttribute('aria-modal', 'true');
+        modalEl.setAttribute('role', 'dialog');
+        setTimeout(() => {
+          const initialFocus = options.initialFocusEl || modalEl.querySelector(FOCUSABLE_SELECTOR);
+          if (initialFocus && typeof initialFocus.focus === 'function') initialFocus.focus();
+        }, 50);
+      }
+
+      function close(modalEl, resultData = null) {
+        if (!modalEl) return;
+        const stackIdx = modalStack.findIndex(item => item.modalEl === modalEl);
+        if (stackIdx === -1) {
+          modalEl.classList.remove('active');
+          return;
+        }
+        const [modalInfo] = modalStack.splice(stackIdx, 1);
+        modalEl.classList.remove('active');
+        modalEl.removeAttribute('aria-modal');
+        if (typeof modalInfo.onClose === 'function') modalInfo.onClose(resultData);
+        if (modalInfo.previousActiveElement && typeof modalInfo.previousActiveElement.focus === 'function') {
+          modalInfo.previousActiveElement.focus();
+        }
+      }
+
+      return { open, close };
+    })();
+
+    window.ModalManager = ModalManager;
+
+    window.customAlert = function customAlert(title, msg) {
       if (!msg) { msg = title; title = 'Alert'; }
       return new Promise((resolve) => {
         const modal = document.getElementById('promptModal');
@@ -1577,7 +1807,7 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
         const btnHeaderCancel = document.getElementById('promptHeaderCancel');
 
         titleEl.textContent = title;
-        inputEl.style.display = 'none'; // hide input
+        inputEl.style.display = 'none';
         
         let msgEl = document.getElementById('promptMessageText');
         if (!msgEl) {
@@ -1592,108 +1822,64 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
 
         btnCancel.style.display = 'none';
         btnConfirm.textContent = 'OK';
-        modal.classList.add('active');
 
-        const cleanup = () => {
-          modal.classList.remove('active');
+        let isResolved = false;
+        const cleanupAndResolve = () => {
+          if (isResolved) return;
+          isResolved = true;
           msgEl.style.display = 'none';
           inputEl.style.display = '';
           btnCancel.style.display = '';
           btnConfirm.textContent = 'Confirm';
           btnConfirm.onclick = null;
           if (btnHeaderCancel) btnHeaderCancel.onclick = null;
+          ModalManager.close(modal);
+          resolve();
         };
 
-        btnConfirm.onclick = () => { cleanup(); resolve(); };
-        if (btnHeaderCancel) {
-          btnHeaderCancel.onclick = () => { cleanup(); resolve(); };
-        }
-      });
-    }
+        btnConfirm.onclick = () => cleanupAndResolve();
+        if (btnHeaderCancel) btnHeaderCancel.onclick = () => cleanupAndResolve();
 
-    window.showToast = showToast;
-    function showToast(msg, type = 'info') {
-      const container = document.getElementById('toastContainer');
-      if (!container) return;
-
-      const toast = document.createElement('div');
-      toast.setAttribute('role', 'status');
-      toast.setAttribute('aria-live', 'polite');
-      toast.className = `toast toast-${type}`;
-
-      // Create SVG Icons based on type (zero-emoji compliance)
-      let iconSvg = '';
-      if (type === 'success') {
-        iconSvg = `<svg class="toast-icon toast-icon-success" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>`;
-      } else if (type === 'error') {
-        iconSvg = `<svg class="toast-icon toast-icon-error" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>`;
-      } else if (type === 'warning') {
-        iconSvg = `<svg class="toast-icon toast-icon-warning" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>`;
-      } else {
-        iconSvg = `<svg class="toast-icon toast-icon-info" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>`;
-      }
-
-      toast.innerHTML = `
-        <div class="toast-content">
-          <span class="toast-icon-container">${iconSvg}</span>
-          <span class="toast-message">${msg}</span>
-        </div>
-        <button class="toast-close" aria-label="Close toast">&times;</button>
-        <div class="toast-progress"></div>
-      `;
-
-      container.appendChild(toast);
-
-      const duration = 3000;
-      let remaining = duration;
-      let startTime = Date.now();
-      let timeoutId = null;
-
-      // Set animation duration on progress bar
-      const progress = toast.querySelector('.toast-progress');
-      if (progress) {
-        progress.style.animationDuration = `${duration}ms`;
-      }
-
-      function dismiss() {
-        toast.style.animation = 'toastOut 0.3s ease forwards';
-        setTimeout(() => toast.remove(), 300);
-      }
-
-      function startTimer() {
-        startTime = Date.now();
-        timeoutId = setTimeout(dismiss, remaining);
-      }
-
-      function pauseTimer() {
-        clearTimeout(timeoutId);
-        remaining -= Date.now() - startTime;
-        if (remaining < 0) remaining = 0;
-      }
-
-      // Close button handler
-      const closeBtn = toast.querySelector('.toast-close');
-      if (closeBtn) {
-        closeBtn.addEventListener('click', (e) => {
-          e.stopPropagation();
-          dismiss();
+        ModalManager.open(modal, {
+          initialFocusEl: btnConfirm,
+          onClose: () => cleanupAndResolve()
         });
+      });
+    };
+
+    function setButtonLoading(btn, isLoading, loadingText = 'Processing...') {
+      const el = typeof btn === 'string' ? document.querySelector(btn) : btn;
+      if (!el) return;
+      if (isLoading) {
+        if (el.dataset.isLoading === 'true') return;
+        el.dataset.isLoading = 'true';
+        el.dataset.originalHtml = el.innerHTML;
+        el.dataset.originalDisabled = el.disabled ? 'true' : 'false';
+        el.disabled = true;
+        el.classList.add('btn-loading');
+        el.innerHTML = `<svg class="btn-spinner" viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" fill="none" stroke-width="2" style="animation:spin 0.8s linear infinite; margin-right:6px; vertical-align:middle;"><circle cx="12" cy="12" r="10" stroke-dasharray="32" stroke-dashoffset="12"></circle></svg><span>${loadingText}</span>`;
+      } else {
+        if (el.dataset.isLoading !== 'true') return;
+        el.disabled = el.dataset.originalDisabled === 'true';
+        el.innerHTML = el.dataset.originalHtml || el.innerHTML;
+        el.classList.remove('btn-loading');
+        delete el.dataset.isLoading;
+        delete el.dataset.originalHtml;
+        delete el.dataset.originalDisabled;
       }
-
-      // Hover behavior: pause/resume progress & timer
-      toast.addEventListener('mouseenter', () => {
-        pauseTimer();
-        if (progress) progress.style.animationPlayState = 'paused';
-      });
-
-      toast.addEventListener('mouseleave', () => {
-        startTimer();
-        if (progress) progress.style.animationPlayState = 'running';
-      });
-
-      // Start timer initially
-      startTimer();
     }
+
+    async function withButtonLoading(btn, asyncFn, loadingText = 'Processing...') {
+      setButtonLoading(btn, true, loadingText);
+      try {
+        return await asyncFn();
+      } finally {
+        setButtonLoading(btn, false);
+      }
+    }
+
+    window.setButtonLoading = setButtonLoading;
+    window.withButtonLoading = withButtonLoading;
     document.addEventListener('DOMContentLoaded', () => {
         const searchInput = document.getElementById('searchUsersInput');
         if (searchInput) {
@@ -1899,6 +2085,8 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(revealText.textContent).then(function() {
         showToast('API key copied!', 'success');
+      }).catch(function(err) {
+        showToast('Copy failed: ' + err.message, 'error');
       });
     } else {
       // Fallback
