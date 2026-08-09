@@ -342,15 +342,78 @@ export default async function handler(req, res) {
     if (action === 're_review_task') {
       if (!isReviewer && !isManagement) return res.status(403).json({ error: 'Reviewers or Management only' });
 
-      const fetchRes = await fetch(`${supabaseUrl}/rest/v1/content_tasks?id=eq.${task_id}`, {
+      const fetchRes = await fetch(`${supabaseUrl}/rest/v1/content_tasks?id=eq.${encodeURIComponent(task_id)}&status=eq.done`, {
         method: 'PATCH',
         headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}`, 'Content-Type': 'application/json', 'Prefer': 'return=representation' },
-        body: JSON.stringify({ status: 'in_review', review_started_at: new Date().toISOString(), completed_at: null })
+        body: JSON.stringify({ status: 'in_review', review_started_at: new Date().toISOString(), reviewed_by: userId, completed_at: null })
+      });
+      if (!fetchRes.ok) throw new Error(await fetchRes.text());
+      const data = await fetchRes.json();
+      if (!data || data.length === 0) {
+        return res.status(409).json({ error: 'Task is no longer in done status' });
+      }
+
+      await logAction(task_id, 're_review_requested', 'done', 'in_review', note || 'Re-review requested');
+      return res.status(200).json({ success: true, task: data[0] });
+    }
+
+    if (action === 'retrack_task') {
+      if (!isManagement && !isAdmin) return res.status(403).json({ error: 'Management or Admin only' });
+
+      const fetchRes = await fetch(`${supabaseUrl}/rest/v1/content_tasks?id=eq.${encodeURIComponent(task_id)}&status=eq.done`, {
+        method: 'PATCH',
+        headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}`, 'Content-Type': 'application/json', 'Prefer': 'return=representation' },
+        body: JSON.stringify({
+          status: 'open',
+          assigned_to: null,
+          assigned_at: null,
+          submitted_at: null,
+          review_started_at: null,
+          reviewed_by: null,
+          completed_at: null
+        })
+      });
+      if (!fetchRes.ok) throw new Error(await fetchRes.text());
+      const data = await fetchRes.json();
+      if (!data || data.length === 0) {
+        return res.status(409).json({ error: 'Task is no longer in done status' });
+      }
+
+      await logAction(task_id, 'retracked', 'done', 'open', note || 'Task retracked to open');
+      return res.status(200).json({ success: true, task: data[0] });
+    }
+
+    if (action === 'resubmit_task') {
+      const taskRes = await fetch(`${supabaseUrl}/rest/v1/content_tasks?id=eq.${encodeURIComponent(task_id)}&select=assigned_to,status`, {
+        headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
+      });
+      const taskData = await taskRes.json();
+      if (!taskData || taskData.length === 0) return res.status(404).json({ error: 'Task not found' });
+
+      const isAssignee = taskData[0].assigned_to === userId;
+      if (!isAssignee && !isManagement && !isAdmin) {
+        return res.status(403).json({ error: 'Only the assigned developer, management, or admins can re-submit' });
+      }
+
+      if (taskData[0].status !== 'developed' && taskData[0].status !== 'in_review') {
+        return res.status(409).json({ error: 'Task must be in developed or in_review status to re-submit' });
+      }
+
+      const prevStatus = taskData[0].status;
+      const fetchRes = await fetch(`${supabaseUrl}/rest/v1/content_tasks?id=eq.${encodeURIComponent(task_id)}`, {
+        method: 'PATCH',
+        headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}`, 'Content-Type': 'application/json', 'Prefer': 'return=representation' },
+        body: JSON.stringify({
+          status: 'in_progress',
+          submitted_at: null,
+          review_started_at: null,
+          reviewed_by: null
+        })
       });
       if (!fetchRes.ok) throw new Error(await fetchRes.text());
       const data = await fetchRes.json();
 
-      await logAction(task_id, 're_review_requested', null, 'in_review', note || 'Re-review requested');
+      await logAction(task_id, 'resubmitted', prevStatus, 'in_progress', note || 'Task pulled back for rework');
       return res.status(200).json({ success: true, task: data[0] });
     }
 
