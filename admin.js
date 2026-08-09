@@ -1192,7 +1192,7 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
         
         var badgesHtml = '';
         if (isAdmin) badgesHtml += '<span class="badge badge-admin">ADMIN</span>';
-        if (division) badgesHtml += '<span class="badge" style="background:var(--accent);color:var(--c1);text-transform:uppercase;">' + division + '</span>';
+        if (division) badgesHtml += '<span class="badge badge-division">' + division + '</span>';
         if (isBanned) badgesHtml += '<span class="badge badge-banned">BANNED</span>';
 
         // Build devices HTML using string concat to avoid nested template literal issues
@@ -1202,13 +1202,13 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
            for (var di = 0; di < devices.length; di++) {
               var dev = devices[di];
               var isDevBanned = bannedDevs.includes(dev.id);
-              devRows += '<div style="display:flex; justify-content:space-between; align-items:center; padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">';
+              devRows += '<div style="display:flex; justify-content:space-between; align-items:center; padding: 4px 0; border-bottom: 1px solid var(--border-light);">';
               devRows += '<span style="font-family:var(--font-mono); font-size:12px; max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="' + dev.id + '">' + dev.id.substr(0,14) + '...</span>';
               devRows += '<div style="display:flex; gap: 4px;">';
-              devRows += '<button class="btn-card ' + (isDevBanned ? 'primary' : 'danger') + ' btn-block-dev" style="padding: 2px 8px; font-size: 11px;" data-dev="' + dev.id + '" data-banned="' + isDevBanned + '">';
+              devRows += '<button class="btn-card ' + (isDevBanned ? 'primary' : 'danger') + ' btn-block-dev" data-dev="' + dev.id + '" data-banned="' + isDevBanned + '">';
               devRows += (isDevBanned ? 'Unban' : 'Block');
               devRows += '</button>';
-              devRows += '<button class="btn-card danger btn-delete-dev" style="padding: 2px 8px; font-size: 11px; background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3);" data-dev="' + dev.id + '" data-userid="' + u.id + '" data-email="' + email + '" title="Remove Device">';
+              devRows += '<button class="btn-card danger btn-delete-dev" data-dev="' + dev.id + '" data-userid="' + u.id + '" data-email="' + email + '" title="Remove Device">';
               devRows += 'Delete';
               devRows += '</button></div></div>';
            }
@@ -1976,7 +1976,7 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
             '<span style="font-size:12px; color:var(--text-muted); margin-left:12px;">Authorized ' + created + '</span>' +
             '<span style="font-size:12px; color:var(--text-muted); margin-left:8px;">&middot; Expires: ' + expires + '</span>' +
           '</div>' +
-          '<button class="btn-unified" style="color:var(--danger); border-color:var(--danger);" onclick="window._revokeOAuthToken(\'' + sanitize(t.token_id).replace(/'/g, "\\'") + '\', \'' + sanitize(t.user_email).replace(/'/g, "\\'") + '\')">Disconnect</button>' +
+          '<button class="btn-unified sm danger" onclick="window._revokeOAuthToken(\'' + sanitize(t.token_id).replace(/'/g, "\\'") + '\', \'' + sanitize(t.user_email).replace(/'/g, "\\'") + '\')">Disconnect</button>' +
         '</div>';
       }).join('');
 
@@ -2031,8 +2031,8 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
             '<span style="font-size:12px; color:var(--text-muted); margin-left:8px;">&middot; Last used: ' + lastUsed + '</span>' +
             '<span style="font-size:12px; color:var(--text-muted); margin-left:8px;">&middot; ' + (k.request_count || 0) + ' requests</span>' +
             '<span style="font-size:12px; color:var(--text-muted); margin-left:8px;">&middot; ' + expiresInfo + '</span>' +
-          '</div>' +
-          '<button class="btn-unified" style="color:var(--danger); border-color:var(--danger);" onclick="window._revokeApiKey(\'' + k.id + '\', \'' + sanitize(k.name).replace(/'/g, "\\'") + '\')">Revoke</button>' +
+            '</div>' +
+          '<button class="btn-unified sm danger" onclick="window._revokeApiKey(\'' + k.id + '\', \'' + sanitize(k.name).replace(/'/g, "\\'") + '\')">Revoke</button>' +
         '</div>';
       }).join('');
 
