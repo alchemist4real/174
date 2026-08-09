@@ -381,7 +381,9 @@ function getMcpToolsList() {
     { name: 'tasks_start_review', description: 'Start active review on a submitted task (Reviewer only)', inputSchema: { type: 'object', properties: { task_id: { type: 'string' } }, required: ['task_id'] } },
     { name: 'tasks_add_note', description: 'Add a note/comment to a task log', inputSchema: { type: 'object', properties: { task_id: { type: 'string' }, note: { type: 'string' } }, required: ['task_id', 'note'] } },
     { name: 'tasks_reset_phase', description: 'Reset a task phase/status back for re-planning (Management/Dev/Reviewer)', inputSchema: { type: 'object', properties: { task_id: { type: 'string' }, new_status: { type: 'string', enum: ['open', 'in_progress'] }, unassign: { type: 'boolean' }, note: { type: 'string' } }, required: ['task_id', 'note'] } },
-    { name: 'tasks_re_review', description: 'Request re-review on a task (Reviewer/Management)', inputSchema: { type: 'object', properties: { task_id: { type: 'string' }, note: { type: 'string' } }, required: ['task_id', 'note'] } },
+    { name: 'tasks_re_review', description: 'Request re-review on a done task, sends it back to in_review (Reviewer/Management)', inputSchema: { type: 'object', properties: { task_id: { type: 'string' }, note: { type: 'string' } }, required: ['task_id', 'note'] } },
+    { name: 'tasks_retrack', description: 'Reopen a completed task back to open status with full timestamp reset (Management/Admin only)', inputSchema: { type: 'object', properties: { task_id: { type: 'string' }, note: { type: 'string' } }, required: ['task_id', 'note'] } },
+    { name: 'tasks_resubmit', description: 'Pull back a developed or in_review task to in_progress for rework (Assigned dev/Management/Admin)', inputSchema: { type: 'object', properties: { task_id: { type: 'string' }, note: { type: 'string' } }, required: ['task_id', 'note'] } },
     { name: 'divisions_join', description: 'Join an organization division', inputSchema: { type: 'object', properties: { division_id: { type: 'string', enum: ['management','development','review'] }, whatsapp: { type: 'string' } }, required: ['division_id'] } },
     { name: 'divisions_update_whatsapp', description: 'Update your WhatsApp contact info', inputSchema: { type: 'object', properties: { whatsapp: { type: 'string' } }, required: ['whatsapp'] } },
     { name: 'divisions_get_members', description: 'Get detailed member list of a specific division (or all divisions)', inputSchema: { type: 'object', properties: { division_id: { type: 'string' } } } },
@@ -817,6 +819,15 @@ async function routeMethod(method, params, auth, roles, cfg) {
     if (!roles.isReviewer && !roles.isManagement && !roles.isAdmin) throw err403('Reviewers or Management required');
     if (!params.task_id || !params.note) throw err400('Missing params.task_id or params.note');
     return tasksReReview(params.task_id, params.note, auth.userId, su, sk);
+  }
+  if (m === 'tasks_retrack') {
+    if (!roles.isManagement && !roles.isAdmin) throw err403('Management or Admin required');
+    if (!params.task_id || !params.note) throw err400('Missing params.task_id or params.note');
+    return tasksRetrack(params.task_id, params.note, auth.userId, su, sk);
+  }
+  if (m === 'tasks_resubmit') {
+    if (!params.task_id || !params.note) throw err400('Missing params.task_id or params.note');
+    return tasksResubmit(params.task_id, params.note, auth.userId, su, sk);
   }
 
   if (m === 'divisions_list') {
@@ -2015,21 +2026,84 @@ async function tasksResetPhase(taskId, newStatus, unassign, note, userId, su, sk
 }
 
 async function tasksReReview(taskId, note, userId, su, sk) {
-  const res = await fetch(`${su}/rest/v1/content_tasks?id=eq.${taskId}`, {
+  const res = await fetch(`${su}/rest/v1/content_tasks?id=eq.${encodeURIComponent(taskId)}&status=eq.done`, {
     method: 'PATCH',
     headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}`, 'Content-Type': 'application/json', 'Prefer': 'return=representation' },
-    body: JSON.stringify({ status: 'in_review', review_started_at: new Date().toISOString(), completed_at: null })
+    body: JSON.stringify({ status: 'in_review', review_started_at: new Date().toISOString(), reviewed_by: userId, completed_at: null })
   });
   if (!res.ok) throw new Error('Failed to request re-review: ' + await res.text());
-  const [task] = await res.json();
+  const data = await res.json();
+  if (!data || data.length === 0) throw new Error('Task is no longer in done status (409 conflict)');
 
   await fetch(`${su}/rest/v1/task_logs`, {
     method: 'POST',
     headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ task_id: taskId, user_id: userId, action: 're_review_requested', new_status: 'in_review', note: note })
+    body: JSON.stringify({ task_id: taskId, user_id: userId, action: 're_review_requested', prev_status: 'done', new_status: 'in_review', note: note })
   });
 
-  return { success: true, task };
+  return { success: true, task: data[0] };
+}
+
+async function tasksRetrack(taskId, note, userId, su, sk) {
+  const res = await fetch(`${su}/rest/v1/content_tasks?id=eq.${encodeURIComponent(taskId)}&status=eq.done`, {
+    method: 'PATCH',
+    headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}`, 'Content-Type': 'application/json', 'Prefer': 'return=representation' },
+    body: JSON.stringify({
+      status: 'open',
+      assigned_to: null,
+      assigned_at: null,
+      submitted_at: null,
+      review_started_at: null,
+      reviewed_by: null,
+      completed_at: null
+    })
+  });
+  if (!res.ok) throw new Error('Failed to retrack task: ' + await res.text());
+  const data = await res.json();
+  if (!data || data.length === 0) throw new Error('Task is no longer in done status (409 conflict)');
+
+  await fetch(`${su}/rest/v1/task_logs`, {
+    method: 'POST',
+    headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ task_id: taskId, user_id: userId, action: 'retracked', prev_status: 'done', new_status: 'open', note: note })
+  });
+
+  return { success: true, task: data[0] };
+}
+
+async function tasksResubmit(taskId, note, userId, su, sk) {
+  // Fetch current task to validate status and ownership
+  const taskRes = await fetch(`${su}/rest/v1/content_tasks?id=eq.${encodeURIComponent(taskId)}&select=assigned_to,status`, {
+    headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}` }
+  });
+  const taskData = await taskRes.json();
+  if (!taskData || taskData.length === 0) throw new Error('Task not found');
+
+  if (taskData[0].status !== 'developed' && taskData[0].status !== 'in_review') {
+    throw new Error('Task must be in developed or in_review status to re-submit');
+  }
+
+  const prevStatus = taskData[0].status;
+  const res = await fetch(`${su}/rest/v1/content_tasks?id=eq.${encodeURIComponent(taskId)}`, {
+    method: 'PATCH',
+    headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}`, 'Content-Type': 'application/json', 'Prefer': 'return=representation' },
+    body: JSON.stringify({
+      status: 'in_progress',
+      submitted_at: null,
+      review_started_at: null,
+      reviewed_by: null
+    })
+  });
+  if (!res.ok) throw new Error('Failed to re-submit task: ' + await res.text());
+  const data = await res.json();
+
+  await fetch(`${su}/rest/v1/task_logs`, {
+    method: 'POST',
+    headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ task_id: taskId, user_id: userId, action: 'resubmitted', prev_status: prevStatus, new_status: 'in_progress', note: note })
+  });
+
+  return { success: true, task: data[0] };
 }
 
 // ═══════════════════════════════════════════════════════════════

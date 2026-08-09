@@ -505,13 +505,23 @@ function openTaskModal(task) {
         actionsHtml += `<button class="btn-unified primary" onclick="updateTask('${task.id}', 'approve_task')">Approve (Done)</button>`;
     }
 
-    // Re-Review Button (for done or developed tasks)
-    if ((isRev || isMgmt) && (task.status === 'done' || task.status === 'developed')) {
+    // Re-submit: pull task back from developed/in_review to in_progress for rework
+    if ((task.status === 'developed' || task.status === 'in_review') && (isMyTask || isMgmt)) {
+        actionsHtml += `<button class="btn-unified" onclick="updateTask('${task.id}', 'resubmit_task')" style="border-color:var(--accent); color:var(--accent)">Re-submit (Pull Back)</button>`;
+    }
+
+    // Re-Review: send a done task back to in_review
+    if (task.status === 'done' && (isRev || isMgmt)) {
         actionsHtml += `<button class="btn-unified" onclick="updateTask('${task.id}', 're_review_task')" style="border-color:var(--accent); color:var(--accent)">Re-Review Task</button>`;
     }
 
-    // Reset Phase / Re-Plan Button (for active roles)
-    if (isMgmt || isDev || isRev) {
+    // Retrack: reopen a done task back to open (full reset)
+    if (task.status === 'done' && isMgmt) {
+        actionsHtml += `<button class="btn-unified" onclick="updateTask('${task.id}', 'retrack_task')" style="border-color:var(--warning, #e6a23c); color:var(--warning, #e6a23c)">Retrack (Reopen)</button>`;
+    }
+
+    // Reset Phase / Re-Plan (any active status)
+    if ((task.status !== 'open') && (isMgmt || isDev || isRev)) {
         actionsHtml += `<button class="btn-unified" onclick="updateTask('${task.id}', 'reset_phase')" style="border-color:var(--border-medium); color:var(--text-main);">Reset Phase / Re-Plan</button>`;
     }
 
@@ -586,8 +596,8 @@ window.loadTaskLogs = async function(taskId) {
             let noteHtml = l.note ? `<div style="color:var(--text-main); font-style:italic; margin-top:4px; padding-left:8px; border-left:2px solid var(--border-medium);">"${l.note}"</div>` : '';
             let actionColor = 'var(--accent)';
             if (l.action === 'rejected' || l.action === 'deleted') actionColor = 'var(--danger)';
-            else if (l.action === 'phase_reset') actionColor = 'var(--warning, #e6a23c)';
-            else if (l.action === 're_review_requested') actionColor = 'var(--accent)';
+            else if (l.action === 'phase_reset' || l.action === 'retracked') actionColor = 'var(--warning, #e6a23c)';
+            else if (l.action === 're_review_requested' || l.action === 'resubmitted') actionColor = 'var(--accent)';
 
             return `<div style="font-size:11px; border-bottom:1px solid var(--border-light); padding:8px 0;">
                 <div><span style="color:${actionColor}; font-weight:600;">${l.action.replace(/_/g, ' ').toUpperCase()}</span> by <b>${l.user ? (l.user.username || l.user.email.split('@')[0]) : 'System'}</b></div>
@@ -623,6 +633,22 @@ window.updateTask = async function(taskId, action) {
             return;
         }
         note = reReviewNote.trim();
+    } else if (action === 'retrack_task') {
+        const retrackNote = await customPrompt("Mandatory: Why is this completed task being reopened?");
+        if (!retrackNote || !retrackNote.trim()) {
+            showToast('Retrack reason is required.', 'error');
+            return;
+        }
+        note = retrackNote.trim();
+        const confirmRetrack = await customConfirm("This will fully reset the task to OPEN status, unassign the developer, and clear all timestamps. Continue?");
+        if (!confirmRetrack) return;
+    } else if (action === 'resubmit_task') {
+        const resubmitNote = await customPrompt("Mandatory: Why is this task being pulled back for rework?");
+        if (!resubmitNote || !resubmitNote.trim()) {
+            showToast('Re-submit reason is required.', 'error');
+            return;
+        }
+        note = resubmitNote.trim();
     } else if (action === 'reject_task') {
         note = await customPrompt("Mandatory: Please provide a reason for rejecting this task:");
         if (!note || !note.trim()) {
