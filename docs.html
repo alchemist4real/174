@@ -9,6 +9,21 @@
   <link rel="shortcut icon" href="/favicon.ico">
   <link rel="stylesheet" href="/tokens.css?v=2.0">
   <link rel="stylesheet" href="/admin-styles.css?v=2.0">
+  <style>
+    .embedded-docs .top-nav .brand,
+    .embedded-docs .brand {
+      display: none !important;
+    }
+    .embedded-docs .top-nav {
+      padding: 0 16px;
+      height: 52px;
+    }
+  </style>
+  <script>
+    if (window.self !== window.top || window.location.search.includes('embed')) {
+      document.documentElement.classList.add('embedded-docs');
+    }
+  </script>
 </head>
 <body>
   <div class="bg"></div>

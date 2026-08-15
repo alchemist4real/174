@@ -1130,6 +1130,17 @@ body { margin: 0; overflow: hidden; }
   margin-right: 32px;
 }
 
+.embedded-docs .top-nav .brand,
+.embedded-mode .top-nav .brand,
+body.embedded .top-nav .brand {
+  display: none !important;
+}
+
+.embedded-docs .top-nav {
+  padding: 0 16px;
+  height: 52px;
+}
+
 .top-nav .brand img {
   height: 24px;
 }
