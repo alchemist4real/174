@@ -1,16 +1,16 @@
 # Graph Report - MR-CAPSULES-main  (2026-08-15)
 
 ## Corpus Check
-- 351 files · ~27,422,064 words
+- 351 files · ~27,423,564 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 8446 nodes · 15241 edges · 352 communities (338 shown, 14 thin omitted)
+- 8450 nodes · 15247 edges · 353 communities (339 shown, 14 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 343 edges (avg confidence: 0.5)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `d7a1d28e`
+- Built from commit: `7f45790b`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -171,6 +171,7 @@
 - token.js
 - 2.5 PRAKTIKUM_PRAKTIKUM 2.html
 - register.js
+- Admin Page Feature Expansion — Unified Comprehensive Implementation Plan
 - index.html
 - admin.js
 - 2.5 PRAKTIKUM_PRAKTIKUM 1.html
@@ -354,7 +355,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (352 total, 14 thin omitted)
+## Communities (353 total, 14 thin omitted)
 
 ### Community 0 - "2.4 CBT 2_K20C AM I CINEMATIC.html"
 Cohesion: 0.06
@@ -429,8 +430,8 @@ Cohesion: 0.08
 Nodes (45): activeTypes, DEF_POOL, endSession(), genHarvardCepatQ(), genHarvardLambatQ(), genLegKlinis(), genLegNormaQ(), genSitUpNormaQ() (+37 more)
 
 ### Community 18 - "admin.js"
-Cohesion: 0.09
-Nodes (50): adminAction(), applyAdminPersona(), authMessage, authOverlay, bindKeyEvents(), btnGuestCleanup, btnRefreshDash, currentTree (+42 more)
+Cohesion: 0.08
+Nodes (51): adminAction(), applyAdminPersona(), authMessage, authOverlay, bindKeyEvents(), bindUserActionEvents(), btnGuestCleanup, btnRefreshDash (+43 more)
 
 ### Community 19 - "2.5 LECTURE_K13B am-i-special-2.html"
 Cohesion: 0.07
@@ -865,8 +866,8 @@ Cohesion: 0.14
 Nodes (14): 2. Backend Serverless API Implementation, 2a. Notifications Endpoint — `api/notifications.js` [NEW File], 2b. Invitation Links Endpoint — `api/invites.js` [NEW File], 2c. Task Management Modifications — `api/tasks.js`, 2d. Division Request Modifications — `api/divisions.js`, 2e. Admin System Actions & Rate Limits — `api/admin.js`, Add notification hooks inside existing status updates:, Append administrative actions after the admin check: (+6 more)
 
 ### Community 127 - "3a. Document Markup Changes — `admin.html`"
-Cohesion: 0.11
-Nodes (18): 3. Frontend Client Implementation, 3a. Document Markup Changes — `admin.html`, 3b. Design Aesthetics & Colors Variables — `tokens.css`, 3c. Component Styles — `admin-styles.css`, Add CSV import button next to task board controls inside `#viewTasks`:, Add inside `tokens.css` root scopes (~line 13):, Add view toggle calendars options inside `#tasksViewToggle`:, Append calendar layout container and grid inside `#viewTasks` (beneath table container): (+10 more)
+Cohesion: 0.14
+Nodes (14): 3a. Document Markup Changes — `admin.html`, Add CSV import button next to task board controls inside `#viewTasks`:, Add view toggle calendars options inside `#tasksViewToggle`:, Append calendar layout container and grid inside `#viewTasks` (beneath table container):, Append new file modals overlays for histories and batch uploads at bottom of file:, Append notification bell and unread badge in `#adminTabs` (Dock area):, Append pending requests dashboard inside `#viewUsers`:, Append rebuilding button and orphan checks inside files browser toolbar in `#viewFiles`: (+6 more)
 
 ### Community 128 - "live.js"
 Cohesion: 0.38
@@ -905,8 +906,8 @@ Cohesion: 0.60
 Nodes (5): err(), info(), ok(), gpush.sh script, warn()
 
 ### Community 138 - "4. Frontend Application Logic"
-Cohesion: 0.25
-Nodes (7): 1. System Architecture & Database Schema Migrations, 4. Frontend Application Logic, 4c. Main Page Integration — `index.html` & `fp.js`, Admin Page Feature Expansion — Unified Comprehensive Implementation Plan, Filter broadcasts target divisions:, Intercept Invitation token query parameter during onboarding:, Verify and consume token during Auth Sign Up callback:
+Cohesion: 0.40
+Nodes (5): 4. Frontend Application Logic, 4c. Main Page Integration — `index.html` & `fp.js`, Filter broadcasts target divisions:, Intercept Invitation token query parameter during onboarding:, Verify and consume token during Auth Sign Up callback:
 
 ### Community 139 - "build.js"
 Cohesion: 0.83
@@ -948,17 +949,21 @@ Nodes (6): base64url(), handler(), sanitizeBase64Url(), verifyPkce(), RFC-6749, 
 Cohesion: 0.08
 Nodes (52): activeTypes, DEF_POOL, downloadCert(), endSession(), genIMTQ(), genPersenLemakQ(), genPinggangQ(), genSitReachQ() (+44 more)
 
+### Community 171 - "Admin Page Feature Expansion — Unified Comprehensive Implementation Plan"
+Cohesion: 0.29
+Nodes (6): 1. System Architecture & Database Schema Migrations, 3. Frontend Client Implementation, 3b. Design Aesthetics & Colors Variables — `tokens.css`, 3c. Component Styles — `admin-styles.css`, Add inside `tokens.css` root scopes (~line 13):, Admin Page Feature Expansion — Unified Comprehensive Implementation Plan
+
 ### Community 172 - "index.html"
 Cohesion: 0.08
-Nodes (47): ./fp.js, apply(), applyData(), applyPerfMode(), applyPersona(), backgroundSync(), buildCoverflow(), cards (+39 more)
+Nodes (48): ./fp.js, apply(), applyData(), applyPerfMode(), applyPersona(), backgroundSync(), buildCoverflow(), cards (+40 more)
 
 ### Community 173 - "admin.js"
-Cohesion: 0.09
-Nodes (50): adminAction(), applyAdminPersona(), authMessage, authOverlay, bindKeyEvents(), btnGuestCleanup, btnRefreshDash, currentTree (+42 more)
+Cohesion: 0.08
+Nodes (51): adminAction(), applyAdminPersona(), authMessage, authOverlay, bindKeyEvents(), bindUserActionEvents(), btnGuestCleanup, btnRefreshDash (+43 more)
 
 ### Community 174 - "2.5 PRAKTIKUM_PRAKTIKUM 1.html"
 Cohesion: 0.08
-Nodes (49): activeTypes, AKTIV_LIST, AKTIVITAS_METs, BOUCHARD_HITUNG_KONSEP, BOUCHARD_KAT, BOUCHARD_KAT_KONSEP, DEFINISI_POOL, downloadCert() (+41 more)
+Nodes (48): activeTypes, AKTIV_LIST, AKTIVITAS_METs, BOUCHARD_HITUNG_KONSEP, BOUCHARD_KAT, BOUCHARD_KAT_KONSEP, DEFINISI_POOL, downloadCert() (+40 more)
 
 ### Community 175 - "1.3 CBT 1_10. Fungsi Medulla Spinalis dan Saraf Spinal.html"
 Cohesion: 0.10

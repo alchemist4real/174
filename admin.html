@@ -152,16 +152,16 @@
       <!-- USERS & DIVISIONS VIEW -->
       <div id="viewUsers" class="view-section-row">
         <!-- SIDEBAR -->
-        <div id="orgSidebar" class="org-sidebar collapsed">
+        <div id="orgSidebar" class="org-sidebar">
             <div class="org-sidebar-header">
-                <div id="orgSidebarTitle" class="org-sidebar-title">Organization</div>
+                <div id="orgSidebarTitle" class="org-sidebar-title">ORGANIZATION</div>
                 <button class="btn-unified org-sidebar-toggle-btn" onclick="toggleOrgSidebar(this)" title="Toggle Sidebar">
-                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+                    <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
                 </button>
             </div>
             <div id="orgSidebarContent" class="org-sidebar-content">
                 <div id="divisionSidebarList" class="org-sidebar-inner-list">
-                    <button id="btnDivFilterAll" class="btn-div-item active" data-initials="A" onclick="window.selectDivision('all')"><span class="div-name">All Users</span></button>
+                    <button id="btnDivFilterAll" class="btn-div-item active" data-initials="ALL" onclick="window.selectDivision('all')"><span class="div-name">All Members</span></button>
                     <div class="org-sidebar-section-title">DIVISIONS</div>
                     <!-- Dynamic divisions injected here -->
                 </div>
@@ -194,11 +194,15 @@
         <div class="main-content-layout">
             <div class="toolbar org-toolbar-layout">
                 <div class="toolbar-row">
-                    <div>
-                        <h2 id="orgViewTitle" class="toolbar-title">All Users</h2>
-                        <p id="orgViewDesc" class="toolbar-desc">Manage all registered members in the system.</p>
+                    <div class="toolbar-info-group">
+                        <h2 id="orgViewTitle" class="toolbar-title">ALL USERS</h2>
+                        <p id="orgViewDesc" class="toolbar-desc">Manage all registered members, roles, and device authorizations.</p>
                     </div>
                     <div class="btn-flex-layout">
+                        <button id="btnToggleUserView" class="btn-unified" onclick="window.toggleUserViewMode()" title="Toggle Grid / Table View">
+                          <svg id="iconUserViewMode" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line></svg>
+                          <span id="userViewModeLabel">Table View</span>
+                        </button>
                         <button id="btnAddDivisionMember" class="btn-unified primary btn-add-member-large" onclick="window.promptAddMember(window.currentDivisionId)">
                           <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
                           <span>Add Member</span>
@@ -218,25 +222,25 @@
                             <input type="checkbox" id="toggleSignup">
                             <span class="slider"></span>
                         </div>
-                        Allow Sign Up
+                        <span>Allow Sign Up</span>
                     </label>
                     <label class="switch-label">
                         <div class="switch">
                             <input type="checkbox" id="toggleGuest">
                             <span class="slider"></span>
                         </div>
-                        Allow Guest
+                        <span>Allow Guest</span>
                     </label>
                     <label class="switch-label text-danger-style">
                         <div class="switch">
                             <input type="checkbox" id="toggleMaintenance">
                             <span class="slider slider-danger-style"></span>
                         </div>
-                        Maintenance
+                        <span>Maintenance</span>
                     </label>
                 </div>
                 <div class="announcement-group">
-                    <input type="text" id="announcementText" class="auth-input announcement-input" placeholder="Announcement message...">
+                    <input type="text" id="announcementText" class="auth-input announcement-input" placeholder="Broadcast system announcement...">
                     <button id="btnSendAnnouncement" class="btn-unified primary btn-broadcast">
                       <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.9 19.1C1 15.2 1 8.8 4.9 4.9"></path><path d="M7.8 16.2c-2.3-2.3-2.3-6.1 0-8.5"></path><circle cx="12" cy="12" r="2"></circle><path d="M16.2 7.8c2.3 2.3 2.3 6.1 0 8.5"></path><path d="M19.1 4.9C23 8.8 23 15.1 19.1 19"></path></svg>
                       <span>Broadcast</span>
@@ -244,19 +248,44 @@
                 </div>
             </div>
             
-            <div id="allUsersControls">
-            </div>
-            
             <div class="user-filter-container">
-                <input type="text" id="searchUsersInput" class="auth-input search-users-input" placeholder="Search users...">
-                <button class="btn-unified user-filter active user-filter-btn" data-filter="all">ALL</button>
-                <button class="btn-unified user-filter user-filter-btn" data-filter="online">ONLINE</button>
-                <button class="btn-unified user-filter user-filter-btn" data-filter="banned">BANNED</button>
-                <button class="btn-unified user-filter user-filter-btn" data-filter="admin">ADMINS</button>
+                <div class="search-wrap-box">
+                  <svg class="search-icon-svg" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                  <input type="text" id="searchUsersInput" class="auth-input search-users-input" placeholder="Search user, email, role, device...">
+                </div>
+                <div class="user-filter-pill-group">
+                  <button class="btn-unified user-filter active user-filter-btn" data-filter="all">ALL</button>
+                  <button class="btn-unified user-filter user-filter-btn" data-filter="admin">ADMINS</button>
+                  <button class="btn-unified user-filter user-filter-btn" data-filter="online">ONLINE</button>
+                  <button class="btn-unified user-filter user-filter-btn" data-filter="banned">BANNED</button>
+                </div>
+                <div class="user-stats-ribbon" id="userStatsRibbon">
+                  <span id="userCountSummary" class="user-count-summary">0 Users</span>
+                </div>
             </div>
             
-            <div class="user-grid" id="userBrowser">
-                <!-- User items injected here -->
+            <div class="user-catalog-content" id="userCatalogContent">
+              <div class="user-grid" id="userBrowser">
+                  <!-- User cards injected here -->
+              </div>
+              <div class="user-table-wrapper hidden" id="userTableWrapper">
+                  <table class="user-table" id="userTable">
+                      <thead>
+                          <tr>
+                              <th style="width: 220px;">USER</th>
+                              <th style="width: 240px;">EMAIL</th>
+                              <th style="width: 140px;">DIVISION</th>
+                              <th style="width: 110px;">ROLE</th>
+                              <th style="width: 130px;">DEVICES</th>
+                              <th style="width: 120px;">JOINED</th>
+                              <th style="text-align: right; min-width: 260px;">ACTIONS</th>
+                          </tr>
+                      </thead>
+                      <tbody id="userTableBody">
+                          <!-- User table rows injected here -->
+                      </tbody>
+                  </table>
+              </div>
             </div>
         </div>
       </div>

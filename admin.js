@@ -1458,238 +1458,356 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
       }
     }
 
+    window.userViewMode = localStorage.getItem('mrc_user_view_mode') || 'grid';
+
+    window.toggleUserViewMode = function() {
+      window.userViewMode = window.userViewMode === 'grid' ? 'table' : 'grid';
+      localStorage.setItem('mrc_user_view_mode', window.userViewMode);
+      updateUserViewModeUI();
+    };
+
+    function updateUserViewModeUI() {
+      const gridEl = document.getElementById('userBrowser');
+      const tableEl = document.getElementById('userTableWrapper');
+      const labelEl = document.getElementById('userViewModeLabel');
+      const iconEl = document.getElementById('iconUserViewMode');
+
+      if (!gridEl || !tableEl) return;
+
+      if (window.userViewMode === 'table') {
+        gridEl.classList.add('hidden');
+        tableEl.classList.remove('hidden');
+        if (labelEl) labelEl.textContent = 'Grid View';
+        if (iconEl) {
+          iconEl.innerHTML = '<rect x="3" y="3" width="7" height="7"></rect><rect x="14" y="3" width="7" height="7"></rect><rect x="14" y="14" width="7" height="7"></rect><rect x="3" y="14" width="7" height="7"></rect>';
+        }
+      } else {
+        gridEl.classList.remove('hidden');
+        tableEl.classList.add('hidden');
+        if (labelEl) labelEl.textContent = 'Table View';
+        if (iconEl) {
+          iconEl.innerHTML = '<line x1="8" y1="6" x2="21" y2="6"></line><line x1="8" y1="12" x2="21" y2="12"></line><line x1="8" y1="18" x2="21" y2="18"></line><line x1="3" y1="6" x2="3.01" y2="6"></line><line x1="3" y1="12" x2="3.01" y2="12"></line><line x1="3" y1="18" x2="3.01" y2="18"></line>';
+        }
+      }
+    }
+
+    function bindUserActionEvents(cardOrRow, u, email, isBanned) {
+      const btnMake = cardOrRow.querySelector('.btn-make-admin');
+      if (btnMake) {
+        btnMake.onclick = async () => {
+          if (await customConfirm(`Make ${email} an Admin?`)) {
+            await withButtonLoading(btnMake, async () => {
+              await adminAction('add_admin', { targetUserId: u.id, identifier: email });
+              loadUsers();
+            }, 'Updating...');
+          }
+        };
+      }
+
+      const btnRevoke = cardOrRow.querySelector('.btn-revoke');
+      if (btnRevoke) {
+        btnRevoke.onclick = async () => {
+          if (await customConfirm(`Remove admin privileges for ${email}?`)) {
+            await withButtonLoading(btnRevoke, async () => {
+              await adminAction('remove_admin', { identifier: email });
+              loadUsers();
+            }, 'Updating...');
+          }
+        };
+      }
+
+      const btnBan = cardOrRow.querySelector('.btn-ban');
+      if (btnBan) {
+        btnBan.onclick = async () => {
+          const actionText = isBanned ? 'unban' : 'ban';
+          if (await customConfirm(`Are you sure you want to ${actionText} ${email}?`)) {
+            await withButtonLoading(btnBan, async () => {
+              await adminAction('ban_user', { userId: u.id, banned: !isBanned });
+              loadUsers();
+            }, 'Updating...');
+          }
+        };
+      }
+
+      const btnReset = cardOrRow.querySelector('.btn-reset-pwd');
+      if (btnReset) {
+        btnReset.onclick = async () => {
+          const newPassword = await customPrompt(`Enter new password for ${email}:`, 'MrCapsules2026!');
+          if (newPassword && newPassword.trim() !== '') {
+            if (newPassword.trim().length < 6) {
+              customAlert('Password must be at least 6 characters long.');
+              return;
+            }
+            await withButtonLoading(btnReset, async () => {
+              const res = await adminAction('reset_user_password', { userId: u.id, newPassword: newPassword.trim() });
+              if (res && res.success) {
+                showToast('Password for ' + email + ' reset successfully!', 'success');
+              }
+            }, 'Resetting...');
+          }
+        };
+      }
+
+      const btnDel = cardOrRow.querySelector('.btn-del-user');
+      if (btnDel) {
+        btnDel.onclick = async () => {
+          if (await customConfirm(`WARNING: This will permanently delete the user ${email} from the database. This action cannot be undone. Proceed?`)) {
+            await withButtonLoading(btnDel, async () => {
+              await adminAction('delete_user', { userId: u.id });
+              loadUsers();
+            }, 'Deleting...');
+          }
+        };
+      }
+
+      const btnRemoveDiv = cardOrRow.querySelector('.btn-remove-div');
+      if (btnRemoveDiv) {
+        btnRemoveDiv.onclick = async (e) => {
+          const targetEmail = e.target.getAttribute('data-email');
+          if (window.removeMember) {
+            window.removeMember(targetEmail, window.currentDivisionId);
+          }
+        };
+      }
+
+      const devBtns = cardOrRow.querySelectorAll('.btn-block-dev');
+      devBtns.forEach(btn => {
+        btn.onclick = async (e) => {
+          const devId = e.target.getAttribute('data-dev');
+          const currentlyBanned = e.target.getAttribute('data-banned') === 'true';
+          if (!devId) return;
+
+          if (!await customConfirm(`Are you sure you want to ${currentlyBanned ? 'unban' : 'block'} this device?`)) return;
+
+          await withButtonLoading(btn, async () => {
+            try {
+              const cfgData = await adminAction('get_config');
+              if (!cfgData || !cfgData.success) throw new Error(cfgData?.error || "Failed to get config from backend");
+              const configObj = cfgData.config || {};
+              let arr = configObj.bannedDevices || [];
+
+              if (currentlyBanned) {
+                arr = arr.filter(id => id !== devId);
+              } else {
+                if (!arr.includes(devId)) arr.push(devId);
+              }
+
+              await adminAction('update_config', { bannedDevices: arr });
+              window._cachedBannedDevices = arr;
+
+              if (window.sessionRoom) {
+                try {
+                  if (!currentlyBanned) {
+                    await window.sessionRoom.send({ type: 'broadcast', event: 'ban_device', payload: { deviceId: devId } });
+                  } else {
+                    await window.sessionRoom.send({ type: 'broadcast', event: 'unban_device', payload: { deviceId: devId } });
+                  }
+                } catch (realtimeErr) { console.warn('Realtime notify failed:', realtimeErr); }
+              }
+              loadUsers();
+            } catch (err) {
+              customAlert('Error updating config: ' + err.message);
+            }
+          }, 'Updating...');
+        };
+      });
+
+      const deleteDevBtns = cardOrRow.querySelectorAll('.btn-delete-dev');
+      deleteDevBtns.forEach(btn => {
+        btn.onclick = async (e) => {
+          const devId = e.target.getAttribute('data-dev');
+          const targetUserId = e.target.getAttribute('data-userid');
+          const targetEmail = e.target.getAttribute('data-email');
+          if (!devId || !targetUserId) return;
+
+          if (!await customConfirm(`Delete device "${devId.substr(0,14)}..." from user ${targetEmail}?`)) return;
+
+          await withButtonLoading(btn, async () => {
+            try {
+              const res = await adminAction('remove_user_device', { userId: targetUserId, deviceId: devId });
+              if (res && res.success) {
+                showToast(`Device deleted successfully from ${targetEmail}`, 'success');
+                loadUsers();
+              } else {
+                throw new Error(res ? res.error : 'Failed to delete device');
+              }
+            } catch (err) {
+              customAlert('Error deleting device: ' + err.message);
+            }
+          }, 'Deleting...');
+        };
+      });
+    }
+
     function renderUsers(users, bannedDevs) {
       bannedDevs = bannedDevs || [];
-      var userBrowser = document.getElementById('userBrowser');
-      userBrowser.innerHTML = '';
-      if(document.getElementById('itemCount')) document.getElementById('itemCount').textContent = users.length + ' users';
+      const userBrowser = document.getElementById('userBrowser');
+      const userTableBody = document.getElementById('userTableBody');
+      const summaryEl = document.getElementById('userCountSummary');
+      const itemCountEl = document.getElementById('itemCount');
 
-      users.forEach(function(u) {
-        var email = u.email;
-        var meta = u.user_metadata || {};
-        var appMeta = u.app_metadata || {};
-        var username = meta.username || '-';
-        var isBanned = appMeta.banned === true || meta.banned === true;
-        
-        var devices = Array.isArray(meta.devices) ? meta.devices.slice() : [];
-        if (typeof meta.deviceId === 'string' && !devices.some(function(d){ return d.id === meta.deviceId; })) {
-           devices.push({ id: meta.deviceId, added: u.created_at });
+      if (userBrowser) userBrowser.innerHTML = '';
+      if (userTableBody) userTableBody.innerHTML = '';
+
+      let adminCount = 0;
+      let bannedCount = 0;
+      let guestCount = 0;
+
+      users.forEach(u => {
+        const meta = u.user_metadata || {};
+        const appMeta = u.app_metadata || {};
+        if (u.role === 'admin') adminCount++;
+        if (appMeta.banned === true || meta.banned === true) bannedCount++;
+        if (meta.is_guest === true || (!u.email && meta.username?.startsWith('guest_'))) guestCount++;
+      });
+
+      const statsText = `Total: ${users.length} • Admins: ${adminCount} • Banned: ${bannedCount}`;
+      if (summaryEl) summaryEl.textContent = statsText;
+      if (itemCountEl) itemCountEl.textContent = `${users.length} users`;
+
+      if (users.length === 0) {
+        const emptyHtml = '<div style="grid-column: 1 / -1; padding: 48px 24px; color: var(--text-muted); text-align: center; font-family: var(--font-primary); font-size: 15px;">NO MEMBERS FOUND IN THIS VIEW</div>';
+        if (userBrowser) userBrowser.innerHTML = emptyHtml;
+        if (userTableBody) userTableBody.innerHTML = `<tr><td colspan="7" style="padding: 36px; text-align: center; color: var(--text-muted); font-family: var(--font-primary);">NO MEMBERS FOUND</td></tr>`;
+        return;
+      }
+
+      users.forEach(u => {
+        const email = u.email || '';
+        const meta = u.user_metadata || {};
+        const appMeta = u.app_metadata || {};
+        const username = meta.username || email.split('@')[0] || 'Anonymous';
+        const isBanned = appMeta.banned === true || meta.banned === true;
+        const isAdmin = u.role === 'admin';
+        const division = meta.division || '';
+        const isGuest = meta.is_guest === true || username.startsWith('guest_');
+
+        const devices = Array.isArray(meta.devices) ? meta.devices.slice() : [];
+        if (typeof meta.deviceId === 'string' && !devices.some(d => d.id === meta.deviceId)) {
+          devices.push({ id: meta.deviceId, added: u.created_at });
         }
-        
-        var isAdmin = u.role === 'admin';
-        var division = meta.division || '';
 
-        var card = document.createElement('div');
-        card.className = 'user-card';
-        card.style.display = 'flex';
-        card.style.flexDirection = 'column';
-        
-        var badgesHtml = '';
+        let initials = (username.length >= 2 ? username.substring(0, 2) : username).toUpperCase();
+        if (!initials.trim()) initials = 'U';
+
+        let badgesHtml = '';
         if (isAdmin) badgesHtml += '<span class="badge badge-admin">ADMIN</span>';
-        if (division) badgesHtml += '<span class="badge badge-division">' + division + '</span>';
+        else badgesHtml += '<span class="badge badge-member">MEMBER</span>';
+        if (division) badgesHtml += `<span class="badge badge-division">${sanitize(division.toUpperCase())}</span>`;
         if (isBanned) badgesHtml += '<span class="badge badge-banned">BANNED</span>';
+        if (isGuest) badgesHtml += '<span class="badge badge-guest">GUEST</span>';
 
-        // Build devices HTML using string concat to avoid nested template literal issues
-        var devicesHtml = '';
+        let deviceRowsHtml = '';
         if (devices.length > 0) {
-           var devRows = '';
-           for (var di = 0; di < devices.length; di++) {
-              var dev = devices[di];
-              var isDevBanned = bannedDevs.includes(dev.id);
-              devRows += '<div style="display:flex; justify-content:space-between; align-items:center; padding: 6px 0; border-bottom: 1px solid var(--border-light);">';
-              devRows += '<span style="font-family:var(--font-mono); font-size:13px; max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="' + dev.id + '">' + dev.id.substr(0,14) + '...</span>';
-              devRows += '<div style="display:flex; gap: 6px;">';
-              devRows += '<button class="btn-card ' + (isDevBanned ? 'primary' : 'danger') + ' btn-block-dev" data-dev="' + dev.id + '" data-banned="' + isDevBanned + '">';
-              devRows += (isDevBanned ? 'Unban' : 'Block');
-              devRows += '</button>';
-              devRows += '<button class="btn-card danger btn-delete-dev" data-dev="' + dev.id + '" data-userid="' + u.id + '" data-email="' + email + '" title="Remove Device">';
-              devRows += 'Delete';
-              devRows += '</button></div></div>';
-           }
-           devicesHtml = '<div style="margin-top:14px; font-size:13.5px; color:var(--text-main); border-top:1px solid var(--border-light); padding-top:12px;">';
-           devicesHtml += '<div style="font-weight:700; margin-bottom:8px;">Known Devices (' + devices.length + ')</div>';
-           devicesHtml += devRows + '</div>';
-        } else {
-           devicesHtml = '<div style="margin-top:14px; font-size:13.5px; color:var(--text-muted); border-top:1px solid var(--border-light); padding-top:12px;">No known devices yet.</div>';
+          devices.forEach(dev => {
+            const isDevBanned = bannedDevs.includes(dev.id);
+            deviceRowsHtml += `
+              <div class="user-device-item">
+                <span class="user-device-id" title="${sanitize(dev.id)}">${sanitize(dev.id.substring(0, 16))}...</span>
+                <div class="user-device-actions">
+                  <button class="btn-dev-action ${isDevBanned ? '' : 'danger'} btn-block-dev" data-dev="${sanitize(dev.id)}" data-banned="${isDevBanned}">
+                    ${isDevBanned ? 'Unban' : 'Block'}
+                  </button>
+                  <button class="btn-dev-action danger btn-delete-dev" data-dev="${sanitize(dev.id)}" data-userid="${sanitize(u.id)}" data-email="${sanitize(email)}" title="Remove Device">
+                    Delete
+                  </button>
+                </div>
+              </div>
+            `;
+          });
         }
 
-        // Build card actions
-        var actionsHtml = '';
+        let actionsHtml = '';
         if (window.isSuperAdmin) {
           if (window.currentDivisionId && window.currentDivisionId !== 'all') {
-             actionsHtml += '<button class="btn-card danger btn-remove-div" data-email="' + email + '">Remove from Division</button>';
+            actionsHtml += `<button class="btn-card danger btn-remove-div" data-email="${sanitize(email)}">Remove Div</button>`;
           }
           if (isAdmin) {
-            actionsHtml += '<button class="btn-card btn-revoke" data-target="' + email + '">Revoke Admin</button>';
+            actionsHtml += `<button class="btn-card btn-revoke" data-target="${sanitize(email)}">Revoke Admin</button>`;
           } else {
-            actionsHtml += '<button class="btn-card primary btn-make-admin" data-target="' + email + '">Make Admin</button>';
+            actionsHtml += `<button class="btn-card primary btn-make-admin" data-target="${sanitize(email)}">Make Admin</button>`;
           }
-          actionsHtml += '<button class="btn-card ' + (isBanned ? 'primary' : 'danger') + ' btn-ban" data-id="' + u.id + '" data-banned="' + isBanned + '">';
-          actionsHtml += (isBanned ? 'Unban' : 'Ban') + '</button>';
-          actionsHtml += '<button class="btn-card primary btn-reset-pwd" data-id="' + u.id + '">Reset Pwd</button>';
-          actionsHtml += '<button class="btn-card danger btn-del-user" data-id="' + u.id + '">Delete</button>';
+          actionsHtml += `<button class="btn-card ${isBanned ? 'primary' : 'danger'} btn-ban" data-id="${sanitize(u.id)}" data-banned="${isBanned}">${isBanned ? 'Unban' : 'Ban'}</button>`;
+          actionsHtml += `<button class="btn-card primary btn-reset-pwd" data-id="${sanitize(u.id)}">Reset Pwd</button>`;
+          actionsHtml += `<button class="btn-card danger btn-del-user" data-id="${sanitize(u.id)}">Delete</button>`;
         }
 
-        card.setAttribute('data-banned', isBanned ? 'true' : 'false');
-        card.setAttribute('data-admin', isAdmin ? 'true' : 'false');
-        card.setAttribute('data-online', 'false');
+        // Render Card for Grid View
+        if (userBrowser) {
+          const card = document.createElement('div');
+          card.className = 'user-card';
+          card.setAttribute('data-banned', isBanned ? 'true' : 'false');
+          card.setAttribute('data-admin', isAdmin ? 'true' : 'false');
+          card.setAttribute('data-online', 'false');
+          card.setAttribute('data-guest', isGuest ? 'true' : 'false');
 
-        let displayUsername = username !== '-' ? username : email.split('@')[0];
-        card.innerHTML = '<div class="user-card-header">' +
-          '<div><div class="user-email" style="text-transform: uppercase;">' + sanitize(displayUsername) + '</div>' +
-          '<div class="user-meta">' + sanitize(email) + ' &bull; ' + new Date(u.created_at).toLocaleDateString() + '</div></div>' +
-          '<div class="user-badges">' + badgesHtml + '</div></div>' +
-          '<div class="card-actions">' + actionsHtml + '</div>' +
-          devicesHtml;
+          const joinedDate = u.created_at ? new Date(u.created_at).toLocaleDateString() : '-';
 
-        const btnMake = card.querySelector('.btn-make-admin');
-        if (btnMake) {
-          btnMake.onclick = async (e) => {
-            if(await customConfirm(`Make ${email} an Admin?`)) {
-              await withButtonLoading(btnMake, async () => {
-                await adminAction('add_admin', { targetUserId: u.id, identifier: email });
-                loadUsers();
-              }, 'Updating...');
-            }
-          };
+          card.innerHTML = `
+            <div class="user-card-header">
+              <div class="user-avatar-badge">${sanitize(initials)}</div>
+              <div class="user-card-main-info">
+                <div class="user-card-top-line">
+                  <div class="user-username">${sanitize(username)}</div>
+                </div>
+                <div class="user-email-text" title="${sanitize(email)}">${sanitize(email || 'No email registered')}</div>
+                <div class="user-badges-wrap">${badgesHtml}</div>
+              </div>
+            </div>
+            <div style="display:flex; justify-content:space-between; font-size:12px; color:var(--text-muted); font-family:var(--font-secondary); padding: 2px 0;">
+              <span>Joined: ${joinedDate}</span>
+              <span>${devices.length} Device${devices.length === 1 ? '' : 's'}</span>
+            </div>
+            ${devices.length > 0 ? `
+              <div class="user-device-drawer">
+                <div class="user-device-drawer-header btn-toggle-dev-list" onclick="const dl = this.nextElementSibling; dl.style.display = (dl.style.display === 'none' || !dl.style.display) ? 'flex' : 'none';">
+                  <span class="device-count-badge">Devices Registered (${devices.length})</span>
+                  <span>Toggle List &darr;</span>
+                </div>
+                <div class="user-device-list" style="display:none;">
+                  ${deviceRowsHtml}
+                </div>
+              </div>
+            ` : ''}
+            <div class="card-actions">${actionsHtml}</div>
+          `;
+
+          bindUserActionEvents(card, u, email, isBanned);
+          userBrowser.appendChild(card);
         }
 
-        const btnRevoke = card.querySelector('.btn-revoke');
-        if (btnRevoke) {
-          btnRevoke.onclick = async (e) => {
-            if(await customConfirm(`Remove admin privileges for ${email}?`)) {
-              await withButtonLoading(btnRevoke, async () => {
-                await adminAction('remove_admin', { identifier: email });
-                loadUsers();
-              }, 'Updating...');
-            }
-          };
+        // Render Row for Table View
+        if (userTableBody) {
+          const tr = document.createElement('tr');
+          tr.className = 'user-table-row';
+          tr.setAttribute('data-banned', isBanned ? 'true' : 'false');
+          tr.setAttribute('data-admin', isAdmin ? 'true' : 'false');
+          tr.setAttribute('data-online', 'false');
+          tr.setAttribute('data-guest', isGuest ? 'true' : 'false');
+
+          const joinedDate = u.created_at ? new Date(u.created_at).toLocaleDateString() : '-';
+
+          tr.innerHTML = `
+            <td>
+              <div style="display:flex; align-items:center; gap:8px;">
+                <div class="user-avatar-badge" style="width:28px; height:28px; min-width:28px; font-size:11px;">${sanitize(initials)}</div>
+                <span style="font-weight:700; color:var(--c3); font-family:var(--font-primary);">${sanitize(username)}</span>
+              </div>
+            </td>
+            <td><span class="user-email-text" style="font-size:13px;">${sanitize(email || '-')}</span></td>
+            <td><span class="badge badge-division">${sanitize(division ? division.toUpperCase() : 'NONE')}</span></td>
+            <td>${isAdmin ? '<span class="badge badge-admin">ADMIN</span>' : '<span class="badge badge-member">MEMBER</span>'}</td>
+            <td><span style="font-family:var(--font-secondary); font-size:12.5px;">${devices.length} Dev</span></td>
+            <td><span style="font-family:var(--font-secondary); font-size:12px; color:var(--text-muted);">${joinedDate}</span></td>
+            <td><div class="user-table-actions">${actionsHtml}</div></td>
+          `;
+
+          bindUserActionEvents(tr, u, email, isBanned);
+          userTableBody.appendChild(tr);
         }
-
-        const btnBan = card.querySelector('.btn-ban');
-        if (btnBan) {
-          btnBan.onclick = async (e) => {
-            const actionText = isBanned ? 'unban' : 'ban';
-            if(await customConfirm(`Are you sure you want to ${actionText} ${email}?`)) {
-              await withButtonLoading(btnBan, async () => {
-                await adminAction('ban_user', { userId: u.id, banned: !isBanned });
-                loadUsers();
-              }, 'Updating...');
-            }
-          };
-        }
-
-        const btnReset = card.querySelector('.btn-reset-pwd');
-        if (btnReset) {
-          btnReset.onclick = async (e) => {
-            const newPassword = await customPrompt(`Enter new password for ${email}:`, 'MrCapsules2026!');
-            if (newPassword && newPassword.trim() !== '') {
-              if (newPassword.trim().length < 6) {
-                customAlert('Password must be at least 6 characters long.');
-                return;
-              }
-              await withButtonLoading(btnReset, async () => {
-                const res = await adminAction('reset_user_password', { userId: u.id, newPassword: newPassword.trim() });
-                if (res && res.success) {
-                  showToast('Password for ' + email + ' reset successfully!', 'success');
-                }
-              }, 'Resetting...');
-            }
-          };
-        }
-
-        const btnDel = card.querySelector('.btn-del-user');
-        if (btnDel) {
-          btnDel.onclick = async (e) => {
-            if(await customConfirm(`WARNING: This will permanently delete the user ${email} from the database. This action cannot be undone. Proceed?`)) {
-              await withButtonLoading(btnDel, async () => {
-                await adminAction('delete_user', { userId: u.id });
-                loadUsers();
-              }, 'Deleting...');
-            }
-          };
-        }
-
-        const btnRemoveDiv = card.querySelector('.btn-remove-div');
-        if (btnRemoveDiv) {
-          btnRemoveDiv.onclick = async (e) => {
-             const targetEmail = e.target.getAttribute('data-email');
-             if(window.removeMember) {
-                 window.removeMember(targetEmail, window.currentDivisionId);
-             }
-          };
-        }
-
-        const devBtns = card.querySelectorAll('.btn-block-dev');
-        devBtns.forEach(btn => {
-          btn.onclick = async (e) => {
-             const devId = e.target.getAttribute('data-dev');
-             const currentlyBanned = e.target.getAttribute('data-banned') === 'true';
-             if(!devId) return;
-             
-             if(!await customConfirm(`Are you sure you want to ${currentlyBanned ? 'unban' : 'block'} this device?`)) return;
-             
-             await withButtonLoading(btn, async () => {
-               try {
-                  const cfgData = await adminAction('get_config');
-                  if (!cfgData || !cfgData.success) throw new Error(cfgData?.error || "Failed to get config from backend");
-                  const configObj = cfgData.config || {};
-                  let arr = configObj.bannedDevices || [];
-                  
-                  if (currentlyBanned) {
-                     arr = arr.filter(id => id !== devId);
-                  } else {
-                     if(!arr.includes(devId)) arr.push(devId);
-                  }
-                  
-                  await adminAction('update_config', { bannedDevices: arr });
-                  window._cachedBannedDevices = arr; // Update cache immediately
-                  
-                  if (window.sessionRoom) {
-                     try {
-                       if (!currentlyBanned) {
-                          await window.sessionRoom.send({ type: 'broadcast', event: 'ban_device', payload: { deviceId: devId } });
-                       } else {
-                          await window.sessionRoom.send({ type: 'broadcast', event: 'unban_device', payload: { deviceId: devId } });
-                       }
-                     } catch(realtimeErr) { console.warn('Realtime notify failed:', realtimeErr); }
-                  }
-                  loadUsers();
-               } catch(err) {
-                  customAlert('Error updating config: ' + err.message);
-               }
-             }, 'Updating...');
-          };
-        });
-
-        const deleteDevBtns = card.querySelectorAll('.btn-delete-dev');
-        deleteDevBtns.forEach(btn => {
-          btn.onclick = async (e) => {
-             const devId = e.target.getAttribute('data-dev');
-             const targetUserId = e.target.getAttribute('data-userid');
-             const targetEmail = e.target.getAttribute('data-email');
-             if (!devId || !targetUserId) return;
-
-             if (!await customConfirm(`Delete device "${devId.substr(0,14)}..." from user ${targetEmail}?`)) return;
-
-             await withButtonLoading(btn, async () => {
-               try {
-                  const res = await adminAction('remove_user_device', { userId: targetUserId, deviceId: devId });
-                  if (res && res.success) {
-                     showToast(`Device deleted successfully from ${targetEmail}`, 'success');
-                     loadUsers();
-                  } else {
-                     throw new Error(res ? res.error : 'Failed to delete device');
-                  }
-               } catch(err) {
-                  customAlert('Error deleting device: ' + err.message);
-               }
-             }, 'Deleting...');
-          };
-        });
-
-        userBrowser.appendChild(card);
       });
+
+      updateUserViewModeUI();
       if (window.applyUserFilters) window.applyUserFilters();
     }
 
@@ -1735,38 +1853,52 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
     window.currentFilter = 'all';
     window.applyUserFilters = function() {
         const searchInput = document.getElementById('searchUsersInput');
-        const val = searchInput ? searchInput.value.toLowerCase() : '';
+        const val = searchInput ? searchInput.value.toLowerCase().trim() : '';
         const cards = document.querySelectorAll('#userBrowser .user-card');
+        const rows = document.querySelectorAll('#userTableBody .user-table-row');
         
-        cards.forEach(card => {
+        let visibleCount = 0;
+
+        function checkMatch(el) {
             let show = true;
-            
-            if (window.currentFilter === 'banned') show = card.getAttribute('data-banned') === 'true';
-            else if (window.currentFilter === 'admin') show = card.getAttribute('data-admin') === 'true';
-            else if (window.currentFilter === 'online') show = card.getAttribute('data-online') === 'true';
-            
+            if (window.currentFilter === 'banned') show = el.getAttribute('data-banned') === 'true';
+            else if (window.currentFilter === 'admin') show = el.getAttribute('data-admin') === 'true';
+            else if (window.currentFilter === 'online') show = el.getAttribute('data-online') === 'true';
+            else if (window.currentFilter === 'guest') show = el.getAttribute('data-guest') === 'true';
+
             if (show && val) {
-                const email = (card.querySelector('.user-email')?.textContent || '').toLowerCase();
-                const meta = (card.querySelector('.user-meta')?.textContent || '').toLowerCase();
-                if (!email.includes(val) && !meta.includes(val)) {
+                const text = (el.textContent || '').toLowerCase();
+                if (!text.includes(val)) {
                     show = false;
                 }
             }
+            return show;
+        }
+
+        cards.forEach(card => {
+            const show = checkMatch(card);
             card.style.display = show ? '' : 'none';
+            if (show) visibleCount++;
         });
+
+        rows.forEach(row => {
+            const show = checkMatch(row);
+            row.style.display = show ? '' : 'none';
+        });
+
+        const counterEl = document.getElementById('userCountSummary');
+        if (counterEl) {
+            const total = (window.lastLoadedUsers || []).length;
+            counterEl.textContent = `Showing ${visibleCount}/${total} Members`;
+        }
     };
 
-    // User filter tabs
-    document.querySelectorAll('.user-filter').forEach(function(btn) {
-      btn.onclick = function() {
-        document.querySelectorAll('.user-filter').forEach(function(b) {
-          b.classList.remove('active');
-        });
-        btn.classList.add('active');
-        window.currentFilter = btn.getAttribute('data-filter') || 'all';
-        if(window.applyUserFilters) window.applyUserFilters();
-      };
-    });
+    const searchUsersInputEl = document.getElementById('searchUsersInput');
+    if (searchUsersInputEl) {
+      searchUsersInputEl.addEventListener('input', () => {
+        if (window.applyUserFilters) window.applyUserFilters();
+      });
+    }
 
     // User polling removed in favor of Supabase realtime channel (users_changed)
 
