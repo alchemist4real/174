@@ -57,7 +57,7 @@
     </div>
   </div>
   <div class="credit-footer">
-    MAINTAINED BY MR CAPSULES COMMUNITY • <a href="/docs.html" target="_blank" style="color: inherit; text-decoration: underline;">READ DOCS</a>
+    Maintained by Mr. Capsules Community • <a href="/docs.html" target="_blank" style="color: inherit; text-decoration: underline;">READ DOCS</a>
   </div>
 </div>
 
@@ -72,7 +72,7 @@
   </button>
   <div class="brand">
     <img src="/logo.svg" alt="logo">
-    <span>MR CAPSULES</span>
+    <span>Mr. Capsules</span>
   </div>
   <div class="greeting" id="greetingText"></div>
 
@@ -81,7 +81,7 @@
   </div>
 
   <div class="now-title">
-    <div class="t-s" id="nowSong">MR CAPSULES</div>
+    <div class="t-s" id="nowSong">Mr. Capsules</div>
     <div class="t-a" id="nowArtist">Loading content</div>
   </div>
 
@@ -89,7 +89,7 @@
     <div class="left-ctrl">
       <div class="mini-thumb" id="mThumb"><img id="mImg" src="" style="display:none;"></div>
       <div class="mini-info">
-        <div class="mini-s" id="mSong">MR CAPSULES</div>
+        <div class="mini-s" id="mSong">Mr. Capsules</div>
         <div class="mini-a" id="mArtist">Select a block</div>
       </div>
     </div>
@@ -125,7 +125,7 @@
       </button>
     </div>
   </div>
-  <div class="credit-footer">MAINTAINED BY MR CAPSULES COMMUNITY</div>
+  <div class="credit-footer">Maintained by Mr. Capsules Community</div>
 </div>
 
 <!-- SETTINGS MODAL -->
@@ -158,15 +158,13 @@
         </div>
       </div>
       <div>
-        <div class="settings-section-title">APPEARANCE</div>
+        <div class="settings-section-title">PREFERENCES</div>
         <div class="stat-block" style="margin-bottom:12px;">
-          <div class="stat-item" style="flex-direction:column; align-items:flex-start; gap:8px;">
-            <span class="stat-label">THEME</span>
-            <div style="display:flex; width:100%; gap:4px;" id="themeToggles">
-              <button class="auth-btn auth-btn-outline theme-btn active" data-theme-val="light" style="flex:1; padding:6px; font-size:10px;">LIGHT</button>
-              <button class="auth-btn auth-btn-outline theme-btn" data-theme-val="dark" style="flex:1; padding:6px; font-size:10px;">DARK</button>
-              <button class="auth-btn auth-btn-outline theme-btn" data-theme-val="mrs" style="flex:1; padding:6px; font-size:10px;">Mrs.</button>
-              <button class="auth-btn auth-btn-outline theme-btn" data-theme-val="device" style="flex:1; padding:6px; font-size:10px;">DEVICE</button>
+          <div class="stat-item" style="flex-direction:row; align-items:center; justify-content:space-between; width:100%;">
+            <span class="stat-label">PERSONA<br><span style="opacity:0.5; font-size:9px;">Mr. / Mrs. Title</span></span>
+            <div style="display:flex; gap:4px;" id="personaToggles">
+              <button class="auth-btn auth-btn-outline persona-btn active" data-persona="mr" style="padding:4px 10px; font-size:10px;">Mr.</button>
+              <button class="auth-btn auth-btn-outline persona-btn" data-persona="mrs" style="padding:4px 10px; font-size:10px;">Mrs.</button>
             </div>
           </div>
           <div class="stat-divider" style="margin: 8px 0;"></div>
@@ -188,7 +186,7 @@
         <div class="settings-section-title">DOCUMENTATION</div>
         <div class="stat-block" style="margin-bottom:24px;">
           <div class="stat-item" style="flex-direction:row; align-items:center; justify-content:space-between; width:100%;">
-            <span class="stat-label">MR-CAPSULES DOCS<br><span style="opacity:0.5; font-size:9px;">VIEW GUIDE & INFO</span></span>
+            <span class="stat-label">Mr. Capsules Docs<br><span style="opacity:0.5; font-size:9px;">VIEW GUIDE & INFO</span></span>
             <a href="/docs.html" target="_blank" style="text-decoration:none;">
               <button class="auth-btn auth-btn-outline" style="padding:6px 12px; font-size:10px; display:flex; align-items:center; gap:4px;">
                 <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
@@ -253,24 +251,28 @@
 
 <script src="data.js"></script>
 <script>
-/* ══ THEME ENGINE ══ */
-const themeToggles = document.querySelectorAll('.theme-btn');
-let currentThemeMode = 'light';
+/* ══ PERSONA ENGINE ══ */
+const personaToggles = document.querySelectorAll('.persona-btn');
+let currentPersona = 'mr';
 try {
-  currentThemeMode = localStorage.getItem('mr_theme') || 'light';
+  currentPersona = localStorage.getItem('mr_persona') || 'mr';
 } catch(e) {}
 
 function walkAndReplaceMR(node, isMrs) {
-  if (node.nodeName === 'SCRIPT' || node.nodeName === 'STYLE') return;
+  if (!node) return;
+  if (node.nodeName === 'SCRIPT' || node.nodeName === 'STYLE' || node.nodeName === 'IFRAME' || node.nodeName === 'CODE' || node.nodeName === 'PRE' || node.nodeName === 'INPUT' || node.nodeName === 'TEXTAREA') return;
   if (node.nodeType === 3) {
+    if (node.originalValue === undefined) node.originalValue = node.nodeValue;
     if (isMrs) {
-      if (node.originalValue === undefined) node.originalValue = node.nodeValue;
       if (/mr/i.test(node.originalValue)) {
-         node.nodeValue = node.originalValue
-           .replace(/\bMr\./g, 'Mrs.')
-           .replace(/\bMR\b/g, 'MRS')
-           .replace(/\bMr\b/g, 'Mrs')
-           .replace(/\bmr\b/g, 'mrs');
+        node.nodeValue = node.originalValue
+          .replace(/\bMr\.\s*Capsules\b/g, 'Mrs. Capsules')
+          .replace(/\bMR\.\s*CAPSULES\b/g, 'MRS. CAPSULES')
+          .replace(/\bMR\s+CAPSULES\b/g, 'MRS CAPSULES')
+          .replace(/\bMr\.\b/g, 'Mrs.')
+          .replace(/\bMR\b/g, 'MRS')
+          .replace(/\bMr\b/g, 'Mrs')
+          .replace(/\bmr\b/g, 'mrs');
       }
     } else {
       if (node.originalValue !== undefined) node.nodeValue = node.originalValue;
@@ -280,58 +282,43 @@ function walkAndReplaceMR(node, isMrs) {
   }
 }
 
-function applyTheme(mode) {
-  let isDark = false;
-  let isMrs = false;
-  
-  if (mode === 'device') {
-    isDark = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)').matches : false;
-  } else if (mode === 'mrs') {
-    isMrs = true;
-  } else {
-    isDark = (mode === 'dark');
-  }
-  
+function applyPersona(p) {
+  currentPersona = (p === 'mrs') ? 'mrs' : 'mr';
+  const isMrs = (currentPersona === 'mrs');
+
+  if (document.originalTitle === undefined) document.originalTitle = document.title;
   if (isMrs) {
-    document.documentElement.setAttribute('data-theme', 'mrs');
-  } else if (isDark) {
-    document.documentElement.setAttribute('data-theme', 'dark');
+    document.title = document.originalTitle
+      .replace(/\bMr\.\s*Capsules\b/g, 'Mrs. Capsules')
+      .replace(/\bMr\./g, 'Mrs.')
+      .replace(/\bMR\b/g, 'MRS')
+      .replace(/\bMr\b/g, 'Mrs');
   } else {
-    document.documentElement.removeAttribute('data-theme');
+    document.title = document.originalTitle;
   }
-  
+
   walkAndReplaceMR(document.body, isMrs);
-  
-  themeToggles.forEach(btn => {
-    btn.classList.toggle('active', btn.getAttribute('data-theme-val') === mode);
+
+  personaToggles.forEach(btn => {
+    btn.classList.toggle('active', btn.getAttribute('data-persona') === currentPersona);
   });
 }
 
-// Initial apply
-applyTheme(currentThemeMode);
+applyPersona(currentPersona);
 
-// Listen for system theme changes if in device mode
-if (window.matchMedia) {
-  window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
-    if (currentThemeMode === 'device') applyTheme('device');
-  });
-}
-
-themeToggles.forEach(btn => {
+personaToggles.forEach(btn => {
   btn.addEventListener('click', () => {
-    const val = btn.getAttribute('data-theme-val');
-    currentThemeMode = val;
+    const val = btn.getAttribute('data-persona');
     try {
-      localStorage.setItem('mr_theme', val);
+      localStorage.setItem('mr_persona', val);
     } catch(e) {}
-    applyTheme(val);
+    applyPersona(val);
   });
 });
 
 window.addEventListener('storage', (e) => {
-  if (e.key === 'mr_theme' || e.key === 'theme') {
-    currentThemeMode = e.newValue;
-    applyTheme(e.newValue);
+  if (e.key === 'mr_persona') {
+    applyPersona(e.newValue || 'mr');
   }
 });
 
@@ -517,6 +504,9 @@ function buildCoverflow(startIndex) {
   }
   
   updateBackButton();
+  if (typeof currentPersona !== 'undefined' && currentPersona === 'mrs') {
+    walkAndReplaceMR(cf, true);
+  }
 }
 
 function updateBackButton() {
@@ -1776,7 +1766,7 @@ try {
       {
         target: '#btnSettings',
         title: 'Settings & Account',
-        text: "Manage your themes, network status, and account here. Let's open settings now so you can set your Username!"
+        text: "Manage your preferences, network status, and account here. Let's open settings now so you can set your Username!"
       }
     ];
     

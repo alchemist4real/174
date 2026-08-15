@@ -48,11 +48,6 @@
       </div>
     </div>
 
-    <div id="adminThemeToggles" class="docs-theme-toggles">
-      <button class="btn-unified admin-theme-btn-unified theme-toggle-btn" data-theme-val="light">LIGHT</button>
-      <button class="btn-unified admin-theme-btn-unified theme-toggle-btn" data-theme-val="dark">DARK</button>
-      <button class="btn-unified admin-theme-btn-unified theme-toggle-btn" data-theme-val="mrs">MRS.</button>
-    </div>
   </div>
   
   <div class="docs-content-area">
@@ -646,7 +641,7 @@ Buat semua task tersebut satu per satu.&rdquo;</pre>
       <li>Gunakan <strong>Prompt Formal</strong> yang sudah disediakan di bagian 3 dokumentasi ini.</li>
     </ul>
   </li>
-<div class="alert-box" style="border-left-color:#22c55e;">
+<div class="alert-box">
   <strong>SELURUH WORKFLOW BISA DIJALANKAN MURNI VIA CLAUDE CONNECTOR</strong><br>
   Semua langkah di atas — dari claim task, membaca template, prompting, sampai upload &amp; submit — bisa dilakukan <strong>100% lewat chat Claude.ai</strong> yang terhubung ke MCP MR-CAPSULES, <em>tanpa perlu membuka Admin Panel sama sekali</em>.<br><br>
   <strong>Satu-satunya pengecualian:</strong> upload file referensi materi (PPT Lecture, Modul Praktikum, Naskah Soal) <strong>tidak bisa lewat Claude Connector</strong> karena file itu ada di perangkat lokal kamu. File referensi harus dilampirkan langsung ke chat Claude secara manual sebelum prompting.
@@ -913,7 +908,7 @@ Keluarkan seluruh kode HTML utuh tanpa potongan agar siap saya simpan langsung k
         <h2>3. Jalur A &mdash; Patch Langsung via MCP (Claude Connector)</h2>
         <p>Ini adalah jalur tercepat untuk memperbaiki kesalahan minor tanpa harus melibatkan Developer. Reviewer cukup chat ke Claude.ai (dengan MCP MR-CAPSULES aktif) atau Antigravity CLI.</p>
 
-        <div class="alert-box" style="border-left-color:#22c55e;">
+        <div class="alert-box">
           <strong>SELURUH PROSES PATCH BISA DILAKUKAN MURNI VIA CLAUDE CONNECTOR</strong><br>
           Tidak perlu membuka code editor, tidak perlu tahu cara edit HTML. Cukup chat ke Claude dengan informasi yang jelas &mdash; Claude yang akan membaca file, menemukan soal yang dimaksud, dan memperbaikinya langsung di server.
         </div>
@@ -1079,7 +1074,7 @@ Tolong update explanation soal nomor 13 di file tersebut."</pre>
           </tbody>
         </table>
 
-        <div class="alert-box" style="border-left-color:#22c55e;">
+        <div class="alert-box">
           <strong>CHECKLIST SEBELUM APPROVE:</strong>
           <ul style="margin:8px 0 0 0;padding-left:20px;">
             <li>Semua kunci jawaban benar secara medis</li>
@@ -1128,57 +1123,54 @@ Tolong update explanation soal nomor 13 di file tersebut."</pre>
     document.addEventListener('DOMContentLoaded', initTabs);
     initTabs();
 
-    const savedTheme = localStorage.getItem('mr_theme') || localStorage.getItem('theme');
-    if (savedTheme) {
-      document.documentElement.setAttribute('data-theme', savedTheme === 'light' ? '' : savedTheme);
-      if (savedTheme === 'light') document.documentElement.removeAttribute('data-theme');
-      else document.documentElement.setAttribute('data-theme', savedTheme);
-    } else {
-      document.documentElement.setAttribute('data-theme', 'dark');
-    }
-
-    const themeButtons = document.querySelectorAll('.admin-theme-btn-unified');
-    function updateActiveThemeBtn(val) {
-      if (!val) val = 'light';
-      themeButtons.forEach(b => {
-        if (b.getAttribute('data-theme-val') === val) {
-          b.style.fontWeight = 'bold';
-          b.style.border = '2px solid var(--accent)';
-          b.classList.add('active');
+    /* ══ PERSONA ENGINE (Synced from Main Site) ══ */
+    function walkAndReplaceMR(node, isMrs) {
+      if (!node) return;
+      if (node.nodeName === 'SCRIPT' || node.nodeName === 'STYLE' || node.nodeName === 'IFRAME' || node.nodeName === 'CODE' || node.nodeName === 'PRE' || node.nodeName === 'INPUT' || node.nodeName === 'TEXTAREA') return;
+      if (node.nodeType === 3) {
+        if (node.originalValue === undefined) node.originalValue = node.nodeValue;
+        if (isMrs) {
+          if (/mr/i.test(node.originalValue)) {
+            node.nodeValue = node.originalValue
+              .replace(/\bMr\.\s*Capsules\b/g, 'Mrs. Capsules')
+              .replace(/\bMR\.\s*CAPSULES\b/g, 'MRS. CAPSULES')
+              .replace(/\bMR\s+CAPSULES\b/g, 'MRS CAPSULES')
+              .replace(/\bMr\.\b/g, 'Mrs.')
+              .replace(/\bMR\b/g, 'MRS')
+              .replace(/\bMr\b/g, 'Mrs')
+              .replace(/\bmr\b/g, 'mrs');
+          }
         } else {
-          b.style.fontWeight = 'normal';
-          b.style.border = '1px solid transparent';
-          b.classList.remove('active');
+          if (node.originalValue !== undefined) node.nodeValue = node.originalValue;
         }
-      });
+      } else if (node.nodeType === 1) {
+        node.childNodes.forEach(child => walkAndReplaceMR(child, isMrs));
+      }
     }
 
-    function applyDocsTheme(mode) {
-      if (!mode || mode === 'light') {
-        document.documentElement.removeAttribute('data-theme');
+    function applyDocsPersona(p) {
+      const isMrs = (p === 'mrs');
+      if (document.originalTitle === undefined) document.originalTitle = document.title;
+      if (isMrs) {
+        document.title = document.originalTitle
+          .replace(/\bMr\.\s*Capsules\b/g, 'Mrs. Capsules')
+          .replace(/\bMr\./g, 'Mrs.')
+          .replace(/\bMR\b/g, 'MRS')
+          .replace(/\bMr\b/g, 'Mrs');
       } else {
-        document.documentElement.setAttribute('data-theme', mode);
+        document.title = document.originalTitle;
       }
-      updateActiveThemeBtn(mode);
+      walkAndReplaceMR(document.body, isMrs);
     }
 
-    themeButtons.forEach(btn => {
-      btn.addEventListener('click', () => {
-        const v = btn.getAttribute('data-theme-val');
-        localStorage.setItem('mr_theme', v);
-        applyDocsTheme(v);
-      });
-    });
+    const savedPersona = localStorage.getItem('mr_persona') || 'mr';
+    applyDocsPersona(savedPersona);
 
-    // Cross-tab theme sync (matches index.html and admin.js)
     window.addEventListener('storage', (e) => {
-      if (e.key === 'mr_theme' || e.key === 'theme') {
-        applyDocsTheme(e.newValue);
+      if (e.key === 'mr_persona') {
+        applyDocsPersona(e.newValue || 'mr');
       }
     });
-
-    const currentTheme = savedTheme || 'dark';
-    updateActiveThemeBtn(currentTheme);
   </script>
 </body>
 </html>

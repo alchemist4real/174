@@ -1,11 +1,11 @@
 # Graph Report - MR-CAPSULES-main  (2026-08-15)
 
 ## Corpus Check
-- 356 files · ~27,418,748 words
+- 354 files · ~27,396,711 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 8455 nodes · 15236 edges · 354 communities (340 shown, 14 thin omitted)
+- 8449 nodes · 15232 edges · 352 communities (338 shown, 14 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 343 edges (avg confidence: 0.5)
 - Token cost: 0 input · 0 output
 
@@ -350,7 +350,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (354 total, 14 thin omitted)
+## Communities (352 total, 14 thin omitted)
 
 ### Community 0 - "2.4 CBT 2_K20C AM I CINEMATIC.html"
 Cohesion: 0.06
@@ -1556,11 +1556,9 @@ Nodes (3): download(), fontDir, zipPath
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `4a. Core Core Infrastructure Modifications — `admin.js`` connect `4a. Core Core Infrastructure Modifications — `admin.js`` to `4. Frontend Application Logic`?**
+- **Why does `4b. Workflow Logic Enhancements — `admin-workflow.js`` connect `4b. Workflow Logic Enhancements — `admin-workflow.js`` to `Priority Badges injection logic inside Kanban Board and Syllabus Tables:`, `4. Frontend Application Logic`?**
   _High betweenness centrality (0.000) - this node is a cross-community bridge._
-- **Why does `Admin Page Feature Expansion — Unified Comprehensive Implementation Plan` connect `Admin Page Feature Expansion — Unified Comprehensive Implementation Plan` to `2. Backend Serverless API Implementation`, `5. Verification & Testing Protocol`, `4. Frontend Application Logic`?**
-  _High betweenness centrality (0.000) - this node is a cross-community bridge._
-- **Why does `4. Frontend Application Logic` connect `4. Frontend Application Logic` to `Admin Page Feature Expansion — Unified Comprehensive Implementation Plan`, `4a. Core Core Infrastructure Modifications — `admin.js``, `4b. Workflow Logic Enhancements — `admin-workflow.js``?**
+- **Why does `2. Backend Serverless API Implementation` connect `2. Backend Serverless API Implementation` to `Admin Page Feature Expansion — Unified Comprehensive Implementation Plan`?**
   _High betweenness centrality (0.000) - this node is a cross-community bridge._
 - **What connects `fileCache`, `_statusTextEl`, `_statusBarEl` to the rest of the system?**
   _2422 weakly-connected nodes found - possible documentation gaps or missing edges._
@@ -1570,3 +1568,5 @@ _Questions this graph is uniquely positioned to answer:_
   _Cohesion score 0.06821480406386067 - nodes in this community are weakly interconnected._
 - **Should `index.html` be split into smaller, more focused modules?**
   _Cohesion score 0.08220211161387632 - nodes in this community are weakly interconnected._
+- **Should `2.5 PRAKTIKUM_PRAKTIKUM 1.html` be split into smaller, more focused modules?**
+  _Cohesion score 0.07142857142857142 - nodes in this community are weakly interconnected._

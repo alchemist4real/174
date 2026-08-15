@@ -501,33 +501,33 @@ function openTaskModal(task) {
     } else if (task.status === 'developed' && isRev) {
         actionsHtml += `<button class="btn-unified primary" onclick="updateTask('${task.id}', 'start_review')">Start Review</button>`;
     } else if (task.status === 'in_review' && isRev) {
-        actionsHtml += `<button class="btn-unified" onclick="updateTask('${task.id}', 'reject_task')" style="border-color:var(--danger); color:var(--danger)">Reject</button>`;
+        actionsHtml += `<button class="btn-unified danger" onclick="updateTask('${task.id}', 'reject_task')">Reject</button>`;
         actionsHtml += `<button class="btn-unified primary" onclick="updateTask('${task.id}', 'approve_task')">Approve (Done)</button>`;
     }
 
     // Re-submit: pull task back from developed/in_review to in_progress for rework
     if ((task.status === 'developed' || task.status === 'in_review') && (isMyTask || isMgmt)) {
-        actionsHtml += `<button class="btn-unified" onclick="updateTask('${task.id}', 'resubmit_task')" style="border-color:var(--accent); color:var(--accent)">Re-submit (Pull Back)</button>`;
+        actionsHtml += `<button class="btn-unified warning" onclick="updateTask('${task.id}', 'resubmit_task')">Re-submit (Pull Back)</button>`;
     }
 
     // Re-Review: send a done task back to in_review
     if (task.status === 'done' && (isRev || isMgmt)) {
-        actionsHtml += `<button class="btn-unified" onclick="updateTask('${task.id}', 're_review_task')" style="border-color:var(--accent); color:var(--accent)">Re-Review Task</button>`;
+        actionsHtml += `<button class="btn-unified warning" onclick="updateTask('${task.id}', 're_review_task')">Re-Review Task</button>`;
     }
 
     // Retrack: reopen a done task back to open (full reset)
     if (task.status === 'done' && isMgmt) {
-        actionsHtml += `<button class="btn-unified" onclick="updateTask('${task.id}', 'retrack_task')" style="border-color:var(--warning, #e6a23c); color:var(--warning, #e6a23c)">Retrack (Reopen)</button>`;
+        actionsHtml += `<button class="btn-unified warning" onclick="updateTask('${task.id}', 'retrack_task')">Retrack (Reopen)</button>`;
     }
 
     // Reset Phase / Re-Plan (any active status)
     if ((task.status !== 'open') && (isMgmt || isDev || isRev)) {
-        actionsHtml += `<button class="btn-unified" onclick="updateTask('${task.id}', 'reset_phase')" style="border-color:var(--border-medium); color:var(--text-main);">Reset Phase / Re-Plan</button>`;
+        actionsHtml += `<button class="btn-unified muted" onclick="updateTask('${task.id}', 'reset_phase')">Reset Phase / Re-Plan</button>`;
     }
 
     // Delete Task Button (for Management or Admin)
     if (isMgmt) {
-        actionsHtml += `<button class="btn-unified" onclick="updateTask('${task.id}', 'delete_task')" style="background:var(--danger); color:#fff; border-color:var(--danger);">Delete Task</button>`;
+        actionsHtml += `<button class="btn-unified danger-fill" onclick="updateTask('${task.id}', 'delete_task')">Delete Task</button>`;
     }
 
     const modal = document.getElementById('contextModal');
@@ -557,12 +557,12 @@ function openTaskModal(task) {
             <div style="font-weight:700; margin-bottom:8px;">Description & Notes:</div>
             <div style="white-space:pre-wrap; color:var(--text-main);">${task.description || 'No description provided.'}</div>
         </div>
-        <div style="margin-top:12px;"><button class="btn-card" style="width:100%; justify-content:center;" onclick="loadTaskLogs('${task.id}')">View Activity Logs</button></div>
+        <div style="margin-top:12px;"><button class="btn-card w-100" style="justify-content:center;" onclick="loadTaskLogs('${task.id}')">View Activity Logs</button></div>
         <div id="taskLogsContainer_${task.id}" style="margin-top:8px; max-height:150px; overflow-y:auto;"></div>
     </div>`;
 
     if (task.target_path) {
-        actionsHtml = `<button class="btn primary" style="background:var(--c3); border-color:var(--c3); color:var(--c1); border-radius:var(--radius-pill); font-weight:600; flex:1;" onclick="openTaskFile('${task.target_path}')">Open File in Editor</button>` + actionsHtml;
+        actionsHtml = `<button class="btn-unified primary" style="flex:1;" onclick="openTaskFile('${task.target_path}')">Open File in Editor</button>` + actionsHtml;
     }
 
     acts.innerHTML = details + `<div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">${actionsHtml}</div>`;
@@ -939,7 +939,7 @@ function parseCBTHtml(path, html) {
             block.innerHTML = `
                 <div style="font-weight:bold; margin-bottom:8px;">Soal #${idx + 1}</div>
                 <textarea id="q_edit_${idx}" class="auth-input" style="width:100%; height:120px; font-family:var(--font-mono); font-size:12px; margin-bottom:8px;">${q.outerHTML}</textarea>
-                <button class="btn-unified danger btn-report-issue" style="font-size:11px; padding:4px 8px; border-color:var(--danger); color:var(--danger);">Report Issue</button>
+                <button class="btn-unified xs danger btn-report-issue">Report Issue</button>
             `;
 
             block.querySelector('.btn-report-issue').addEventListener('click', async () => {

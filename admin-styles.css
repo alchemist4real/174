@@ -1,17 +1,8 @@
 /* ADMIN CSS EXTRACT */
 
 
-    
-    
-    
-    
-    [data-theme="dark"] img[src="/logo.svg"] {
-      content: url("/logo-white.svg");
-    }
-    
-    
-    
-    
+
+
     a { color: var(--c4); text-decoration: none; }
     
     .main-panel { flex: 1; display: flex; flex-direction: column; overflow: hidden; position: relative; }
@@ -72,7 +63,7 @@
     .btn-unified.danger { color: var(--c4); border-color: var(--border-medium); }
     .btn-unified.danger:hover { background: color-mix(in srgb, var(--c4) 12%, transparent); }
     .btn-unified.danger-fill { background: var(--danger); color: var(--c1); border-color: var(--danger); font-weight: 600; }
-    .btn-unified.danger-fill:hover { background: color-mix(in srgb, var(--danger) 85%, #000); border-color: transparent; }
+    .btn-unified.danger-fill:hover { background: color-mix(in srgb, var(--danger) 85%, var(--c4)); border-color: transparent; }
     .btn-unified.warning { color: var(--c4); border-color: var(--c4); }
     .btn-unified.warning:hover { background: color-mix(in srgb, var(--c4) 12%, transparent); }
     .btn-unified.muted { color: var(--text-main); border-color: var(--border-medium); }
@@ -711,10 +702,10 @@ body { margin: 0; overflow: hidden; }
 }
 
 .docs-section p, .docs-section ul, .docs-section ol {
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  font-family: var(--font-mono);
   color: var(--text-muted);
   line-height: 1.7;
-  font-size: 14.5px;
+  font-size: 14px;
   margin: 0;
 }
 
@@ -1197,16 +1188,6 @@ h1, h2, h3, h4, h5, h6, .modal-title, .docs-title, .docs-section h2, .section-ti
 .bottom-dock-user-info {
   display: flex;
   align-items: center;
-  gap: 16px;
-}
-.bottom-dock-theme-toggles {
-  display: flex;
-  gap: 4px;
-}
-.theme-toggle-btn {
-  padding: 4px 8px;
-  font-size: 10px;
-}
 .user-badge-text {
   font-size: 12px;
   color: var(--text-muted);
@@ -1240,12 +1221,6 @@ h1, h2, h3, h4, h5, h6, .modal-title, .docs-title, .docs-section h2, .section-ti
   letter-spacing: 0.15em;
   color: var(--accent);
   text-transform: uppercase;
-}
-.docs-theme-toggles {
-  display: flex;
-  gap: 4px;
-  margin-left: auto;
-  align-items: center;
 }
 .docs-note-block {
   color: var(--text-main);
@@ -1765,7 +1740,7 @@ h1, h2, h3, h4, h5, h6, .modal-title, .docs-title, .docs-section h2, .section-ti
 
 
 /* ── Docs top-nav responsive (placed last so it overrides base rules) ──
-   Prevents brand + tab + theme toggles from overflowing narrow screens,
+   Prevents brand + tab navigation from overflowing narrow screens,
    which previously widened the page and clipped the docs content. */
 @media (max-width: 768px) {
   .top-nav { padding: 0 12px; gap: 8px; }
@@ -1774,8 +1749,6 @@ h1, h2, h3, h4, h5, h6, .modal-title, .docs-title, .docs-section h2, .section-ti
   .docs-brand-text { display: none !important; }
   .top-nav .tabs { flex: 1 1 auto; min-width: 0; overflow-x: auto; }
   .top-nav .tab { padding: 0 10px; font-size: 12px; white-space: nowrap; }
-  .docs-theme-toggles { gap: 2px; margin-left: auto; flex-shrink: 0; }
-  .docs-theme-toggles .theme-toggle-btn { padding: 4px 6px; font-size: 9px; }
   .docs-content-area { padding: 0 16px; overflow-x: hidden; }
   .docs-container { margin: 24px auto 60px auto; }
   .docs-title { font-size: 22px; }
@@ -1784,8 +1757,7 @@ h1, h2, h3, h4, h5, h6, .modal-title, .docs-title, .docs-section h2, .section-ti
 
 /* ── Docs top-nav brand + back-button polish ──
    Overrides the conflicting .btn-back-home definitions (admin extract vs
-   docs section) with one consistent, scoped treatment, and keeps the brand
-   label legible across all three themes. */
+   docs section) with one consistent, scoped treatment. */
 .top-nav .brand { flex-direction: row; align-items: center; gap: 12px; }
 .top-nav .brand img { height: 26px; }
 .top-nav .btn-back-home {
@@ -1818,7 +1790,7 @@ h1, h2, h3, h4, h5, h6, .modal-title, .docs-title, .docs-section h2, .section-ti
   position: fixed;
   inset: 0;
   z-index: 10000;
-  background: rgba(0, 0, 0, 0.7);
+  background: color-mix(in srgb, var(--c3) 65%, transparent);
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
   display: flex;
@@ -1839,7 +1811,7 @@ h1, h2, h3, h4, h5, h6, .modal-title, .docs-title, .docs-section h2, .section-ti
 .settings-box {
   background: var(--bg-card);
   color: var(--text-main);
-  border: 1px solid var(--border-light);
+  border: 1.5px solid var(--border-medium);
   width: 90%;
   max-width: 520px;
   max-height: 90vh;
@@ -1847,7 +1819,7 @@ h1, h2, h3, h4, h5, h6, .modal-title, .docs-title, .docs-section h2, .section-ti
   display: flex;
   flex-direction: column;
   overflow: hidden;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 20px 40px color-mix(in srgb, var(--c3) 30%, transparent);
   transform: translateY(16px) scale(0.97);
   transition: transform 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }

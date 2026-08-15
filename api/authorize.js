@@ -241,23 +241,12 @@ export default async function handler(req, res) {
       <link rel="icon" type="image/svg+xml" href="/logo.svg">
       <link rel="apple-touch-icon" href="/apple-touch-icon.png">
       <link rel="shortcut icon" href="/favicon.png">
-      <link rel="preconnect" href="https://fonts.googleapis.com">
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-      <link href="https://fonts.googleapis.com/css2?family=Donegal+One&display=swap" rel="stylesheet">
+      <link rel="stylesheet" href="/tokens.css">
       <style>
-        :root {
-          --c1: #0D0D0D;
-          --c2: #161616;
-          --c3: #FAFAFA;
-          --c4: #E2FF4A;
-          --text-muted: rgba(250, 250, 250, 0.6);
-          --border: rgba(250, 250, 250, 0.15);
-          --danger: #ff5252;
-        }
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-          background: radial-gradient(circle at 50% 30%, rgba(226, 255, 74, 0.06) 0%, transparent 65%), var(--c1);
+          font-family: var(--font-mono);
+          background: var(--c1);
           color: var(--c3);
           min-height: 100vh;
           display: flex;
@@ -267,15 +256,14 @@ export default async function handler(req, res) {
         }
         .auth-card {
           background: var(--c2);
-          border: 1.5px solid var(--border);
+          border: 1.5px solid var(--c3);
           border-radius: 16px;
           padding: 40px 36px;
           max-width: 440px;
           width: 100%;
-          box-shadow: 0 25px 60px rgba(0, 0, 0, 0.8), 0 0 40px rgba(226, 255, 74, 0.05);
+          box-shadow: 0 16px 36px color-mix(in srgb, var(--c3) 25%, transparent);
           text-align: center;
           position: relative;
-          backdrop-filter: blur(10px);
         }
         .logo-row {
           display: flex;
@@ -284,22 +272,22 @@ export default async function handler(req, res) {
           gap: 12px;
           margin-bottom: 24px;
         }
-        .logo-icon { width: 36px; height: 36px; filter: drop-shadow(0 0 8px rgba(226, 255, 74, 0.3)); }
+        .logo-icon { width: 36px; height: 36px; }
         .plus-icon { color: var(--text-muted); font-size: 16px; font-weight: 300; }
         .claude-badge {
-          background: var(--c4);
-          color: #0D0D0D;
+          background: var(--c3);
+          color: var(--c1);
           font-weight: 800;
           font-size: 12px;
           letter-spacing: 0.05em;
           padding: 5px 12px;
           border-radius: 99px;
-          text-transform: uppercase;
+          font-family: var(--font-sans);
         }
         h1 {
-          font-family: 'Donegal One', 'Times New Roman', serif;
+          font-family: var(--font-sans);
           font-size: 24px;
-          font-weight: 400;
+          font-weight: 700;
           margin-bottom: 8px;
           color: var(--c3);
           letter-spacing: 0.02em;

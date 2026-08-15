@@ -329,16 +329,16 @@
           </button>
         </div>
 
-        <div style="padding: 16px 24px; max-width: 860px; overflow-y: auto; flex: 1;">
-          <div id="apiKeysAccessInfo" style="margin-bottom:20px; padding:16px; background:var(--bg-card); border:1px solid var(--border-light); border-radius:12px; color:var(--text-muted); font-size:13px; display:none;">
+        <div class="api-keys-container">
+          <div id="apiKeysAccessInfo" class="api-keys-card" style="display:none; color:var(--text-muted); font-size:13px;">
             You must join a division to generate API keys. Go to the <strong>Team</strong> tab to join one.
           </div>
 
           <div id="apiKeysGenerateSection" style="display:none;">
-            <div style="margin-bottom:24px; padding:20px; background:var(--bg-card); border:1px solid var(--border-light); border-radius:12px;">
+            <div class="api-keys-card">
               <h3 style="margin:0 0 6px 0; font-size:14px; font-weight:600; color:var(--text-main);">Generate New API Key</h3>
               <p style="margin:0 0 16px 0; font-size:13px; color:var(--text-muted);">AI assistants (Claude, ChatGPT, etc.) use this key via <code style="font-size:11px; background:var(--bg-inset); padding:2px 6px; border-radius:4px;">POST /api/mcp</code></p>
-              <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end;">
+              <div class="api-keys-form-row">
                 <div style="flex:1; min-width:200px;">
                   <label class="form-label" for="newKeyName">Key Name</label>
                   <input type="text" id="newKeyName" class="auth-input" placeholder="e.g. Claude Desktop, My Script" maxlength="50" style="width:100%;">
@@ -357,22 +357,22 @@
             </div>
           </div>
 
-          <div id="apiKeyRevealBox" style="display:none; margin-bottom:24px; padding:20px; border:2px solid #f59e0b; border-radius:12px; background:rgba(245,158,11,0.07);">
-            <div style="font-size:13px; font-weight:600; color:#f59e0b; margin-bottom:12px;">Copy this key now — it will NOT be shown again.</div>
+          <div id="apiKeyRevealBox" class="api-keys-reveal-box">
+            <div style="font-size:13px; font-weight:600; color:var(--c4); margin-bottom:12px;">Copy this key now — it will NOT be shown again.</div>
             <div style="display:flex; gap:10px; align-items:center; margin-bottom:16px;">
-              <code id="apiKeyRevealText" style="flex:1; font-family:monospace; font-size:13px; background:var(--bg-inset); padding:10px 14px; border-radius:8px; word-break:break-all; color:var(--text-main);"></code>
+              <code id="apiKeyRevealText" style="flex:1; font-family:var(--font-mono); font-size:13px; background:var(--bg-inset); padding:10px 14px; border-radius:8px; word-break:break-all; color:var(--text-main);"></code>
               <button id="btnCopyApiKey" class="btn-unified primary" style="white-space:nowrap;">Copy</button>
             </div>
             <div style="font-size:13px; color:var(--text-muted); margin-bottom:8px; font-weight:600;">How to connect to Claude.ai (Custom Connector):</div>
-            <div style="font-size:12px; color:var(--text-muted); margin-bottom:4px;">1. Go to Claude.ai Settings &rarr; Connectors &rarr; Add Custom Connector</div>
-            <div style="font-size:12px; color:var(--text-muted); margin-bottom:4px;">2. Name: <code style="background:var(--bg-inset); padding:2px 5px; border-radius:4px;">Mr Capsules</code></div>
-            <div style="font-size:12px; color:var(--text-muted); margin-bottom:4px;">3. URL: <code style="background:var(--bg-inset); padding:2px 5px; border-radius:4px;">https://mr-capsules.vercel.app/api/mcp</code></div>
-            <div style="font-size:12px; color:var(--text-muted); margin-bottom:4px;">4. Advanced settings: <em>Leave completely blank</em></div>
-            <div style="font-size:12px; color:var(--text-muted);">5. Click <strong>Add</strong> &rarr; Click <strong>Connect</strong> &rarr; Sign in with your Mr. Capsules account to authorize!</div>
+            <div class="api-keys-step">1. Go to Claude.ai Settings &rarr; Connectors &rarr; Add Custom Connector</div>
+            <div class="api-keys-step">2. Name: <code style="background:var(--bg-inset); padding:2px 5px; border-radius:4px;">Mr Capsules</code></div>
+            <div class="api-keys-step">3. URL: <code style="background:var(--bg-inset); padding:2px 5px; border-radius:4px;">https://mr-capsules.vercel.app/api/mcp</code></div>
+            <div class="api-keys-step">4. Advanced settings: <em>Leave completely blank</em></div>
+            <div class="api-keys-step">5. Click <strong>Add</strong> &rarr; Click <strong>Connect</strong> &rarr; Sign in with your Mr. Capsules account to authorize!</div>
           </div>
 
           <div style="margin-bottom: 28px;">
-            <div style="font-size:13px; font-weight:700; color:var(--text-main); margin-bottom:12px; text-transform:uppercase; letter-spacing:0.05em; display:flex; align-items:center; gap:8px;">
+            <div class="api-keys-section-title">
               <span style="background:var(--accent-soft); color:var(--accent); padding:4px 10px; border-radius:99px; font-size:11px;">MCP OAuth</span>
               <span>Connected Claude / Client Sessions</span>
             </div>
@@ -382,7 +382,7 @@
           </div>
 
           <div>
-            <div style="font-size:13px; font-weight:600; color:var(--text-muted); margin-bottom:12px; text-transform:uppercase; letter-spacing:0.05em;">Developer API Keys (max 5)</div>
+            <div class="api-keys-section-title" style="color:var(--text-muted);">Developer API Keys (max 5)</div>
             <div id="apiKeysList">
               <div style="color:var(--text-muted); font-size:14px; padding:24px; text-align:center;">Loading...</div>
             </div>
@@ -641,11 +641,6 @@
       </div>
     </div>
     <div class="user-info bottom-dock-user-info">
-      <div id="adminThemeToggles" class="bottom-dock-theme-toggles">
-        <button class="btn-unified admin-theme-btn-unified theme-toggle-btn" data-theme-val="light">LIGHT</button>
-        <button class="btn-unified admin-theme-btn-unified theme-toggle-btn" data-theme-val="dark">DARK</button>
-        <button class="btn-unified admin-theme-btn-unified theme-toggle-btn" data-theme-val="mrs">Mrs.</button>
-      </div>
       <span id="userBadge" class="user-badge-text"></span>
       <button id="btnSignOut" class="btn-unified">Sign Out</button>
     </div>

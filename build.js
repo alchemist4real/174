@@ -159,7 +159,7 @@ function build() {
     // Copy all static web assets to public/ directory for Vercel CDN deployment
     const rootFiles = fs.readdirSync(process.cwd());
     rootFiles.forEach(file => {
-      if (file === 'node_modules' || file === '.git' || file === '.vercel' || file === 'api' || file === 'public' || file === 'graphify-out' || file === '.agents') {
+      if (file === 'node_modules' || file === '.git' || file === '.vercel' || file === 'api' || file === 'public' || file === 'graphify-out' || file === '.agents' || file === 'scratch') {
         return;
       }
       const srcPath = path.join(process.cwd(), file);

@@ -15,8 +15,8 @@
     "semantic_hash": ""
   },
   "admin.js": {
-    "mtime": 1786770436.6688442,
-    "ast_hash": "392807fb190ef681f79f163ce6910d02",
+    "mtime": 1786768172.963057,
+    "ast_hash": "38cfcf89a022c5dd10acb5537275bea5",
     "semantic_hash": ""
   },
   "api/admin.js": {
@@ -720,13 +720,13 @@
     "semantic_hash": "9a4ce52b5ae1fd97684b9f35a9cd04a6"
   },
   "data.js": {
-    "mtime": 1786770523.5268314,
+    "mtime": 1786769568.677974,
     "ast_hash": "d38288e55e340dcc9335a77ca6369366",
     "semantic_hash": ""
   },
   "docs.html": {
-    "mtime": 1786770424.860547,
-    "ast_hash": "7d85bb4dcbb5a17ebfe60f5b79856350",
+    "mtime": 1786768823.0677829,
+    "ast_hash": "df1fa5899a112dbcc6401a849c01e5f6",
     "semantic_hash": ""
   },
   "gpush.sh": {
@@ -735,8 +735,8 @@
     "semantic_hash": "794b3b4c39f4c920d7dbe0fffbd3e10c"
   },
   "index.html": {
-    "mtime": 1786770402.944946,
-    "ast_hash": "9c16880f2722b3d973812a6ba36f54fc",
+    "mtime": 1786768111.4011052,
+    "ast_hash": "cdf4fb90c598927ade05425856d55f82",
     "semantic_hash": ""
   },
   "live.html": {
@@ -1050,8 +1050,8 @@
     "semantic_hash": ""
   },
   "api/authorize.js": {
-    "mtime": 1786770475.463503,
-    "ast_hash": "7d52662a56a2504c8906355b6f7d1274",
+    "mtime": 1785469740.1878653,
+    "ast_hash": "9ab22d35a094e7502ee53727f7da31c4",
     "semantic_hash": ""
   },
   "api/token.js": {
@@ -1090,8 +1090,8 @@
     "semantic_hash": ""
   },
   "public/admin.js": {
-    "mtime": 1786770436.6688442,
-    "ast_hash": "392807fb190ef681f79f163ce6910d02",
+    "mtime": 1786768172.963057,
+    "ast_hash": "38cfcf89a022c5dd10acb5537275bea5",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.2/1.2 Ident PK_Flashcard PK 2.html": {
@@ -1760,18 +1760,18 @@
     "semantic_hash": ""
   },
   "public/data.js": {
-    "mtime": 1786770523.5268314,
+    "mtime": 1786769568.677974,
     "ast_hash": "d38288e55e340dcc9335a77ca6369366",
     "semantic_hash": ""
   },
   "public/docs.html": {
-    "mtime": 1786770424.860547,
-    "ast_hash": "7d85bb4dcbb5a17ebfe60f5b79856350",
+    "mtime": 1786768823.0677829,
+    "ast_hash": "df1fa5899a112dbcc6401a849c01e5f6",
     "semantic_hash": ""
   },
   "public/index.html": {
-    "mtime": 1786770402.944946,
-    "ast_hash": "9c16880f2722b3d973812a6ba36f54fc",
+    "mtime": 1786768111.4011052,
+    "ast_hash": "cdf4fb90c598927ade05425856d55f82",
     "semantic_hash": ""
   },
   "public/live.html": {
@@ -2347,26 +2347,6 @@
   "scratch/download_offbit.js": {
     "mtime": 1786769473.050154,
     "ast_hash": "e9d4da4f3df8a1eb4799829ed08e8624",
-    "semantic_hash": ""
-  },
-  "public/scratch/render_specimen.py": {
-    "mtime": 1786770496.650747,
-    "ast_hash": "8f1b620c35e69038cb90b0f06f2ecc25",
-    "semantic_hash": ""
-  },
-  "scratch/render_specimen.py": {
-    "mtime": 1786770496.650747,
-    "ast_hash": "8f1b620c35e69038cb90b0f06f2ecc25",
-    "semantic_hash": ""
-  },
-  "assets/offbit_specimen.png": {
-    "mtime": 1786770505.4309285,
-    "ast_hash": "f4995481330c17d842625a97ba343f18",
-    "semantic_hash": ""
-  },
-  "public/assets/offbit_specimen.png": {
-    "mtime": 1786770505.4309285,
-    "ast_hash": "f4995481330c17d842625a97ba343f18",
     "semantic_hash": ""
   }
 }

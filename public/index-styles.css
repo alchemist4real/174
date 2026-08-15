@@ -444,7 +444,7 @@
 .auth-btn-outline { background: transparent; color: var(--text-modal); border: 1px solid var(--border-medium); }
 .auth-msg { font-family: var(--font-mono); font-size: 11px; color: var(--text-modal); opacity: 0.8; margin-top: 8px; display: none; }
 
-.theme-btn.active {
+.persona-btn.active {
   background: var(--gradient-accent);
   color: var(--c1);
   border-color: transparent;

@@ -1495,71 +1495,54 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
       } catch(e) { console.error("Error fetching uptime logs:", e); }
     }, 30000);
 
-// Optimized brand title updater (O(k) targeted query selection)
-    function updateBrandTitles(isMrs) {
-      const brandElements = document.querySelectorAll('.auth-brand-title');
-      brandElements.forEach(el => {
-        if (el.dataset.originalText === undefined) {
-          el.dataset.originalText = el.textContent;
-        }
+    /* ══ PERSONA ENGINE (Synced from Main Site) ══ */
+    function walkAndReplaceMR(node, isMrs) {
+      if (!node) return;
+      if (node.nodeName === 'SCRIPT' || node.nodeName === 'STYLE' || node.nodeName === 'IFRAME' || node.nodeName === 'CODE' || node.nodeName === 'PRE' || node.nodeName === 'INPUT' || node.nodeName === 'TEXTAREA' || (node.classList && (node.classList.contains('CodeMirror') || node.classList.contains('cm-editor')))) return;
+      if (node.nodeType === 3) {
+        if (node.originalValue === undefined) node.originalValue = node.nodeValue;
         if (isMrs) {
-          el.textContent = el.dataset.originalText
-            .replace(/\bMr\./g, 'Mrs.')
-            .replace(/\bMR\b/g, 'MRS')
-            .replace(/\bMr\b/g, 'Mrs')
-            .replace(/\bmr\b/g, 'mrs');
+          if (/mr/i.test(node.originalValue)) {
+            node.nodeValue = node.originalValue
+              .replace(/\bMr\.\s*Capsules\b/g, 'Mrs. Capsules')
+              .replace(/\bMR\.\s*CAPSULES\b/g, 'MRS. CAPSULES')
+              .replace(/\bMR\s+CAPSULES\b/g, 'MRS CAPSULES')
+              .replace(/\bMr\.\b/g, 'Mrs.')
+              .replace(/\bMR\b/g, 'MRS')
+              .replace(/\bMr\b/g, 'Mrs')
+              .replace(/\bmr\b/g, 'mrs');
+          }
         } else {
-          el.textContent = el.dataset.originalText;
+          if (node.originalValue !== undefined) node.nodeValue = node.originalValue;
         }
-      });
+      } else if (node.nodeType === 1) {
+        node.childNodes.forEach(child => walkAndReplaceMR(child, isMrs));
+      }
     }
 
-    function applyAdminTheme(t) {
-      if (t === 'mrs') {
-        document.documentElement.setAttribute('data-theme', 'mrs');
-        updateBrandTitles(true);
-      } else if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        document.documentElement.setAttribute('data-theme', 'dark');
-        updateBrandTitles(false);
+    function applyAdminPersona(p) {
+      const isMrs = (p === 'mrs');
+      if (document.originalTitle === undefined) document.originalTitle = document.title;
+      if (isMrs) {
+        document.title = document.originalTitle
+          .replace(/\bMr\.\s*Capsules\b/g, 'Mrs. Capsules')
+          .replace(/\bMr\./g, 'Mrs.')
+          .replace(/\bMR\b/g, 'MRS')
+          .replace(/\bMr\b/g, 'Mrs');
       } else {
-        document.documentElement.removeAttribute('data-theme');
-        updateBrandTitles(false);
+        document.title = document.originalTitle;
       }
+      walkAndReplaceMR(document.body, isMrs);
     }
 
-    const initialThemeVal = localStorage.getItem('mr_theme') || localStorage.getItem('theme');
-    applyAdminTheme(initialThemeVal);
-    
-    // Listen for theme changes from index.html in another tab
+    const savedAdminPersona = localStorage.getItem('mr_persona') || 'mr';
+    applyAdminPersona(savedAdminPersona);
+
     window.addEventListener('storage', (e) => {
-      if (e.key === 'mr_theme' || e.key === 'theme') {
-        applyAdminTheme(e.newValue);
-        if (typeof updateAdminThemeBtns !== 'undefined') updateAdminThemeBtns(e.newValue);
+      if (e.key === 'mr_persona') {
+        applyAdminPersona(e.newValue || 'mr');
       }
     });
-
-    const adminThemeBtns = document.querySelectorAll('.admin-theme-btn-unified');
-    function updateAdminThemeBtns(val) {
-      if (!val) val = 'light';
-      adminThemeBtns.forEach(b => {
-        if (b.getAttribute('data-theme-val') === val) {
-          b.style.fontWeight = 'bold';
-          b.style.border = '2px solid var(--accent)';
-        } else {
-          b.style.fontWeight = 'normal';
-          b.style.border = '1px solid transparent';
-        }
-      });
-    }
-    adminThemeBtns.forEach(b => {
-      b.addEventListener('click', () => {
-        const v = b.getAttribute('data-theme-val');
-        localStorage.setItem('mr_theme', v);
-        applyAdminTheme(v);
-        updateAdminThemeBtns(v);
-      });
-    });
-    updateAdminThemeBtns(initialThemeVal);
 
     // ============================================================================
     // UNIFIED TOAST MANAGER

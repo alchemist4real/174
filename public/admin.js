@@ -1192,7 +1192,7 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
         
         var badgesHtml = '';
         if (isAdmin) badgesHtml += '<span class="badge badge-admin">ADMIN</span>';
-        if (division) badgesHtml += '<span class="badge" style="background:var(--accent);color:var(--c1);text-transform:uppercase;">' + division + '</span>';
+        if (division) badgesHtml += '<span class="badge badge-division">' + division + '</span>';
         if (isBanned) badgesHtml += '<span class="badge badge-banned">BANNED</span>';
 
         // Build devices HTML using string concat to avoid nested template literal issues
@@ -1202,13 +1202,13 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
            for (var di = 0; di < devices.length; di++) {
               var dev = devices[di];
               var isDevBanned = bannedDevs.includes(dev.id);
-              devRows += '<div style="display:flex; justify-content:space-between; align-items:center; padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.05);">';
+              devRows += '<div style="display:flex; justify-content:space-between; align-items:center; padding: 4px 0; border-bottom: 1px solid var(--border-light);">';
               devRows += '<span style="font-family:var(--font-mono); font-size:12px; max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="' + dev.id + '">' + dev.id.substr(0,14) + '...</span>';
               devRows += '<div style="display:flex; gap: 4px;">';
-              devRows += '<button class="btn-card ' + (isDevBanned ? 'primary' : 'danger') + ' btn-block-dev" style="padding: 2px 8px; font-size: 11px;" data-dev="' + dev.id + '" data-banned="' + isDevBanned + '">';
+              devRows += '<button class="btn-card ' + (isDevBanned ? 'primary' : 'danger') + ' btn-block-dev" data-dev="' + dev.id + '" data-banned="' + isDevBanned + '">';
               devRows += (isDevBanned ? 'Unban' : 'Block');
               devRows += '</button>';
-              devRows += '<button class="btn-card danger btn-delete-dev" style="padding: 2px 8px; font-size: 11px; background: rgba(239, 68, 68, 0.15); color: #f87171; border: 1px solid rgba(239, 68, 68, 0.3);" data-dev="' + dev.id + '" data-userid="' + u.id + '" data-email="' + email + '" title="Remove Device">';
+              devRows += '<button class="btn-card danger btn-delete-dev" data-dev="' + dev.id + '" data-userid="' + u.id + '" data-email="' + email + '" title="Remove Device">';
               devRows += 'Delete';
               devRows += '</button></div></div>';
            }
@@ -1495,71 +1495,54 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
       } catch(e) { console.error("Error fetching uptime logs:", e); }
     }, 30000);
 
-// Optimized brand title updater (O(k) targeted query selection)
-    function updateBrandTitles(isMrs) {
-      const brandElements = document.querySelectorAll('.auth-brand-title');
-      brandElements.forEach(el => {
-        if (el.dataset.originalText === undefined) {
-          el.dataset.originalText = el.textContent;
-        }
+    /* ══ PERSONA ENGINE (Synced from Main Site) ══ */
+    function walkAndReplaceMR(node, isMrs) {
+      if (!node) return;
+      if (node.nodeName === 'SCRIPT' || node.nodeName === 'STYLE' || node.nodeName === 'IFRAME' || node.nodeName === 'CODE' || node.nodeName === 'PRE' || node.nodeName === 'INPUT' || node.nodeName === 'TEXTAREA' || (node.classList && (node.classList.contains('CodeMirror') || node.classList.contains('cm-editor')))) return;
+      if (node.nodeType === 3) {
+        if (node.originalValue === undefined) node.originalValue = node.nodeValue;
         if (isMrs) {
-          el.textContent = el.dataset.originalText
-            .replace(/\bMr\./g, 'Mrs.')
-            .replace(/\bMR\b/g, 'MRS')
-            .replace(/\bMr\b/g, 'Mrs')
-            .replace(/\bmr\b/g, 'mrs');
+          if (/mr/i.test(node.originalValue)) {
+            node.nodeValue = node.originalValue
+              .replace(/\bMr\.\s*Capsules\b/g, 'Mrs. Capsules')
+              .replace(/\bMR\.\s*CAPSULES\b/g, 'MRS. CAPSULES')
+              .replace(/\bMR\s+CAPSULES\b/g, 'MRS CAPSULES')
+              .replace(/\bMr\.\b/g, 'Mrs.')
+              .replace(/\bMR\b/g, 'MRS')
+              .replace(/\bMr\b/g, 'Mrs')
+              .replace(/\bmr\b/g, 'mrs');
+          }
         } else {
-          el.textContent = el.dataset.originalText;
+          if (node.originalValue !== undefined) node.nodeValue = node.originalValue;
         }
-      });
+      } else if (node.nodeType === 1) {
+        node.childNodes.forEach(child => walkAndReplaceMR(child, isMrs));
+      }
     }
 
-    function applyAdminTheme(t) {
-      if (t === 'mrs') {
-        document.documentElement.setAttribute('data-theme', 'mrs');
-        updateBrandTitles(true);
-      } else if (t === 'dark' || (!t && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-        document.documentElement.setAttribute('data-theme', 'dark');
-        updateBrandTitles(false);
+    function applyAdminPersona(p) {
+      const isMrs = (p === 'mrs');
+      if (document.originalTitle === undefined) document.originalTitle = document.title;
+      if (isMrs) {
+        document.title = document.originalTitle
+          .replace(/\bMr\.\s*Capsules\b/g, 'Mrs. Capsules')
+          .replace(/\bMr\./g, 'Mrs.')
+          .replace(/\bMR\b/g, 'MRS')
+          .replace(/\bMr\b/g, 'Mrs');
       } else {
-        document.documentElement.removeAttribute('data-theme');
-        updateBrandTitles(false);
+        document.title = document.originalTitle;
       }
+      walkAndReplaceMR(document.body, isMrs);
     }
 
-    const initialThemeVal = localStorage.getItem('mr_theme') || localStorage.getItem('theme');
-    applyAdminTheme(initialThemeVal);
-    
-    // Listen for theme changes from index.html in another tab
+    const savedAdminPersona = localStorage.getItem('mr_persona') || 'mr';
+    applyAdminPersona(savedAdminPersona);
+
     window.addEventListener('storage', (e) => {
-      if (e.key === 'mr_theme' || e.key === 'theme') {
-        applyAdminTheme(e.newValue);
-        if (typeof updateAdminThemeBtns !== 'undefined') updateAdminThemeBtns(e.newValue);
+      if (e.key === 'mr_persona') {
+        applyAdminPersona(e.newValue || 'mr');
       }
     });
-
-    const adminThemeBtns = document.querySelectorAll('.admin-theme-btn-unified');
-    function updateAdminThemeBtns(val) {
-      if (!val) val = 'light';
-      adminThemeBtns.forEach(b => {
-        if (b.getAttribute('data-theme-val') === val) {
-          b.style.fontWeight = 'bold';
-          b.style.border = '2px solid var(--accent)';
-        } else {
-          b.style.fontWeight = 'normal';
-          b.style.border = '1px solid transparent';
-        }
-      });
-    }
-    adminThemeBtns.forEach(b => {
-      b.addEventListener('click', () => {
-        const v = b.getAttribute('data-theme-val');
-        localStorage.setItem('mr_theme', v);
-        applyAdminTheme(v);
-        updateAdminThemeBtns(v);
-      });
-    });
-    updateAdminThemeBtns(initialThemeVal);
 
     // ============================================================================
     // UNIFIED TOAST MANAGER
@@ -1976,7 +1959,7 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
             '<span style="font-size:12px; color:var(--text-muted); margin-left:12px;">Authorized ' + created + '</span>' +
             '<span style="font-size:12px; color:var(--text-muted); margin-left:8px;">&middot; Expires: ' + expires + '</span>' +
           '</div>' +
-          '<button class="btn-unified" style="color:var(--danger); border-color:var(--danger);" onclick="window._revokeOAuthToken(\'' + sanitize(t.token_id).replace(/'/g, "\\'") + '\', \'' + sanitize(t.user_email).replace(/'/g, "\\'") + '\')">Disconnect</button>' +
+          '<button class="btn-unified sm danger" onclick="window._revokeOAuthToken(\'' + sanitize(t.token_id).replace(/'/g, "\\'") + '\', \'' + sanitize(t.user_email).replace(/'/g, "\\'") + '\')">Disconnect</button>' +
         '</div>';
       }).join('');
 
@@ -2031,8 +2014,8 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
             '<span style="font-size:12px; color:var(--text-muted); margin-left:8px;">&middot; Last used: ' + lastUsed + '</span>' +
             '<span style="font-size:12px; color:var(--text-muted); margin-left:8px;">&middot; ' + (k.request_count || 0) + ' requests</span>' +
             '<span style="font-size:12px; color:var(--text-muted); margin-left:8px;">&middot; ' + expiresInfo + '</span>' +
-          '</div>' +
-          '<button class="btn-unified" style="color:var(--danger); border-color:var(--danger);" onclick="window._revokeApiKey(\'' + k.id + '\', \'' + sanitize(k.name).replace(/'/g, "\\'") + '\')">Revoke</button>' +
+            '</div>' +
+          '<button class="btn-unified sm danger" onclick="window._revokeApiKey(\'' + k.id + '\', \'' + sanitize(k.name).replace(/'/g, "\\'") + '\')">Revoke</button>' +
         '</div>';
       }).join('');
 
