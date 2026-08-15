@@ -1,1022 +1,1101 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kuis Fungsi Sistem Saraf - 20 Soal</title>
-    <!-- Impor Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
-    <!-- Impor Google Font (Inter) -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap" rel="stylesheet">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CBT: Fisiologi & Fungsi Sistem Saraf — CBT Exam Blok 1.3</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Syne:wght@600;700;800&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f8f8f5;
+  --bg2: #f1f1ed;
+  --bg3: #e7e7e2;
+  --bg4: #dcdcd6;
+  --border: rgba(40,55,110,.10);
+  --border2: rgba(40,55,110,.20);
+  --text: #161b2e;
+  --text2: #384068;
+  --text3: #7c85a8;
+  --green: #1f7a4a;
+  --greenbg: rgba(31,122,74,.09);
+  --greenb: rgba(31,122,74,.25);
+  --gold: #7a6010;
+  --goldbg: rgba(122,96,16,.09);
+  --goldb: rgba(122,96,16,.28);
+  --red: #b03030;
+  --redbg: rgba(176,48,48,.08);
+  --redb: rgba(176,48,48,.25);
+  --blue: #1a4faa;
+  --bluebg: rgba(26,79,170,.09);
+  --blueb: rgba(26,79,170,.28);
+  --purp: #4433a0;
+  --purpbg: rgba(68,51,160,.08);
+  --purpb: rgba(68,51,160,.25);
+  --teal: #136ba8;
+  --tealbg: rgba(19,107,168,.08);
+  --tealb: rgba(19,107,168,.25);
+  --r: 10px;
+  --rl: 14px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 15px;
+  line-height: 1.6;
+  min-height: 100vh;
+}
+.hdr {
+  background: var(--bg);
+  border-bottom: 1px solid var(--border);
+  padding: 18px 24px;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+.hdr-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.brand-badge {
+  font-family: 'DM Mono', monospace;
+  font-size: 11px;
+  letter-spacing: 1px;
+  background: var(--redbg);
+  color: var(--red);
+  border: 1px solid var(--redb);
+  padding: 4px 10px;
+  border-radius: 99px;
+  font-weight: 500;
+  text-transform: uppercase;
+}
+.brand-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text);
+}
+.hdr-meta {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.timer-pill {
+  font-family: 'DM Mono', monospace;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 14px;
+  border-radius: 99px;
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.timer-pill.urgent {
+  background: var(--redbg);
+  color: var(--red);
+  border-color: var(--redb);
+  animation: pulse 1s infinite alternate;
+}
+@keyframes pulse { from { opacity: 1; } to { opacity: 0.6; } }
 
-    <!-- Konfigurasi MathJax untuk render rumus kimia/matematika -->
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+.btn {
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 7px 16px;
+  border-radius: var(--r);
+  border: 1px solid var(--border2);
+  background: var(--bg2);
+  color: var(--text);
+  cursor: pointer;
+  transition: all .2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+.btn:hover { background: var(--bg3); border-color: var(--text2); }
+.btn-primary { background: var(--text); color: var(--bg); border-color: var(--text); }
+.btn-primary:hover { background: var(--red); border-color: var(--red); color: #fff; }
+.btn-danger { background: var(--redbg); color: var(--red); border-color: var(--redb); }
+.btn-danger:hover { background: var(--red); color: #fff; }
 
-    <style>
-        /* CSS Kustom - Tema Charcoal & Electric Blue (Futuristik) */
-        body {
-            font-family: 'Inter', sans-serif;
-            /* Background Gelap Abu-abu Kebiruan */
-            background: linear-gradient(135deg, #263238 0%, #37474f 100%);
-            color: #eceff1;
-            user-select: none;
-            padding: 1rem;
-            transition: all 0.2s;
-            overflow-y: auto;
-        }
+.layout {
+  max-width: 1200px;
+  margin: 24px auto 60px;
+  padding: 0 20px;
+  display: grid;
+  grid-template-columns: 1fr 340px;
+  gap: 24px;
+  align-items: start;
+}
+@media (max-width: 900px) {
+  .layout { grid-template-columns: 1fr; }
+}
 
-        /* Kontainer utama bergaya "glass" */
-        .quiz-container {
-            background: rgba(38, 50, 56, 0.85);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(84, 110, 122, 0.5);
-            border-radius: 1.5rem;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
-            padding: 1.5rem 2rem;
-            width: 90%;
-            max-width: 800px;
-        }
+.main-content {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: var(--rl);
+  padding: 28px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.02);
+}
 
-        /* Styling Teks Umum */
-        h1, .text-3xl, .text-4xl {
-            font-weight: 700;
-            color: #00e5ff; /* Electric Blue */
-            text-shadow: 0 0 10px rgba(0, 229, 255, 0.5);
-        }
-        
-        p, .text-lg, span { color: #cfd8dc; } /* Blue Grey Light */
-        
-        #progress-text, #score-text, #final-score-text, #flashcard-progress {
-            color: #00e5ff;
-            font-weight: 600;
-            text-shadow: 0 0 5px rgba(0, 229, 255, 0.3);
-        }
+.q-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 14px;
+  border-bottom: 1px solid var(--border);
+}
+.q-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--text);
+}
+.q-flag-btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  background: transparent;
+  border: 1px solid var(--border);
+  padding: 4px 10px;
+  border-radius: var(--r);
+  cursor: pointer;
+  color: var(--text3);
+  transition: all .2s;
+}
+.q-flag-btn.flagged {
+  background: var(--goldbg);
+  color: var(--gold);
+  border-color: var(--goldb);
+  font-weight: 600;
+}
 
-        /* Tombol aksi (Mulai/Ulangi/Menu) - Aksen Cyan */
-        .action-btn {
-            font-family: 'Inter', sans-serif;
-            text-transform: uppercase;
-            background-color: #00bcd4; /* Cyan */
-            border: none;
-            padding: 0.9rem 1.5rem;
-            box-shadow: 0 4px 12px 0 rgba(0, 0, 0, 0.3);
-            cursor: pointer;
-            transition: all 0.2s ease-in-out;
-            color: #263238; /* Teks Gelap */
-            font-weight: 700;
-            font-size: 1rem;
-            margin-top: 0.5rem;
-            margin-bottom: 0.5rem;
-            border-radius: 0.75rem;
-        }
-        .action-btn:hover {
-            background-color: #00e5ff; /* Electric Blue lebih terang */
-            transform: translateY(-2px);
-            box-shadow: 0 0 15px rgba(0, 229, 255, 0.6);
-        }
-        .action-btn:active {
-            box-shadow: none;
-            transform: translateY(0px);
-        }
-        .action-btn:disabled {
-            background-color: #546e7a;
-            opacity: 0.7;
-            cursor: not-allowed;
-            transform: none;
-            box-shadow: none;
-        }
-        
-        /* Tombol kembali ke menu - Dark Blue Grey */
-        .back-to-menu-btn {
-            background-color: #455a64;
-            color: #eceff1;
-            font-size: 0.9rem;
-            padding: 0.75rem 1rem;
-            font-weight: 600;
-        }
-        .back-to-menu-btn:hover { background-color: #546e7a; }
+.q-text {
+  font-size: 15.5px;
+  line-height: 1.65;
+  color: var(--text);
+  margin-bottom: 24px;
+  font-weight: 400;
+}
+.q-img {
+  max-width: 100%;
+  border-radius: var(--r);
+  border: 1px solid var(--border);
+  margin: 0 0 20px;
+}
 
-        /* Tombol Opsi Jawaban (Outline Style Modern) */
-        .option-btn {
-            font-family: 'Inter', sans-serif;
-            background: rgba(38, 50, 56, 0.5);
-            border: 1px solid #546e7a;
-            display: block;
-            width: 100%;
-            margin-bottom: 1rem;
-            text-align: left;
-            padding: 1.25rem;
-            font-size: 0.95rem;
-            line-height: 1.5;
-            color: #eceff1;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            border-radius: 0.75rem;
-        }
-        .option-btn:hover {
-            transform: translateY(-2px);
-            background: rgba(69, 90, 100, 0.7);
-            border-color: #00e5ff;
-            box-shadow: 0 0 8px rgba(0, 229, 255, 0.2);
-        }
-        
-        /* Style untuk jawaban yg dipilih di Mode Ujian */
-        .option-btn.selected {
-            background: rgba(0, 229, 255, 0.15);
-            border-color: #00e5ff;
-            color: #00e5ff;
-        }
-        
-        /* Status Jawaban */
-        .option-btn.correct {
-            background-color: #00c853; /* Malachite Green */
-            border-color: #00c853;
-            color: #ffffff;
-            font-weight: 600;
-            box-shadow: 0 0 10px rgba(0, 200, 83, 0.4);
-        }
-        .option-btn.incorrect {
-            background-color: #ff1744; /* Red Accent */
-            border-color: #ff1744;
-            color: #ffffff;
-            font-weight: 600;
-            box-shadow: 0 0 10px rgba(255, 23, 68, 0.4);
-        }
-        .option-btn.disabled { pointer-events: none; }
-        
-        /* Teks Pertanyaan */
-        #question-text {
-            font-size: 1.15rem;
-            line-height: 1.75;
-            min-height: 100px;
-            margin-bottom: 2rem;
-            color: #ffffff;
-            font-weight: 600;
-        }
+.opts {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-bottom: 28px;
+}
+.opt {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  padding: 12px 16px;
+  border-radius: var(--r);
+  border: 1px solid var(--border2);
+  background: var(--bg);
+  cursor: pointer;
+  transition: all .15s;
+  text-align: left;
+  font-size: 14.5px;
+  color: var(--text);
+  width: 100%;
+}
+.opt:hover {
+  background: var(--bg2);
+  border-color: var(--text2);
+}
+.opt.selected {
+  background: var(--bluebg);
+  border-color: var(--blueb);
+  color: var(--blue);
+  font-weight: 500;
+}
+.opt-key {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  font-weight: 600;
+  width: 24px;
+  height: 24px;
+  border-radius: 6px;
+  background: var(--bg2);
+  border: 1px solid var(--border2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--text2);
+}
+.opt.selected .opt-key {
+  background: var(--blue);
+  color: #fff;
+  border-color: var(--blue);
+}
 
-        /* --- Style untuk Flashcard & Penjelasan Latihan --- */
-        #flashcard {
-            background: linear-gradient(145deg, #37474f, #263238);
-            border: 1px solid #546e7a;
-            min-height: 300px;
-            padding: 1.5rem;
-            cursor: pointer;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3);
-            border-radius: 1rem;
-        }
-        
-        #flashcard-front, #flashcard-back {
-            font-size: 1.1rem;
-            line-height: 1.7;
-            color: #eceff1;
-        }
-        
-        .card-label {
-            font-size: 0.75rem;
-            color: #90a4ae;
-            margin-bottom: 1rem;
-            text-transform: uppercase;
-            font-weight: 700;
-            letter-spacing: 0.05em;
-        }
-        
-        /* Kontainer untuk penjelasan */
-        #flashcard-answer-list, #explanation-container, .review-explanations {
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-        }
-        .flashcard-option-detailed {
-            padding: 0.75rem 1rem;
-            border-radius: 0.75rem;
-            font-size: 0.9rem;
-            transition: all 0.2s;
-            border: 1px solid #455a64;
-            background: rgba(38, 50, 56, 0.6);
-        }
-        .flashcard-option-detailed strong {
-            display: block;
-            font-weight: 600;
-            color: #00e5ff;
-            margin-bottom: 0.25rem;
-        }
-        .flashcard-option-detailed span {
-            font-size: 0.85rem;
-            color: #cfd8dc;
-            line-height: 1.5;
-        }
-        .flashcard-option-detailed.correct {
-            background: rgba(0, 200, 83, 0.15);
-            border-color: #00c853;
-        }
-        .flashcard-option-detailed.correct span { color: #e8f5e9; }
-        .flashcard-option-detailed.incorrect {
-            background: rgba(255, 23, 68, 0.15);
-            border-color: #ff1744;
-        }
-        
-        /* Style untuk Layar Review */
-        .review-card {
-            background: rgba(38, 50, 56, 0.7);
-            padding: 1.5rem;
-            border-radius: 1rem;
-            border: 1px solid #455a64;
-        }
-        .review-question {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 1.5rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px solid #455a64;
-            color: #00e5ff;
-        }
-        .review-options-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 0.75rem;
-            margin-bottom: 1.5rem;
-        }
-        @media (min-width: 768px) {
-            .review-options-grid { grid-template-columns: 1fr 1fr; }
-        }
-        .review-option {
-            padding: 0.75rem 1rem;
-            border-radius: 0.5rem;
-            font-size: 0.9rem;
-            border: 1px solid transparent;
-            color: #b0bec5;
-        }
-        .review-option.neutral {
-            background: rgba(69, 90, 100, 0.4);
-            border-color: #546e7a;
-        }
-        .review-option.correct {
-            background: rgba(0, 200, 83, 0.2);
-            border-color: #00c853;
-            color: #00e676;
-            font-weight: 600;
-        }
-        .review-option.chosen-wrong {
-            background: rgba(255, 23, 68, 0.2);
-            border-color: #ff1744;
-            color: #ff5252;
-            font-weight: 600;
-            text-decoration: line-through;
-        }
-        .review-explanations { margin-top: 1.5rem; }
-        
-        .hidden { display: none; }
-    </style>
+.q-nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 20px;
+  border-top: 1px solid var(--border);
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+/* Sidebar */
+.sidebar {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: var(--rl);
+  padding: 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,.02);
+  position: sticky;
+  top: 90px;
+}
+.sb-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.filter-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 16px;
+  background: var(--bg2);
+  padding: 3px;
+  border-radius: var(--r);
+}
+.ftab {
+  flex: 1;
+  font-family: 'DM Mono', monospace;
+  font-size: 10.5px;
+  padding: 6px 2px;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  color: var(--text3);
+  cursor: pointer;
+  text-align: center;
+}
+.ftab.active {
+  background: #fff;
+  color: var(--text);
+  font-weight: 600;
+  box-shadow: 0 1px 3px rgba(0,0,0,.05);
+}
+
+.pal-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+  max-height: 380px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+.pal-btn {
+  font-family: 'DM Mono', monospace;
+  font-size: 12px;
+  aspect-ratio: 1;
+  border-radius: var(--r);
+  border: 1px solid var(--border);
+  background: var(--bg2);
+  color: var(--text2);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: all .15s;
+}
+.pal-btn:hover { border-color: var(--text); color: var(--text); }
+.pal-btn.current { border: 2px solid var(--text); font-weight: 700; }
+.pal-btn.answered { background: var(--bluebg); color: var(--blue); border-color: var(--blueb); font-weight: 600; }
+.pal-btn.flagged::after {
+  content: '';
+  position: absolute;
+  top: 3px;
+  right: 3px;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+}
+
+/* Modal */
+.modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(22,27,46,.5);
+  backdrop-filter: blur(4px);
+  z-index: 100;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+}
+.modal-backdrop.show { display: flex; }
+.modal {
+  background: #ffffff;
+  border: 1px solid var(--border);
+  border-radius: var(--rl);
+  max-width: 520px;
+  width: 100%;
+  padding: 28px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.15);
+}
+.modal h2 { font-family: 'Syne', sans-serif; font-size: 20px; margin-bottom: 10px; }
+.modal p { color: var(--text2); font-size: 14px; margin-bottom: 20px; }
+.modal-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-bottom: 24px;
+}
+.mstat {
+  background: var(--bg2);
+  padding: 10px;
+  border-radius: var(--r);
+  text-align: center;
+}
+.mstat-v { font-family: 'DM Mono', monospace; font-size: 18px; font-weight: 700; }
+.mstat-l { font-size: 11px; color: var(--text3); margin-top: 2px; }
+
+/* Results Mode */
+.results-view { display: none; }
+.res-card {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--rl);
+  padding: 32px;
+  margin-bottom: 24px;
+  text-align: center;
+}
+.res-score {
+  font-family: 'Syne', sans-serif;
+  font-size: 64px;
+  font-weight: 800;
+  color: var(--text);
+  line-height: 1;
+}
+.res-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin: 24px 0;
+}
+.res-item {
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  padding: 14px;
+}
+.res-val { font-family: 'DM Mono', monospace; font-size: 22px; font-weight: 700; }
+.res-lbl { font-size: 11.5px; color: var(--text3); margin-top: 2px; }
+
+.review-item {
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--rl);
+  padding: 20px;
+  margin-bottom: 16px;
+}
+.review-item.correct { border-left: 5px solid var(--green); }
+.review-item.incorrect { border-left: 5px solid var(--red); }
+.review-item.unanswered { border-left: 5px solid var(--gold); }
+.review-exp {
+  margin-top: 14px;
+  padding: 12px 14px;
+  background: var(--bg2);
+  border-radius: var(--r);
+  font-size: 13.5px;
+  color: var(--text2);
+}
+</style>
 </head>
-<body class="flex items-center justify-center min-h-screen">
+<body>
 
-    <!-- 1. Layar Mulai (Pilih Mode) -->
-    <div id="start-screen" class="quiz-container text-center">
-        <h1 class="text-3xl md:text-4xl mb-6">KUIS FUNGSI SISTEM SARAF</h1>
-        <p class="mb-10 text-lg">Materi 9 - 20 SOAL</p>
-        <div class="flex flex-col">
-            <button id="start-flashcard-btn" class="action-btn">Mode Flashcard</button>
-            <button id="start-practice-btn" class="action-btn">Mode Latihan</button>
-            <button id="start-exam-btn" class="action-btn">Mode Ujian</button>
-        </div>
+<header class="hdr">
+  <div class="hdr-inner">
+    <div class="brand">
+      <span class="brand-badge">Blok 1.3</span>
+      <h1 class="brand-title">CBT: Fisiologi & Fungsi Sistem Saraf</h1>
     </div>
+    <div class="hdr-meta">
+      <div class="timer-pill" id="timer">⏱️ <span id="time-display">--:--</span></div>
+      <button class="btn btn-primary" onclick="confirmFinish()">Selesaikan Ujian</button>
+    </div>
+  </div>
+</header>
 
-    <!-- 2. Layar Kuis (Latihan & Ujian) (Tersembunyi) -->
-    <div id="quiz-screen" class="quiz-container hidden w-full max-w-4xl">
-        <!-- Info Progress & Skor -->
-        <div class="flex justify-between items-center mb-6">
-            <span id="progress-text">Soal 1 / 20</span>
-            <span id="score-text">Skor: 0</span>
-        </div>
-        
-        <!-- Area Soal -->
-        <div id="question-text">
-            Memuat pertanyaan...
-        </div>
-
-        <!-- Area Opsi Jawaban -->
-        <div id="options-container" class="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <!-- Opsi akan ditambahkan oleh JavaScript -->
-        </div>
-        
-        <!-- Area Penjelasan (Hanya Mode Latihan) -->
-        <div id="explanation-container" class="mt-6">
-            <!-- Penjelasan akan muncul di sini -->
-        </div>
-        
-        <!-- Tombol Lanjut (Hanya Mode Latihan) -->
-        <div class="text-center mt-8">
-            <button id="next-question-btn" class="action-btn text-lg hidden">
-                Lanjut
-            </button>
-            <button class="back-to-menu-btn action-btn">Kembali ke Menu</button>
-        </div>
+<div class="layout" id="exam-layout">
+  <main class="main-content">
+    <div class="q-header">
+      <div class="q-title" id="q-number">Soal 1 dari 20</div>
+      <button class="q-flag-btn" id="flag-btn" onclick="toggleFlag()">🚩 Ragu-ragu</button>
     </div>
     
-    <!-- 3. Layar Flashcard (Tersembunyi) -->
-    <div id="flashcard-screen" class="quiz-container hidden w-full max-w-2xl">
-        <!-- Progress Flashcard -->
-        <span id="flashcard-progress" class="block text-center mb-6">1 / 20</span>
-        
-        <!-- Flashcard -->
-        <div id="flashcard">
-            <div id="flashcard-front">
-                <span class="card-label">Istilah / Pertanyaan</span>
-                <p>Memuat...</p>
-            </div>
-            <div id="flashcard-back" class="hidden">
-                <span class="card-label">Penjelasan</span>
-                <div id="flashcard-answer-list">
-                    <!-- Konten diisi secara sinkron -->
-                </div>
-            </div>
-        </div>
-        
-        <!-- Navigasi Flashcard -->
-        <div class="flex justify-between mt-6">
-            <button id="flashcard-prev" class="action-btn text-lg">&lt; Prev</button>
-            <button id="flashcard-flip" class="action-btn text-lg">Balik</button>
-            <button id="flashcard-next" class="action-btn text-lg">Next &gt;</button>
-        </div>
-        
-        <div class="text-center mt-6">
-            <button class="back-to-menu-btn action-btn">Kembali ke Menu</button>
-        </div>
+    <div class="q-text" id="q-text">Memuat pertanyaan...</div>
+    <img id="q-image" class="q-img" style="display:none;" alt="Gambar Soal" />
+
+    <div class="opts" id="opts"></div>
+
+    <div class="q-nav">
+      <button class="btn" id="prev-btn" onclick="navQ(-1)">‹ Sebelumnya</button>
+      <div style="font-family:'DM Mono',monospace; font-size:12px; color:var(--text3);">Tombol Pintas: 1-5 / A-E</div>
+      <button class="btn" id="next-btn" onclick="navQ(1)">Berikutnya ›</button>
+    </div>
+  </main>
+
+  <aside class="sidebar">
+    <div class="sb-title">
+      <span>Lembar Jawaban</span>
+      <span style="font-family:'DM Mono',monospace; font-size:12px; color:var(--text3);" id="progress-text">0/20</span>
     </div>
 
-
-    <!-- 4. Layar Hasil (Tersembunyi) -->
-    <div id="result-screen" class="quiz-container text-center hidden">
-        <h1 class="text-3xl mb-6">KUIS SELESAI!</h1>
-        <p id="final-score-text" class="text-4xl my-10">SKOR ANDA: 0 / 20</p>
-        <!-- Tombol Review BARU -->
-        <div class="flex flex-col md:flex-row justify-center gap-4">
-            <button id="review-button" class="action-btn text-xl hidden">Review Kuis</button>
-            <button id="restart-button" class="action-btn text-xl">Ulangi Kuis</button>
-        </div>
-        <button class="back-to-menu-btn action-btn mt-6">Kembali ke Menu</button>
+    <div class="filter-tabs">
+      <button class="ftab active" onclick="setFilter('all', this)">Semua</button>
+      <button class="ftab" onclick="setFilter('unanswered', this)">Belum</button>
+      <button class="ftab" onclick="setFilter('flagged', this)">Ragu</button>
     </div>
+
+    <div class="pal-grid" id="palette"></div>
+  </aside>
+</div>
+
+<!-- Modal Selesai -->
+<div class="modal-backdrop" id="finish-modal">
+  <div class="modal">
+    <h2>Konfirmasi Penyelesaian</h2>
+    <p>Apakah Anda yakin ingin mengakhiri sesi ujian ini? Pastikan seluruh butir soal telah diperiksa.</p>
     
-    <!-- 5. Layar Review BARU (Tersembunyi) -->
-    <div id="review-screen" class="quiz-container hidden w-full max-w-4xl">
-        <h1 class="text-3xl mb-6 text-center">Review Kuis Anda</h1>
-        
-        <!-- Kontainer untuk semua soal review -->
-        <div id="review-container" class="flex flex-col gap-6 max-h-[70vh] overflow-y-auto pr-2">
-            <!-- Soal review akan di-generate di sini -->
-        </div>
-        
-        <div class="text-center mt-8 flex flex-col md:flex-row justify-center gap-4">
-             <button id="restart-from-review" class="action-btn text-xl">Ulangi Kuis</button>
-             <button class="back-to-menu-btn action-btn">Kembali ke Menu</button>
-        </div>
+    <div class="modal-stats">
+      <div class="mstat">
+        <div class="mstat-v" style="color:var(--blue);" id="modal-ans">0</div>
+        <div class="mstat-l">Dijawab</div>
+      </div>
+      <div class="mstat">
+        <div class="mstat-v" style="color:var(--text3);" id="modal-unans">0</div>
+        <div class="mstat-l">Kosong</div>
+      </div>
+      <div class="mstat">
+        <div class="mstat-v" style="color:var(--gold);" id="modal-flag">0</div>
+        <div class="mstat-l">Ragu-ragu</div>
+      </div>
     </div>
 
-    <script>
-        // --- Data Soal (BAGIAN 9: Fungsi Sistem Saraf) ---
-        const questions = [
-            { // 1
-                question: "Urutan logis dari tiga fungsi dasar sistem saraf dalam memproses informasi adalah...",
-                options: ["Motorik -> Integrasi -> Sensorik", "Sensorik -> Integrasi -> Motorik", "Integrasi -> Sensorik -> Motorik", "Sensorik -> Motorik -> Integrasi"],
-                correct: "Sensorik -> Integrasi -> Motorik",
-                explanations: {
-                    "Motorik -> Integrasi -> Sensorik": "SALAH. Motorik adalah hasil akhir.",
-                    "Sensorik -> Integrasi -> Motorik": "BENAR. Sistem saraf menerima input (sensorik/aferen), memprosesnya di SSP (integrasi), dan memberikan respons (motorik/eferen).",
-                    "Integrasi -> Sensorik -> Motorik": "SALAH. Integrasi membutuhkan data input terlebih dahulu.",
-                    "Sensorik -> Motorik -> Integrasi": "SALAH. Integrasi (keputusan) terjadi sebelum aksi motorik."
-                }
-            },
-            { // 2
-                question: "Divisi Sistem Saraf Tepi (SST) yang mengontrol aktivitas otot rangka secara SADAR (volunter) adalah...",
-                options: ["Sistem Saraf Otonom (SSO)", "Sistem Saraf Somatik (SNS)", "Sistem Saraf Enterik (ENS)", "Sistem Saraf Parasimpatis"],
-                correct: "Sistem Saraf Somatik (SNS)",
-                explanations: {
-                    "Sistem Saraf Otonom (SSO)": "SALAH. SSO mengontrol fungsi tidak sadar (involunter).",
-                    "Sistem Saraf Somatik (SNS)": "BENAR. SNS bertanggung jawab atas kontrol volunter (sadar) terhadap efektor somatik yaitu otot rangka.",
-                    "Sistem Saraf Enterik (ENS)": "SALAH. ENS mengontrol saluran pencernaan.",
-                    "Sistem Saraf Parasimpatis": "SALAH. Ini adalah bagian dari SSO."
-                }
-            },
-            { // 3
-                question: "Sistem saraf yang sering disebut 'otak perut' karena dapat mengontrol saluran pencernaan secara mandiri adalah...",
-                options: ["Sistem Saraf Simpatis", "Sistem Saraf Parasimpatis", "Sistem Saraf Enterik (ENS)", "Sistem Saraf Pusat (SSP)"],
-                correct: "Sistem Saraf Enterik (ENS)",
-                explanations: {
-                    "Sistem Saraf Simpatis": "SALAH. Hanya memodulasi aktivitas usus.",
-                    "Sistem Saraf Parasimpatis": "SALAH. Hanya memodulasi aktivitas usus.",
-                    "Sistem Saraf Enterik (ENS)": "BENAR. ENS adalah jaringan neuron kompleks di dinding usus yang dapat mengatur gerak peristaltik dan sekresi secara lokal/mandiri.",
-                    "Sistem Saraf Pusat (SSP)": "SALAH. SSP (otak) mengontrol, tapi 'otak perut' merujuk pada ENS di perifer."
-                }
-            },
-            { // 4
-                question: "Bagian neuron yang berfungsi sebagai pusat metabolisme sel dan mengandung nukleus adalah...",
-                options: ["Dendrit", "Akson", "Axon Hillock", "Badan Sel (Soma)"],
-                correct: "Badan Sel (Soma)",
-                explanations: {
-                    "Dendrit": "SALAH. Penerima sinyal.",
-                    "Akson": "SALAH. Penghantar sinyal.",
-                    "Axon Hillock": "SALAH. Pemicu potensial aksi.",
-                    "Badan Sel (Soma)": "BENAR. Soma (perikaryon) mengandung organel vital untuk sintesis protein dan metabolisme neuron."
-                }
-            },
-            { // 5
-                question: "Bagian pangkal akson yang berfungsi sebagai 'Trigger Zone' untuk memicu potensial aksi adalah...",
-                options: ["Dendrit", "Badan Nissl", "Axon Hillock", "Telodendria"],
-                correct: "Axon Hillock",
-                explanations: {
-                    "Dendrit": "SALAH. Menerima sinyal berjenjang.",
-                    "Badan Nissl": "SALAH. Retikulum endoplasma kasar (sintesis protein).",
-                    "Axon Hillock": "BENAR. Di sinilah sinyal-sinyal input dijumlahkan (sumasi), dan jika mencapai threshold, potensial aksi dimulai.",
-                    "Telodendria": "SALAH. Terminal akson."
-                }
-            },
-            { // 6
-                question: "Neuron sensorik yang badan selnya terletak di Ganglion Radiks Dorsalis umumnya memiliki struktur...",
-                options: ["Multipolar", "Bipolar", "Unipolar (Pseudounipolar)", "Anaxonic"],
-                correct: "Unipolar (Pseudounipolar)",
-                explanations: {
-                    "Multipolar": "SALAH. Umumnya neuron motorik dan interneuron.",
-                    "Bipolar": "SALAH. Khusus di retina, hidung, telinga.",
-                    "Unipolar (Pseudounipolar)": "BENAR. Memiliki satu juluran pendek yang bercabang dua (satu ke perifer, satu ke SSP), khas untuk neuron sensorik somatik.",
-                    "Anaxonic": "SALAH. Di otak/retina tertentu."
-                }
-            },
-            { // 7
-                question: "Potensial Membran Istirahat (-70 mV) terutama dijaga oleh...",
-                options: ["Kanal Bocor $K^+$ dan Pompa $Na^+/K^+$", "Kanal $Na^+$ Berpintu Tegangan", "Kanal $Ca^{2+}$", "Kanal $Cl^-$ Berpintu Ligan"],
-                correct: "Kanal Bocor $K^+$ dan Pompa $Na^+/K^+$",
-                explanations: {
-                    "Kanal Bocor $K^+$ dan Pompa $Na^+/K^+$": "BENAR. Kebocoran ion $K^+$ keluar sel dan kerja pompa ATPase (3 $Na^+$ keluar, 2 $K^+$ masuk) menciptakan muatan negatif di dalam sel.",
-                    "Kanal $Na^+$ Berpintu Tegangan": "SALAH. Ini aktif saat potensial aksi (depolarisasi).",
-                    "Kanal $Ca^{2+}$": "SALAH. Penting di terminal sinaps.",
-                    "Kanal $Cl^-$ Berpintu Ligan": "SALAH. Penting untuk inhibisi sinaptik."
-                }
-            },
-            { // 8
-                question: "Fase Depolarisasi cepat pada Potensial Aksi disebabkan oleh pembukaan...",
-                options: ["Kanal $K^+$ Berpintu Tegangan", "Kanal $Na^+$ Berpintu Tegangan", "Kanal $Cl^-$", "Pompa $Na^+/K^+$"],
-                correct: "Kanal $Na^+$ Berpintu Tegangan",
-                explanations: {
-                    "Kanal $K^+$ Berpintu Tegangan": "SALAH. Ini menyebabkan Repolarisasi.",
-                    "Kanal $Na^+$ Berpintu Tegangan": "BENAR. Saat threshold tercapai, kanal ini terbuka, $Na^+$ masuk deras, membuat membran menjadi positif (+30 mV).",
-                    "Kanal $Cl^-$": "SALAH. Menyebabkan Hiperpolarisasi.",
-                    "Pompa $Na^+/K^+$": "SALAH. Bekerja lambat menjaga keseimbangan jangka panjang."
-                }
-            },
-            { // 9
-                question: "Konduksi impuls yang 'melompat' dari satu Nodus Ranvier ke nodus berikutnya pada akson bermielin disebut...",
-                options: ["Konduksi Kontinu", "Konduksi Saltatoris", "Konduksi Sinaptik", "Konduksi Retrograd"],
-                correct: "Konduksi Saltatoris",
-                explanations: {
-                    "Konduksi Kontinu": "SALAH. Pada akson tak bermielin (lambat).",
-                    "Konduksi Saltatoris": "BENAR. 'Saltare' berarti melompat. Mielin menginsulasi akson sehingga arus hanya bisa keluar masuk di nodus, mempercepat hantaran.",
-                    "Konduksi Sinaptik": "SALAH. Transmisi antar neuron.",
-                    "Konduksi Retrograd": "SALAH. Transport material balik ke soma."
-                }
-            },
-            { // 10
-                question: "Jenis sinapsis yang paling umum pada sistem saraf mamalia, yang menggunakan neurotransmiter, adalah...",
-                options: ["Sinapsis Listrik", "Sinapsis Kimia", "Gap Junction", "Sinapsis Mekanik"],
-                correct: "Sinapsis Kimia",
-                explanations: {
-                    "Sinapsis Listrik": "SALAH. Menggunakan gap junction, lebih jarang (misal: jantung).",
-                    "Sinapsis Kimia": "BENAR. Menggunakan zat kimia (neurotransmiter) untuk menyeberangi celah sinaps, memungkinkan modulasi sinyal yang kompleks.",
-                    "Gap Junction": "SALAH. Ini struktur sinapsis listrik.",
-                    "Sinapsis Mekanik": "SALAH. Tidak ada istilah ini dalam konteks transmisi saraf standar."
-                }
-            },
-            { // 11
-                question: "Peristiwa yang memicu fusi vesikel sinaptik dan pelepasan neurotransmiter (eksositosis) di terminal akson adalah masuknya ion...",
-                options: ["Natrium ($Na^+$)", "Kalium ($K^+$)", "Kalsium ($Ca^{2+}$)", "Klorida ($Cl^-$)"],
-                correct: "Kalsium ($Ca^{2+}$)",
-                explanations: {
-                    "Natrium ($Na^+$)": "SALAH. Memicu depolarisasi membran akson.",
-                    "Kalium ($K^+$)": "SALAH. Memicu repolarisasi.",
-                    "Kalsium ($Ca^{2+}$)": "BENAR. Depolarisasi terminal membuka kanal $Ca^{2+}$ voltage-gated; influks kalsium adalah sinyal kunci untuk eksositosis.",
-                    "Klorida ($Cl^-$)": "SALAH. Biasanya untuk inhibisi."
-                }
-            },
-            { // 12
-                question: "Reseptor neurotransmiter yang juga berfungsi langsung sebagai kanal ion (membuka saat NT menempel) disebut...",
-                options: ["Reseptor Metabotropik", "Reseptor Ionotropik", "Protein G", "Second Messenger"],
-                correct: "Reseptor Ionotropik",
-                explanations: {
-                    "Reseptor Metabotropik": "SALAH. Bekerja tidak langsung melalui protein G (lambat).",
-                    "Reseptor Ionotropik": "BENAR. Reseptor ini adalah 'Ligand-gated Ion Channel', bekerja sangat cepat.",
-                    "Protein G": "SALAH. Komponen reseptor metabotropik.",
-                    "Second Messenger": "SALAH. Produk reseptor metabotropik."
-                }
-            },
-            { // 13
-                question: "Neurotransmiter eksitatorik utama di otak, yang sangat penting untuk memori dan pembelajaran, adalah...",
-                options: ["GABA", "Dopamin", "Glutamat", "Serotonin"],
-                correct: "Glutamat",
-                explanations: {
-                    "GABA": "SALAH. Inhibitor utama.",
-                    "Dopamin": "SALAH. Motivasi/Reward.",
-                    "Glutamat": "BENAR. Glutamat adalah NT eksitatorik paling melimpah di SSP.",
-                    "Serotonin": "SALAH. Mood/Tidur."
-                }
-            },
-            { // 14
-                question: "Neurotransmiter inhibitorik utama di otak yang bekerja dengan membuka kanal $Cl^-$ (menyebabkan hiperpolarisasi) adalah...",
-                options: ["Glutamat", "Asetilkolin", "GABA", "Norepinefrin"],
-                correct: "GABA",
-                explanations: {
-                    "Glutamat": "SALAH. Eksitatorik.",
-                    "Asetilkolin": "SALAH. Umumnya eksitatorik di SSP.",
-                    "GABA": "BENAR. Gamma-Aminobutyric Acid menyebabkan IPSP (Inhibitory Postsynaptic Potential).",
-                    "Norepinefrin": "SALAH. Arousal/Perhatian."
-                }
-            },
-            { // 15
-                question: "Potensial Postsinaptik Eksitatorik (EPSP) adalah perubahan potensial membran yang bersifat...",
-                options: ["Hiperpolarisasi (menjauhi threshold)", "Depolarisasi (mendekati threshold)", "Repolarisasi", "Tetap (tidak berubah)"],
-                correct: "Depolarisasi (mendekati threshold)",
-                explanations: {
-                    "Hiperpolarisasi (menjauhi threshold)": "SALAH. Ini adalah IPSP.",
-                    "Depolarisasi (mendekati threshold)": "BENAR. EPSP membuat neuron lebih positif, sehingga lebih mudah mencapai ambang batas untuk menembakkan potensial aksi.",
-                    "Repolarisasi": "SALAH. Kembali ke istirahat.",
-                    "Tetap (tidak berubah)": "SALAH."
-                }
-            },
-            { // 16
-                question: "Potensial Postsinaptik Inhibitorik (IPSP) biasanya disebabkan oleh pembukaan kanal...",
-                options: ["$Na^+$", "$Ca^{2+}$", "$K^+$ atau $Cl^-$", "Semua kanal tertutup"],
-                correct: "$K^+$ atau $Cl^-$",
-                explanations: {
-                    "$Na^+$": "SALAH. Masuknya $Na^+$ menyebabkan EPSP (Depolarisasi).",
-                    "$Ca^{2+}$": "SALAH. Masuknya $Ca^{2+}$ menyebabkan EPSP.",
-                    "$K^+$ atau $Cl^-$": "BENAR. Keluarnya $K^+$ (muatan positif hilang) atau masuknya $Cl^-$ (muatan negatif tambah) membuat sel lebih negatif (Hiperpolarisasi/IPSP).",
-                    "Semua kanal tertutup": "SALAH."
-                }
-            },
-            { // 17
-                question: "Fenomena di mana satu neuron menerima input berulang-ulang dengan sangat cepat dari SATU sinaps presinaps untuk mencapai threshold disebut...",
-                options: ["Sumasi Spasial", "Sumasi Temporal", "Divergensi", "Konvergensi"],
-                correct: "Sumasi Temporal",
-                explanations: {
-                    "Sumasi Spasial": "SALAH. Penjumlahan dari BANYAK lokasi berbeda.",
-                    "Sumasi Temporal": "BENAR. 'Temporal' berarti waktu; akumulasi sinyal dari waktu ke waktu pada satu titik.",
-                    "Divergensi": "SALAH. Satu neuron menyebar ke banyak.",
-                    "Konvergensi": "SALAH. Banyak neuron menuju satu (struktur sirkuit, bukan mekanisme penjumlahan potensial)."
-                }
-            },
-            { // 18
-                question: "Fenomena di mana satu neuron menjumlahkan input yang datang secara SERENTAK dari BANYAK sinaps di lokasi berbeda disebut...",
-                options: ["Sumasi Spasial", "Sumasi Temporal", "Adaptasi", "Fasilitasi"],
-                correct: "Sumasi Spasial",
-                explanations: {
-                    "Sumasi Spasial": "BENAR. 'Spasial' berarti ruang; akumulasi sinyal dari berbagai ruang/lokasi di neuron pada saat bersamaan.",
-                    "Sumasi Temporal": "SALAH. Dari satu sumber berulang.",
-                    "Adaptasi": "SALAH. Penurunan respons reseptor.",
-                    "Fasilitasi": "SALAH. Peningkatan respons (mekanisme umum)."
-                }
-            },
-            { // 19
-                question: "Struktur SSP yang berfungsi sebagai penghubung utama antara sistem saraf dan sistem endokrin (mengontrol kelenjar pituitari) adalah...",
-                options: ["Talamus", "Serebelum", "Hipotalamus", "Medula Oblongata"],
-                correct: "Hipotalamus",
-                explanations: {
-                    "Talamus": "SALAH. Relay sensorik.",
-                    "Serebelum": "SALAH. Koordinasi motorik.",
-                    "Hipotalamus": "BENAR. Mengontrol sekresi hormon pituitari dan menjaga homeostasis.",
-                    "Medula Oblongata": "SALAH. Pusat vital (jantung/napas)."
-                }
-            },
-            { // 20
-                question: "Respons fisiologis seperti peningkatan detak jantung, dilatasi pupil, dan pengalihan darah ke otot rangka ('Fight or Flight') dikendalikan oleh...",
-                options: ["Sistem Saraf Somatik", "Sistem Saraf Parasimpatis", "Sistem Saraf Simpatis", "Sistem Saraf Enterik"],
-                correct: "Sistem Saraf Simpatis",
-                explanations: {
-                    "Sistem Saraf Somatik": "SALAH. Kontrol otot sadar.",
-                    "Sistem Saraf Parasimpatis": "SALAH. 'Rest and Digest' (menurunkan detak jantung).",
-                    "Sistem Saraf Simpatis": "BENAR. Mempersiapkan tubuh untuk aktivitas berat atau stres.",
-                    "Sistem Saraf Enterik": "SALAH. Pencernaan."
-                }
-            }
-        ];
+    <div style="display:flex; justify-content:flex-end; gap:10px;">
+      <button class="btn" onclick="closeModal()">Kembali Ujian</button>
+      <button class="btn btn-danger" onclick="submitExam()">Ya, Selesaikan</button>
+    </div>
+  </div>
+</div>
 
+<!-- Tampilan Hasil Review -->
+<div class="layout results-view" id="results-layout" style="display:none; max-width:960px;">
+  <div style="grid-column: 1 / -1;">
+    <div class="res-card">
+      <div style="font-family:'DM Mono',monospace; font-size:12px; color:var(--text3); text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">Hasil Akhir Evaluasi</div>
+      <div class="res-score" id="res-score">0%</div>
+      <p style="color:var(--text2); margin-top:8px;" id="res-msg">Evaluasi selesai.</p>
 
-        // --- Variabel Status Kuis ---
-        let currentQuestionIndex = 0;
-        let score = 0;
-        const totalQuestions = questions.length;
-        let currentMode = 'exam'; // 'exam', 'practice', 'flashcard'
-        let currentFlashcardIndex = 0; // Untuk mode flashcard
-        let userAnswers = []; // BARU: Untuk menyimpan jawaban mode ujian
+      <div class="res-grid">
+        <div class="res-item">
+          <div class="res-val" style="color:var(--green);" id="res-correct">0</div>
+          <div class="res-lbl">Jawaban Benar</div>
+        </div>
+        <div class="res-item">
+          <div class="res-val" style="color:var(--red);" id="res-wrong">0</div>
+          <div class="res-lbl">Jawaban Salah</div>
+        </div>
+        <div class="res-item">
+          <div class="res-val" style="color:var(--text3);" id="res-empty">0</div>
+          <div class="res-lbl">Tidak Dijawab</div>
+        </div>
+        <div class="res-item">
+          <div class="res-val" style="color:var(--text);" id="res-time">--:--</div>
+          <div class="res-lbl">Waktu Digunakan</div>
+        </div>
+      </div>
 
-        // --- Referensi Elemen DOM ---
-        const startScreen = document.getElementById('start-screen');
-        const quizScreen = document.getElementById('quiz-screen');
-        const resultScreen = document.getElementById('result-screen');
-        const flashcardScreen = document.getElementById('flashcard-screen');
-        const reviewScreen = document.getElementById('review-screen'); // BARU
-        
-        // Tombol Menu Utama
-        const startFlashcardBtn = document.getElementById('start-flashcard-btn');
-        const startPracticeBtn = document.getElementById('start-practice-btn');
-        const startExamBtn = document.getElementById('start-exam-btn');
-        
-        // Tombol Hasil
-        const restartButton = document.getElementById('restart-button');
-        const reviewButton = document.getElementById('review-button'); // BARU
-        
-        // Elemen Kuis
-        const questionText = document.getElementById('question-text');
-        const optionsContainer = document.getElementById('options-container');
-        const progressText = document.getElementById('progress-text');
-        const scoreText = document.getElementById('score-text');
-        const finalScoreText = document.getElementById('final-score-text');
-        const nextQuestionButton = document.getElementById('next-question-btn');
-        const explanationContainer = document.getElementById('explanation-container');
-        
-        // Elemen Flashcard
-        const flashcard = document.getElementById('flashcard');
-        const flashcardFront = document.getElementById('flashcard-front');
-        const flashcardBack = document.getElementById('flashcard-back');
-        const flashcardAnswerList = document.getElementById('flashcard-answer-list');
-        const flashcardProgress = document.getElementById('flashcard-progress');
-        const flashcardPrev = document.getElementById('flashcard-prev');
-        const flashcardFlip = document.getElementById('flashcard-flip');
-        const flashcardNext = document.getElementById('flashcard-next');
-        
-        // Elemen Review BARU
-        const reviewContainer = document.getElementById('review-container');
-        const restartFromReviewBtn = document.getElementById('restart-from-review');
-        
-        // Tombol Kembali ke Menu
-        const backToMenuButtons = document.querySelectorAll('.back-to-menu-btn');
-        
-        // --- Fungsi Navigasi Utama ---
+      <div style="display:flex; justify-content:center; gap:12px; margin-top:16px;">
+        <button class="btn btn-primary" onclick="restartExam()">Ulangi Ujian ↺</button>
+      </div>
+    </div>
 
-        function showMainMenu() {
-            quizScreen.classList.add('hidden');
-            resultScreen.classList.add('hidden');
-            flashcardScreen.classList.add('hidden');
-            reviewScreen.classList.add('hidden'); // BARU
-            startScreen.classList.remove('hidden');
-            document.body.classList.add('items-center');
-            document.body.classList.remove('pt-10');
-        }
+    <h2 style="font-family:'Syne',sans-serif; font-size:20px; margin-bottom:16px;">Pembahasan Butir Soal</h2>
+    <div id="review-list"></div>
+  </div>
+</div>
 
-        function setBodyActive() {
-            document.body.classList.remove('items-center');
-            document.body.classList.add('pt-10');
-        }
+<script>
+const STORAGE_KEY = 'cbtfisiologifungsisistemsaraf_exam_state';
+const questions = [
+  {
+    "id": 1,
+    "q": "Urutan logis dari tiga fungsi dasar sistem saraf dalam memproses informasi adalah...",
+    "o": [
+      "Motorik -> Integrasi -> Sensorik",
+      "Sensorik -> Integrasi -> Motorik",
+      "Integrasi -> Sensorik -> Motorik",
+      "Sensorik -> Motorik -> Integrasi"
+    ],
+    "a": 1,
+    "exp": "Motorik -> Integrasi -> Sensorik: SALAH. Motorik adalah hasil akhir.<br>Sensorik -> Integrasi -> Motorik: BENAR. Sistem saraf menerima input (sensorik/aferen), memprosesnya di SSP (integrasi), dan memberikan respons (motorik/eferen).<br>Integrasi -> Sensorik -> Motorik: SALAH. Integrasi membutuhkan data input terlebih dahulu.<br>Sensorik -> Motorik -> Integrasi: SALAH. Integrasi (keputusan) terjadi sebelum aksi motorik.",
+    "src": "Departemen Anatomi & Fisiologi FK UNSOED"
+  },
+  {
+    "id": 2,
+    "q": "Divisi Sistem Saraf Tepi (SST) yang mengontrol aktivitas otot rangka secara SADAR (volunter) adalah...",
+    "o": [
+      "Sistem Saraf Otonom (SSO)",
+      "Sistem Saraf Somatik (SNS)",
+      "Sistem Saraf Enterik (ENS)",
+      "Sistem Saraf Parasimpatis"
+    ],
+    "a": 1,
+    "exp": "Sistem Saraf Otonom (SSO): SALAH. SSO mengontrol fungsi tidak sadar (involunter).<br>Sistem Saraf Somatik (SNS): BENAR. SNS bertanggung jawab atas kontrol volunter (sadar) terhadap efektor somatik yaitu otot rangka.<br>Sistem Saraf Enterik (ENS): SALAH. ENS mengontrol saluran pencernaan.<br>Sistem Saraf Parasimpatis: SALAH. Ini adalah bagian dari SSO.",
+    "src": "Departemen Anatomi & Fisiologi FK UNSOED"
+  },
+  {
+    "id": 3,
+    "q": "Sistem saraf yang sering disebut 'otak perut' karena dapat mengontrol saluran pencernaan secara mandiri adalah...",
+    "o": [
+      "Sistem Saraf Simpatis",
+      "Sistem Saraf Parasimpatis",
+      "Sistem Saraf Enterik (ENS)",
+      "Sistem Saraf Pusat (SSP)"
+    ],
+    "a": 2,
+    "exp": "Sistem Saraf Simpatis: SALAH. Hanya memodulasi aktivitas usus.<br>Sistem Saraf Parasimpatis: SALAH. Hanya memodulasi aktivitas usus.<br>Sistem Saraf Enterik (ENS): BENAR. ENS adalah jaringan neuron kompleks di dinding usus yang dapat mengatur gerak peristaltik dan sekresi secara lokal/mandiri.<br>Sistem Saraf Pusat (SSP): SALAH. SSP (otak) mengontrol, tapi 'otak perut' merujuk pada ENS di perifer.",
+    "src": "Departemen Anatomi & Fisiologi FK UNSOED"
+  },
+  {
+    "id": 4,
+    "q": "Bagian neuron yang berfungsi sebagai pusat metabolisme sel dan mengandung nukleus adalah...",
+    "o": [
+      "Dendrit",
+      "Akson",
+      "Axon Hillock",
+      "Badan Sel (Soma)"
+    ],
+    "a": 3,
+    "exp": "Dendrit: SALAH. Penerima sinyal.<br>Akson: SALAH. Penghantar sinyal.<br>Axon Hillock: SALAH. Pemicu potensial aksi.<br>Badan Sel (Soma): BENAR. Soma (perikaryon) mengandung organel vital untuk sintesis protein dan metabolisme neuron.",
+    "src": "Departemen Anatomi & Fisiologi FK UNSOED"
+  },
+  {
+    "id": 5,
+    "q": "Bagian pangkal akson yang berfungsi sebagai 'Trigger Zone' untuk memicu potensial aksi adalah...",
+    "o": [
+      "Dendrit",
+      "Badan Nissl",
+      "Axon Hillock",
+      "Telodendria"
+    ],
+    "a": 2,
+    "exp": "Dendrit: SALAH. Menerima sinyal berjenjang.<br>Badan Nissl: SALAH. Retikulum endoplasma kasar (sintesis protein).<br>Axon Hillock: BENAR. Di sinilah sinyal-sinyal input dijumlahkan (sumasi), dan jika mencapai threshold, potensial aksi dimulai.<br>Telodendria: SALAH. Terminal akson.",
+    "src": "Departemen Anatomi & Fisiologi FK UNSOED"
+  },
+  {
+    "id": 6,
+    "q": "Neuron sensorik yang badan selnya terletak di Ganglion Radiks Dorsalis umumnya memiliki struktur...",
+    "o": [
+      "Multipolar",
+      "Bipolar",
+      "Unipolar (Pseudounipolar)",
+      "Anaxonic"
+    ],
+    "a": 2,
+    "exp": "Multipolar: SALAH. Umumnya neuron motorik dan interneuron.<br>Bipolar: SALAH. Khusus di retina, hidung, telinga.<br>Unipolar (Pseudounipolar): BENAR. Memiliki satu juluran pendek yang bercabang dua (satu ke perifer, satu ke SSP), khas untuk neuron sensorik somatik.<br>Anaxonic: SALAH. Di otak/retina tertentu.",
+    "src": "Departemen Anatomi & Fisiologi FK UNSOED"
+  },
+  {
+    "id": 7,
+    "q": "Potensial Membran Istirahat (-70 mV) terutama dijaga oleh...",
+    "o": [
+      "Kanal Bocor $K^+$ dan Pompa $Na^+/K^+$",
+      "Kanal $Na^+$ Berpintu Tegangan",
+      "Kanal $Ca^{2+}$",
+      "Kanal $Cl^-$ Berpintu Ligan"
+    ],
+    "a": 0,
+    "exp": "Kanal Bocor $K^+$ dan Pompa $Na^+/K^+$: BENAR. Kebocoran ion $K^+$ keluar sel dan kerja pompa ATPase (3 $Na^+$ keluar, 2 $K^+$ masuk) menciptakan muatan negatif di dalam sel.<br>Kanal $Na^+$ Berpintu Tegangan: SALAH. Ini aktif saat potensial aksi (depolarisasi).<br>Kanal $Ca^{2+}$: SALAH. Penting di terminal sinaps.<br>Kanal $Cl^-$ Berpintu Ligan: SALAH. Penting untuk inhibisi sinaptik.",
+    "src": "Departemen Anatomi & Fisiologi FK UNSOED"
+  },
+  {
+    "id": 8,
+    "q": "Fase Depolarisasi cepat pada Potensial Aksi disebabkan oleh pembukaan...",
+    "o": [
+      "Kanal $K^+$ Berpintu Tegangan",
+      "Kanal $Na^+$ Berpintu Tegangan",
+      "Kanal $Cl^-$",
+      "Pompa $Na^+/K^+$"
+    ],
+    "a": 1,
+    "exp": "Kanal $K^+$ Berpintu Tegangan: SALAH. Ini menyebabkan Repolarisasi.<br>Kanal $Na^+$ Berpintu Tegangan: BENAR. Saat threshold tercapai, kanal ini terbuka, $Na^+$ masuk deras, membuat membran menjadi positif (+30 mV).<br>Kanal $Cl^-$: SALAH. Menyebabkan Hiperpolarisasi.<br>Pompa $Na^+/K^+$: SALAH. Bekerja lambat menjaga keseimbangan jangka panjang.",
+    "src": "Departemen Anatomi & Fisiologi FK UNSOED"
+  },
+  {
+    "id": 9,
+    "q": "Konduksi impuls yang 'melompat' dari satu Nodus Ranvier ke nodus berikutnya pada akson bermielin disebut...",
+    "o": [
+      "Konduksi Kontinu",
+      "Konduksi Saltatoris",
+      "Konduksi Sinaptik",
+      "Konduksi Retrograd"
+    ],
+    "a": 1,
+    "exp": "Konduksi Kontinu: SALAH. Pada akson tak bermielin (lambat).<br>Konduksi Saltatoris: BENAR. 'Saltare' berarti melompat. Mielin menginsulasi akson sehingga arus hanya bisa keluar masuk di nodus, mempercepat hantaran.<br>Konduksi Sinaptik: SALAH. Transmisi antar neuron.<br>Konduksi Retrograd: SALAH. Transport material balik ke soma.",
+    "src": "Departemen Anatomi & Fisiologi FK UNSOED"
+  },
+  {
+    "id": 10,
+    "q": "Jenis sinapsis yang paling umum pada sistem saraf mamalia, yang menggunakan neurotransmiter, adalah...",
+    "o": [
+      "Sinapsis Listrik",
+      "Sinapsis Kimia",
+      "Gap Junction",
+      "Sinapsis Mekanik"
+    ],
+    "a": 1,
+    "exp": "Sinapsis Listrik: SALAH. Menggunakan gap junction, lebih jarang (misal: jantung).<br>Sinapsis Kimia: BENAR. Menggunakan zat kimia (neurotransmiter) untuk menyeberangi celah sinaps, memungkinkan modulasi sinyal yang kompleks.<br>Gap Junction: SALAH. Ini struktur sinapsis listrik.<br>Sinapsis Mekanik: SALAH. Tidak ada istilah ini dalam konteks transmisi saraf standar.",
+    "src": "Departemen Anatomi & Fisiologi FK UNSOED"
+  },
+  {
+    "id": 11,
+    "q": "Peristiwa yang memicu fusi vesikel sinaptik dan pelepasan neurotransmiter (eksositosis) di terminal akson adalah masuknya ion...",
+    "o": [
+      "Natrium ($Na^+$)",
+      "Kalium ($K^+$)",
+      "Kalsium ($Ca^{2+}$)",
+      "Klorida ($Cl^-$)"
+    ],
+    "a": 2,
+    "exp": "Natrium ($Na^+$): SALAH. Memicu depolarisasi membran akson.<br>Kalium ($K^+$): SALAH. Memicu repolarisasi.<br>Kalsium ($Ca^{2+}$): BENAR. Depolarisasi terminal membuka kanal $Ca^{2+}$ voltage-gated; influks kalsium adalah sinyal kunci untuk eksositosis.<br>Klorida ($Cl^-$): SALAH. Biasanya untuk inhibisi.",
+    "src": "Departemen Anatomi & Fisiologi FK UNSOED"
+  },
+  {
+    "id": 12,
+    "q": "Reseptor neurotransmiter yang juga berfungsi langsung sebagai kanal ion (membuka saat NT menempel) disebut...",
+    "o": [
+      "Reseptor Metabotropik",
+      "Reseptor Ionotropik",
+      "Protein G",
+      "Second Messenger"
+    ],
+    "a": 1,
+    "exp": "Reseptor Metabotropik: SALAH. Bekerja tidak langsung melalui protein G (lambat).<br>Reseptor Ionotropik: BENAR. Reseptor ini adalah 'Ligand-gated Ion Channel', bekerja sangat cepat.<br>Protein G: SALAH. Komponen reseptor metabotropik.<br>Second Messenger: SALAH. Produk reseptor metabotropik.",
+    "src": "Departemen Anatomi & Fisiologi FK UNSOED"
+  },
+  {
+    "id": 13,
+    "q": "Neurotransmiter eksitatorik utama di otak, yang sangat penting untuk memori dan pembelajaran, adalah...",
+    "o": [
+      "GABA",
+      "Dopamin",
+      "Glutamat",
+      "Serotonin"
+    ],
+    "a": 2,
+    "exp": "GABA: SALAH. Inhibitor utama.<br>Dopamin: SALAH. Motivasi/Reward.<br>Glutamat: BENAR. Glutamat adalah NT eksitatorik paling melimpah di SSP.<br>Serotonin: SALAH. Mood/Tidur.",
+    "src": "Departemen Anatomi & Fisiologi FK UNSOED"
+  },
+  {
+    "id": 14,
+    "q": "Neurotransmiter inhibitorik utama di otak yang bekerja dengan membuka kanal $Cl^-$ (menyebabkan hiperpolarisasi) adalah...",
+    "o": [
+      "Glutamat",
+      "Asetilkolin",
+      "GABA",
+      "Norepinefrin"
+    ],
+    "a": 2,
+    "exp": "Glutamat: SALAH. Eksitatorik.<br>Asetilkolin: SALAH. Umumnya eksitatorik di SSP.<br>GABA: BENAR. Gamma-Aminobutyric Acid menyebabkan IPSP (Inhibitory Postsynaptic Potential).<br>Norepinefrin: SALAH. Arousal/Perhatian.",
+    "src": "Departemen Anatomi & Fisiologi FK UNSOED"
+  },
+  {
+    "id": 15,
+    "q": "Potensial Postsinaptik Eksitatorik (EPSP) adalah perubahan potensial membran yang bersifat...",
+    "o": [
+      "Hiperpolarisasi (menjauhi threshold)",
+      "Depolarisasi (mendekati threshold)",
+      "Repolarisasi",
+      "Tetap (tidak berubah)"
+    ],
+    "a": 1,
+    "exp": "Hiperpolarisasi (menjauhi threshold): SALAH. Ini adalah IPSP.<br>Depolarisasi (mendekati threshold): BENAR. EPSP membuat neuron lebih positif, sehingga lebih mudah mencapai ambang batas untuk menembakkan potensial aksi.<br>Repolarisasi: SALAH. Kembali ke istirahat.<br>Tetap (tidak berubah): SALAH.",
+    "src": "Departemen Anatomi & Fisiologi FK UNSOED"
+  },
+  {
+    "id": 16,
+    "q": "Potensial Postsinaptik Inhibitorik (IPSP) biasanya disebabkan oleh pembukaan kanal...",
+    "o": [
+      "$Na^+$",
+      "$Ca^{2+}$",
+      "$K^+$ atau $Cl^-$",
+      "Semua kanal tertutup"
+    ],
+    "a": 2,
+    "exp": "$Na^+$: SALAH. Masuknya $Na^+$ menyebabkan EPSP (Depolarisasi).<br>$Ca^{2+}$: SALAH. Masuknya $Ca^{2+}$ menyebabkan EPSP.<br>$K^+$ atau $Cl^-$: BENAR. Keluarnya $K^+$ (muatan positif hilang) atau masuknya $Cl^-$ (muatan negatif tambah) membuat sel lebih negatif (Hiperpolarisasi/IPSP).<br>Semua kanal tertutup: SALAH.",
+    "src": "Departemen Anatomi & Fisiologi FK UNSOED"
+  },
+  {
+    "id": 17,
+    "q": "Fenomena di mana satu neuron menerima input berulang-ulang dengan sangat cepat dari SATU sinaps presinaps untuk mencapai threshold disebut...",
+    "o": [
+      "Sumasi Spasial",
+      "Sumasi Temporal",
+      "Divergensi",
+      "Konvergensi"
+    ],
+    "a": 1,
+    "exp": "Sumasi Spasial: SALAH. Penjumlahan dari BANYAK lokasi berbeda.<br>Sumasi Temporal: BENAR. 'Temporal' berarti waktu; akumulasi sinyal dari waktu ke waktu pada satu titik.<br>Divergensi: SALAH. Satu neuron menyebar ke banyak.<br>Konvergensi: SALAH. Banyak neuron menuju satu (struktur sirkuit, bukan mekanisme penjumlahan potensial).",
+    "src": "Departemen Anatomi & Fisiologi FK UNSOED"
+  },
+  {
+    "id": 18,
+    "q": "Fenomena di mana satu neuron menjumlahkan input yang datang secara SERENTAK dari BANYAK sinaps di lokasi berbeda disebut...",
+    "o": [
+      "Sumasi Spasial",
+      "Sumasi Temporal",
+      "Adaptasi",
+      "Fasilitasi"
+    ],
+    "a": 0,
+    "exp": "Sumasi Spasial: BENAR. 'Spasial' berarti ruang; akumulasi sinyal dari berbagai ruang/lokasi di neuron pada saat bersamaan.<br>Sumasi Temporal: SALAH. Dari satu sumber berulang.<br>Adaptasi: SALAH. Penurunan respons reseptor.<br>Fasilitasi: SALAH. Peningkatan respons (mekanisme umum).",
+    "src": "Departemen Anatomi & Fisiologi FK UNSOED"
+  },
+  {
+    "id": 19,
+    "q": "Struktur SSP yang berfungsi sebagai penghubung utama antara sistem saraf dan sistem endokrin (mengontrol kelenjar pituitari) adalah...",
+    "o": [
+      "Talamus",
+      "Serebelum",
+      "Hipotalamus",
+      "Medula Oblongata"
+    ],
+    "a": 2,
+    "exp": "Talamus: SALAH. Relay sensorik.<br>Serebelum: SALAH. Koordinasi motorik.<br>Hipotalamus: BENAR. Mengontrol sekresi hormon pituitari dan menjaga homeostasis.<br>Medula Oblongata: SALAH. Pusat vital (jantung/napas).",
+    "src": "Departemen Anatomi & Fisiologi FK UNSOED"
+  },
+  {
+    "id": 20,
+    "q": "Respons fisiologis seperti peningkatan detak jantung, dilatasi pupil, dan pengalihan darah ke otot rangka ('Fight or Flight') dikendalikan oleh...",
+    "o": [
+      "Sistem Saraf Somatik",
+      "Sistem Saraf Parasimpatis",
+      "Sistem Saraf Simpatis",
+      "Sistem Saraf Enterik"
+    ],
+    "a": 2,
+    "exp": "Sistem Saraf Somatik: SALAH. Kontrol otot sadar.<br>Sistem Saraf Parasimpatis: SALAH. 'Rest and Digest' (menurunkan detak jantung).<br>Sistem Saraf Simpatis: BENAR. Mempersiapkan tubuh untuk aktivitas berat atau stres.<br>Sistem Saraf Enterik: SALAH. Pencernaan.",
+    "src": "Departemen Anatomi & Fisiologi FK UNSOED"
+  }
+];
 
-        // --- Logika Mode Flashcard ---
+let curIdx = 0;
+let userAnswers = {};
+let flagged = {};
+let currentFilter = 'all';
+let secondsElapsed = 0;
+let timerInterval = null;
+let isSubmitted = false;
 
-        function startFlashcardMode() {
-            currentFlashcardIndex = 0;
-            startScreen.classList.add('hidden');
-            flashcardScreen.classList.remove('hidden');
-            setBodyActive();
-            showFlashcard();
-        }
+const KEYS = ['A', 'B', 'C', 'D', 'E', 'F'];
 
-        function showFlashcard() {
-            const question = questions[currentFlashcardIndex];
-            flashcardFront.querySelector('p').innerText = question.question;
-            flashcardAnswerList.innerHTML = ''; 
-            flashcardFront.classList.remove('hidden');
-            flashcardBack.classList.add('hidden');
-            flashcardProgress.innerText = `${currentFlashcardIndex + 1} / ${totalQuestions}`;
-            flashcardPrev.disabled = currentFlashcardIndex === 0;
-            flashcardNext.disabled = currentFlashcardIndex === totalQuestions - 1;
-            
-            // Render MathJax jika ada rumus
-            if (window.MathJax) {
-                MathJax.typesetPromise([flashcardFront]);
-            }
-        }
+function init() {
+  loadState();
+  renderPalette();
+  renderQ();
+  startTimer();
+  
+  document.addEventListener('keydown', handleKeyNav);
+}
 
-        function flipFlashcard() {
-            const isFlippingToBack = flashcardBack.classList.contains('hidden');
-            if (isFlippingToBack) {
-                const q = questions[currentFlashcardIndex];
-                renderFlashcardExplanations(q.explanations, q.correct);
-            }
-            flashcardFront.classList.toggle('hidden');
-            flashcardBack.classList.toggle('hidden');
-            
-            // Render MathJax saat dibalik
-            if (window.MathJax && isFlippingToBack) {
-                MathJax.typesetPromise([flashcardBack]);
-            }
-        }
-        
-        function renderFlashcardExplanations(explanationsObj, correctTerm) {
-            flashcardAnswerList.innerHTML = ''; 
-            const sortedTerms = Object.keys(explanationsObj).sort((a, b) => (a === correctTerm ? -1 : b === correctTerm ? 1 : 0));
-            sortedTerms.forEach(term => {
-                const explanation = explanationsObj[term];
-                const isCorrect = (term === correctTerm);
-                renderSingleExplanation(term, explanation, isCorrect, flashcardAnswerList);
-            });
-        }
-        
-        function prevFlashcard() {
-            if (currentFlashcardIndex > 0) {
-                currentFlashcardIndex--;
-                showFlashcard();
-            }
-        }
+function startTimer() {
+  timerInterval = setInterval(() => {
+    secondsElapsed++;
+    saveState();
+    updateTimerDisplay();
+  }, 1000);
+}
 
-        function nextFlashcard() {
-            if (currentFlashcardIndex < totalQuestions - 1) {
-                currentFlashcardIndex++;
-                showFlashcard();
-            }
-        }
+function updateTimerDisplay() {
+  const m = Math.floor(secondsElapsed / 60);
+  const s = secondsElapsed % 60;
+  const str = String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+  const d = document.getElementById('time-display');
+  if (d) d.textContent = str;
+}
 
-        // --- Logika Mode Kuis (Latihan & Ujian) ---
+function renderQ() {
+  const q = questions[curIdx];
+  document.getElementById('q-number').textContent = 'Soal ' + (curIdx + 1) + ' dari ' + questions.length;
+  document.getElementById('q-text').textContent = q.q;
+  
+  const imgEl = document.getElementById('q-image');
+  if (q.img) {
+    imgEl.src = q.img;
+    imgEl.style.display = 'block';
+  } else {
+    imgEl.style.display = 'none';
+  }
 
-        function startQuiz() {
-            currentQuestionIndex = 0;
-            score = 0;
-            userAnswers = []; // BARU: Kosongkan riwayat jawaban
-            
-            startScreen.classList.add('hidden');
-            resultScreen.classList.add('hidden');
-            reviewScreen.classList.add('hidden'); // BARU
-            quizScreen.classList.remove('hidden');
-            nextQuestionButton.classList.add('hidden');
-            
-            setBodyActive();
-            showQuestion();
-        }
-        
-        function startPracticeMode() {
-            currentMode = 'practice';
-            startQuiz();
-        }
-        
-        function startExamMode() {
-            currentMode = 'exam';
-            startQuiz();
-        }
+  const flagBtn = document.getElementById('flag-btn');
+  if (flagged[curIdx]) {
+    flagBtn.classList.add('flagged');
+    flagBtn.textContent = '🚩 Ragu-ragu (Aktif)';
+  } else {
+    flagBtn.classList.remove('flagged');
+    flagBtn.textContent = '🚩 Ragu-ragu';
+  }
 
-        function showQuestion() {
-            optionsContainer.innerHTML = '';
-            explanationContainer.innerHTML = ''; 
-            nextQuestionButton.classList.add('hidden');
-            
-            const question = questions[currentQuestionIndex];
-            questionText.innerText = question.question;
-            progressText.innerText = `Soal ${currentQuestionIndex + 1} / ${totalQuestions}`;
-            
-            // Mode Latihan menunjukkan skor real-time, Mode Ujian tidak
-            if (currentMode === 'practice') {
-                 scoreText.innerText = `Skor: ${score}`;
-            } else {
-                 scoreText.innerText = `Skor: -`;
-            }
-            
-            const options = question.options;
+  const optsContainer = document.getElementById('opts');
+  optsContainer.innerHTML = '';
 
-            options.forEach(option => {
-                const button = document.createElement('button');
-                button.innerText = option;
-                button.classList.add('option-btn');
-                button.addEventListener('click', () => selectAnswer(option, button));
-                optionsContainer.appendChild(button);
-            });
-            
-            // Render MathJax untuk soal baru
-            if (window.MathJax) {
-                MathJax.typesetPromise([questionText, optionsContainer]);
-            }
-        }
+  q.o.forEach((optText, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'opt' + (userAnswers[curIdx] === i ? ' selected' : '');
+    btn.innerHTML = '<span class="opt-key">' + KEYS[i] + '</span><span>' + optText + '</span>';
+    btn.onclick = () => selectOption(i);
+    optsContainer.appendChild(btn);
+  });
 
-        function selectAnswer(selectedOption, buttonEl) {
-            const correctAnwer = questions[currentQuestionIndex].correct;
+  document.getElementById('prev-btn').disabled = curIdx === 0;
+  document.getElementById('next-btn').disabled = curIdx === questions.length - 1;
 
-            // Nonaktifkan semua tombol opsi
-            const optionButtons = optionsContainer.querySelectorAll('.option-btn');
-            optionButtons.forEach(btn => btn.classList.add('disabled'));
-            
-            // Simpan jawaban (untuk kedua mode)
-            userAnswers[currentQuestionIndex] = {
-                chosen: selectedOption,
-                correct: correctAnwer,
-                isCorrect: selectedOption === correctAnwer
-            };
+  updateProgress();
+  renderPalette();
+}
 
-            // Logika lanjut berdasarkan mode
-            if (currentMode === 'practice') {
-                // --- MODE LATIHAN ---
-                if (selectedOption === correctAnwer) {
-                    score++;
-                    buttonEl.classList.add('correct');
-                } else {
-                    buttonEl.classList.add('incorrect');
-                    optionButtons.forEach(btn => {
-                        if (btn.innerText === correctAnwer) {
-                            btn.classList.add('correct');
-                        }
-                    });
-                }
-                scoreText.innerText = `Skor: ${score}`;
-                nextQuestionButton.classList.remove('hidden');
-                renderPracticeExplanation(selectedOption, correctAnwer);
-                
-            } else {
-                // --- MODE UJIAN (LOGIKA BARU) ---
-                // 1. Hanya sorot jawaban yang dipilih
-                buttonEl.classList.add('selected');
-                
-                // 2. Tidak ada feedback benar/salah
-                
-                // 3. Auto-lanjut setelah delay singkat
-                setTimeout(goToNextQuestion, 500); 
-            }
-        }
-        
-        function renderPracticeExplanation(chosenOption, correctOption) {
-            explanationContainer.innerHTML = ''; 
-            const explanations = questions[currentQuestionIndex].explanations;
-            
-            // Tampilkan penjelasan untuk semua opsi, tandai yang benar dan yang dipilih salah
-            Object.keys(explanations).forEach(term => {
-                const explanation = explanations[term];
-                const isCorrect = (term === correctOption);
-                const isChosen = (term === chosenOption);
-                
-                // Hanya tampilkan yang benar dan yang salah dipilih (jika beda)
-                if(isCorrect || (isChosen && !isCorrect)) {
-                     renderSingleExplanation(term, explanation, isCorrect, explanationContainer);
-                }
-            });
-            
-            // Render MathJax pada penjelasan
-            if (window.MathJax) {
-                MathJax.typesetPromise([explanationContainer]);
-            }
-        }
-        
-        // Fungsi render yang dibagikan
-        function renderSingleExplanation(term, explanation, isCorrect, targetElement) {
-            const optionEl = document.createElement('div');
-            optionEl.classList.add('flashcard-option-detailed');
-            
-            if (isCorrect) {
-                optionEl.classList.add('correct');
-            } else {
-                optionEl.classList.add('incorrect');
-            }
-            
-            optionEl.innerHTML = `
-                <strong>${term}</strong>
-                <span>${explanation}</span>
-            `;
-            targetElement.appendChild(optionEl);
-        }
-        
-        function goToNextQuestion() {
-            currentQuestionIndex++;
-            if (currentQuestionIndex < totalQuestions) {
-                showQuestion();
-            } else {
-                showResults();
-            }
-        }
+function selectOption(optIdx) {
+  if (isSubmitted) return;
+  if (userAnswers[curIdx] === optIdx) {
+    delete userAnswers[curIdx];
+  } else {
+    userAnswers[curIdx] = optIdx;
+  }
+  saveState();
+  renderQ();
+}
 
-        function showResults() {
-            quizScreen.classList.add('hidden');
-            resultScreen.classList.remove('hidden');
-            
-            let finalScore = 0;
-            
-            if (currentMode === 'exam') {
-                // Hitung skor dari array userAnswers
-                finalScore = userAnswers.filter(answer => answer.isCorrect).length;
-                reviewButton.classList.remove('hidden'); // Tampilkan tombol review
-            } else {
-                // Ambil skor real-time dari mode latihan
-                finalScore = score;
-                reviewButton.classList.add('hidden'); // Sembunyikan tombol review
-            }
-            
-            finalScoreText.innerText = `SKOR ANDA: ${finalScore} / ${totalQuestions}`;
-            document.body.classList.add('items-center');
-            document.body.classList.remove('pt-10');
-        }
-        
-        // --- FUNGSI REVIEW BARU ---
-        
-        function showReviewScreen() {
-            resultScreen.classList.add('hidden');
-            reviewScreen.classList.remove('hidden');
-            reviewContainer.innerHTML = ''; // Kosongkan review sebelumnya
-            setBodyActive(); // Agar tidak terpusat
-            
-            questions.forEach((question, index) => {
-                const userAnswer = userAnswers[index] || { chosen: null }; // Tangani jika soal tidak terjawab
-                
-                // Buat kartu review
-                const reviewCard = document.createElement('div');
-                reviewCard.classList.add('review-card');
-                
-                // Buat HTML untuk opsi
-                let optionsHTML = '';
-                question.options.forEach(option => {
-                    let optionClass = 'review-option neutral';
-                    if (option === question.correct) {
-                        optionClass = 'review-option correct';
-                    } else if (option === userAnswer.chosen) {
-                        optionClass = 'review-option chosen-wrong';
-                    }
-                    
-                    optionsHTML += `<div class="${optionClass}">${option}</div>`;
-                });
-                
-                // Buat HTML untuk penjelasan
-                let explanationsHTML = '';
-                const explanations = question.explanations;
-                const correctTerm = question.correct;
-                
-                // Urutkan penjelasan agar yang benar selalu di atas, diikuti yang salah (jika dipilih)
-                const sortedTerms = Object.keys(explanations).sort((a, b) => {
-                    if (a === correctTerm) return -1;
-                    if (b === correctTerm) return 1;
-                    if (a === userAnswer.chosen) return -1;
-                    if (b === userAnswer.chosen) return 1;
-                    return 0;
-                });
-                
-                sortedTerms.forEach(term => {
-                    const explanation = explanations[term];
-                    const isCorrect = (term === correctTerm);
-                    
-                    let explanationClass = 'flashcard-option-detailed';
-                    if (isCorrect) {
-                        explanationClass += ' correct';
-                    } else {
-                        explanationClass += ' incorrect';
-                    }
-                    
-                    explanationsHTML += `
-                        <div class="${explanationClass}">
-                            <strong>${term}</strong>
-                            <span>${explanation}</span>
-                        </div>
-                    `;
-                });
-                
+function toggleFlag() {
+  if (flagged[curIdx]) {
+    delete flagged[curIdx];
+  } else {
+    flagged[curIdx] = true;
+  }
+  saveState();
+  renderQ();
+}
 
-                // Gabungkan semuanya
-                reviewCard.innerHTML = `
-                    <div class="review-question">Soal ${index + 1}: ${question.question}</div>
-                    <div class="review-options-grid">${optionsHTML}</div>
-                    <div class="review-explanations">${explanationsHTML}</div>
-                `;
-                
-                reviewContainer.appendChild(reviewCard);
-            });
-            
-            // Render MathJax pada layar review
-            if (window.MathJax) {
-                MathJax.typesetPromise([reviewContainer]);
-            }
-        }
+function navQ(delta) {
+  const next = curIdx + delta;
+  if (next >= 0 && next < questions.length) {
+    curIdx = next;
+    renderQ();
+  }
+}
 
-        // --- Event Listeners ---
-        
-        // Menu Utama
-        startFlashcardBtn.addEventListener('click', startFlashcardMode);
-        startPracticeBtn.addEventListener('click', startPracticeMode);
-        startExamBtn.addEventListener('click', startExamMode);
-        
-        // Layar Hasil
-        restartButton.addEventListener('click', startQuiz); // Mengulangi mode terakhir
-        reviewButton.addEventListener('click', showReviewScreen); // BARU
-        
-        // Layar Review BARU
-        restartFromReviewBtn.addEventListener('click', startQuiz);
-        
-        // Layar Kuis
-        nextQuestionButton.addEventListener('click', goToNextQuestion);
-        
-        // Layar Flashcard
-        flashcard.addEventListener('click', flipFlashcard);
-        flashcardFlip.addEventListener('click', flipFlashcard);
-        flashcardPrev.addEventListener('click', prevFlashcard);
-        flashcardNext.addEventListener('click', nextFlashcard);
-        
-        // Tombol Kembali ke Menu (Global)
-        backToMenuButtons.forEach(button => {
-            button.addEventListener('click', showMainMenu);
-        });
+function jumpQ(idx) {
+  curIdx = idx;
+  renderQ();
+}
 
-    </script>
+function updateProgress() {
+  const ansCount = Object.keys(userAnswers).length;
+  document.getElementById('progress-text').textContent = ansCount + '/' + questions.length;
+}
+
+function renderPalette() {
+  const pal = document.getElementById('palette');
+  pal.innerHTML = '';
+
+  questions.forEach((_, i) => {
+    const isAnswered = userAnswers[i] !== undefined;
+    const isFlagged = !!flagged[i];
+
+    if (currentFilter === 'unanswered' && isAnswered) return;
+    if (currentFilter === 'flagged' && !isFlagged) return;
+
+    const btn = document.createElement('button');
+    let cls = 'pal-btn';
+    if (i === curIdx) cls += ' current';
+    if (isAnswered) cls += ' answered';
+    if (isFlagged) cls += ' flagged';
+    
+    btn.className = cls;
+    btn.textContent = i + 1;
+    btn.onclick = () => jumpQ(i);
+    pal.appendChild(btn);
+  });
+}
+
+function setFilter(f, btn) {
+  currentFilter = f;
+  document.querySelectorAll('.ftab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  renderPalette();
+}
+
+function confirmFinish() {
+  const ansCount = Object.keys(userAnswers).length;
+  const flagCount = Object.keys(flagged).length;
+  const unansCount = questions.length - ansCount;
+
+  document.getElementById('modal-ans').textContent = ansCount;
+  document.getElementById('modal-unans').textContent = unansCount;
+  document.getElementById('modal-flag').textContent = flagCount;
+
+  document.getElementById('finish-modal').classList.add('show');
+}
+
+function closeModal() {
+  document.getElementById('finish-modal').classList.remove('show');
+}
+
+function submitExam() {
+  closeModal();
+  isSubmitted = true;
+  clearInterval(timerInterval);
+
+  let correctCount = 0;
+  questions.forEach((q, i) => {
+    if (userAnswers[i] === q.a) {
+      correctCount++;
+    }
+  });
+
+  const total = questions.length;
+  const wrongCount = Object.keys(userAnswers).length - correctCount;
+  const emptyCount = total - Object.keys(userAnswers).length;
+  const pct = Math.round((correctCount / total) * 100);
+
+  document.getElementById('exam-layout').style.display = 'none';
+  document.getElementById('results-layout').style.display = 'block';
+
+  document.getElementById('res-score').textContent = pct + '%';
+  document.getElementById('res-correct').textContent = correctCount;
+  document.getElementById('res-wrong').textContent = wrongCount;
+  document.getElementById('res-empty').textContent = emptyCount;
+
+  const m = Math.floor(secondsElapsed / 60);
+  const s = secondsElapsed % 60;
+  document.getElementById('res-time').textContent = String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+
+  renderReviewList();
+}
+
+function renderReviewList() {
+  const container = document.getElementById('review-list');
+  container.innerHTML = '';
+
+  questions.forEach((q, i) => {
+    const userAns = userAnswers[i];
+    const isCorrect = userAns === q.a;
+    const isUnanswered = userAns === undefined;
+
+    let cls = 'review-item ';
+    if (isUnanswered) cls += 'unanswered';
+    else if (isCorrect) cls += 'correct';
+    else cls += 'incorrect';
+
+    const div = document.createElement('div');
+    div.className = cls;
+
+    let statusText = isUnanswered ? '⚪ Tidak Dijawab' : (isCorrect ? '✅ Jawaban Benar' : '❌ Jawaban Salah');
+    let optsHtml = q.o.map((opt, oIdx) => {
+      let optStyle = 'padding:6px 10px; border-radius:6px; margin:4px 0; font-size:13.5px;';
+      if (oIdx === q.a) {
+        optStyle += ' background:var(--greenbg); color:var(--green); font-weight:600; border:1px solid var(--greenb);';
+      } else if (oIdx === userAns && !isCorrect) {
+        optStyle += ' background:var(--redbg); color:var(--red); font-weight:600; border:1px solid var(--redb);';
+      } else {
+        optStyle += ' color:var(--text2);';
+      }
+      return '<div style="' + optStyle + '">' + KEYS[oIdx] + '. ' + opt + '</div>';
+    }).join('');
+
+    div.innerHTML = 
+      '<div style="display:flex; justify-content:space-between; margin-bottom:8px;">' +
+        '<strong style="font-family:Syne,sans-serif;">Soal #' + (i + 1) + '</strong>' +
+        '<span style="font-family:DM Mono,monospace; font-size:12px;">' + statusText + '</span>' +
+      '</div>' +
+      '<div style="font-size:14.5px; margin-bottom:12px; color:var(--text);">' + q.q + '</div>' +
+      '<div style="margin-bottom:12px;">' + optsHtml + '</div>' +
+      '<div class="review-exp">' +
+        '<strong>Pembahasan:</strong> ' + (q.exp || 'Tidak ada pembahasan khusus.') +
+        (q.src ? '<div style="font-size:11.5px; color:var(--text3); margin-top:4px;">Sumber: ' + q.src + '</div>' : '') +
+      '</div>';
+
+    container.appendChild(div);
+  });
+}
+
+function restartExam() {
+  localStorage.removeItem(STORAGE_KEY);
+  location.reload();
+}
+
+function handleKeyNav(e) {
+  if (isSubmitted) return;
+  if (['1','2','3','4','5'].includes(e.key)) {
+    const idx = parseInt(e.key) - 1;
+    if (idx < questions[curIdx].o.length) selectOption(idx);
+  } else if (['a','b','c','d','e'].includes(e.key.toLowerCase())) {
+    const idx = e.key.toLowerCase().charCodeAt(0) - 97;
+    if (idx < questions[curIdx].o.length) selectOption(idx);
+  } else if (e.key === 'ArrowRight') {
+    navQ(1);
+  } else if (e.key === 'ArrowLeft') {
+    navQ(-1);
+  }
+}
+
+function saveState() {
+  const state = { userAnswers, flagged, curIdx, secondsElapsed };
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+}
+
+function loadState() {
+  const saved = localStorage.getItem(STORAGE_KEY);
+  if (saved) {
+    try {
+      const state = JSON.parse(saved);
+      userAnswers = state.userAnswers || {};
+      flagged = state.flagged || {};
+      curIdx = state.curIdx || 0;
+      secondsElapsed = state.secondsElapsed || 0;
+    } catch(e) {}
+  }
+}
+
+window.onload = init;
+</script>
 </body>
 </html>

@@ -1,16 +1,16 @@
 # Graph Report - MR-CAPSULES-main  (2026-08-15)
 
 ## Corpus Check
-- 352 files · ~27,435,403 words
+- 377 files · ~27,522,330 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 8491 nodes · 15321 edges · 353 communities (339 shown, 14 thin omitted)
-- Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 343 edges (avg confidence: 0.5)
+- 7601 nodes · 15008 edges · 378 communities (352 shown, 26 thin omitted)
+- Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 69 edges (avg confidence: 0.5)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `b1ab91c6`
+- Built from commit: `cadd16f0`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -165,7 +165,9 @@
 - graphify.md
 - graphify.md
 - gpush.sh
+- 2.2_ Anggur Merah.html
 - vercel.json
+- 1.2 Ident PK_Flashcard PK 2.html
 - mcp.js
 - authorize.js
 - token.js
@@ -316,8 +318,10 @@
 - Priority Badges injection logic inside Kanban Board and Syllabus Tables:
 - 1.4 Ident Biokim_eakeak fc.html
 - 2.1 Ident Fisio_Praktikum 1.html
+- 2.2_ Anggur Merah.html
 - 🤝 Contributing to MR-CAPSULES
 - vercel.json
+- 1.2 Ident PK_Flashcard PK 2.html
 - 🤝 Contributing to MR-CAPSULES
 - PULL_REQUEST_TEMPLATE.md
 - PULL_REQUEST_TEMPLATE.md
@@ -333,6 +337,30 @@
 - download_offbit.js
 - font-review.html
 - font-review.html
+- convert_typeb_jarwo.js
+- convert_typeb_bioromance.js
+- convert_typeb_pk3.js
+- analyze_files.js
+- convert_cbt_block12.js
+- convert_cbt_block21.js
+- convert_cbt_block22.js
+- convert_cbt_block23.js
+- inspect_bio_romance.js
+- inspect_jarwo.js
+- inspect_jarwo_bank.js
+- convert_typeb_pk1.js
+- inspect_block12.js
+- inspect_block22_questions.js
+- inspect_block23_questions.js
+- inspect_cbt_schemas_12.js
+- convert_typeb_pk2.js
+- inspect_specific_12.js
+- convert_typeb_gasak1.js
+- convert_typeb_gasak2.js
+- convert_cbt_block13.js
+- inspect_block13.js
+- inspect_cbt_schemas_13.js
+- inspect_gasak_libas.js
 
 ## God Nodes (most connected - your core abstractions)
 1. `routeMethod()` - 81 edges
@@ -343,8 +371,8 @@
 6. `makeQ()` - 17 edges
 7. `makeQ()` - 17 edges
 8. `makeQ()` - 17 edges
-9. `renderQuestion()` - 17 edges
-10. `renderQuestion()` - 17 edges
+9. `makeQ()` - 17 edges
+10. `makeQ()` - 17 edges
 
 ## Surprising Connections (you probably didn't know these)
 - `testLocal()` --calls--> `handler()`  [EXTRACTED]
@@ -355,7 +383,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (353 total, 14 thin omitted)
+## Communities (378 total, 26 thin omitted)
 
 ### Community 0 - "2.4 CBT 2_K20C AM I CINEMATIC.html"
 Cohesion: 0.06
@@ -374,56 +402,56 @@ Cohesion: 0.07
 Nodes (47): activeTypes, AKTIV_LIST, AKTIVITAS_METs, BOUCHARD_HITUNG_KONSEP, BOUCHARD_KAT, BOUCHARD_KAT_KONSEP, DEFINISI_POOL, endSession() (+39 more)
 
 ### Community 4 - "1.3 CBT 1_10. Fungsi Medulla Spinalis dan Saraf Spinal.html"
-Cohesion: 0.06
-Nodes (47): backToMenuButtons, explanationContainer, finalScoreText, flashcard, flashcardAnswerList, flashcardBack, flashcardFlip, flashcardFront (+39 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 5 - "1.3 CBT 1_11. Fungsi Integratif.html"
-Cohesion: 0.06
-Nodes (47): backToMenuButtons, explanationContainer, finalScoreText, flashcard, flashcardAnswerList, flashcardBack, flashcardFlip, flashcardFront (+39 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 6 - "1.3 CBT 1_12. Fungsi Sistem Saraf Otonom.html"
-Cohesion: 0.06
-Nodes (47): backToMenuButtons, explanationContainer, finalScoreText, flashcard, flashcardAnswerList, flashcardBack, flashcardFlip, flashcardFront (+39 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 7 - "1.3 CBT 1_1. Organisasi dan Embriologi SSP dan SST.html"
-Cohesion: 0.06
-Nodes (47): backToMenuButtons, explanationContainer, finalScoreText, flashcard, flashcardAnswerList, flashcardBack, flashcardFlip, flashcardFront (+39 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 8 - "1.3 CBT 1_2. Pars Centralis Systema Nervosum Centrale (Cerebrum & Truncus Encephali) .html"
-Cohesion: 0.06
-Nodes (47): backToMenuButtons, explanationContainer, finalScoreText, flashcard, flashcardAnswerList, flashcardBack, flashcardFlip, flashcardFront (+39 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 9 - "1.3 CBT 1_3. Pars Centralis Systema Nervosum Centrale (Cerebrum & Truncus Encephali) II.html"
-Cohesion: 0.06
-Nodes (47): backToMenuButtons, explanationContainer, finalScoreText, flashcard, flashcardAnswerList, flashcardBack, flashcardFlip, flashcardFront (+39 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 10 - "1.3 CBT 1_4. Cerebellum Et Medulla Spinalis.html"
-Cohesion: 0.06
-Nodes (47): backToMenuButtons, explanationContainer, finalScoreText, flashcard, flashcardAnswerList, flashcardBack, flashcardFlip, flashcardFront (+39 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 11 - "1.3 CBT 1_5. Vascularisasi Pars Centralis Systema Nervosum Central.html"
-Cohesion: 0.06
-Nodes (47): backToMenuButtons, explanationContainer, finalScoreText, flashcard, flashcardAnswerList, flashcardBack, flashcardFlip, flashcardFront (+39 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 12 - "1.3 CBT 1_6. Pars Peripherica Systema Nervosum Periphericum.html"
-Cohesion: 0.06
-Nodes (47): backToMenuButtons, explanationContainer, finalScoreText, flashcard, flashcardAnswerList, flashcardBack, flashcardFlip, flashcardFront (+39 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 13 - "1.3 CBT 1_7. Struktur Mikroskopis Sistem Saraf Pusat dan Sistem Saraf Tepi.html"
-Cohesion: 0.06
-Nodes (47): backToMenuButtons, explanationContainer, finalScoreText, flashcard, flashcardAnswerList, flashcardBack, flashcardFlip, flashcardFront (+39 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 14 - "1.3 CBT 1_8. Biokimiawi Sistem Saraf.html"
-Cohesion: 0.06
-Nodes (47): backToMenuButtons, explanationContainer, finalScoreText, flashcard, flashcardAnswerList, flashcardBack, flashcardFlip, flashcardFront (+39 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 15 - "1.3 CBT 1_9. Fungsi Sistem Saraf.html"
-Cohesion: 0.06
-Nodes (47): backToMenuButtons, explanationContainer, finalScoreText, flashcard, flashcardAnswerList, flashcardBack, flashcardFlip, flashcardFront (+39 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 16 - "1.3 CBT 1_merah.html"
-Cohesion: 0.06
-Nodes (47): backToMenuButtons, explanationContainer, finalScoreText, flashcard, flashcardAnswerList, flashcardBack, flashcardFlip, flashcardFront (+39 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 17 - "2.5 PRAKTIKUM_PRAKTIKUM 3.html"
 Cohesion: 0.08
@@ -446,16 +474,16 @@ Cohesion: 0.07
 Nodes (44): activeTypes, endSession(), KEYS, makePicker(), makeQ(), nextQ(), nextType(), pick_pool_blum (+36 more)
 
 ### Community 22 - "2.3 CBT_99 TAHUN MEDAN TIPSEN.html"
-Cohesion: 0.09
-Nodes (43): allScores, answered, clearHistory(), closeOverlay(), fadeOutWin(), fetchDirectory(), flagged, getAudioCtx() (+35 more)
+Cohesion: 0.29
+Nodes (15): allScores, answered, clearHistory(), jumpTo(), KEYS, loadStats(), navigate(), QUESTIONS (+7 more)
 
 ### Community 23 - "2.3 CBT_22 SYAFIQ JUMBO.html"
-Cohesion: 0.09
-Nodes (42): allScores, answered, clearHistory(), closeOverlay(), fadeOutWin(), fetchDirectory(), flagged, getAudioCtx() (+34 more)
+Cohesion: 0.29
+Nodes (15): allScores, answered, clearHistory(), jumpTo(), KEYS, loadStats(), navigate(), QUESTIONS (+7 more)
 
 ### Community 24 - "2.3 CBT_24 SYAFIQ GALACTUS.html"
-Cohesion: 0.10
-Nodes (42): allScores, answered, clearHistory(), closeOverlay(), fadeOutWin(), fetchDirectory(), flagged, getAudioCtx() (+34 more)
+Cohesion: 0.29
+Nodes (15): allScores, answered, clearHistory(), jumpTo(), KEYS, loadStats(), navigate(), QUESTIONS (+7 more)
 
 ### Community 25 - "2.4 CBT_20 Plato.html"
 Cohesion: 0.10
@@ -490,12 +518,12 @@ Cohesion: 0.06
 Nodes (39): activeTypes, endSession(), KEYS, KLAS_POOL, KWA_POOL, makePicker(), makeQ(), MAR_POOL (+31 more)
 
 ### Community 33 - "2.3 CBT_21 SYAFIQ KECIL.html"
-Cohesion: 0.11
-Nodes (38): allScores, clearHistory(), closeOverlay(), fadeOutWin(), fetchDirectory(), getAudioCtx(), init(), initAudio() (+30 more)
+Cohesion: 0.29
+Nodes (15): allScores, answered, clearHistory(), jumpTo(), KEYS, loadStats(), navigate(), QUESTIONS (+7 more)
 
 ### Community 34 - "2.3 CBT_23 SYAFIQ GIGA.html"
-Cohesion: 0.11
-Nodes (38): allScores, clearHistory(), closeOverlay(), fadeOutWin(), fetchDirectory(), getAudioCtx(), init(), initAudio() (+30 more)
+Cohesion: 0.29
+Nodes (15): allScores, answered, clearHistory(), jumpTo(), KEYS, loadStats(), navigate(), QUESTIONS (+7 more)
 
 ### Community 35 - "2.5 LECTURE_K14 am-i-feeding.html"
 Cohesion: 0.08
@@ -558,24 +586,24 @@ Cohesion: 0.09
 Nodes (32): activeTypes, endSession(), KEYS, makePicker(), makeQ(), nextQ(), nextType(), pick_pool_clinical_cases (+24 more)
 
 ### Community 50 - "1.2-1_jarwo.html"
-Cohesion: 0.09
-Nodes (31): audioPlayer, audioQueue, checkAnswer(), continueBtn, distractionQuotes, endBtn, endMessage, endScreen (+23 more)
+Cohesion: 0.27
+Nodes (9): downloadCert(), KEYS, masterQuestions, nextQ(), quizSet, renderQuizQ(), selectQuizAns(), showQuizResults() (+1 more)
 
 ### Community 51 - "2.5 LECTURE_K8 am-i-nourished.html"
 Cohesion: 0.09
 Nodes (30): activeTypes, endSession(), KEYS, makePicker(), makeQ(), nextQ(), nextType(), pick_pool_antropometri (+22 more)
 
 ### Community 52 - "1.3 CBT 2_emerald.html"
-Cohesion: 0.08
-Nodes (28): currentQNum, fcAnswer, fcExplanation, fcProgress, fcQuestion, feedbackContainer, feedbackText, finishBtn (+20 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 53 - "1.3 CBT 2_ORANGE.html"
-Cohesion: 0.08
-Nodes (28): currentQNum, fcAnswer, fcExplanation, fcProgress, fcQuestion, feedbackContainer, feedbackText, finishBtn (+20 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 54 - "1.3 CBT 2_VIOLET.html"
-Cohesion: 0.08
-Nodes (28): currentQNum, fcAnswer, fcExplanation, fcProgress, fcQuestion, feedbackContainer, feedbackText, finishBtn (+20 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 55 - "2.5 LECTURE_K12B am-i-sedentary.html"
 Cohesion: 0.08
@@ -586,20 +614,20 @@ Cohesion: 0.10
 Nodes (28): activeTypes, endSession(), kasusPool, KEYS, makePicker(), makeQ(), nextQ(), nextType() (+20 more)
 
 ### Community 57 - "1.2-2_Histo jaringan ikat.html"
-Cohesion: 0.09
-Nodes (27): answerButtonsEl, backToEndBtn, endScreen, finalScoreEl, finalStatsEl, nextBtn, progressBar, questionCounterEl (+19 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 58 - "1.2-2_Histo Otot.html"
-Cohesion: 0.09
-Nodes (27): answerButtonsEl, backToEndBtn, endScreen, finalScoreEl, finalStatsEl, nextBtn, progressBar, questionCounterEl (+19 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 59 - "1.2-2_Overall CBT.html"
-Cohesion: 0.10
-Nodes (28): calculateScore(), confirmModal, feedbackModeSelector, finishBtn, finishExam(), loadQuestion(), loadQuestionForReview(), mainContainer (+20 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 60 - "1.2-2_Histo Cell Connect.html"
-Cohesion: 0.10
-Nodes (26): feedbackContainer, feedbackTextEl, finalScoreEl, handleTimeout(), moveToNext(), optionsContainer, questionNumberEl, questionScreen (+18 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 61 - "2.4 CBT 2_K12 AM I COMMUNICATIVE.html"
 Cohesion: 0.10
@@ -642,112 +670,112 @@ Cohesion: 0.10
 Nodes (23): activeTypes, endSession(), KEYS, makePicker(), nextQ(), nextType(), pickers, pool_cases (+15 more)
 
 ### Community 71 - "1.2-2_Histo Epitel.html"
-Cohesion: 0.10
-Nodes (23): endScreen, feedbackContainer, feedbackText, finalScoreText, nextBtn, nextQuestion(), optionsContainer, progressText (+15 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 72 - "1.2 Ident PK_Latsol PK.html"
-Cohesion: 0.13
-Nodes (24): disableOptions(), feedbackOverlay, finalScoreDisplay, gameArea, handleTimeout(), optionsContainer, progressBar, questionCounter (+16 more)
+Cohesion: 0.27
+Nodes (9): downloadCert(), KEYS, masterQuestions, nextQ(), quizSet, renderQuizQ(), selectQuizAns(), showQuizResults() (+1 more)
 
 ### Community 73 - "2.4 CBT 2_K20B AM I IMPACTFUL.html"
 Cohesion: 0.14
 Nodes (23): activeTypes, DASAR_VIDEO_POOL, endSession(), genDurasiPlatformQ(), genIdeVideoQ(), genKesalahanVideoQ(), genPeranDokterQ(), genStrukturIdentifikasiQ() (+15 more)
 
 ### Community 74 - "1.2-2_Biomoll DNA Repair.html"
-Cohesion: 0.13
-Nodes (22): cbtScreen, flaggedQuestions, flashcardData, flashcardScreen, goToQuestion(), initFlashcards(), initTest(), quizData (+14 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 75 - "1.2-2_Histo apoptosis dan penuaan.html"
-Cohesion: 0.13
-Nodes (22): cbtScreen, flaggedQuestions, flashcardData, flashcardScreen, goToQuestion(), initFlashcards(), initTest(), quizData (+14 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 76 - "1.2-2_Histo Matrix Intraseluler.html"
-Cohesion: 0.13
-Nodes (22): cbtScreen, flaggedQuestions, flashcardData, flashcardScreen, goToQuestion(), initFlashcards(), initTest(), quizData (+14 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 77 - "1.2-2_Histo Saraf.html"
-Cohesion: 0.13
-Nodes (22): cbtScreen, flaggedQuestions, flashcardData, flashcardScreen, goToQuestion(), initFlashcards(), initTest(), quizData (+14 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 78 - "1.3 other_PUSH UP 1.html"
-Cohesion: 0.10
-Nodes (21): currentQNum, feedbackContainer, feedbackText, finishBtn, handleAnswer(), navigateQuestion(), nextBtn, optionsContainer (+13 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 79 - "1.3 other_PUSH UP 2.html"
-Cohesion: 0.10
-Nodes (21): currentQNum, feedbackContainer, feedbackText, finishBtn, handleAnswer(), navigateQuestion(), nextBtn, optionsContainer (+13 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 80 - "1.4 Ident Anatomi_PPT ADIU 23'.html"
 Cohesion: 0.12
 Nodes (18): contentDisplay, finishUjian(), floorContainer, floorsData, initLatihan(), initRangkuman(), latihanQuestions, loadLatihanQuestion() (+10 more)
 
 ### Community 81 - "1.2-2_Histo Siklus dan regulasi sel.html"
-Cohesion: 0.13
-Nodes (22): answerButtonsEl, autoNext(), endScreen, finalScoreEl, handleTimeOut(), questionCounterEl, questions, questionTextEl (+14 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 82 - "2.2 CBT 1_23 JOKROWI.html"
-Cohesion: 0.14
-Nodes (22): backToHome(), btnFinish, btnNext, btnPrev, feedbackArea, finishQuiz(), LETTERS, loadQuestion() (+14 more)
+Cohesion: 0.29
+Nodes (15): allScores, answered, clearHistory(), jumpTo(), KEYS, loadStats(), navigate(), QUESTIONS (+7 more)
 
 ### Community 83 - "2.2 OTHER_25 PARNO SAPI.html"
-Cohesion: 0.15
-Nodes (20): answered, bestScore, closeOverlay(), flagged, init(), jumpTo(), navigate(), QUESTIONS (+12 more)
+Cohesion: 0.29
+Nodes (15): allScores, answered, clearHistory(), jumpTo(), KEYS, loadStats(), navigate(), QUESTIONS (+7 more)
 
 ### Community 84 - "2.4 CBT 2_K13 AM I CULTURALLY HUMBLE.html"
 Cohesion: 0.15
 Nodes (20): activeTypes, ANTRO_POOL, endSession(), genAntroKasusQ(), genAntroTrendQ(), KEYS, makePicker(), makeQ() (+12 more)
 
 ### Community 85 - "2.1 CBT_25 minute jumping jack.html"
-Cohesion: 0.12
-Nodes (18): btnFinish, btnNext, btnPrev, feedbackArea, loadQuestion(), nextQuestion(), optContainer, options (+10 more)
+Cohesion: 0.29
+Nodes (15): allScores, answered, clearHistory(), jumpTo(), KEYS, loadStats(), navigate(), QUESTIONS (+7 more)
 
 ### Community 86 - "2.2 CBT 2_22 ANTON AYAM.html"
-Cohesion: 0.20
-Nodes (20): answered, buildMap(), closeOverlay(), drillReset(), flags, goHome(), goToQ(), navigate() (+12 more)
+Cohesion: 0.29
+Nodes (15): allScores, answered, clearHistory(), jumpTo(), KEYS, loadStats(), navigate(), QUESTIONS (+7 more)
 
 ### Community 87 - "2.2 CBT 2_23 TONO GALON.html"
-Cohesion: 0.20
-Nodes (20): answered, buildMap(), closeOverlay(), drillReset(), flags, goHome(), goToQ(), navigate() (+12 more)
+Cohesion: 0.29
+Nodes (15): allScores, answered, clearHistory(), jumpTo(), KEYS, loadStats(), navigate(), QUESTIONS (+7 more)
 
 ### Community 88 - "2.2 CBT 2_24 AMBAR LAUNDRY.html"
-Cohesion: 0.20
-Nodes (20): answered, buildMap(), closeOverlay(), drillReset(), flags, goHome(), goToQ(), navigate() (+12 more)
+Cohesion: 0.29
+Nodes (15): allScores, answered, clearHistory(), jumpTo(), KEYS, loadStats(), navigate(), QUESTIONS (+7 more)
 
 ### Community 89 - "2.2 CBT 2_DEATHPAMIN.html"
-Cohesion: 0.20
-Nodes (20): answered, buildMap(), closeOverlay(), drillReset(), flags, goHome(), goToQ(), navigate() (+12 more)
+Cohesion: 0.29
+Nodes (15): allScores, answered, clearHistory(), jumpTo(), KEYS, loadStats(), navigate(), QUESTIONS (+7 more)
 
 ### Community 90 - "2.2 CBT 2_DEATHPAMIN 2.html"
-Cohesion: 0.20
-Nodes (20): answered, buildMap(), closeOverlay(), drillReset(), flags, goHome(), goToQ(), navigate() (+12 more)
+Cohesion: 0.29
+Nodes (15): allScores, answered, clearHistory(), jumpTo(), KEYS, loadStats(), navigate(), QUESTIONS (+7 more)
 
 ### Community 91 - "1.4 CBT_Biokim Lecture.html"
 Cohesion: 0.16
 Nodes (17): calculateExamResult(), confirmExitExam(), examAnswers, flashcards, initExam(), initFlashcards(), initPractice(), nextCard() (+9 more)
 
 ### Community 92 - "2.1 CBT_22 hours warmin up.html"
-Cohesion: 0.12
-Nodes (17): btnFinish, btnNext, btnPrev, feedbackArea, loadQuestion(), nextQuestion(), optContainer, options (+9 more)
+Cohesion: 0.29
+Nodes (15): allScores, answered, clearHistory(), jumpTo(), KEYS, loadStats(), navigate(), QUESTIONS (+7 more)
 
 ### Community 93 - "2.1 CBT_22 minute jogging.html"
-Cohesion: 0.12
-Nodes (17): btnFinish, btnNext, btnPrev, feedbackArea, loadQuestion(), nextQuestion(), optContainer, options (+9 more)
+Cohesion: 0.29
+Nodes (15): allScores, answered, clearHistory(), jumpTo(), KEYS, loadStats(), navigate(), QUESTIONS (+7 more)
 
 ### Community 94 - "2.1 CBT_23 deadlift.html"
-Cohesion: 0.12
-Nodes (17): btnFinish, btnNext, btnPrev, feedbackArea, loadQuestion(), nextQuestion(), optContainer, options (+9 more)
+Cohesion: 0.29
+Nodes (15): allScores, answered, clearHistory(), jumpTo(), KEYS, loadStats(), navigate(), QUESTIONS (+7 more)
 
 ### Community 95 - "2.1 CBT_24 bench press.html"
-Cohesion: 0.12
-Nodes (17): btnFinish, btnNext, btnPrev, feedbackArea, loadQuestion(), nextQuestion(), optContainer, options (+9 more)
+Cohesion: 0.29
+Nodes (15): allScores, answered, clearHistory(), jumpTo(), KEYS, loadStats(), navigate(), QUESTIONS (+7 more)
 
 ### Community 96 - "2.2 CBT 1_45 BAXLIL.html"
-Cohesion: 0.21
-Nodes (19): buildQMap(), closeOverlay(), goHome(), handleAnswer(), navigate(), Q, renderQ(), reviewMode() (+11 more)
+Cohesion: 0.29
+Nodes (15): allScores, answered, clearHistory(), jumpTo(), KEYS, loadStats(), navigate(), QUESTIONS (+7 more)
 
 ### Community 97 - "2.2 CBT 2_45 TAHUN COPY PASTE.html"
-Cohesion: 0.18
-Nodes (18): answered, buildMap(), drillReset(), flags, goHome(), navigate(), Q, renderQ() (+10 more)
+Cohesion: 0.29
+Nodes (15): allScores, answered, clearHistory(), jumpTo(), KEYS, loadStats(), navigate(), QUESTIONS (+7 more)
 
 ### Community 98 - "2.4 CBT 2_K24 AM I PRESENTABLE.html"
 Cohesion: 0.16
@@ -758,8 +786,8 @@ Cohesion: 0.15
 Nodes (18): activeTypes, endSession(), KEYS, makePicker(), makeQ(), MASTER_POOL, nextQ(), nextType() (+10 more)
 
 ### Community 100 - "1.3 IDENT_GASAK LIBAS FISIO 1.html"
-Cohesion: 0.13
-Nodes (17): allFlashcards, card, cardBack, cardContainer, cardCounter, cardFront, categorySelect, filterAndDisplayCards() (+9 more)
+Cohesion: 0.19
+Nodes (14): curCards, downloadCert(), flashcardsData, KEYS, navCard(), nextQ(), quizPool, quizSet (+6 more)
 
 ### Community 101 - "1.4 CBT_22 SIT UP.html"
 Cohesion: 0.13
@@ -778,8 +806,8 @@ Cohesion: 0.12
 Nodes (17): isAnswered, mainContent, modeFlashcardBtn, modeQuizBtn, navContainer, nextBtn, prevBtn, questions (+9 more)
 
 ### Community 105 - "2.2 CBT 1_22 FUFUFAFA.html"
-Cohesion: 0.21
-Nodes (17): buildQMap(), closeOverlay(), handleAnswer(), navigate(), Q, renderQ(), reviewMode(), showDrillFeedback() (+9 more)
+Cohesion: 0.29
+Nodes (15): allScores, answered, clearHistory(), jumpTo(), KEYS, loadStats(), navigate(), QUESTIONS (+7 more)
 
 ### Community 106 - "2.4 CBT 2_K16B AM I PERCEIVING.html"
 Cohesion: 0.16
@@ -810,8 +838,8 @@ Cohesion: 0.16
 Nodes (13): currentQuestions, flashcardsData, nextFlashcard(), nextQuestion(), prevFlashcard(), questionsData, renderFlashcard(), renderQuestion() (+5 more)
 
 ### Community 113 - "2.2 CBT 1_24 PRANOWO.html"
-Cohesion: 0.18
-Nodes (14): backToHome(), clearDrillTimer(), loadQ(), nextQ(), prevQ(), questions, quizScreen, restartDrill() (+6 more)
+Cohesion: 0.29
+Nodes (15): allScores, answered, clearHistory(), jumpTo(), KEYS, loadStats(), navigate(), QUESTIONS (+7 more)
 
 ### Community 114 - "2.4 CBT 2_K16A AM I VISUAL.html"
 Cohesion: 0.16
@@ -834,28 +862,28 @@ Cohesion: 0.12
 Nodes (17): 4b. Workflow Logic Enhancements — `admin-workflow.js`, Calendar View compilation and day popups logic:, Client settings binding hooks for dock tabs navigation click:, Comments list replacement layout:, Contribution Leaderboard Export handler:, CSV Import Wizard client logic:, Division join request list interface:, Hapus Dead Code Scrapper: (+9 more)
 
 ### Community 119 - "1.2 Ident PK_Flashcard PK.html"
-Cohesion: 0.13
-Nodes (15): backCategory, backContent, cardCounter, createFilters(), currentCards, filterCards(), filtersContainer, flashcard (+7 more)
+Cohesion: 0.19
+Nodes (15): curCards, downloadCert(), filterCards(), flashcardsData, KEYS, navCard(), nextQ(), quizBank (+7 more)
 
 ### Community 120 - "2.1 CBT_ FISIO ARVENA.html"
-Cohesion: 0.18
-Nodes (14): handleAskteriSave(), questionPool, quizData, renderAskteri(), renderContent(), renderKuisMenu(), renderRingkasan(), renderSandisk() (+6 more)
+Cohesion: 0.27
+Nodes (10): downloadCert(), KEYS, nextQ(), QUESTIONS, quizSet, renderQ(), selectAns(), sessionLog (+2 more)
 
 ### Community 121 - "💊 MR-CAPSULES"
 Cohesion: 0.11
 Nodes (17): 1. 🤖 Model Context Protocol (MCP) & API Gateway Integration, 2. 🎛️ Comprehensive Admin Portal (`admin.html`), 3. 📖 Modernized Interactive Documentation (`docs.html`), 4. ⚡ Live Study Room Engine (`live.html`), 📖 About MR-CAPSULES, 🛠️ Architecture & Tech Stack, 🔌 Connecting AI Assistants via MCP, Core Technologies (+9 more)
 
 ### Community 122 - "1.3 IDENT_GASAK LIBAS FISIOX 2.html"
-Cohesion: 0.13
-Nodes (14): activeCards, cardAnswer, cardCategory, cardContainer, cardCounter, cardInner, cardQuestion, categoryFilter (+6 more)
+Cohesion: 0.19
+Nodes (15): curCards, downloadCert(), filterCards(), flashcardsData, KEYS, navCard(), nextQ(), quizPool (+7 more)
 
 ### Community 123 - "1.4 Ident Histologi_Osteoblast~.html"
 Cohesion: 0.20
 Nodes (14): finishExam(), flashcards, handleAnswer(), nextCard(), nextQuestion(), prevCard(), quizQuestions, quizState (+6 more)
 
 ### Community 124 - "2.1 Ident Fisio_Pre&Post.html"
-Cohesion: 0.20
-Nodes (15): backToHome(), finishPretest(), flipCard(), loadFlashcard(), loadPretestQuestion(), navFlashcard(), navPretest(), options (+7 more)
+Cohesion: 0.27
+Nodes (9): DB_EVALUATION, downloadCert(), KEYS, nextQ(), quizSet, renderQ(), selectAns(), showResults() (+1 more)
 
 ### Community 125 - "4a. Core Core Infrastructure Modifications — `admin.js`"
 Cohesion: 0.13
@@ -878,8 +906,8 @@ Cohesion: 0.39
 Nodes (11): apiCall(), createNewTaskPrompt(), initTaskKanbanDelegation(), initWorkflow(), loadDivisions(), loadTasks(), openTaskModal(), parseCBTHtml() (+3 more)
 
 ### Community 130 - "1.2-1_flashcard biochemical romance.html"
-Cohesion: 0.18
-Nodes (9): cardBack, cardCounter, cardData, cardFront, deck, flashcard, nextBtn, prevBtn (+1 more)
+Cohesion: 0.19
+Nodes (14): curCards, downloadCert(), flashcardsData, KEYS, navCard(), nextQ(), quizPool, quizSet (+6 more)
 
 ### Community 131 - "2.4 CBT 2_K21 AM I COMMUNICATIVE.html"
 Cohesion: 0.29
@@ -901,6 +929,10 @@ Nodes (7): 1. Verification of Task Edit, Delete & Clone (Tiers 1a, A1), 2. Verif
 Cohesion: 0.43
 Nodes (6): generateBadges(), generateCard(), getIcon(), thresholds, updateSpiderChart(), weights
 
+### Community 136 - "2.3 CBT_Kicaw.html"
+Cohesion: 0.29
+Nodes (15): allScores, answered, clearHistory(), jumpTo(), KEYS, loadStats(), navigate(), QUESTIONS (+7 more)
+
 ### Community 137 - "gpush.sh"
 Cohesion: 0.60
 Nodes (5): err(), info(), ok(), gpush.sh script, warn()
@@ -914,24 +946,36 @@ Cohesion: 0.83
 Nodes (3): build(), copyRecursiveSync(), walkDir()
 
 ### Community 141 - "1.2 other_Pull up 1.html"
-Cohesion: 0.83
-Nodes (3): renderQuestion(), selectAnswer(), updateNavButtons()
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 142 - "1.2 other_Pull up 2.html"
-Cohesion: 0.83
-Nodes (3): renderQuestion(), selectAnswer(), updateNavButtons()
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 144 - "Priority Badges injection logic inside Kanban Board and Syllabus Tables:"
 Cohesion: 0.67
 Nodes (3): Inside `renderKanban(tasks)` (~line 228):, Inside `renderTasksAsSyllabus(tasks)` (~line 416):, Priority Badges injection logic inside Kanban Board and Syllabus Tables:
 
+### Community 146 - "2.1 Ident Fisio_Praktikum 1.html"
+Cohesion: 0.27
+Nodes (9): DB_PRACTICUM, downloadCert(), KEYS, nextQ(), quizSet, renderQ(), selectAns(), showResults() (+1 more)
+
 ### Community 151 - "gpush.sh"
 Cohesion: 0.60
 Nodes (5): err(), info(), ok(), gpush.sh script, warn()
 
+### Community 159 - "2.2_ Anggur Merah.html"
+Cohesion: 0.27
+Nodes (9): DB_ANATOMY, downloadCert(), KEYS, nextQ(), quizSet, renderQ(), selectAns(), showResults() (+1 more)
+
 ### Community 160 - "vercel.json"
 Cohesion: 0.50
 Nodes (3): cleanUrls, headers, routes
+
+### Community 161 - "1.2 Ident PK_Flashcard PK 2.html"
+Cohesion: 0.19
+Nodes (14): curCards, downloadCert(), flashcardsData, KEYS, navCard(), nextQ(), quizBank, quizSet (+6 more)
 
 ### Community 166 - "mcp.js"
 Cohesion: 0.09
@@ -966,56 +1010,56 @@ Cohesion: 0.08
 Nodes (49): activeTypes, AKTIV_LIST, AKTIVITAS_METs, BOUCHARD_HITUNG_KONSEP, BOUCHARD_KAT, BOUCHARD_KAT_KONSEP, DEFINISI_POOL, downloadCert() (+41 more)
 
 ### Community 175 - "1.3 CBT 1_10. Fungsi Medulla Spinalis dan Saraf Spinal.html"
-Cohesion: 0.10
-Nodes (48): backToMenuButtons, explanationContainer, finalScoreText, flashcard, flashcardAnswerList, flashcardBack, flashcardFlip, flashcardFront (+40 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 176 - "1.3 CBT 1_11. Fungsi Integratif.html"
-Cohesion: 0.10
-Nodes (48): backToMenuButtons, explanationContainer, finalScoreText, flashcard, flashcardAnswerList, flashcardBack, flashcardFlip, flashcardFront (+40 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 177 - "1.3 CBT 1_12. Fungsi Sistem Saraf Otonom.html"
-Cohesion: 0.10
-Nodes (48): backToMenuButtons, explanationContainer, finalScoreText, flashcard, flashcardAnswerList, flashcardBack, flashcardFlip, flashcardFront (+40 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 178 - "1.3 CBT 1_1. Organisasi dan Embriologi SSP dan SST.html"
-Cohesion: 0.10
-Nodes (48): backToMenuButtons, explanationContainer, finalScoreText, flashcard, flashcardAnswerList, flashcardBack, flashcardFlip, flashcardFront (+40 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 179 - "1.3 CBT 1_2. Pars Centralis Systema Nervosum Centrale (Cerebrum & Truncus Encephali) .html"
-Cohesion: 0.10
-Nodes (48): backToMenuButtons, explanationContainer, finalScoreText, flashcard, flashcardAnswerList, flashcardBack, flashcardFlip, flashcardFront (+40 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 180 - "1.3 CBT 1_3. Pars Centralis Systema Nervosum Centrale (Cerebrum & Truncus Encephali) II.html"
-Cohesion: 0.10
-Nodes (48): backToMenuButtons, explanationContainer, finalScoreText, flashcard, flashcardAnswerList, flashcardBack, flashcardFlip, flashcardFront (+40 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 181 - "1.3 CBT 1_4. Cerebellum Et Medulla Spinalis.html"
-Cohesion: 0.10
-Nodes (48): backToMenuButtons, explanationContainer, finalScoreText, flashcard, flashcardAnswerList, flashcardBack, flashcardFlip, flashcardFront (+40 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 182 - "1.3 CBT 1_5. Vascularisasi Pars Centralis Systema Nervosum Central.html"
-Cohesion: 0.10
-Nodes (48): backToMenuButtons, explanationContainer, finalScoreText, flashcard, flashcardAnswerList, flashcardBack, flashcardFlip, flashcardFront (+40 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 183 - "1.3 CBT 1_6. Pars Peripherica Systema Nervosum Periphericum.html"
-Cohesion: 0.10
-Nodes (48): backToMenuButtons, explanationContainer, finalScoreText, flashcard, flashcardAnswerList, flashcardBack, flashcardFlip, flashcardFront (+40 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 184 - "1.3 CBT 1_7. Struktur Mikroskopis Sistem Saraf Pusat dan Sistem Saraf Tepi.html"
-Cohesion: 0.10
-Nodes (48): backToMenuButtons, explanationContainer, finalScoreText, flashcard, flashcardAnswerList, flashcardBack, flashcardFlip, flashcardFront (+40 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 185 - "1.3 CBT 1_8. Biokimiawi Sistem Saraf.html"
-Cohesion: 0.10
-Nodes (48): backToMenuButtons, explanationContainer, finalScoreText, flashcard, flashcardAnswerList, flashcardBack, flashcardFlip, flashcardFront (+40 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 186 - "1.3 CBT 1_9. Fungsi Sistem Saraf.html"
-Cohesion: 0.10
-Nodes (48): backToMenuButtons, explanationContainer, finalScoreText, flashcard, flashcardAnswerList, flashcardBack, flashcardFlip, flashcardFront (+40 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 187 - "1.3 CBT 1_merah.html"
-Cohesion: 0.10
-Nodes (48): backToMenuButtons, explanationContainer, finalScoreText, flashcard, flashcardAnswerList, flashcardBack, flashcardFlip, flashcardFront (+40 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 188 - "2.5 PRAKTIKUM_PRAKTIKUM 3.html"
 Cohesion: 0.09
@@ -1034,16 +1078,16 @@ Cohesion: 0.07
 Nodes (45): activeTypes, downloadCert(), endSession(), KEYS, makePicker(), makeQ(), nextQ(), nextType() (+37 more)
 
 ### Community 192 - "2.3 CBT_99 TAHUN MEDAN TIPSEN.html"
-Cohesion: 0.13
-Nodes (43): allScores, answered, clearHistory(), closeOverlay(), fadeOutWin(), fetchDirectory(), flagged, getAudioCtx() (+35 more)
+Cohesion: 0.29
+Nodes (15): allScores, answered, clearHistory(), jumpTo(), KEYS, loadStats(), navigate(), QUESTIONS (+7 more)
 
 ### Community 193 - "2.3 CBT_22 SYAFIQ JUMBO.html"
-Cohesion: 0.13
-Nodes (42): allScores, answered, clearHistory(), closeOverlay(), fadeOutWin(), fetchDirectory(), flagged, getAudioCtx() (+34 more)
+Cohesion: 0.29
+Nodes (15): allScores, answered, clearHistory(), jumpTo(), KEYS, loadStats(), navigate(), QUESTIONS (+7 more)
 
 ### Community 194 - "2.3 CBT_24 SYAFIQ GALACTUS.html"
-Cohesion: 0.13
-Nodes (42): allScores, answered, clearHistory(), closeOverlay(), fadeOutWin(), fetchDirectory(), flagged, getAudioCtx() (+34 more)
+Cohesion: 0.29
+Nodes (15): allScores, answered, clearHistory(), jumpTo(), KEYS, loadStats(), navigate(), QUESTIONS (+7 more)
 
 ### Community 195 - "2.4 CBT_20 Plato.html"
 Cohesion: 0.13
@@ -1078,12 +1122,12 @@ Cohesion: 0.07
 Nodes (40): activeTypes, downloadCert(), endSession(), KEYS, KLAS_POOL, KWA_POOL, makePicker(), makeQ() (+32 more)
 
 ### Community 203 - "2.3 CBT_21 SYAFIQ KECIL.html"
-Cohesion: 0.13
-Nodes (38): allScores, clearHistory(), closeOverlay(), fadeOutWin(), fetchDirectory(), getAudioCtx(), init(), initAudio() (+30 more)
+Cohesion: 0.29
+Nodes (15): allScores, answered, clearHistory(), jumpTo(), KEYS, loadStats(), navigate(), QUESTIONS (+7 more)
 
 ### Community 204 - "2.3 CBT_23 SYAFIQ GIGA.html"
-Cohesion: 0.13
-Nodes (38): allScores, clearHistory(), closeOverlay(), fadeOutWin(), fetchDirectory(), getAudioCtx(), init(), initAudio() (+30 more)
+Cohesion: 0.29
+Nodes (15): allScores, answered, clearHistory(), jumpTo(), KEYS, loadStats(), navigate(), QUESTIONS (+7 more)
 
 ### Community 205 - "2.5 LECTURE_K14 am-i-feeding.html"
 Cohesion: 0.09
@@ -1146,24 +1190,24 @@ Cohesion: 0.11
 Nodes (33): activeTypes, downloadCert(), endSession(), KEYS, makePicker(), makeQ(), nextQ(), nextType() (+25 more)
 
 ### Community 220 - "1.2-1_jarwo.html"
-Cohesion: 0.15
-Nodes (31): audioPlayer, audioQueue, checkAnswer(), continueBtn, distractionQuotes, endBtn, endMessage, endScreen (+23 more)
+Cohesion: 0.27
+Nodes (9): downloadCert(), KEYS, masterQuestions, nextQ(), quizSet, renderQuizQ(), selectQuizAns(), showQuizResults() (+1 more)
 
 ### Community 221 - "2.5 LECTURE_K8 am-i-nourished.html"
 Cohesion: 0.11
 Nodes (31): activeTypes, downloadCert(), endSession(), KEYS, makePicker(), makeQ(), nextQ(), nextType() (+23 more)
 
 ### Community 222 - "1.3 CBT 2_emerald.html"
-Cohesion: 0.16
-Nodes (30): backToMenu(), currentQNum, fcAnswer, fcExplanation, fcProgress, fcQuestion, feedbackContainer, feedbackText (+22 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 223 - "1.3 CBT 2_ORANGE.html"
-Cohesion: 0.16
-Nodes (30): backToMenu(), currentQNum, fcAnswer, fcExplanation, fcProgress, fcQuestion, feedbackContainer, feedbackText (+22 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 224 - "1.3 CBT 2_VIOLET.html"
-Cohesion: 0.16
-Nodes (30): backToMenu(), currentQNum, fcAnswer, fcExplanation, fcProgress, fcQuestion, feedbackContainer, feedbackText (+22 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 225 - "2.5 LECTURE_K12B am-i-sedentary.html"
 Cohesion: 0.10
@@ -1174,20 +1218,20 @@ Cohesion: 0.12
 Nodes (29): activeTypes, downloadCert(), endSession(), kasusPool, KEYS, makePicker(), makeQ(), nextQ() (+21 more)
 
 ### Community 227 - "1.2-2_Histo jaringan ikat.html"
-Cohesion: 0.15
-Nodes (28): answerButtonsEl, backToEndBtn, endScreen, finalScoreEl, finalStatsEl, nextBtn, progressBar, questionCounterEl (+20 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 228 - "1.2-2_Histo Otot.html"
-Cohesion: 0.15
-Nodes (28): answerButtonsEl, backToEndBtn, endScreen, finalScoreEl, finalStatsEl, nextBtn, progressBar, questionCounterEl (+20 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 229 - "1.2-2_Overall CBT.html"
-Cohesion: 0.18
-Nodes (28): calculateScore(), confirmModal, feedbackModeSelector, finishBtn, finishExam(), loadQuestion(), loadQuestionForReview(), mainContainer (+20 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 230 - "1.2-2_Histo Cell Connect.html"
-Cohesion: 0.17
-Nodes (27): feedbackContainer, feedbackTextEl, finalScoreEl, handleTimeout(), moveToNext(), optionsContainer, questionNumberEl, questionScreen (+19 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 231 - "2.4 CBT 2_K12 AM I COMMUNICATIVE.html"
 Cohesion: 0.12
@@ -1230,112 +1274,112 @@ Cohesion: 0.13
 Nodes (24): activeTypes, downloadCert(), endSession(), KEYS, makePicker(), nextQ(), nextType(), pickers (+16 more)
 
 ### Community 241 - "1.2-2_Histo Epitel.html"
-Cohesion: 0.20
-Nodes (24): endScreen, feedbackContainer, feedbackText, finalScoreText, nextBtn, nextQuestion(), optionsContainer, progressText (+16 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 242 - "1.2 Ident PK_Latsol PK.html"
-Cohesion: 0.18
-Nodes (24): disableOptions(), feedbackOverlay, finalScoreDisplay, gameArea, handleTimeout(), optionsContainer, progressBar, questionCounter (+16 more)
+Cohesion: 0.27
+Nodes (9): downloadCert(), KEYS, masterQuestions, nextQ(), quizSet, renderQuizQ(), selectQuizAns(), showQuizResults() (+1 more)
 
 ### Community 243 - "2.4 CBT 2_K20B AM I IMPACTFUL.html"
 Cohesion: 0.17
 Nodes (24): activeTypes, DASAR_VIDEO_POOL, downloadCert(), endSession(), genDurasiPlatformQ(), genIdeVideoQ(), genKesalahanVideoQ(), genPeranDokterQ() (+16 more)
 
 ### Community 244 - "1.2-2_Biomoll DNA Repair.html"
-Cohesion: 0.24
-Nodes (23): cbtScreen, flaggedQuestions, flashcardData, flashcardScreen, goToQuestion(), initFlashcards(), initTest(), quizData (+15 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 245 - "1.2-2_Histo apoptosis dan penuaan.html"
-Cohesion: 0.24
-Nodes (23): cbtScreen, flaggedQuestions, flashcardData, flashcardScreen, goToQuestion(), initFlashcards(), initTest(), quizData (+15 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 246 - "1.2-2_Histo Matrix Intraseluler.html"
-Cohesion: 0.24
-Nodes (23): cbtScreen, flaggedQuestions, flashcardData, flashcardScreen, goToQuestion(), initFlashcards(), initTest(), quizData (+15 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 247 - "1.2-2_Histo Saraf.html"
-Cohesion: 0.24
-Nodes (23): cbtScreen, flaggedQuestions, flashcardData, flashcardScreen, goToQuestion(), initFlashcards(), initTest(), quizData (+15 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 248 - "1.3 other_PUSH UP 1.html"
-Cohesion: 0.20
-Nodes (23): backToMenu(), currentQNum, feedbackContainer, feedbackText, finishBtn, finishQuiz(), handleAnswer(), navigateQuestion() (+15 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 249 - "1.3 other_PUSH UP 2.html"
-Cohesion: 0.20
-Nodes (23): backToMenu(), currentQNum, feedbackContainer, feedbackText, finishBtn, finishQuiz(), handleAnswer(), navigateQuestion() (+15 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 250 - "1.4 Ident Anatomi_PPT ADIU 23'.html"
 Cohesion: 0.18
 Nodes (20): changeRoomFC(), contentDisplay, finishUjian(), floorContainer, floorsData, initLatihan(), initRangkuman(), latihanQuestions (+12 more)
 
 ### Community 251 - "1.2-2_Histo Siklus dan regulasi sel.html"
-Cohesion: 0.21
-Nodes (22): answerButtonsEl, autoNext(), endScreen, finalScoreEl, handleTimeOut(), questionCounterEl, questions, questionTextEl (+14 more)
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 252 - "2.2 CBT 1_23 JOKROWI.html"
-Cohesion: 0.25
-Nodes (22): backToHome(), btnFinish, btnNext, btnPrev, feedbackArea, finishQuiz(), LETTERS, loadQuestion() (+14 more)
+Cohesion: 0.29
+Nodes (15): allScores, answered, clearHistory(), jumpTo(), KEYS, loadStats(), navigate(), QUESTIONS (+7 more)
 
 ### Community 253 - "2.2 OTHER_25 PARNO SAPI.html"
-Cohesion: 0.24
-Nodes (20): answered, bestScore, closeOverlay(), flagged, init(), jumpTo(), navigate(), QUESTIONS (+12 more)
+Cohesion: 0.29
+Nodes (15): allScores, answered, clearHistory(), jumpTo(), KEYS, loadStats(), navigate(), QUESTIONS (+7 more)
 
 ### Community 254 - "2.4 CBT 2_K13 AM I CULTURALLY HUMBLE.html"
 Cohesion: 0.19
 Nodes (21): activeTypes, ANTRO_POOL, downloadCert(), endSession(), genAntroKasusQ(), genAntroTrendQ(), KEYS, makePicker() (+13 more)
 
 ### Community 255 - "2.1 CBT_25 minute jumping jack.html"
-Cohesion: 0.25
-Nodes (20): backToHome(), btnFinish, btnNext, btnPrev, feedbackArea, finishQuiz(), loadQuestion(), nextQuestion() (+12 more)
+Cohesion: 0.29
+Nodes (15): allScores, answered, clearHistory(), jumpTo(), KEYS, loadStats(), navigate(), QUESTIONS (+7 more)
 
 ### Community 256 - "2.2 CBT 2_22 ANTON AYAM.html"
 Cohesion: 0.29
-Nodes (20): answered, buildMap(), closeOverlay(), drillReset(), flags, goHome(), goToQ(), navigate() (+12 more)
+Nodes (15): allScores, answered, clearHistory(), jumpTo(), KEYS, loadStats(), navigate(), QUESTIONS (+7 more)
 
 ### Community 257 - "2.2 CBT 2_23 TONO GALON.html"
 Cohesion: 0.29
-Nodes (20): answered, buildMap(), closeOverlay(), drillReset(), flags, goHome(), goToQ(), navigate() (+12 more)
+Nodes (15): allScores, answered, clearHistory(), jumpTo(), KEYS, loadStats(), navigate(), QUESTIONS (+7 more)
 
 ### Community 258 - "2.2 CBT 2_24 AMBAR LAUNDRY.html"
 Cohesion: 0.29
-Nodes (20): answered, buildMap(), closeOverlay(), drillReset(), flags, goHome(), goToQ(), navigate() (+12 more)
+Nodes (15): allScores, answered, clearHistory(), jumpTo(), KEYS, loadStats(), navigate(), QUESTIONS (+7 more)
 
 ### Community 259 - "2.2 CBT 2_DEATHPAMIN.html"
 Cohesion: 0.29
-Nodes (20): answered, buildMap(), closeOverlay(), drillReset(), flags, goHome(), goToQ(), navigate() (+12 more)
+Nodes (15): allScores, answered, clearHistory(), jumpTo(), KEYS, loadStats(), navigate(), QUESTIONS (+7 more)
 
 ### Community 260 - "2.2 CBT 2_DEATHPAMIN 2.html"
 Cohesion: 0.29
-Nodes (20): answered, buildMap(), closeOverlay(), drillReset(), flags, goHome(), goToQ(), navigate() (+12 more)
+Nodes (15): allScores, answered, clearHistory(), jumpTo(), KEYS, loadStats(), navigate(), QUESTIONS (+7 more)
 
 ### Community 261 - "1.4 CBT_Biokim Lecture.html"
 Cohesion: 0.23
 Nodes (18): calculateExamResult(), checkPracticeAnswer(), confirmExitExam(), examAnswers, flashcards, initExam(), initFlashcards(), initPractice() (+10 more)
 
 ### Community 262 - "2.1 CBT_22 hours warmin up.html"
-Cohesion: 0.24
-Nodes (19): backToHome(), btnFinish, btnNext, btnPrev, feedbackArea, finishQuiz(), loadQuestion(), nextQuestion() (+11 more)
+Cohesion: 0.29
+Nodes (15): allScores, answered, clearHistory(), jumpTo(), KEYS, loadStats(), navigate(), QUESTIONS (+7 more)
 
 ### Community 263 - "2.1 CBT_22 minute jogging.html"
-Cohesion: 0.24
-Nodes (19): backToHome(), btnFinish, btnNext, btnPrev, feedbackArea, finishQuiz(), loadQuestion(), nextQuestion() (+11 more)
+Cohesion: 0.29
+Nodes (15): allScores, answered, clearHistory(), jumpTo(), KEYS, loadStats(), navigate(), QUESTIONS (+7 more)
 
 ### Community 264 - "2.1 CBT_23 deadlift.html"
-Cohesion: 0.24
-Nodes (19): backToHome(), btnFinish, btnNext, btnPrev, feedbackArea, finishQuiz(), loadQuestion(), nextQuestion() (+11 more)
+Cohesion: 0.29
+Nodes (15): allScores, answered, clearHistory(), jumpTo(), KEYS, loadStats(), navigate(), QUESTIONS (+7 more)
 
 ### Community 265 - "2.1 CBT_24 bench press.html"
-Cohesion: 0.24
-Nodes (19): backToHome(), btnFinish, btnNext, btnPrev, feedbackArea, finishQuiz(), loadQuestion(), nextQuestion() (+11 more)
+Cohesion: 0.29
+Nodes (15): allScores, answered, clearHistory(), jumpTo(), KEYS, loadStats(), navigate(), QUESTIONS (+7 more)
 
 ### Community 266 - "2.2 CBT 1_45 BAXLIL.html"
 Cohesion: 0.29
-Nodes (19): buildQMap(), closeOverlay(), goHome(), handleAnswer(), navigate(), Q, renderQ(), reviewMode() (+11 more)
+Nodes (15): allScores, answered, clearHistory(), jumpTo(), KEYS, loadStats(), navigate(), QUESTIONS (+7 more)
 
 ### Community 267 - "2.2 CBT 2_45 TAHUN COPY PASTE.html"
-Cohesion: 0.27
-Nodes (18): answered, buildMap(), drillReset(), flags, goHome(), navigate(), Q, renderQ() (+10 more)
+Cohesion: 0.29
+Nodes (15): allScores, answered, clearHistory(), jumpTo(), KEYS, loadStats(), navigate(), QUESTIONS (+7 more)
 
 ### Community 268 - "2.4 CBT 2_K24 AM I PRESENTABLE.html"
 Cohesion: 0.19
@@ -1346,8 +1390,8 @@ Cohesion: 0.20
 Nodes (19): activeTypes, downloadCert(), endSession(), KEYS, makePicker(), makeQ(), MASTER_POOL, nextQ() (+11 more)
 
 ### Community 270 - "1.3 IDENT_GASAK LIBAS FISIO 1.html"
-Cohesion: 0.20
-Nodes (17): allFlashcards, card, cardBack, cardContainer, cardCounter, cardFront, categorySelect, filterAndDisplayCards() (+9 more)
+Cohesion: 0.19
+Nodes (14): curCards, downloadCert(), flashcardsData, KEYS, navCard(), nextQ(), quizPool, quizSet (+6 more)
 
 ### Community 271 - "1.4 CBT_22 SIT UP.html"
 Cohesion: 0.26
@@ -1366,8 +1410,8 @@ Cohesion: 0.25
 Nodes (18): calculateAndShowResult(), isAnswered, mainContent, modeFlashcardBtn, modeQuizBtn, navContainer, nextBtn, prevBtn (+10 more)
 
 ### Community 275 - "2.2 CBT 1_22 FUFUFAFA.html"
-Cohesion: 0.30
-Nodes (18): buildQMap(), closeOverlay(), goHome(), handleAnswer(), navigate(), Q, renderQ(), reviewMode() (+10 more)
+Cohesion: 0.29
+Nodes (15): allScores, answered, clearHistory(), jumpTo(), KEYS, loadStats(), navigate(), QUESTIONS (+7 more)
 
 ### Community 276 - "2.4 CBT 2_K16B AM I PERCEIVING.html"
 Cohesion: 0.21
@@ -1399,7 +1443,7 @@ Nodes (16): currentQuestions, finishExam(), flashcardsData, handleAnswer(), next
 
 ### Community 283 - "2.2 CBT 1_24 PRANOWO.html"
 Cohesion: 0.29
-Nodes (15): backToHome(), clearDrillTimer(), finishQuiz(), loadQ(), nextQ(), prevQ(), questions, quizScreen (+7 more)
+Nodes (15): allScores, answered, clearHistory(), jumpTo(), KEYS, loadStats(), navigate(), QUESTIONS (+7 more)
 
 ### Community 284 - "2.4 CBT 2_K16A AM I VISUAL.html"
 Cohesion: 0.22
@@ -1422,12 +1466,12 @@ Cohesion: 0.12
 Nodes (17): 4b. Workflow Logic Enhancements — `admin-workflow.js`, Calendar View compilation and day popups logic:, Client settings binding hooks for dock tabs navigation click:, Comments list replacement layout:, Contribution Leaderboard Export handler:, CSV Import Wizard client logic:, Division join request list interface:, Hapus Dead Code Scrapper: (+9 more)
 
 ### Community 289 - "1.2 Ident PK_Flashcard PK.html"
-Cohesion: 0.21
-Nodes (15): backCategory, backContent, cardCounter, createFilters(), currentCards, filterCards(), filtersContainer, flashcard (+7 more)
+Cohesion: 0.19
+Nodes (15): curCards, downloadCert(), filterCards(), flashcardsData, KEYS, navCard(), nextQ(), quizBank (+7 more)
 
 ### Community 290 - "2.1 CBT_ FISIO ARVENA.html"
-Cohesion: 0.29
-Nodes (16): finishKuis(), goHome(), handleAskteriSave(), questionPool, quizData, renderAskteri(), renderContent(), renderKuisMenu() (+8 more)
+Cohesion: 0.27
+Nodes (10): downloadCert(), KEYS, nextQ(), QUESTIONS, quizSet, renderQ(), selectAns(), sessionLog (+2 more)
 
 ### Community 291 - "💊 MR-CAPSULES"
 Cohesion: 0.11
@@ -1435,7 +1479,7 @@ Nodes (17): 1. 🤖 Model Context Protocol (MCP) & API Gateway Integration, 2. �
 
 ### Community 292 - "1.3 IDENT_GASAK LIBAS FISIOX 2.html"
 Cohesion: 0.19
-Nodes (14): activeCards, cardAnswer, cardCategory, cardContainer, cardCounter, cardInner, cardQuestion, categoryFilter (+6 more)
+Nodes (15): curCards, downloadCert(), filterCards(), flashcardsData, KEYS, navCard(), nextQ(), quizPool (+7 more)
 
 ### Community 293 - "1.4 Ident Histologi_Osteoblast~.html"
 Cohesion: 0.28
@@ -1443,7 +1487,7 @@ Nodes (14): finishExam(), flashcards, handleAnswer(), nextCard(), nextQuestion()
 
 ### Community 294 - "2.1 Ident Fisio_Pre&Post.html"
 Cohesion: 0.27
-Nodes (15): backToHome(), finishPretest(), flipCard(), loadFlashcard(), loadPretestQuestion(), navFlashcard(), navPretest(), options (+7 more)
+Nodes (9): DB_EVALUATION, downloadCert(), KEYS, nextQ(), quizSet, renderQ(), selectAns(), showResults() (+1 more)
 
 ### Community 295 - "4a. Core Core Infrastructure Modifications — `admin.js`"
 Cohesion: 0.13
@@ -1466,8 +1510,8 @@ Cohesion: 0.39
 Nodes (11): apiCall(), createNewTaskPrompt(), initTaskKanbanDelegation(), initWorkflow(), loadDivisions(), loadTasks(), openTaskModal(), parseCBTHtml() (+3 more)
 
 ### Community 300 - "1.2-1_flashcard biochemical romance.html"
-Cohesion: 0.31
-Nodes (10): cardBack, cardCounter, cardData, cardFront, deck, flashcard, nextBtn, prevBtn (+2 more)
+Cohesion: 0.19
+Nodes (14): curCards, downloadCert(), flashcardsData, KEYS, navCard(), nextQ(), quizPool, quizSet (+6 more)
 
 ### Community 301 - "package.json"
 Cohesion: 0.08
@@ -1490,8 +1534,8 @@ Cohesion: 0.52
 Nodes (6): generateBadges(), generateCard(), getIcon(), thresholds, updateSpiderChart(), weights
 
 ### Community 306 - "2.3 CBT_Kicaw.html"
-Cohesion: 0.38
-Nodes (3): bankSoal, renderQuestions(), titles
+Cohesion: 0.29
+Nodes (15): allScores, answered, clearHistory(), jumpTo(), KEYS, loadStats(), navigate(), QUESTIONS (+7 more)
 
 ### Community 307 - "mock_server.js"
 Cohesion: 0.83
@@ -1502,16 +1546,24 @@ Cohesion: 0.40
 Nodes (5): 4. Frontend Application Logic, 4c. Main Page Integration — `index.html` & `fp.js`, Filter broadcasts target divisions:, Intercept Invitation token query parameter during onboarding:, Verify and consume token during Auth Sign Up callback:
 
 ### Community 310 - "1.2 other_Pull up 1.html"
-Cohesion: 0.83
-Nodes (3): renderQuestion(), selectAnswer(), updateNavButtons()
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 311 - "1.2 other_Pull up 2.html"
-Cohesion: 0.83
-Nodes (3): renderQuestion(), selectAnswer(), updateNavButtons()
+Cohesion: 0.25
+Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 313 - "Priority Badges injection logic inside Kanban Board and Syllabus Tables:"
 Cohesion: 0.67
 Nodes (3): Inside `renderKanban(tasks)` (~line 228):, Inside `renderTasksAsSyllabus(tasks)` (~line 416):, Priority Badges injection logic inside Kanban Board and Syllabus Tables:
+
+### Community 315 - "2.1 Ident Fisio_Praktikum 1.html"
+Cohesion: 0.27
+Nodes (9): DB_PRACTICUM, downloadCert(), KEYS, nextQ(), quizSet, renderQ(), selectAns(), showResults() (+1 more)
+
+### Community 317 - "2.2_ Anggur Merah.html"
+Cohesion: 0.27
+Nodes (9): DB_ANATOMY, downloadCert(), KEYS, nextQ(), quizSet, renderQ(), selectAns(), showResults() (+1 more)
 
 ### Community 318 - "🤝 Contributing to MR-CAPSULES"
 Cohesion: 0.25
@@ -1520,6 +1572,10 @@ Nodes (7): 1. 🎛️ Division Management (Pengurus), 2. 💻 Division Developme
 ### Community 319 - "vercel.json"
 Cohesion: 0.50
 Nodes (3): cleanUrls, headers, routes
+
+### Community 320 - "1.2 Ident PK_Flashcard PK 2.html"
+Cohesion: 0.19
+Nodes (14): curCards, downloadCert(), flashcardsData, KEYS, navCard(), nextQ(), quizBank, quizSet (+6 more)
 
 ### Community 325 - "🤝 Contributing to MR-CAPSULES"
 Cohesion: 0.25
@@ -1573,25 +1629,61 @@ Nodes (8): cleanExpiredUploadSessions(), restoreUploadSessionFromSb(), uploadCan
 Cohesion: 0.67
 Nodes (3): download(), fontDir, zipPath
 
+### Community 352 - "convert_typeb_jarwo.js"
+Cohesion: 0.29
+Nodes (6): content, m, normalized, questionsJson, rawQuestions, targetFile
+
+### Community 354 - "convert_typeb_bioromance.js"
+Cohesion: 0.33
+Nodes (5): cardsJson, content, m, rawCards, targetFile
+
+### Community 355 - "convert_typeb_pk3.js"
+Cohesion: 0.33
+Nodes (5): content, filePath, m, questionsJson, rawQuestions
+
+### Community 356 - "analyze_files.js"
+Cohesion: 0.50
+Nodes (3): basePath, blocks, results
+
+### Community 361 - "inspect_bio_romance.js"
+Cohesion: 0.50
+Nodes (3): content, filePath, m
+
+### Community 362 - "inspect_jarwo.js"
+Cohesion: 0.50
+Nodes (3): content, filePath, m
+
+### Community 363 - "inspect_jarwo_bank.js"
+Cohesion: 0.50
+Nodes (3): content, filePath, m
+
+### Community 372 - "convert_typeb_gasak1.js"
+Cohesion: 0.33
+Nodes (5): cardsJson, content, m, rawCards, targetFile
+
+### Community 373 - "convert_typeb_gasak2.js"
+Cohesion: 0.33
+Nodes (5): cardsJson, content, m, rawCards, targetFile
+
 ## Knowledge Gaps
-- **2440 isolated node(s):** `fileCache`, `_statusTextEl`, `_statusBarEl`, `_itemCountEl`, `fileInput` (+2435 more)
+- **1509 isolated node(s):** `fileCache`, `_statusTextEl`, `_statusBarEl`, `_itemCountEl`, `fileInput` (+1504 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **14 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **26 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `2. Backend Serverless API Implementation` connect `2. Backend Serverless API Implementation` to `Admin Page Feature Expansion — Unified Comprehensive Implementation Plan`?**
+- **Why does `4b. Workflow Logic Enhancements — `admin-workflow.js`` connect `4b. Workflow Logic Enhancements — `admin-workflow.js`` to `Priority Badges injection logic inside Kanban Board and Syllabus Tables:`, `4. Frontend Application Logic`?**
   _High betweenness centrality (0.000) - this node is a cross-community bridge._
-- **Why does `Admin Page Feature Expansion — Unified Comprehensive Implementation Plan` connect `Admin Page Feature Expansion — Unified Comprehensive Implementation Plan` to `4. Frontend Application Logic`, `5. Verification & Testing Protocol`, `2. Backend Serverless API Implementation`?**
-  _High betweenness centrality (0.000) - this node is a cross-community bridge._
-- **Why does `wrap` connect `2.5 PRAKTIKUM_PRAKTIKUM 1.html` to `index.html`?**
+- **Why does `4. Frontend Application Logic` connect `4. Frontend Application Logic` to `4b. Workflow Logic Enhancements — `admin-workflow.js``, `Admin Page Feature Expansion — Unified Comprehensive Implementation Plan`, `4a. Core Core Infrastructure Modifications — `admin.js``?**
   _High betweenness centrality (0.000) - this node is a cross-community bridge._
 - **What connects `fileCache`, `_statusTextEl`, `_statusBarEl` to the rest of the system?**
-  _2440 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _1509 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `2.4 CBT 2_K20C AM I CINEMATIC.html` be split into smaller, more focused modules?**
   _Cohesion score 0.06398730830248546 - nodes in this community are weakly interconnected._
 - **Should `2.5 PRAKTIKUM_PRAKTIKUM 2.html` be split into smaller, more focused modules?**
   _Cohesion score 0.06821480406386067 - nodes in this community are weakly interconnected._
 - **Should `index.html` be split into smaller, more focused modules?**
   _Cohesion score 0.07609427609427609 - nodes in this community are weakly interconnected._
+- **Should `2.5 PRAKTIKUM_PRAKTIKUM 1.html` be split into smaller, more focused modules?**
+  _Cohesion score 0.07142857142857142 - nodes in this community are weakly interconnected._

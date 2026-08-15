@@ -5,8 +5,8 @@
     "semantic_hash": "d48db7cbcbd87d2238f12157551c6e21"
   },
   "admin-workflow.js": {
-    "mtime": 1786783586.733996,
-    "ast_hash": "45c77e323409537619c667d94a4dc542",
+    "mtime": 1786784261.7944639,
+    "ast_hash": "3eceefd6550d3e8a7605eec8954c0c10",
     "semantic_hash": ""
   },
   "admin.html": {
@@ -50,89 +50,89 @@
     "semantic_hash": ""
   },
   "content/semester 1/1.2/1.2 Ident PK_Flashcard PK 2.html": {
-    "mtime": 1782875857.294576,
-    "ast_hash": "3d05d406fc36d235fc4f2eee8a1dd72e",
-    "semantic_hash": "3d05d406fc36d235fc4f2eee8a1dd72e"
+    "mtime": 1786789542.4985902,
+    "ast_hash": "6041eee12329a7302386a339e6bb6820",
+    "semantic_hash": ""
   },
   "content/semester 1/1.2/1.2 Ident PK_Flashcard PK.html": {
-    "mtime": 1783932976.485921,
-    "ast_hash": "1b0ce002170047a1af003145bd63eb15",
-    "semantic_hash": "1b0ce002170047a1af003145bd63eb15"
+    "mtime": 1786789503.3565054,
+    "ast_hash": "b646028171006d95d3381179598b155f",
+    "semantic_hash": ""
   },
   "content/semester 1/1.2/1.2 Ident PK_Latsol PK.html": {
-    "mtime": 1783932976.4993725,
-    "ast_hash": "6018ed0153d870ed45c21afb627f363e",
-    "semantic_hash": "6018ed0153d870ed45c21afb627f363e"
+    "mtime": 1786789637.8948433,
+    "ast_hash": "44f9d23548f521509eab8eb0a0788678",
+    "semantic_hash": ""
   },
   "content/semester 1/1.2/1.2 other_Pull up 1.html": {
-    "mtime": 1782875857.298571,
-    "ast_hash": "19d575fe227c199512549be0ef728d56",
-    "semantic_hash": "19d575fe227c199512549be0ef728d56"
+    "mtime": 1786789457.494903,
+    "ast_hash": "66b16a9c37431935424b30737a3b92de",
+    "semantic_hash": ""
   },
   "content/semester 1/1.2/1.2 other_Pull up 2.html": {
-    "mtime": 1782875857.3005693,
-    "ast_hash": "d71f79619b241d48449fbfeeeb4f65b2",
-    "semantic_hash": "d71f79619b241d48449fbfeeeb4f65b2"
+    "mtime": 1786789457.5130126,
+    "ast_hash": "398bc3da07e621ac3ca61d22cd1b44ea",
+    "semantic_hash": ""
   },
   "content/semester 1/1.2/1.2-1_flashcard biochemical romance.html": {
-    "mtime": 1782875857.303565,
-    "ast_hash": "2cca7a8276624a7b0b43c01d855333dc",
-    "semantic_hash": "2cca7a8276624a7b0b43c01d855333dc"
+    "mtime": 1786789739.455834,
+    "ast_hash": "ef62b14fdc07465aab618f6dfdcaeaa2",
+    "semantic_hash": ""
   },
   "content/semester 1/1.2/1.2-1_jarwo.html": {
-    "mtime": 1782875857.3075678,
-    "ast_hash": "7ad1be6b37d2f5626775ee2a9ead8544",
-    "semantic_hash": "7ad1be6b37d2f5626775ee2a9ead8544"
+    "mtime": 1786789767.765275,
+    "ast_hash": "5545bec68d6becf754ba4bec8c3a918a",
+    "semantic_hash": ""
   },
   "content/semester 1/1.2/1.2-2_Biomoll DNA Repair.html": {
-    "mtime": 1782875857.3105614,
-    "ast_hash": "e77861fd602a84dce3a0520a7f7f4660",
-    "semantic_hash": "e77861fd602a84dce3a0520a7f7f4660"
+    "mtime": 1786789457.4036195,
+    "ast_hash": "d1e1b5aec03174d851c6222f813cd7e3",
+    "semantic_hash": ""
   },
   "content/semester 1/1.2/1.2-2_Histo Cell Connect.html": {
-    "mtime": 1782875857.311561,
-    "ast_hash": "8560805c8d27f9500453c1a6cd996bac",
-    "semantic_hash": "8560805c8d27f9500453c1a6cd996bac"
+    "mtime": 1786789457.4329593,
+    "ast_hash": "2e452bf7989aac8ecdeaf3a13ae9ea03",
+    "semantic_hash": ""
   },
   "content/semester 1/1.2/1.2-2_Histo Epitel.html": {
-    "mtime": 1783169366.6269386,
-    "ast_hash": "0ab9030a2828b3493fddc3be9ab57053",
-    "semantic_hash": "0ab9030a2828b3493fddc3be9ab57053"
+    "mtime": 1786789457.4530227,
+    "ast_hash": "d5965a5f2dbb7f31403f45f2163a5ef7",
+    "semantic_hash": ""
   },
   "content/semester 1/1.2/1.2-2_Histo Matrix Intraseluler.html": {
-    "mtime": 1782875857.3155582,
-    "ast_hash": "9a8740c014b58e636b24a0409a82b73f",
-    "semantic_hash": "9a8740c014b58e636b24a0409a82b73f"
+    "mtime": 1786789457.4689226,
+    "ast_hash": "3c52f92dd3fd1b6b58ecaa8851b246be",
+    "semantic_hash": ""
   },
   "content/semester 1/1.2/1.2-2_Histo Otot.html": {
-    "mtime": 1782875857.317557,
-    "ast_hash": "48eceeccdd74705b609cde5b5c364623",
-    "semantic_hash": "48eceeccdd74705b609cde5b5c364623"
+    "mtime": 1786789457.4759147,
+    "ast_hash": "5c1c482c5f21e82859bebf1ee9b48dc5",
+    "semantic_hash": ""
   },
   "content/semester 1/1.2/1.2-2_Histo Saraf.html": {
-    "mtime": 1782875857.3185573,
-    "ast_hash": "b6e711160ed33a57638b5030562346af",
-    "semantic_hash": "b6e711160ed33a57638b5030562346af"
+    "mtime": 1786789457.4799116,
+    "ast_hash": "187c6887bb984c2a21c15b7caf8ffe96",
+    "semantic_hash": ""
   },
   "content/semester 1/1.2/1.2-2_Histo Siklus dan regulasi sel.html": {
-    "mtime": 1782875857.319556,
-    "ast_hash": "b8a6a0d380f86a4145d9dc5e6aa94ece",
-    "semantic_hash": "b8a6a0d380f86a4145d9dc5e6aa94ece"
+    "mtime": 1786789457.48391,
+    "ast_hash": "8d3462ef37b6a957564aed7d0f7c9114",
+    "semantic_hash": ""
   },
   "content/semester 1/1.2/1.2-2_Histo apoptosis dan penuaan.html": {
-    "mtime": 1782875857.3215556,
-    "ast_hash": "b18dfe2fbe76ac0b12c9829b83d6982e",
-    "semantic_hash": "b18dfe2fbe76ac0b12c9829b83d6982e"
+    "mtime": 1786789457.4279625,
+    "ast_hash": "7b15a917f28df23e3e094eba49712a52",
+    "semantic_hash": ""
   },
   "content/semester 1/1.2/1.2-2_Histo jaringan ikat.html": {
-    "mtime": 1782875857.3235364,
-    "ast_hash": "e4e7fb51b3d5b864a5cbf8de1afd1cd5",
-    "semantic_hash": "e4e7fb51b3d5b864a5cbf8de1afd1cd5"
+    "mtime": 1786789457.462019,
+    "ast_hash": "31122ebc6d3753ed24118cbf15bca6f2",
+    "semantic_hash": ""
   },
   "content/semester 1/1.2/1.2-2_Overall CBT.html": {
-    "mtime": 1782875857.3265946,
-    "ast_hash": "b60631c8296f01f916994149eb5ea741",
-    "semantic_hash": "b60631c8296f01f916994149eb5ea741"
+    "mtime": 1786789457.5310023,
+    "ast_hash": "731e8ccc26ea959e5ff8a6721f66bac3",
+    "semantic_hash": ""
   },
   "content/semester 1/1.3/1.3 CBT 1_0. materuy.html": {
     "mtime": 1782875857.3316069,
@@ -140,64 +140,64 @@
     "semantic_hash": "0dd0ae1df483e32cbb7b8ebdf7f1911e"
   },
   "content/semester 1/1.3/1.3 CBT 1_1. Organisasi dan Embriologi SSP dan SST.html": {
-    "mtime": 1782875857.3451827,
-    "ast_hash": "ae864cf33e18d4d974071fff625bd99d",
-    "semantic_hash": "ae864cf33e18d4d974071fff625bd99d"
+    "mtime": 1786789906.8460553,
+    "ast_hash": "5953428bc9ca64c655ff1fe872dfd1c6",
+    "semantic_hash": ""
   },
   "content/semester 1/1.3/1.3 CBT 1_10. Fungsi Medulla Spinalis dan Saraf Spinal.html": {
-    "mtime": 1782875857.3471818,
-    "ast_hash": "17b617b356bc9cdf014b475032d10245",
-    "semantic_hash": "17b617b356bc9cdf014b475032d10245"
+    "mtime": 1786789906.9201515,
+    "ast_hash": "69585a5c7cb6bb9a3a386121eaed56e9",
+    "semantic_hash": ""
   },
   "content/semester 1/1.3/1.3 CBT 1_11. Fungsi Integratif.html": {
-    "mtime": 1782875857.3491802,
-    "ast_hash": "362c8ca3ad5e3591f2a2480bd5c76249",
-    "semantic_hash": "362c8ca3ad5e3591f2a2480bd5c76249"
+    "mtime": 1786789906.925149,
+    "ast_hash": "4a3819053804fc48aea44d570f6661a3",
+    "semantic_hash": ""
   },
   "content/semester 1/1.3/1.3 CBT 1_12. Fungsi Sistem Saraf Otonom.html": {
-    "mtime": 1782875857.351179,
-    "ast_hash": "ff014b2f08dd8646ae760d7ba9c69b7c",
-    "semantic_hash": "ff014b2f08dd8646ae760d7ba9c69b7c"
+    "mtime": 1786789906.940139,
+    "ast_hash": "3c5ff73ea8dd256974df09f0eda30d4e",
+    "semantic_hash": ""
   },
   "content/semester 1/1.3/1.3 CBT 1_2. Pars Centralis Systema Nervosum Centrale (Cerebrum & Truncus Encephali) .html": {
-    "mtime": 1782875857.3531785,
-    "ast_hash": "0aef30ad6eb911ca34be23df42afe2f0",
-    "semantic_hash": "0aef30ad6eb911ca34be23df42afe2f0"
+    "mtime": 1786789906.869042,
+    "ast_hash": "9d5dae5a5ba5c7bf7b08cc4abe1a3814",
+    "semantic_hash": ""
   },
   "content/semester 1/1.3/1.3 CBT 1_3. Pars Centralis Systema Nervosum Centrale (Cerebrum & Truncus Encephali) II.html": {
-    "mtime": 1782875857.3586755,
-    "ast_hash": "469f36129bdbc20f76b173958663e9fa",
-    "semantic_hash": "469f36129bdbc20f76b173958663e9fa"
+    "mtime": 1786789906.8816514,
+    "ast_hash": "0040ec50f4c4963b40ed89303dd3336e",
+    "semantic_hash": ""
   },
   "content/semester 1/1.3/1.3 CBT 1_4. Cerebellum Et Medulla Spinalis.html": {
-    "mtime": 1782875857.3616724,
-    "ast_hash": "742b1736dd6f5cf75ff9ab7013aa79c3",
-    "semantic_hash": "742b1736dd6f5cf75ff9ab7013aa79c3"
+    "mtime": 1786789906.8851638,
+    "ast_hash": "6ee7a959b8af28d48391cfc9aa2558b6",
+    "semantic_hash": ""
   },
   "content/semester 1/1.3/1.3 CBT 1_5. Vascularisasi Pars Centralis Systema Nervosum Central.html": {
-    "mtime": 1782875857.3636699,
-    "ast_hash": "24e12e8be819d594a7e7bc82408acc98",
-    "semantic_hash": "24e12e8be819d594a7e7bc82408acc98"
+    "mtime": 1786789906.8962433,
+    "ast_hash": "6bbc7c05cfb1121223ad6fcf4712e352",
+    "semantic_hash": ""
   },
   "content/semester 1/1.3/1.3 CBT 1_6. Pars Peripherica Systema Nervosum Periphericum.html": {
-    "mtime": 1782875857.3646688,
-    "ast_hash": "5b688ecf7c0a0e2fd61b0120f9a50333",
-    "semantic_hash": "5b688ecf7c0a0e2fd61b0120f9a50333"
+    "mtime": 1786789906.9006457,
+    "ast_hash": "5e471f53e35c6c251c0338cdae9145ba",
+    "semantic_hash": ""
   },
   "content/semester 1/1.3/1.3 CBT 1_7. Struktur Mikroskopis Sistem Saraf Pusat dan Sistem Saraf Tepi.html": {
-    "mtime": 1782875857.3666694,
-    "ast_hash": "619f9a0208e1449225a8739ce197bbd5",
-    "semantic_hash": "619f9a0208e1449225a8739ce197bbd5"
+    "mtime": 1786789906.9071577,
+    "ast_hash": "753dfd4f45775ef040a166d6b5c8051d",
+    "semantic_hash": ""
   },
   "content/semester 1/1.3/1.3 CBT 1_8. Biokimiawi Sistem Saraf.html": {
-    "mtime": 1782875857.367669,
-    "ast_hash": "fced611bbc93ac884eec5a206c352c9b",
-    "semantic_hash": "fced611bbc93ac884eec5a206c352c9b"
+    "mtime": 1786789906.9111555,
+    "ast_hash": "38bac47235f641f06bbdaa9288551894",
+    "semantic_hash": ""
   },
   "content/semester 1/1.3/1.3 CBT 1_9. Fungsi Sistem Saraf.html": {
-    "mtime": 1782875857.3696654,
-    "ast_hash": "665e099a90fde9cfd2586c47a052ef65",
-    "semantic_hash": "665e099a90fde9cfd2586c47a052ef65"
+    "mtime": 1786789906.9161527,
+    "ast_hash": "5781451bab9bab2f0de86291d59f8f76",
+    "semantic_hash": ""
   },
   "content/semester 1/1.3/1.3 CBT 1_card generator.html": {
     "mtime": 1783169368.7813046,
@@ -205,44 +205,44 @@
     "semantic_hash": "4cefa543b0c8c6094c52e406ddfe2352"
   },
   "content/semester 1/1.3/1.3 CBT 1_merah.html": {
-    "mtime": 1782875857.3791845,
-    "ast_hash": "b7bcda2499153227ee30d8aeb7eaabde",
-    "semantic_hash": "b7bcda2499153227ee30d8aeb7eaabde"
+    "mtime": 1786789906.950133,
+    "ast_hash": "0b8eab77ab10da5d93b6843a3fa098ae",
+    "semantic_hash": ""
   },
   "content/semester 1/1.3/1.3 CBT 2_ORANGE.html": {
-    "mtime": 1782875857.3791845,
-    "ast_hash": "007791e894deb05ecad8bb85f26f80fa",
-    "semantic_hash": "007791e894deb05ecad8bb85f26f80fa"
+    "mtime": 1786789906.957129,
+    "ast_hash": "977eddd6b7ca579242b9b5734dd0d240",
+    "semantic_hash": ""
   },
   "content/semester 1/1.3/1.3 CBT 2_VIOLET.html": {
-    "mtime": 1782875857.392136,
-    "ast_hash": "a7e6d979b4eb8381e07be8cdf6c25921",
-    "semantic_hash": "a7e6d979b4eb8381e07be8cdf6c25921"
+    "mtime": 1786789906.9643092,
+    "ast_hash": "1551d23647c552d70ecdca41546ba6b1",
+    "semantic_hash": ""
   },
   "content/semester 1/1.3/1.3 CBT 2_emerald.html": {
-    "mtime": 1782875857.3951333,
-    "ast_hash": "9f9b35c4453e8b89c906ec3ee65d90fb",
-    "semantic_hash": "9f9b35c4453e8b89c906ec3ee65d90fb"
+    "mtime": 1786789906.9728646,
+    "ast_hash": "b8b91aa7b8a6257c8dc0667aa21bce42",
+    "semantic_hash": ""
   },
   "content/semester 1/1.3/1.3 IDENT_GASAK LIBAS FISIO 1.html": {
-    "mtime": 1782875857.3971312,
-    "ast_hash": "7b3d70579263f5a9921f9f22a4ebdaae",
-    "semantic_hash": "7b3d70579263f5a9921f9f22a4ebdaae"
+    "mtime": 1786789948.735314,
+    "ast_hash": "992c710c9a05c4c348ff6e74eb53d212",
+    "semantic_hash": ""
   },
   "content/semester 1/1.3/1.3 IDENT_GASAK LIBAS FISIOX 2.html": {
-    "mtime": 1782875857.3981311,
-    "ast_hash": "a4804f9c840e6c6a85f9b6a4b326f100",
-    "semantic_hash": "a4804f9c840e6c6a85f9b6a4b326f100"
+    "mtime": 1786789980.2377348,
+    "ast_hash": "74965c8e02029d6b0710b3787efcf114",
+    "semantic_hash": ""
   },
   "content/semester 1/1.3/1.3 other_PUSH UP 1.html": {
-    "mtime": 1782875857.4011292,
-    "ast_hash": "60925815cb85f5c0b9dd57edea80361b",
-    "semantic_hash": "60925815cb85f5c0b9dd57edea80361b"
+    "mtime": 1786789906.9822538,
+    "ast_hash": "73f361db734e6d97a839cabd1be4a300",
+    "semantic_hash": ""
   },
   "content/semester 1/1.3/1.3 other_PUSH UP 2.html": {
-    "mtime": 1782875857.4055812,
-    "ast_hash": "6a68abce404b69587dfd21c03760d8f9",
-    "semantic_hash": "6a68abce404b69587dfd21c03760d8f9"
+    "mtime": 1786789906.9935784,
+    "ast_hash": "dd71f79d12d160ec18e7b61f448e52d9",
+    "semantic_hash": ""
   },
   "content/semester 1/1.4/1.4 CBT_0. COKI PARDEDE.html": {
     "mtime": 1782875857.4088292,
@@ -250,19 +250,19 @@
     "semantic_hash": "dcd65dbc8478c7794f4ba8a8d63497a3"
   },
   "content/semester 1/1.4/1.4 CBT_22 SIT UP.html": {
-    "mtime": 1782875857.4118245,
-    "ast_hash": "98cc6d05eb24716baec852f15b7edbf7",
-    "semantic_hash": "98cc6d05eb24716baec852f15b7edbf7"
+    "mtime": 1786790108.3379107,
+    "ast_hash": "eec807a9950275006f6279d60b4d7552",
+    "semantic_hash": ""
   },
   "content/semester 1/1.4/1.4 CBT_23 PULL UP.html": {
-    "mtime": 1782875857.4143288,
-    "ast_hash": "7a8ddafa0cb3c2df3086d91a218dd28e",
-    "semantic_hash": "7a8ddafa0cb3c2df3086d91a218dd28e"
+    "mtime": 1786790108.3618968,
+    "ast_hash": "bdad0948b94ec5cfd26405c82ef9e359",
+    "semantic_hash": ""
   },
   "content/semester 1/1.4/1.4 CBT_24 SCOTT JUMP.html": {
-    "mtime": 1782875857.4163332,
-    "ast_hash": "440b700d1405a3aeed133bbd4dedd3e3",
-    "semantic_hash": "440b700d1405a3aeed133bbd4dedd3e3"
+    "mtime": 1786790108.3701053,
+    "ast_hash": "f22916b63c4f5074953958662699cf1e",
+    "semantic_hash": ""
   },
   "content/semester 1/1.4/1.4 CBT_Anatomi Lecture.html": {
     "mtime": 1783932976.8788228,
@@ -280,9 +280,9 @@
     "semantic_hash": "9b5fd9917321497c1c6857e091fb1a98"
   },
   "content/semester 1/1.4/1.4 CBT_Histologi Lecture.html": {
-    "mtime": 1782875857.4265826,
-    "ast_hash": "b121a8aa4f5ba242caa90602853d1cba",
-    "semantic_hash": "b121a8aa4f5ba242caa90602853d1cba"
+    "mtime": 1786790108.3771007,
+    "ast_hash": "0c73d9e0a2c02366fab671814eed5d4c",
+    "semantic_hash": ""
   },
   "content/semester 1/1.4/1.4 Ident Anatomi_PPT ADIU 23'.html": {
     "mtime": 1783932976.9103246,
@@ -305,134 +305,134 @@
     "semantic_hash": "b32b0fbd52a882c4d9423d1e49a682f7"
   },
   "content/semester 2/2.1/2.1 CBT_ FISIO ARVENA.html": {
-    "mtime": 1782875857.4514296,
-    "ast_hash": "5d4260c2e71cd42c5587b40cd12baa3f",
-    "semantic_hash": "5d4260c2e71cd42c5587b40cd12baa3f"
+    "mtime": 1786789169.4670987,
+    "ast_hash": "db188d6c405215a31f2938ec2d19dd17",
+    "semantic_hash": ""
   },
   "content/semester 2/2.1/2.1 CBT_22 hours warmin up.html": {
-    "mtime": 1782875857.4544327,
-    "ast_hash": "f9a53873269b42d71fc6b3e7b20793aa",
-    "semantic_hash": "f9a53873269b42d71fc6b3e7b20793aa"
+    "mtime": 1786788759.156043,
+    "ast_hash": "9eb77d4ccff46b1cdc3d7d51369e1709",
+    "semantic_hash": ""
   },
   "content/semester 2/2.1/2.1 CBT_22 minute jogging.html": {
-    "mtime": 1782875857.4595625,
-    "ast_hash": "57e71d5f879b3d35d8eb4fd85e823861",
-    "semantic_hash": "57e71d5f879b3d35d8eb4fd85e823861"
+    "mtime": 1786788759.2004383,
+    "ast_hash": "6d25e0cd0d95fcdd6eb5003ef751dfbf",
+    "semantic_hash": ""
   },
   "content/semester 2/2.1/2.1 CBT_23 deadlift.html": {
-    "mtime": 1782875857.4625168,
-    "ast_hash": "4962ce998f8b166039081be3e909df54",
-    "semantic_hash": "4962ce998f8b166039081be3e909df54"
+    "mtime": 1786788759.2186284,
+    "ast_hash": "504866acfa2c0a2319aebb4f792f3c5f",
+    "semantic_hash": ""
   },
   "content/semester 2/2.1/2.1 CBT_24 bench press.html": {
-    "mtime": 1782875857.466515,
-    "ast_hash": "dcf6fc471bcee1f3774481ead4e6ed4b",
-    "semantic_hash": "dcf6fc471bcee1f3774481ead4e6ed4b"
+    "mtime": 1786788759.2327793,
+    "ast_hash": "4b9505ee3faab8f6723e0c0f78ec8f3a",
+    "semantic_hash": ""
   },
   "content/semester 2/2.1/2.1 CBT_25 minute jumping jack.html": {
-    "mtime": 1782875857.4963267,
-    "ast_hash": "33beeb2ea78e8e293b0da86e4c5c64c4",
-    "semantic_hash": "33beeb2ea78e8e293b0da86e4c5c64c4"
+    "mtime": 1786788759.2509196,
+    "ast_hash": "517721824114ef141e640d07d9f6b8e6",
+    "semantic_hash": ""
   },
   "content/semester 2/2.1/2.1 Ident Fisio_Praktikum 1.html": {
-    "mtime": 1782875857.4973278,
-    "ast_hash": "e65ffecc1efbc6ba8c34d33f17e853c9",
-    "semantic_hash": "e65ffecc1efbc6ba8c34d33f17e853c9"
+    "mtime": 1786789169.4954412,
+    "ast_hash": "5cf50f3db86732b38465d5d59ee2ba34",
+    "semantic_hash": ""
   },
   "content/semester 2/2.1/2.1 Ident Fisio_Pre&Post.html": {
-    "mtime": 1782875857.5013237,
-    "ast_hash": "0176b99c4bbf0519c5234e6472a67dbf",
-    "semantic_hash": "0176b99c4bbf0519c5234e6472a67dbf"
+    "mtime": 1786789169.5022454,
+    "ast_hash": "ed0626ca64751945a0a7b4c16697077c",
+    "semantic_hash": ""
   },
   "content/semester 2/2.2/2.2 CBT 1_22 FUFUFAFA.html": {
-    "mtime": 1782875857.5063276,
-    "ast_hash": "ed225a50db2d6d8cde391eb5333bd941",
-    "semantic_hash": "ed225a50db2d6d8cde391eb5333bd941"
+    "mtime": 1786788895.7124066,
+    "ast_hash": "d993029eacb8e4358f5c58b2ab3d9487",
+    "semantic_hash": ""
   },
   "content/semester 2/2.2/2.2 CBT 1_23 JOKROWI.html": {
-    "mtime": 1782875857.5103223,
-    "ast_hash": "a0f4cd7090134fec0a5040931d2498cc",
-    "semantic_hash": "a0f4cd7090134fec0a5040931d2498cc"
+    "mtime": 1786788895.8044436,
+    "ast_hash": "da8b1786b75518d978850b12dae56d41",
+    "semantic_hash": ""
   },
   "content/semester 2/2.2/2.2 CBT 1_24 PRANOWO.html": {
-    "mtime": 1782875857.5123186,
-    "ast_hash": "6c6a367b99e6b24f292555168a29661d",
-    "semantic_hash": "6c6a367b99e6b24f292555168a29661d"
+    "mtime": 1786788895.8203936,
+    "ast_hash": "02cf2c628e16d0abbce24e5e3522cc92",
+    "semantic_hash": ""
   },
   "content/semester 2/2.2/2.2 CBT 1_45 BAXLIL.html": {
-    "mtime": 1782875857.5153165,
-    "ast_hash": "cdced9e0a3bcca4e563a8297a9bbf77b",
-    "semantic_hash": "cdced9e0a3bcca4e563a8297a9bbf77b"
+    "mtime": 1786788895.8298025,
+    "ast_hash": "7bcc5a09cff80a625732a95e8f2c13c9",
+    "semantic_hash": ""
   },
   "content/semester 2/2.2/2.2 CBT 2_22 ANTON AYAM.html": {
-    "mtime": 1782875857.5188365,
-    "ast_hash": "b612442af50018f200ec5759c88a08bf",
-    "semantic_hash": "b612442af50018f200ec5759c88a08bf"
+    "mtime": 1786788895.8688426,
+    "ast_hash": "cc6fd93a8552a6cc3ffc5863a52dc480",
+    "semantic_hash": ""
   },
   "content/semester 2/2.2/2.2 CBT 2_23 TONO GALON.html": {
-    "mtime": 1782875857.5228376,
-    "ast_hash": "aa24e614f56eb08d6281b1d1e51b50a6",
-    "semantic_hash": "aa24e614f56eb08d6281b1d1e51b50a6"
+    "mtime": 1786788895.888143,
+    "ast_hash": "8777c5eb38c568b1e1f1c608b0a9a2df",
+    "semantic_hash": ""
   },
   "content/semester 2/2.2/2.2 CBT 2_24 AMBAR LAUNDRY.html": {
-    "mtime": 1782875857.5268357,
-    "ast_hash": "d2541cc12c7456d2e62c02acafe798ef",
-    "semantic_hash": "d2541cc12c7456d2e62c02acafe798ef"
+    "mtime": 1786788895.904847,
+    "ast_hash": "d934d1b88763983ec4f6ede1e87b11e0",
+    "semantic_hash": ""
   },
   "content/semester 2/2.2/2.2 CBT 2_45 TAHUN COPY PASTE.html": {
-    "mtime": 1782875857.5318387,
-    "ast_hash": "a028006a78280bfd7eb23e7b30a096ca",
-    "semantic_hash": "a028006a78280bfd7eb23e7b30a096ca"
+    "mtime": 1786788895.9280412,
+    "ast_hash": "979a853313a63bdd4580324f1fadc100",
+    "semantic_hash": ""
   },
   "content/semester 2/2.2/2.2 CBT 2_DEATHPAMIN 2.html": {
-    "mtime": 1782875857.5348337,
-    "ast_hash": "fc407fb03b410e502dbf1db225290f7d",
-    "semantic_hash": "fc407fb03b410e502dbf1db225290f7d"
+    "mtime": 1786788895.992006,
+    "ast_hash": "dd1075a9ae32badb59a5e9cf9aa1a3f5",
+    "semantic_hash": ""
   },
   "content/semester 2/2.2/2.2 CBT 2_DEATHPAMIN.html": {
-    "mtime": 1782875857.5431013,
-    "ast_hash": "d422f13f2bf07b9604e7e6d6f8c6de82",
-    "semantic_hash": "d422f13f2bf07b9604e7e6d6f8c6de82"
+    "mtime": 1786788896.0039995,
+    "ast_hash": "efffdf7d31702b3c79a5ae4939892922",
+    "semantic_hash": ""
   },
   "content/semester 2/2.2/2.2 OTHER_25 PARNO SAPI.html": {
-    "mtime": 1782875857.5461004,
-    "ast_hash": "377e2303743aaf5f2c2e7b592a1e1589",
-    "semantic_hash": "377e2303743aaf5f2c2e7b592a1e1589"
+    "mtime": 1786788896.0129926,
+    "ast_hash": "71e92a62472f71dffa74cffd100ac660",
+    "semantic_hash": ""
   },
   "content/semester 2/2.2/2.2_ Anggur Merah.html": {
-    "mtime": 1782875857.548102,
-    "ast_hash": "5be75456a19b4b5750d3f653d339d357",
-    "semantic_hash": "5be75456a19b4b5750d3f653d339d357"
+    "mtime": 1786789169.5070086,
+    "ast_hash": "cbebf552c3e22dc1c674f9026ab68f1e",
+    "semantic_hash": ""
   },
   "content/semester 2/2.3/2.3 CBT_21 SYAFIQ KECIL.html": {
-    "mtime": 1782875857.553468,
-    "ast_hash": "89704919277e9993a9d854a7e6e0be6d",
-    "semantic_hash": "89704919277e9993a9d854a7e6e0be6d"
+    "mtime": 1786788953.2187514,
+    "ast_hash": "ea9d25df373e14d73fb91cc4ad4406f3",
+    "semantic_hash": ""
   },
   "content/semester 2/2.3/2.3 CBT_22 SYAFIQ JUMBO.html": {
-    "mtime": 1782875857.5627673,
-    "ast_hash": "f56df73c7661c9a76ae0ffeca8f99154",
-    "semantic_hash": "f56df73c7661c9a76ae0ffeca8f99154"
+    "mtime": 1786788953.4182796,
+    "ast_hash": "30fc4963a599ca967d2a7bbf28310398",
+    "semantic_hash": ""
   },
   "content/semester 2/2.3/2.3 CBT_23 SYAFIQ GIGA.html": {
-    "mtime": 1782875857.5657635,
-    "ast_hash": "541f2d5781f42ea9638348034cfa0c86",
-    "semantic_hash": "541f2d5781f42ea9638348034cfa0c86"
+    "mtime": 1786788953.9576964,
+    "ast_hash": "86ca1698f81b9c360296300ddcee8197",
+    "semantic_hash": ""
   },
   "content/semester 2/2.3/2.3 CBT_24 SYAFIQ GALACTUS.html": {
-    "mtime": 1782875857.567762,
-    "ast_hash": "958a35c219598e59375c496a0684f475",
-    "semantic_hash": "958a35c219598e59375c496a0684f475"
+    "mtime": 1786788953.9740107,
+    "ast_hash": "89e84abe1412d53ff53478c97ce940ae",
+    "semantic_hash": ""
   },
   "content/semester 2/2.3/2.3 CBT_99 TAHUN MEDAN TIPSEN.html": {
-    "mtime": 1782875857.575759,
-    "ast_hash": "44619447c5c0815acbe70a544b814fd2",
-    "semantic_hash": "44619447c5c0815acbe70a544b814fd2"
+    "mtime": 1786788954.3134725,
+    "ast_hash": "ad1139440f9e8e712b1ddeed5e4cf822",
+    "semantic_hash": ""
   },
   "content/semester 2/2.3/2.3 CBT_Kicaw.html": {
-    "mtime": 1782875857.5797656,
-    "ast_hash": "50ce4b3d75a4f772a0b5e62688f6b509",
-    "semantic_hash": "50ce4b3d75a4f772a0b5e62688f6b509"
+    "mtime": 1786788954.3297517,
+    "ast_hash": "d7957fe2b9507f4080f70a79db01bca7",
+    "semantic_hash": ""
   },
   "content/semester 2/2.4/2.4 CBT 2_K1 AM I HUMAN.html": {
     "mtime": 1783169419.6293135,
@@ -720,7 +720,7 @@
     "semantic_hash": "9a4ce52b5ae1fd97684b9f35a9cd04a6"
   },
   "data.js": {
-    "mtime": 1786783709.4489768,
+    "mtime": 1786789987.7377512,
     "ast_hash": "ff3c68196ec0a1edccd9f6098e02fb29",
     "semantic_hash": ""
   },
@@ -745,9 +745,9 @@
     "semantic_hash": ""
   },
   "live.js": {
-    "mtime": 1784362283.7197359,
-    "ast_hash": "23c77838314c3dca4f3ab7e407fabbda",
-    "semantic_hash": "23c77838314c3dca4f3ab7e407fabbda"
+    "mtime": 1786784268.0685763,
+    "ast_hash": "7d0d305babf94b3b34708e04d00273a0",
+    "semantic_hash": ""
   },
   "mock_server.js": {
     "mtime": 1783488253.8427522,
@@ -1080,8 +1080,8 @@
     "semantic_hash": ""
   },
   "public/admin-workflow.js": {
-    "mtime": 1786783586.733996,
-    "ast_hash": "45c77e323409537619c667d94a4dc542",
+    "mtime": 1786784261.7944639,
+    "ast_hash": "3eceefd6550d3e8a7605eec8954c0c10",
     "semantic_hash": ""
   },
   "public/admin.html": {
@@ -1095,88 +1095,88 @@
     "semantic_hash": ""
   },
   "public/content/semester 1/1.2/1.2 Ident PK_Flashcard PK 2.html": {
-    "mtime": 1782875857.294576,
-    "ast_hash": "3d05d406fc36d235fc4f2eee8a1dd72e",
+    "mtime": 1786789542.4985902,
+    "ast_hash": "6041eee12329a7302386a339e6bb6820",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.2/1.2 Ident PK_Flashcard PK.html": {
-    "mtime": 1783932976.485921,
-    "ast_hash": "1b0ce002170047a1af003145bd63eb15",
+    "mtime": 1786789503.3565054,
+    "ast_hash": "b646028171006d95d3381179598b155f",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.2/1.2 Ident PK_Latsol PK.html": {
-    "mtime": 1783932976.4993725,
-    "ast_hash": "6018ed0153d870ed45c21afb627f363e",
+    "mtime": 1786789637.8948433,
+    "ast_hash": "44f9d23548f521509eab8eb0a0788678",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.2/1.2 other_Pull up 1.html": {
-    "mtime": 1782875857.298571,
-    "ast_hash": "19d575fe227c199512549be0ef728d56",
+    "mtime": 1786789457.494903,
+    "ast_hash": "66b16a9c37431935424b30737a3b92de",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.2/1.2 other_Pull up 2.html": {
-    "mtime": 1782875857.3005693,
-    "ast_hash": "d71f79619b241d48449fbfeeeb4f65b2",
+    "mtime": 1786789457.5130126,
+    "ast_hash": "398bc3da07e621ac3ca61d22cd1b44ea",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.2/1.2-1_flashcard biochemical romance.html": {
-    "mtime": 1782875857.303565,
-    "ast_hash": "2cca7a8276624a7b0b43c01d855333dc",
+    "mtime": 1786789739.455834,
+    "ast_hash": "ef62b14fdc07465aab618f6dfdcaeaa2",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.2/1.2-1_jarwo.html": {
-    "mtime": 1782875857.3075678,
-    "ast_hash": "7ad1be6b37d2f5626775ee2a9ead8544",
+    "mtime": 1786789767.765275,
+    "ast_hash": "5545bec68d6becf754ba4bec8c3a918a",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.2/1.2-2_Biomoll DNA Repair.html": {
-    "mtime": 1782875857.3105614,
-    "ast_hash": "e77861fd602a84dce3a0520a7f7f4660",
+    "mtime": 1786789457.4036195,
+    "ast_hash": "d1e1b5aec03174d851c6222f813cd7e3",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.2/1.2-2_Histo Cell Connect.html": {
-    "mtime": 1782875857.311561,
-    "ast_hash": "8560805c8d27f9500453c1a6cd996bac",
+    "mtime": 1786789457.4329593,
+    "ast_hash": "2e452bf7989aac8ecdeaf3a13ae9ea03",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.2/1.2-2_Histo Epitel.html": {
-    "mtime": 1783169366.6269386,
-    "ast_hash": "0ab9030a2828b3493fddc3be9ab57053",
+    "mtime": 1786789457.4530227,
+    "ast_hash": "d5965a5f2dbb7f31403f45f2163a5ef7",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.2/1.2-2_Histo Matrix Intraseluler.html": {
-    "mtime": 1782875857.3155582,
-    "ast_hash": "9a8740c014b58e636b24a0409a82b73f",
+    "mtime": 1786789457.4689226,
+    "ast_hash": "3c52f92dd3fd1b6b58ecaa8851b246be",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.2/1.2-2_Histo Otot.html": {
-    "mtime": 1782875857.317557,
-    "ast_hash": "48eceeccdd74705b609cde5b5c364623",
+    "mtime": 1786789457.4759147,
+    "ast_hash": "5c1c482c5f21e82859bebf1ee9b48dc5",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.2/1.2-2_Histo Saraf.html": {
-    "mtime": 1782875857.3185573,
-    "ast_hash": "b6e711160ed33a57638b5030562346af",
+    "mtime": 1786789457.4799116,
+    "ast_hash": "187c6887bb984c2a21c15b7caf8ffe96",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.2/1.2-2_Histo Siklus dan regulasi sel.html": {
-    "mtime": 1782875857.319556,
-    "ast_hash": "b8a6a0d380f86a4145d9dc5e6aa94ece",
+    "mtime": 1786789457.48391,
+    "ast_hash": "8d3462ef37b6a957564aed7d0f7c9114",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.2/1.2-2_Histo apoptosis dan penuaan.html": {
-    "mtime": 1782875857.3215556,
-    "ast_hash": "b18dfe2fbe76ac0b12c9829b83d6982e",
+    "mtime": 1786789457.4279625,
+    "ast_hash": "7b15a917f28df23e3e094eba49712a52",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.2/1.2-2_Histo jaringan ikat.html": {
-    "mtime": 1782875857.3235364,
-    "ast_hash": "e4e7fb51b3d5b864a5cbf8de1afd1cd5",
+    "mtime": 1786789457.462019,
+    "ast_hash": "31122ebc6d3753ed24118cbf15bca6f2",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.2/1.2-2_Overall CBT.html": {
-    "mtime": 1782875857.3265946,
-    "ast_hash": "b60631c8296f01f916994149eb5ea741",
+    "mtime": 1786789457.5310023,
+    "ast_hash": "731e8ccc26ea959e5ff8a6721f66bac3",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.3/1.3 CBT 1_0. materuy.html": {
@@ -1185,63 +1185,63 @@
     "semantic_hash": ""
   },
   "public/content/semester 1/1.3/1.3 CBT 1_1. Organisasi dan Embriologi SSP dan SST.html": {
-    "mtime": 1782875857.3451827,
-    "ast_hash": "ae864cf33e18d4d974071fff625bd99d",
+    "mtime": 1786789906.8460553,
+    "ast_hash": "5953428bc9ca64c655ff1fe872dfd1c6",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.3/1.3 CBT 1_10. Fungsi Medulla Spinalis dan Saraf Spinal.html": {
-    "mtime": 1782875857.3471818,
-    "ast_hash": "17b617b356bc9cdf014b475032d10245",
+    "mtime": 1786789906.9201515,
+    "ast_hash": "69585a5c7cb6bb9a3a386121eaed56e9",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.3/1.3 CBT 1_11. Fungsi Integratif.html": {
-    "mtime": 1782875857.3491802,
-    "ast_hash": "362c8ca3ad5e3591f2a2480bd5c76249",
+    "mtime": 1786789906.925149,
+    "ast_hash": "4a3819053804fc48aea44d570f6661a3",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.3/1.3 CBT 1_12. Fungsi Sistem Saraf Otonom.html": {
-    "mtime": 1782875857.351179,
-    "ast_hash": "ff014b2f08dd8646ae760d7ba9c69b7c",
+    "mtime": 1786789906.940139,
+    "ast_hash": "3c5ff73ea8dd256974df09f0eda30d4e",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.3/1.3 CBT 1_2. Pars Centralis Systema Nervosum Centrale (Cerebrum & Truncus Encephali) .html": {
-    "mtime": 1782875857.3531785,
-    "ast_hash": "0aef30ad6eb911ca34be23df42afe2f0",
+    "mtime": 1786789906.869042,
+    "ast_hash": "9d5dae5a5ba5c7bf7b08cc4abe1a3814",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.3/1.3 CBT 1_3. Pars Centralis Systema Nervosum Centrale (Cerebrum & Truncus Encephali) II.html": {
-    "mtime": 1782875857.3586755,
-    "ast_hash": "469f36129bdbc20f76b173958663e9fa",
+    "mtime": 1786789906.8816514,
+    "ast_hash": "0040ec50f4c4963b40ed89303dd3336e",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.3/1.3 CBT 1_4. Cerebellum Et Medulla Spinalis.html": {
-    "mtime": 1782875857.3616724,
-    "ast_hash": "742b1736dd6f5cf75ff9ab7013aa79c3",
+    "mtime": 1786789906.8851638,
+    "ast_hash": "6ee7a959b8af28d48391cfc9aa2558b6",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.3/1.3 CBT 1_5. Vascularisasi Pars Centralis Systema Nervosum Central.html": {
-    "mtime": 1782875857.3636699,
-    "ast_hash": "24e12e8be819d594a7e7bc82408acc98",
+    "mtime": 1786789906.8962433,
+    "ast_hash": "6bbc7c05cfb1121223ad6fcf4712e352",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.3/1.3 CBT 1_6. Pars Peripherica Systema Nervosum Periphericum.html": {
-    "mtime": 1782875857.3646688,
-    "ast_hash": "5b688ecf7c0a0e2fd61b0120f9a50333",
+    "mtime": 1786789906.9006457,
+    "ast_hash": "5e471f53e35c6c251c0338cdae9145ba",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.3/1.3 CBT 1_7. Struktur Mikroskopis Sistem Saraf Pusat dan Sistem Saraf Tepi.html": {
-    "mtime": 1782875857.3666694,
-    "ast_hash": "619f9a0208e1449225a8739ce197bbd5",
+    "mtime": 1786789906.9071577,
+    "ast_hash": "753dfd4f45775ef040a166d6b5c8051d",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.3/1.3 CBT 1_8. Biokimiawi Sistem Saraf.html": {
-    "mtime": 1782875857.367669,
-    "ast_hash": "fced611bbc93ac884eec5a206c352c9b",
+    "mtime": 1786789906.9111555,
+    "ast_hash": "38bac47235f641f06bbdaa9288551894",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.3/1.3 CBT 1_9. Fungsi Sistem Saraf.html": {
-    "mtime": 1782875857.3696654,
-    "ast_hash": "665e099a90fde9cfd2586c47a052ef65",
+    "mtime": 1786789906.9161527,
+    "ast_hash": "5781451bab9bab2f0de86291d59f8f76",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.3/1.3 CBT 1_card generator.html": {
@@ -1250,43 +1250,43 @@
     "semantic_hash": ""
   },
   "public/content/semester 1/1.3/1.3 CBT 1_merah.html": {
-    "mtime": 1782875857.3791845,
-    "ast_hash": "b7bcda2499153227ee30d8aeb7eaabde",
+    "mtime": 1786789906.950133,
+    "ast_hash": "0b8eab77ab10da5d93b6843a3fa098ae",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.3/1.3 CBT 2_ORANGE.html": {
-    "mtime": 1782875857.3791845,
-    "ast_hash": "007791e894deb05ecad8bb85f26f80fa",
+    "mtime": 1786789906.957129,
+    "ast_hash": "977eddd6b7ca579242b9b5734dd0d240",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.3/1.3 CBT 2_VIOLET.html": {
-    "mtime": 1782875857.392136,
-    "ast_hash": "a7e6d979b4eb8381e07be8cdf6c25921",
+    "mtime": 1786789906.9643092,
+    "ast_hash": "1551d23647c552d70ecdca41546ba6b1",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.3/1.3 CBT 2_emerald.html": {
-    "mtime": 1782875857.3951333,
-    "ast_hash": "9f9b35c4453e8b89c906ec3ee65d90fb",
+    "mtime": 1786789906.9728646,
+    "ast_hash": "b8b91aa7b8a6257c8dc0667aa21bce42",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.3/1.3 IDENT_GASAK LIBAS FISIO 1.html": {
-    "mtime": 1782875857.3971312,
-    "ast_hash": "7b3d70579263f5a9921f9f22a4ebdaae",
+    "mtime": 1786789948.735314,
+    "ast_hash": "992c710c9a05c4c348ff6e74eb53d212",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.3/1.3 IDENT_GASAK LIBAS FISIOX 2.html": {
-    "mtime": 1782875857.3981311,
-    "ast_hash": "a4804f9c840e6c6a85f9b6a4b326f100",
+    "mtime": 1786789980.2377348,
+    "ast_hash": "74965c8e02029d6b0710b3787efcf114",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.3/1.3 other_PUSH UP 1.html": {
-    "mtime": 1782875857.4011292,
-    "ast_hash": "60925815cb85f5c0b9dd57edea80361b",
+    "mtime": 1786789906.9822538,
+    "ast_hash": "73f361db734e6d97a839cabd1be4a300",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.3/1.3 other_PUSH UP 2.html": {
-    "mtime": 1782875857.4055812,
-    "ast_hash": "6a68abce404b69587dfd21c03760d8f9",
+    "mtime": 1786789906.9935784,
+    "ast_hash": "dd71f79d12d160ec18e7b61f448e52d9",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.4/1.4 CBT_0. COKI PARDEDE.html": {
@@ -1350,133 +1350,133 @@
     "semantic_hash": ""
   },
   "public/content/semester 2/2.1/2.1 CBT_ FISIO ARVENA.html": {
-    "mtime": 1782875857.4514296,
-    "ast_hash": "5d4260c2e71cd42c5587b40cd12baa3f",
+    "mtime": 1786789169.4670987,
+    "ast_hash": "db188d6c405215a31f2938ec2d19dd17",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.1/2.1 CBT_22 hours warmin up.html": {
-    "mtime": 1782875857.4544327,
-    "ast_hash": "f9a53873269b42d71fc6b3e7b20793aa",
+    "mtime": 1786788759.156043,
+    "ast_hash": "9eb77d4ccff46b1cdc3d7d51369e1709",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.1/2.1 CBT_22 minute jogging.html": {
-    "mtime": 1782875857.4595625,
-    "ast_hash": "57e71d5f879b3d35d8eb4fd85e823861",
+    "mtime": 1786788759.2004383,
+    "ast_hash": "6d25e0cd0d95fcdd6eb5003ef751dfbf",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.1/2.1 CBT_23 deadlift.html": {
-    "mtime": 1782875857.4625168,
-    "ast_hash": "4962ce998f8b166039081be3e909df54",
+    "mtime": 1786788759.2186284,
+    "ast_hash": "504866acfa2c0a2319aebb4f792f3c5f",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.1/2.1 CBT_24 bench press.html": {
-    "mtime": 1782875857.466515,
-    "ast_hash": "dcf6fc471bcee1f3774481ead4e6ed4b",
+    "mtime": 1786788759.2327793,
+    "ast_hash": "4b9505ee3faab8f6723e0c0f78ec8f3a",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.1/2.1 CBT_25 minute jumping jack.html": {
-    "mtime": 1782875857.4963267,
-    "ast_hash": "33beeb2ea78e8e293b0da86e4c5c64c4",
+    "mtime": 1786788759.2509196,
+    "ast_hash": "517721824114ef141e640d07d9f6b8e6",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.1/2.1 Ident Fisio_Praktikum 1.html": {
-    "mtime": 1782875857.4973278,
-    "ast_hash": "e65ffecc1efbc6ba8c34d33f17e853c9",
+    "mtime": 1786789169.4954412,
+    "ast_hash": "5cf50f3db86732b38465d5d59ee2ba34",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.1/2.1 Ident Fisio_Pre&Post.html": {
-    "mtime": 1782875857.5013237,
-    "ast_hash": "0176b99c4bbf0519c5234e6472a67dbf",
+    "mtime": 1786789169.5022454,
+    "ast_hash": "ed0626ca64751945a0a7b4c16697077c",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.2/2.2 CBT 1_22 FUFUFAFA.html": {
-    "mtime": 1782875857.5063276,
-    "ast_hash": "ed225a50db2d6d8cde391eb5333bd941",
+    "mtime": 1786788895.7124066,
+    "ast_hash": "d993029eacb8e4358f5c58b2ab3d9487",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.2/2.2 CBT 1_23 JOKROWI.html": {
-    "mtime": 1782875857.5103223,
-    "ast_hash": "a0f4cd7090134fec0a5040931d2498cc",
+    "mtime": 1786788895.8044436,
+    "ast_hash": "da8b1786b75518d978850b12dae56d41",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.2/2.2 CBT 1_24 PRANOWO.html": {
-    "mtime": 1782875857.5123186,
-    "ast_hash": "6c6a367b99e6b24f292555168a29661d",
+    "mtime": 1786788895.8203936,
+    "ast_hash": "02cf2c628e16d0abbce24e5e3522cc92",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.2/2.2 CBT 1_45 BAXLIL.html": {
-    "mtime": 1782875857.5153165,
-    "ast_hash": "cdced9e0a3bcca4e563a8297a9bbf77b",
+    "mtime": 1786788895.8298025,
+    "ast_hash": "7bcc5a09cff80a625732a95e8f2c13c9",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.2/2.2 CBT 2_22 ANTON AYAM.html": {
-    "mtime": 1782875857.5188365,
-    "ast_hash": "b612442af50018f200ec5759c88a08bf",
+    "mtime": 1786788895.8688426,
+    "ast_hash": "cc6fd93a8552a6cc3ffc5863a52dc480",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.2/2.2 CBT 2_23 TONO GALON.html": {
-    "mtime": 1782875857.5228376,
-    "ast_hash": "aa24e614f56eb08d6281b1d1e51b50a6",
+    "mtime": 1786788895.888143,
+    "ast_hash": "8777c5eb38c568b1e1f1c608b0a9a2df",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.2/2.2 CBT 2_24 AMBAR LAUNDRY.html": {
-    "mtime": 1782875857.5268357,
-    "ast_hash": "d2541cc12c7456d2e62c02acafe798ef",
+    "mtime": 1786788895.904847,
+    "ast_hash": "d934d1b88763983ec4f6ede1e87b11e0",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.2/2.2 CBT 2_45 TAHUN COPY PASTE.html": {
-    "mtime": 1782875857.5318387,
-    "ast_hash": "a028006a78280bfd7eb23e7b30a096ca",
+    "mtime": 1786788895.9280412,
+    "ast_hash": "979a853313a63bdd4580324f1fadc100",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.2/2.2 CBT 2_DEATHPAMIN 2.html": {
-    "mtime": 1782875857.5348337,
-    "ast_hash": "fc407fb03b410e502dbf1db225290f7d",
+    "mtime": 1786788895.992006,
+    "ast_hash": "dd1075a9ae32badb59a5e9cf9aa1a3f5",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.2/2.2 CBT 2_DEATHPAMIN.html": {
-    "mtime": 1782875857.5431013,
-    "ast_hash": "d422f13f2bf07b9604e7e6d6f8c6de82",
+    "mtime": 1786788896.0039995,
+    "ast_hash": "efffdf7d31702b3c79a5ae4939892922",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.2/2.2 OTHER_25 PARNO SAPI.html": {
-    "mtime": 1782875857.5461004,
-    "ast_hash": "377e2303743aaf5f2c2e7b592a1e1589",
+    "mtime": 1786788896.0129926,
+    "ast_hash": "71e92a62472f71dffa74cffd100ac660",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.2/2.2_ Anggur Merah.html": {
-    "mtime": 1782875857.548102,
-    "ast_hash": "5be75456a19b4b5750d3f653d339d357",
+    "mtime": 1786789169.5070086,
+    "ast_hash": "cbebf552c3e22dc1c674f9026ab68f1e",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.3/2.3 CBT_21 SYAFIQ KECIL.html": {
-    "mtime": 1782875857.553468,
-    "ast_hash": "89704919277e9993a9d854a7e6e0be6d",
+    "mtime": 1786788953.2187514,
+    "ast_hash": "ea9d25df373e14d73fb91cc4ad4406f3",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.3/2.3 CBT_22 SYAFIQ JUMBO.html": {
-    "mtime": 1782875857.5627673,
-    "ast_hash": "f56df73c7661c9a76ae0ffeca8f99154",
+    "mtime": 1786788953.4182796,
+    "ast_hash": "30fc4963a599ca967d2a7bbf28310398",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.3/2.3 CBT_23 SYAFIQ GIGA.html": {
-    "mtime": 1782875857.5657635,
-    "ast_hash": "541f2d5781f42ea9638348034cfa0c86",
+    "mtime": 1786788953.9576964,
+    "ast_hash": "86ca1698f81b9c360296300ddcee8197",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.3/2.3 CBT_24 SYAFIQ GALACTUS.html": {
-    "mtime": 1782875857.567762,
-    "ast_hash": "958a35c219598e59375c496a0684f475",
+    "mtime": 1786788953.9740107,
+    "ast_hash": "89e84abe1412d53ff53478c97ce940ae",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.3/2.3 CBT_99 TAHUN MEDAN TIPSEN.html": {
-    "mtime": 1782875857.575759,
-    "ast_hash": "44619447c5c0815acbe70a544b814fd2",
+    "mtime": 1786788954.3134725,
+    "ast_hash": "ad1139440f9e8e712b1ddeed5e4cf822",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.3/2.3 CBT_Kicaw.html": {
-    "mtime": 1782875857.5797656,
-    "ast_hash": "50ce4b3d75a4f772a0b5e62688f6b509",
+    "mtime": 1786788954.3297517,
+    "ast_hash": "d7957fe2b9507f4080f70a79db01bca7",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.4/2.4 CBT 2_K1 AM I HUMAN.html": {
@@ -1760,7 +1760,7 @@
     "semantic_hash": ""
   },
   "public/data.js": {
-    "mtime": 1786783709.4489768,
+    "mtime": 1786789987.7377512,
     "ast_hash": "ff3c68196ec0a1edccd9f6098e02fb29",
     "semantic_hash": ""
   },
@@ -1780,8 +1780,8 @@
     "semantic_hash": ""
   },
   "public/live.js": {
-    "mtime": 1784362283.7197359,
-    "ast_hash": "23c77838314c3dca4f3ab7e407fabbda",
+    "mtime": 1786784268.0685763,
+    "ast_hash": "7d0d305babf94b3b34708e04d00273a0",
     "semantic_hash": ""
   },
   "public/package.json": {
@@ -2347,6 +2347,131 @@
   "public/content/semester 3/3.1/3.1 LECTURE_K.21. Farmakokinetika obat.html": {
     "mtime": 1786781427.828122,
     "ast_hash": "702b03e62878cf1ce29ccfb754ceceac",
+    "semantic_hash": ""
+  },
+  "scratch/analyze_files.js": {
+    "mtime": 1786788410.664428,
+    "ast_hash": "2df87bcb3b608cbc592568f5f2833a4c",
+    "semantic_hash": ""
+  },
+  "scratch/convert_cbt_block12.js": {
+    "mtime": 1786789451.9297018,
+    "ast_hash": "f36d55b4dcfaa55b4e8cd099ceeb75bb",
+    "semantic_hash": ""
+  },
+  "scratch/convert_cbt_block21.js": {
+    "mtime": 1786788742.7060611,
+    "ast_hash": "085fc6d98bbf16a0ee5244264d077f16",
+    "semantic_hash": ""
+  },
+  "scratch/convert_cbt_block22.js": {
+    "mtime": 1786788888.5195193,
+    "ast_hash": "24431f16545af40063a4d6ca47e66b94",
+    "semantic_hash": ""
+  },
+  "scratch/convert_cbt_block23.js": {
+    "mtime": 1786788940.8781953,
+    "ast_hash": "15ee5aa24d0a5069c73152813e5fb735",
+    "semantic_hash": ""
+  },
+  "scratch/convert_typeb_bioromance.js": {
+    "mtime": 1786789731.7186007,
+    "ast_hash": "af06e647b76d07fb421e82afec1097d2",
+    "semantic_hash": ""
+  },
+  "scratch/convert_typeb_jarwo.js": {
+    "mtime": 1786789758.5123918,
+    "ast_hash": "14d27f20d6d24a4434c80a1eab09bd13",
+    "semantic_hash": ""
+  },
+  "scratch/convert_typeb_pk1.js": {
+    "mtime": 1786789497.173022,
+    "ast_hash": "e4af70483269ffdc2bc35dd6fdf5d002",
+    "semantic_hash": ""
+  },
+  "scratch/convert_typeb_pk2.js": {
+    "mtime": 1786789530.1195335,
+    "ast_hash": "7be3e6146c83075653ff832cc75cdca5",
+    "semantic_hash": ""
+  },
+  "scratch/convert_typeb_pk3.js": {
+    "mtime": 1786789561.2253704,
+    "ast_hash": "310efd832ff4015ee6b20575f7647d90",
+    "semantic_hash": ""
+  },
+  "scratch/inspect_bio_romance.js": {
+    "mtime": 1786789667.9179792,
+    "ast_hash": "e3f40aafa396fa082e4d7ef29d037406",
+    "semantic_hash": ""
+  },
+  "scratch/inspect_block12.js": {
+    "mtime": 1786789330.7275789,
+    "ast_hash": "61756b95698eca5c1a7efdcfa090af5f",
+    "semantic_hash": ""
+  },
+  "scratch/inspect_block22_questions.js": {
+    "mtime": 1786788863.2574563,
+    "ast_hash": "533450b8b6ce3a9a520dad13e1dacd39",
+    "semantic_hash": ""
+  },
+  "scratch/inspect_block23_questions.js": {
+    "mtime": 1786788910.0026107,
+    "ast_hash": "b45decbe6f80eeca8030ff0029d639ef",
+    "semantic_hash": ""
+  },
+  "scratch/inspect_cbt_schemas_12.js": {
+    "mtime": 1786789415.651753,
+    "ast_hash": "b0c7af64d24d80571ed7e91e825724fb",
+    "semantic_hash": ""
+  },
+  "scratch/inspect_jarwo.js": {
+    "mtime": 1786789685.2378407,
+    "ast_hash": "56a762b93d126ea9f087387e0e8c9405",
+    "semantic_hash": ""
+  },
+  "scratch/inspect_jarwo_bank.js": {
+    "mtime": 1786789699.8167813,
+    "ast_hash": "225690e095d6254224bbefef633b2d6a",
+    "semantic_hash": ""
+  },
+  "scratch/inspect_specific_12.js": {
+    "mtime": 1786789340.5997257,
+    "ast_hash": "21b319934a21b24d777255cfb524764a",
+    "semantic_hash": ""
+  },
+  "scratch/upgrade_type_b_certs.js": {
+    "mtime": 1786789161.6535056,
+    "ast_hash": "32b562c9edd7b8f674bec8eb5790c7ce",
+    "semantic_hash": ""
+  },
+  "scratch/convert_cbt_block13.js": {
+    "mtime": 1786789897.501163,
+    "ast_hash": "d9ea2fec95ff2ba7d9c60e959cc68437",
+    "semantic_hash": ""
+  },
+  "scratch/convert_typeb_gasak1.js": {
+    "mtime": 1786789940.857403,
+    "ast_hash": "228280c1190a731a24110e3ddbd8ae65",
+    "semantic_hash": ""
+  },
+  "scratch/convert_typeb_gasak2.js": {
+    "mtime": 1786789971.9577165,
+    "ast_hash": "b57427a5eeb4c4b76f99ff2b002613b4",
+    "semantic_hash": ""
+  },
+  "scratch/inspect_block13.js": {
+    "mtime": 1786789849.557473,
+    "ast_hash": "a160b9adc3f5473b1f19881a15e1c847",
+    "semantic_hash": ""
+  },
+  "scratch/inspect_cbt_schemas_13.js": {
+    "mtime": 1786789872.8803256,
+    "ast_hash": "6a998f3507290ff2baa41cb0006b7048",
+    "semantic_hash": ""
+  },
+  "scratch/inspect_gasak_libas.js": {
+    "mtime": 1786789914.4132595,
+    "ast_hash": "95b219903b543e9134f4606737382c40",
     "semantic_hash": ""
   }
 }
