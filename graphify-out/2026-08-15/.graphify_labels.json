@@ -333,11 +333,6 @@
   "331": "3.1 LECTURE_Am I Kinetic - Farmakokinetik.html",
   "332": "bug_report.md",
   "333": "feature_request.md",
-  "334": "check_oauth_logs.js",
-  "335": "generate_logos.py",
-  "336": "test_bearer_token.js",
-  "337": "test_full_flow.js",
-  "338": "test_mcp_local.js",
   "339": "check_oauth_logs.js",
   "340": "generate_logos.py",
   "341": "test_bearer_token.js",
@@ -347,8 +342,8 @@
   "345": "Untitled.md",
   "346": "Welcome.md",
   "347": "DoctorTablet MCP Note Synthesis Rules",
-  "348": "download_offbit.js",
   "349": "download_offbit.js",
   "350": "font-review.html",
-  "351": "font-review.html"
+  "351": "font-review.html",
+  "353": "render_specimen.py"
 }

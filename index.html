@@ -51,7 +51,7 @@
         <button type="button" class="auth-btn" id="btnSignIn">LOG IN</button>
         <button type="button" class="auth-btn auth-btn-outline" id="btnSignUp">SIGN UP</button>
         <button type="button" class="auth-btn auth-btn-outline" id="btnGuest" style="margin-top: 8px; border-color: var(--accent); color: var(--accent);">GUEST MODE</button>
-        <button type="button" class="btn-text" id="btnForgotPwd" style="font-size: 10px; margin-top: 8px; opacity: 0.7;">FORGOT PASSWORD?</button>
+        <button type="button" class="btn-text" id="btnForgotPwd" style="font-size: 12px; margin-top: 8px; opacity: 0.85; justify-content: center; width: 100%;">FORGOT PASSWORD?</button>
         <div class="auth-msg" id="authMsg"></div>
       </form>
     </div>
@@ -161,15 +161,15 @@
         <div class="settings-section-title">PREFERENCES</div>
         <div class="stat-block" style="margin-bottom:12px;">
           <div class="stat-item" style="flex-direction:row; align-items:center; justify-content:space-between; width:100%;">
-            <span class="stat-label">PERSONA<br><span style="opacity:0.5; font-size:9px;">Mr. / Mrs. Title</span></span>
+            <span class="stat-label">PERSONA<br><span style="opacity:0.8; font-size:11px;">Mr. / Mrs. Title</span></span>
             <div style="display:flex; gap:4px;" id="personaToggles">
-              <button class="auth-btn auth-btn-outline persona-btn active" data-persona="mr" style="padding:4px 10px; font-size:10px;">Mr.</button>
-              <button class="auth-btn auth-btn-outline persona-btn" data-persona="mrs" style="padding:4px 10px; font-size:10px;">Mrs.</button>
+              <button class="auth-btn auth-btn-outline persona-btn active" data-persona="mr" style="padding:5px 12px; font-size:12px;">Mr.</button>
+              <button class="auth-btn auth-btn-outline persona-btn" data-persona="mrs" style="padding:5px 12px; font-size:12px;">Mrs.</button>
             </div>
           </div>
           <div class="stat-divider" style="margin: 8px 0;"></div>
           <div class="stat-item" style="flex-direction:row; align-items:center; justify-content:space-between; width:100%;">
-            <span class="stat-label">LOW PERF MODE<br><span style="opacity:0.5; font-size:9px;">DISABLE COVERS</span></span>
+            <span class="stat-label">LOW PERF MODE<br><span style="opacity:0.8; font-size:11px;">DISABLE COVERS</span></span>
             <label class="toggle-switch">
               <input type="checkbox" id="perfToggleCb">
               <span class="slider"></span>
@@ -177,8 +177,8 @@
           </div>
           <div class="stat-divider" style="margin: 8px 0;"></div>
           <div class="stat-item" style="flex-direction:row; align-items:center; justify-content:space-between; width:100%;">
-            <span class="stat-label">GUIDED TOUR<br><span style="opacity:0.5; font-size:9px;">LEARN THE SYSTEM</span></span>
-            <button class="auth-btn auth-btn-outline" style="padding:6px 12px; font-size:10px;" onclick="document.getElementById('settingsModal').classList.remove('active'); document.getElementById('interactionModeModal').classList.add('active');">LAUNCH</button>
+            <span class="stat-label">GUIDED TOUR<br><span style="opacity:0.8; font-size:11px;">LEARN THE SYSTEM</span></span>
+            <button class="auth-btn auth-btn-outline" style="padding:6px 12px; font-size:12px;" onclick="document.getElementById('settingsModal').classList.remove('active'); document.getElementById('interactionModeModal').classList.add('active');">LAUNCH</button>
           </div>
         </div>
       </div>
@@ -186,9 +186,9 @@
         <div class="settings-section-title">DOCUMENTATION</div>
         <div class="stat-block" style="margin-bottom:24px;">
           <div class="stat-item" style="flex-direction:row; align-items:center; justify-content:space-between; width:100%;">
-            <span class="stat-label">Mr. Capsules Docs<br><span style="opacity:0.5; font-size:9px;">VIEW GUIDE & INFO</span></span>
+            <span class="stat-label">Mr. Capsules Docs<br><span style="opacity:0.8; font-size:11px;">VIEW GUIDE & INFO</span></span>
             <a href="/docs.html" target="_blank" style="text-decoration:none;">
-              <button class="auth-btn auth-btn-outline" style="padding:6px 12px; font-size:10px; display:flex; align-items:center; gap:4px;">
+              <button class="auth-btn auth-btn-outline" style="padding:6px 12px; font-size:12px; display:flex; align-items:center; gap:4px;">
                 <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="15 3 21 3 21 9"></polyline><line x1="10" y1="14" x2="21" y2="3"></line></svg>
                 OPEN
               </button>
@@ -203,21 +203,21 @@
             <span class="stat-label">USERNAME</span>
             <div style="display:flex; width:100%; gap:8px;">
               <input type="text" id="authUsername" class="auth-input" style="flex:1; padding:6px 10px;" placeholder="YOUR NAME">
-              <button id="btnSaveUsername" class="auth-btn auth-btn-outline" style="padding:6px 12px; font-size:11px;">SAVE</button>
+              <button id="btnSaveUsername" class="auth-btn auth-btn-outline" style="padding:6px 12px; font-size:12px;">SAVE</button>
             </div>
           </div>
           <div class="stat-item" style="flex-direction:column; align-items:flex-start; gap:8px; margin-top:12px;">
             <span class="stat-label">CHANGE PASSWORD</span>
             <div style="display:flex; width:100%; gap:8px;">
               <input type="password" id="settingsNewPassword" class="auth-input" style="flex:1; padding:6px 10px;" placeholder="NEW PASSWORD">
-              <button id="btnUpdatePassword" class="auth-btn auth-btn-outline" style="padding:6px 12px; font-size:11px; white-space:nowrap;">UPDATE</button>
+              <button id="btnUpdatePassword" class="auth-btn auth-btn-outline" style="padding:6px 12px; font-size:12px; white-space:nowrap;">UPDATE</button>
             </div>
           </div>
           <div style="display:flex; justify-content:space-between; align-items:center; margin-top:24px;">
             <button class="btn-text" id="btnLogout" style="opacity:1; background:color-mix(in srgb, var(--c4) 10%, transparent); padding:8px 12px; border-radius:var(--radius-pill); color:var(--danger); border:1.5px solid var(--danger);">SIGN OUT</button>
             
             <a href="/admin.html" target="_blank" id="adminSection" style="display:none; text-decoration:none;">
-              <button class="btn-text" style="opacity:1; background:var(--border-light); padding:8px 12px; border-radius:var(--radius-pill); color:var(--text-main); border:1.5px solid var(--text-main); display:flex; align-items:center; gap:6px; font-weight:600; font-size:11px;">
+              <button class="btn-text" style="opacity:1; background:var(--border-light); padding:8px 12px; border-radius:var(--radius-pill); color:var(--text-main); border:1.5px solid var(--text-main); display:flex; align-items:center; gap:6px; font-weight:600; font-size:12px;">
                 <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
                 ADMIN
               </button>
@@ -554,10 +554,10 @@ function slot(off){
   const x1=m?140:180, x2=m?260:350;
   switch(off){
     case  0: return {tx:0,   tz:0,    ry:0,   sc:1.00, op:1.00, zi:5};
-    case -1: return {tx:-x1, tz:-85,  ry:42,  sc:0.86, op:0.78, zi:3};
-    case  1: return {tx: x1, tz:-85,  ry:-42, sc:0.86, op:0.78, zi:3};
-    case -2: return {tx:-x2, tz:-220, ry:58,  sc:0.72, op:0.46, zi:1};
-    case  2: return {tx: x2, tz:-220, ry:-58, sc:0.72, op:0.46, zi:1};
+    case -1: return {tx:-x1, tz:-85,  ry:42,  sc:0.86, op:0.85, zi:3};
+    case  1: return {tx: x1, tz:-85,  ry:-42, sc:0.86, op:0.85, zi:3};
+    case -2: return {tx:-x2, tz:-220, ry:58,  sc:0.72, op:0.62, zi:1};
+    case  2: return {tx: x2, tz:-220, ry:-58, sc:0.72, op:0.62, zi:1};
     default: return {tx:0,   tz:-400, ry:0,   sc:0.40, op:0.00, zi:0};
   }
 }
@@ -823,6 +823,11 @@ try {
         isSignupAllowed = config.allowSignup !== false;
         if (!isSignupAllowed && btnSignUp) {
           btnSignUp.style.display = 'none';
+        }
+        const isGuestAllowed = config.allowGuest !== false;
+        const btnGuestEl = document.getElementById('btnGuest');
+        if (!isGuestAllowed && btnGuestEl) {
+          btnGuestEl.style.display = 'none';
         }
       }).catch(e => console.error('Failed to load config', e));
     const btnLogout = document.getElementById('btnLogout');
@@ -1657,8 +1662,8 @@ try {
 <!-- Reset Password Modal -->
 <div id="resetPasswordModal">
   <div style="background:var(--bg-modal); border:1.5px solid var(--text-main); border-radius:var(--radius-card); padding:32px; max-width:400px; width:90%; text-align:center;">
-    <div style=" font-size:24px; color:var(--text-main); margin-bottom:16px;">RESET PASSWORD</div>
-    <div style=" font-size:12px; color:var(--text-muted); margin-bottom:24px; line-height:1.5;">Please enter your new password below.</div>
+    <div style="font-size:24px; color:var(--text-main); margin-bottom:16px; font-family:var(--font-sans);">RESET PASSWORD</div>
+    <div style="font-size:14px; color:var(--text-muted); opacity:0.9; margin-bottom:24px; line-height:1.5;">Please enter your new password below.</div>
     <div style="display:flex; flex-direction:column; gap:12px;">
       <input type="password" id="newPasswordInput" class="auth-input" placeholder="NEW PASSWORD">
       <button id="btnSubmitNewPassword" class="auth-btn" style="background:var(--text-main); color:var(--c1);">UPDATE PASSWORD</button>
@@ -1670,8 +1675,8 @@ try {
 <!-- Username Setup Modal -->
 <div id="usernameSetupModal">
   <div style="background:var(--bg-modal); border:1.5px solid var(--text-main); border-radius:var(--radius-card); padding:32px; max-width:400px; width:90%; text-align:center;">
-    <div style=" font-size:24px; color:var(--text-main); margin-bottom:16px;">SET YOUR USERNAME</div>
-    <div style=" font-size:12px; color:var(--text-muted); margin-bottom:24px; line-height:1.5;">Welcome to MR CAPSULES! Before you proceed, please choose a username to identify yourself in the sanctuary.</div>
+    <div style="font-size:24px; color:var(--text-main); margin-bottom:16px; font-family:var(--font-sans);">SET YOUR USERNAME</div>
+    <div style="font-size:14px; color:var(--text-muted); opacity:0.9; margin-bottom:24px; line-height:1.5;">Welcome to MR CAPSULES! Before you proceed, please choose a username to identify yourself in the sanctuary.</div>
     <div style="display:flex; flex-direction:column; gap:12px;">
       <input type="text" id="setupUsernameInput" class="auth-input" placeholder="USERNAME (e.g. Neo)">
       <button id="btnSubmitSetupUsername" class="auth-btn" style="background:var(--text-main); color:var(--bg-main);">SAVE & CONTINUE</button>
@@ -1683,8 +1688,8 @@ try {
 <!-- Division Setup Modal -->
 <div id="divisionSetupModal">
   <div style="background:var(--bg-modal); border:1.5px solid var(--text-main); border-radius:var(--radius-card); padding:32px; max-width:400px; width:90%; text-align:center;">
-    <div style=" font-size:24px; color:var(--text-main); margin-bottom:16px;">CHOOSE DIVISION</div>
-    <div style=" font-size:12px; color:var(--text-muted); margin-bottom:24px; line-height:1.5;">Please select your primary division and provide your WhatsApp number for team communications.</div>
+    <div style="font-size:24px; color:var(--text-main); margin-bottom:16px; font-family:var(--font-sans);">CHOOSE DIVISION</div>
+    <div style="font-size:14px; color:var(--text-muted); opacity:0.9; margin-bottom:24px; line-height:1.5;">Please select your primary division and provide your WhatsApp number for team communications.</div>
     <div style="display:flex; flex-direction:column; gap:12px;">
       <select id="setupDivisionSelect" class="auth-input" style="width:100%; padding:8px; background:transparent; color:var(--text-main); border:1px solid var(--border-medium);">
         <option value="" disabled selected>Select Division...</option>
@@ -1702,8 +1707,8 @@ try {
 <!-- Interaction Mode Intercept -->
 <div id="interactionModeModal">
   <div style="background:var(--bg-modal); border:1.5px solid var(--text-main); border-radius:var(--radius-card); padding:32px; max-width:400px; width:90%; text-align:center;">
-    <div style=" font-size:24px; color:var(--text-main); margin-bottom:16px;">WELCOME TO MR CAPSULES</div>
-    <div style=" font-size:12px; color:var(--text-muted); margin-bottom:24px; line-height:1.5;">To personalize your guided tour, please select your primary interaction mode:</div>
+    <div style="font-size:24px; color:var(--text-main); margin-bottom:16px; font-family:var(--font-sans);">WELCOME TO MR CAPSULES</div>
+    <div style="font-size:14px; color:var(--text-muted); opacity:0.9; margin-bottom:24px; line-height:1.5;">To personalize your guided tour, please select your primary interaction mode:</div>
     <div style="display:flex; flex-direction:column; gap:12px;">
       <button class="auth-btn" style="background:var(--text-main); color:var(--bg-main);" onclick="startGuide('keyboard')">[ KEYBOARD & MOUSE ]</button>
       <button class="auth-btn" style="background:transparent; color:var(--text-main); border:1px solid var(--text-main);" onclick="startGuide('touch')">[ TOUCHSCREEN ]</button>
@@ -1719,7 +1724,7 @@ try {
     <div class="guide-body" id="guideBody"></div>
     <div class="guide-footer">
       <div class="guide-step-count" id="guideStepCount"></div>
-      <button class="auth-btn" style="padding:6px 12px; font-size:11px;" id="btnGuideNext">NEXT STEP</button>
+      <button class="auth-btn" style="padding:6px 12px; font-size:12px;" id="btnGuideNext">NEXT STEP</button>
     </div>
   </div>
 </div>

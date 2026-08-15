@@ -202,7 +202,7 @@ html,body{
 }
 .brand img{height:34px;opacity:1}
 .brand span{
-  font-family:var(--font-mono);font-size:22px;font-weight:700;
+  font-family:var(--font-primary);font-size:22px;font-weight:700;
   letter-spacing:0.08em;color:var(--c3);
 }
 .greeting {
@@ -510,7 +510,7 @@ html,body{
 }
 .auth-brand-left img { height: 75px; opacity: 0.95; margin-bottom: 8px; animation: authLogoFloat 4s ease-in-out infinite; }
 .auth-brand-left .auth-brand-title {
-  font-family: var(--font-mono); font-size: 52px; font-weight: 700;
+  font-family: var(--font-primary); font-size: 52px; font-weight: 700;
   color:var(--text-modal); letter-spacing: 0.12em; line-height: 1.1;
 }
 .auth-brand-left .auth-brand-subtitle {

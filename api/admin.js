@@ -258,6 +258,7 @@ export default async function handler(req, res) {
       
       const configObj = {
         allowSignup: data[0].allow_signup,
+        allowGuest: data[0].allow_guest,
         maintenanceMode: data[0].maintenance_mode,
         bannedDevices: data[0].banned_devices
       };
@@ -268,10 +269,11 @@ export default async function handler(req, res) {
     if (action === 'update_config') {
       const sbKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
       if (!sbKey) throw new Error("SUPABASE_SERVICE_ROLE_KEY not configured");
-      const { allowSignup, maintenanceMode, bannedDevices } = req.body;
+      const { allowSignup, allowGuest, maintenanceMode, bannedDevices } = req.body;
       
       const payload = {};
       if (allowSignup !== undefined) payload.allow_signup = allowSignup;
+      if (allowGuest !== undefined) payload.allow_guest = allowGuest;
       if (maintenanceMode !== undefined) payload.maintenance_mode = maintenanceMode;
       if (bannedDevices !== undefined) payload.banned_devices = bannedDevices;
 

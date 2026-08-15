@@ -80,16 +80,16 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
         
         var timeStr = new Date(log.time).toLocaleString();
         if (log.type === 'login') {
-          item.innerHTML = '<div style="font-size:12px; color:var(--text-muted);">' + timeStr + ' - [SYSTEM: LOGIN]</div>' +
-            '<div style="font-weight:600;">' + sanitize(log.user) + '</div>' +
-            '<div style="font-size:13px;">' + sanitize(log.email || '') + '</div>' +
-            '<div style="font-size:11px; color:var(--text-muted); margin-top:4px;">Devices: ' + sanitize(log.devStr || 'Unknown') + '</div>';
+          item.innerHTML = '<div style="font-size:13px; font-weight:600; color:var(--c4);">' + timeStr + ' - [SYSTEM: LOGIN]</div>' +
+            '<div style="font-weight:700; font-size:14.5px; margin-top:2px;">' + sanitize(log.user) + '</div>' +
+            '<div style="font-size:14px; margin-top:2px;">' + sanitize(log.email || '') + '</div>' +
+            '<div style="font-size:12px; color:var(--text-muted); opacity:0.95; margin-top:4px;">Devices: ' + sanitize(log.devStr || 'Unknown') + '</div>';
         } else if (log.type === 'online') {
-          item.innerHTML = '<div style="font-size:12px; color:var(--text-muted);">' + timeStr + ' - [LIVE PRESENCE]</div>' +
-            '<div style="font-weight:600; color:var(--text-main);">' + sanitize(log.user) + ' came online</div>';
+          item.innerHTML = '<div style="font-size:13px; font-weight:600; color:var(--c4);">' + timeStr + ' - [LIVE PRESENCE]</div>' +
+            '<div style="font-weight:700; font-size:14.5px; color:var(--text-main); margin-top:2px;">' + sanitize(log.user) + ' came online</div>';
         } else if (log.type === 'offline') {
-          item.innerHTML = '<div style="font-size:12px; color:var(--text-muted);">' + timeStr + ' - [LIVE PRESENCE]</div>' +
-            '<div style="font-weight:600; color:var(--danger);">' + sanitize(log.user) + ' went offline</div>';
+          item.innerHTML = '<div style="font-size:13px; font-weight:600; color:var(--text-muted);">' + timeStr + ' - [LIVE PRESENCE]</div>' +
+            '<div style="font-weight:700; font-size:14.5px; color:var(--danger); margin-top:2px;">' + sanitize(log.user) + ' went offline</div>';
         }
         logList.appendChild(item);
       });
@@ -253,7 +253,7 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
       sessionToken = session.access_token;
       window.dispatchEvent(new CustomEvent('adminReady', { detail: { token: sessionToken } }));
       const badgeEl = document.getElementById('userBadge');
-      badgeEl.textContent = session.user.user_metadata?.username || session.user.email;
+      if (badgeEl) badgeEl.textContent = session.user.user_metadata?.username || session.user.email;
       
       try {
         const controller = new AbortController();
@@ -272,182 +272,194 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
           authOverlay.classList.add('hidden');
           document.getElementById('adminTabs').classList.remove('hidden');
           
-          badgeEl.dataset.role = data.isSuperAdmin ? 'superadmin' : (data.isAdmin ? 'admin' : 'user');
+          window.isSuperAdmin = !!data.isSuperAdmin;
+          window.isAdmin = !!(data.isAdmin || data.isSuperAdmin);
+          if (badgeEl) badgeEl.dataset.role = window.isSuperAdmin ? 'superadmin' : (window.isAdmin ? 'admin' : 'user');
 
-          if (data.isSuperAdmin) {
-            window.isSuperAdmin = true;
-            loadUsers();
-            if(typeof loadDivisions !== 'undefined') loadDivisions(); else if(window.loadDivisions) window.loadDivisions();
-            if(typeof loadTasks !== 'undefined') loadTasks(); else if(window.loadTasks) window.loadTasks();
-            if(window.loadContributions) window.loadContributions();
-            fetchHybridLogs();
-            
-            try {
-              if (supabaseClient) {
-                window.sessionRoom = supabaseClient.channel('online-users', {
-                  config: { broadcast: { self: true, ack: true } }
+          // Initialize all views data
+          loadUsers();
+          if (typeof loadDivisions !== 'undefined') loadDivisions(); else if (window.loadDivisions) window.loadDivisions();
+          if (typeof loadTasks !== 'undefined') loadTasks(); else if (window.loadTasks) window.loadTasks();
+          if (window.loadContributions) window.loadContributions();
+          fetchHybridLogs();
+          
+          try {
+            if (supabaseClient) {
+              window.sessionRoom = supabaseClient.channel('online-users', {
+                config: { broadcast: { self: true, ack: true } }
+              });
+              window.sessionRoom.on('presence', { event: 'sync' }, () => {
+                const state = window.sessionRoom.presenceState();
+                const count = Object.keys(state).length;
+                const el = document.getElementById('dashOnlineCount');
+                if (el) el.textContent = count;
+                // Mark online user cards
+                var cards = document.querySelectorAll('#userBrowser .user-card');
+                var emailMap = new Map();
+                cards.forEach(function(c) {
+                  c.setAttribute('data-online', 'false');
+                  var emailEl = c.querySelector('.user-email');
+                  if (emailEl) emailMap.set(emailEl.textContent, c);
                 });
-                window.sessionRoom.on('presence', { event: 'sync' }, () => {
-                  const state = window.sessionRoom.presenceState();
-                  const count = Object.keys(state).length;
-                  const el = document.getElementById('dashOnlineCount');
-                  if(el) el.textContent = count;
-                  // Mark online user cards
-                  var cards = document.querySelectorAll('#userBrowser .user-card');
-                  // Build email-to-card map for O(1) lookup instead of O(n×m)
-                  var emailMap = new Map();
-                  cards.forEach(function(c) {
-                    c.setAttribute('data-online', 'false');
-                    var emailEl = c.querySelector('.user-email');
-                    if (emailEl) emailMap.set(emailEl.textContent, c);
+                Object.values(state).forEach(function(presences) {
+                  presences.forEach(function(p) {
+                    if (p.user && p.email) {
+                      var card = emailMap.get(p.email);
+                      if (card) card.setAttribute('data-online', 'true');
+                    }
                   });
-                  Object.values(state).forEach(function(presences) {
-                    presences.forEach(function(p) {
-                      if(p.user && p.email) {
-                        var card = emailMap.get(p.email);
-                        if (card) card.setAttribute('data-online', 'true');
-                      }
-                    });
+                });
+              }).on('presence', { event: 'join' }, ({ key, newPresences }) => {
+                newPresences.forEach(function(p) {
+                  var name = (p.email || p.user || 'Unknown');
+                  window.addHybridLog({
+                     id: 'online_' + name + '_' + Date.now(),
+                     type: 'online',
+                     time: Date.now(),
+                     user: name
                   });
-                }).on('presence', { event: 'join' }, ({ key, newPresences }) => {
-                  console.log('Presence join:', newPresences);
-                  newPresences.forEach(function(p) {
-                    var name = (p.email || p.user || 'Unknown');
+                });
+                window.renderHybridLogs();
+              }).on('presence', { event: 'leave' }, ({ key, leftPresences }) => {
+                leftPresences.forEach(function(p) {
+                  var name = (p.email || p.user || 'Unknown');
+                  window.addHybridLog({
+                     id: 'offline_' + name + '_' + Date.now(),
+                     type: 'offline',
+                     time: Date.now(),
+                     user: name
+                  });
+                });
+                window.renderHybridLogs();
+              }).subscribe(async (status) => {
+                 if (status === 'SUBSCRIBED') {
+                    var tEmail = (badgeEl ? badgeEl.textContent : '') || 'Admin';
+                    var tNow = Date.now();
+                    await window.sessionRoom.track({ user: 'auth-user', email: tEmail, joined_at: new Date().toISOString() });
+                    
                     window.addHybridLog({
-                       id: 'online_' + name + '_' + Date.now(),
+                       id: 'online_' + tEmail + '_' + tNow,
                        type: 'online',
-                       time: Date.now(),
-                       user: name
+                       time: tNow,
+                       user: tEmail
                     });
-                  });
-                  window.renderHybridLogs();
-                }).on('presence', { event: 'leave' }, ({ key, leftPresences }) => {
-                  console.log('Presence leave:', leftPresences);
-                  leftPresences.forEach(function(p) {
-                    var name = (p.email || p.user || 'Unknown');
-                    window.addHybridLog({
-                       id: 'offline_' + name + '_' + Date.now(),
-                       type: 'offline',
-                       time: Date.now(),
-                       user: name
-                    });
-                  });
-                  window.renderHybridLogs();
-                }).subscribe(async (status) => {
-                   if (status === 'SUBSCRIBED') {
-                      var tEmail = document.getElementById('userBadge').textContent || 'Admin';
-                      var tNow = Date.now();
-                      await window.sessionRoom.track({ user: 'auth-user', email: tEmail, joined_at: new Date().toISOString() });
-                      
-                      window.addHybridLog({
-                         id: 'online_' + tEmail + '_' + tNow,
-                         type: 'online',
-                         time: tNow,
-                         user: tEmail
-                      });
-                      window.renderHybridLogs();
-                   }
-                });
-                
+                    window.renderHybridLogs();
+                 }
+              });
 
-                // Real-time Database Subscriptions
-                const updateAndRender = () => {
-                  if (window.lastLoadedUsers && window.lastBannedDevs) {
-                    renderUsers(window.lastLoadedUsers, window.lastBannedDevs);
-                    const dashTotalUsers = document.getElementById('dashTotalUsers');
-                    if (dashTotalUsers) dashTotalUsers.textContent = window.lastLoadedUsers.length;
-                  }
-                };
-
-                window.dbChannel = supabaseClient.channel('db-changes')
-                  .on('postgres_changes', { event: '*', schema: 'public', table: 'profiles' }, payload => {
-                     if (!window.lastLoadedUsers) return;
-                     if (payload.eventType === 'DELETE') {
-                       window.lastLoadedUsers = window.lastLoadedUsers.filter(u => u.id !== payload.old.id);
-                     } else if (payload.eventType === 'INSERT') {
-                       window.lastLoadedUsers.push({
-                         id: payload.new.id,
-                         email: payload.new.email,
-                         created_at: payload.new.created_at,
-                         user_metadata: { username: payload.new.username },
-                         app_metadata: { banned: payload.new.banned },
-                         role: 'user'
-                       });
-                     } else if (payload.eventType === 'UPDATE') {
-                       const u = window.lastLoadedUsers.find(u => u.id === payload.new.id);
-                       if (u) {
-                         u.email = payload.new.email;
-                         u.user_metadata = u.user_metadata || {};
-                         u.user_metadata.username = payload.new.username;
-                         u.app_metadata = u.app_metadata || {};
-                         u.app_metadata.banned = payload.new.banned;
-                       }
-                     }
-                     updateAndRender();
-                  })
-                  .on('postgres_changes', { event: '*', schema: 'public', table: 'user_roles' }, payload => {
-                     if (!window.lastLoadedUsers) return;
-                     if (payload.eventType === 'DELETE') {
-                       const u = window.lastLoadedUsers.find(u => u.email === payload.old.identifier || (u.user_metadata||{}).username === payload.old.identifier);
-                       if (u) u.role = 'user';
-                     } else {
-                       const u = window.lastLoadedUsers.find(u => u.email === payload.new.identifier || (u.user_metadata||{}).username === payload.new.identifier);
-                       if (u) u.role = payload.new.role;
-                     }
-                     updateAndRender();
-                  })
-                  .on('postgres_changes', { event: '*', schema: 'public', table: 'user_devices' }, payload => {
-                     // Debounce device changes - these are rare but can come in bursts during signup
-                     clearTimeout(window._deviceChangeTimer);
-                     window._deviceChangeTimer = setTimeout(() => loadUsers(), 800);
-                  })
-                  .on('postgres_changes', { event: '*', schema: 'public', table: 'app_settings' }, payload => {
-                     // Invalidate banned devices cache when settings change
-                     window._cachedBannedDevices = null;
-                     loadUsers();
-                  })
-                  .subscribe();
-                
-                const btnSendAnn = document.getElementById('btnSendAnnouncement');
-                if (btnSendAnn) {
-                  btnSendAnn.onclick = async () => {
-                     const txt = document.getElementById('announcementText').value;
-                     if (!txt) return;
-                     btnSendAnn.textContent = '...';
-                     await window.sessionRoom.send({
-                        type: 'broadcast',
-                        event: 'announcement',
-                        payload: { message: txt }
-                     });
-                     document.getElementById('announcementText').value = '';
-                     btnSendAnn.textContent = 'Sent!';
-                     setTimeout(() => { btnSendAnn.textContent = 'Broadcast'; }, 2000);
-                  };
+              // Real-time Database Subscriptions
+              const updateAndRender = () => {
+                if (window.lastLoadedUsers && window.lastBannedDevs) {
+                  renderUsers(window.lastLoadedUsers, window.lastBannedDevs);
+                  const dashTotalUsers = document.getElementById('dashTotalUsers');
+                  if (dashTotalUsers) dashTotalUsers.textContent = window.lastLoadedUsers.length;
                 }
-              }
-
-              const cfgRes = await adminAction('get_config');
-              const toggle = document.getElementById('toggleSignup');
-              const toggleMaint = document.getElementById('toggleMaintenance');
-              
-              if(cfgRes && cfgRes.success) {
-                window.configSha = cfgRes.sha;
-                const configObj = cfgRes.config;
-                toggle.checked = configObj.allowSignup !== false;
-                toggleMaint.checked = configObj.maintenanceMode === true;
-              } else {
-                window.configSha = null;
-                toggle.checked = true;
-                toggleMaint.checked = false;
-              }
-              
-              const updateConfig = async () => {
-                const isAllowed = toggle.checked;
-                const isMaint = toggleMaint.checked;
-                
-                await adminAction('update_config', { allowSignup: isAllowed, maintenanceMode: isMaint });
               };
-              
+
+              window.dbChannel = supabaseClient.channel('db-changes')
+                .on('postgres_changes', { event: '*', schema: 'public', table: 'profiles' }, payload => {
+                   if (!window.lastLoadedUsers) return;
+                   if (payload.eventType === 'DELETE') {
+                     window.lastLoadedUsers = window.lastLoadedUsers.filter(u => u.id !== payload.old.id);
+                   } else if (payload.eventType === 'INSERT') {
+                     window.lastLoadedUsers.push({
+                       id: payload.new.id,
+                       email: payload.new.email,
+                       created_at: payload.new.created_at,
+                       user_metadata: { username: payload.new.username },
+                       app_metadata: { banned: payload.new.banned },
+                       role: 'user'
+                     });
+                   } else if (payload.eventType === 'UPDATE') {
+                     const u = window.lastLoadedUsers.find(u => u.id === payload.new.id);
+                     if (u) {
+                       u.email = payload.new.email;
+                       u.user_metadata = u.user_metadata || {};
+                       u.user_metadata.username = payload.new.username;
+                       u.app_metadata = u.app_metadata || {};
+                       u.app_metadata.banned = payload.new.banned;
+                     }
+                   }
+                   updateAndRender();
+                })
+                .on('postgres_changes', { event: '*', schema: 'public', table: 'user_roles' }, payload => {
+                   if (!window.lastLoadedUsers) return;
+                   if (payload.eventType === 'DELETE') {
+                     const u = window.lastLoadedUsers.find(u => u.email === payload.old.identifier || (u.user_metadata||{}).username === payload.old.identifier);
+                     if (u) u.role = 'user';
+                   } else {
+                     const u = window.lastLoadedUsers.find(u => u.email === payload.new.identifier || (u.user_metadata||{}).username === payload.new.identifier);
+                     if (u) u.role = payload.new.role;
+                   }
+                   updateAndRender();
+                })
+                .on('postgres_changes', { event: '*', schema: 'public', table: 'user_devices' }, payload => {
+                   clearTimeout(window._deviceChangeTimer);
+                   window._deviceChangeTimer = setTimeout(() => loadUsers(), 800);
+                })
+                .on('postgres_changes', { event: '*', schema: 'public', table: 'app_settings' }, payload => {
+                   window._cachedBannedDevices = null;
+                   loadUsers();
+                })
+                .subscribe();
+            }
+
+            // Setup Broadcast announcement button
+            const btnSendAnn = document.getElementById('btnSendAnnouncement');
+            if (btnSendAnn) {
+              btnSendAnn.onclick = async () => {
+                 const txtInput = document.getElementById('announcementText');
+                 const txt = txtInput ? txtInput.value.trim() : '';
+                 if (!txt) {
+                   if (window.showToast) window.showToast('Please enter an announcement message', 'error');
+                   return;
+                 }
+                 await withButtonLoading(btnSendAnn, async () => {
+                   try {
+                     if (window.sessionRoom) {
+                       await window.sessionRoom.send({
+                          type: 'broadcast',
+                          event: 'announcement',
+                          payload: { message: txt }
+                       });
+                     }
+                     if (txtInput) txtInput.value = '';
+                     if (window.showToast) window.showToast('Announcement broadcasted successfully!', 'success');
+                   } catch(err) {
+                     console.error("Broadcast failed:", err);
+                     if (window.showToast) window.showToast('Broadcast error: ' + err.message, 'error');
+                   }
+                 }, 'Sending...');
+              };
+            }
+
+            // Setup Config Switches
+            const cfgRes = await adminAction('get_config');
+            const toggle = document.getElementById('toggleSignup');
+            const toggleGuest = document.getElementById('toggleGuest');
+            const toggleMaint = document.getElementById('toggleMaintenance');
+            
+            if (cfgRes && cfgRes.success) {
+              window.configSha = cfgRes.sha;
+              const configObj = cfgRes.config || {};
+              if (toggle) toggle.checked = configObj.allowSignup !== false;
+              if (toggleGuest) toggleGuest.checked = configObj.allowGuest !== false;
+              if (toggleMaint) toggleMaint.checked = configObj.maintenanceMode === true;
+            } else {
+              window.configSha = null;
+              if (toggle) toggle.checked = true;
+              if (toggleGuest) toggleGuest.checked = true;
+              if (toggleMaint) toggleMaint.checked = false;
+            }
+            
+            const updateConfig = async () => {
+              const isAllowed = toggle ? toggle.checked : true;
+              const isGuestAllowed = toggleGuest ? toggleGuest.checked : true;
+              const isMaint = toggleMaint ? toggleMaint.checked : false;
+              await adminAction('update_config', { allowSignup: isAllowed, allowGuest: isGuestAllowed, maintenanceMode: isMaint });
+            };
+            
+            if (toggle) {
               toggle.onchange = async (e) => {
                  if (!await customConfirm('Are you sure you want to change allow signup setting?')) {
                    e.target.checked = !e.target.checked;
@@ -455,6 +467,17 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
                  }
                  await updateConfig();
               };
+            }
+            if (toggleGuest) {
+              toggleGuest.onchange = async (e) => {
+                 if (!await customConfirm('Are you sure you want to ' + (e.target.checked ? 'enable' : 'disable') + ' guest access?')) {
+                   e.target.checked = !e.target.checked;
+                   return;
+                 }
+                 await updateConfig();
+              };
+            }
+            if (toggleMaint) {
               toggleMaint.onchange = async (e) => {
                  if (!await customConfirm('Are you sure you want to toggle maintenance mode?')) {
                    e.target.checked = !e.target.checked;
@@ -462,15 +485,18 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
                  }
                  await updateConfig();
                  if (window.sessionRoom) {
-                   await window.sessionRoom.send({
-                      type: 'broadcast',
-                      event: e.target.checked ? 'maintenance_on' : 'maintenance_off',
-                      payload: {}
-                   });
+                   try {
+                     await window.sessionRoom.send({
+                        type: 'broadcast',
+                        event: e.target.checked ? 'maintenance_on' : 'maintenance_off',
+                        payload: {}
+                     });
+                   } catch(err) { console.error(err); }
                  }
               };
-            } catch(e) { console.error("Config fetch error:", e); }
-          }
+            }
+          } catch(e) { console.error("Admin setup error:", e); }
+          
           loadTree();
         } else {
           redirectToHome(data.error || "Forbidden. You are not an admin.");
@@ -649,13 +675,33 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
       
       let html = '';
       if (item.type !== 'folder') {
-        if (item.name.endsWith('.html')) html += `<button class="btn" id="ctxEdit">Edit Code</button>`;
-        html += `<button class="btn" id="ctxCreateTask" style="border-color:var(--accent); color:var(--accent);">Create Task</button>`;
-        html += `<button class="btn" id="ctxDownload">Download</button>`;
-        html += `<button class="btn" id="ctxMove">Move</button>`;
-        html += `<button class="btn" id="ctxRename">Rename</button>`;
+        if (item.name.endsWith('.html')) {
+          html += `<button class="btn-unified" id="ctxEdit">
+            <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"></path><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"></path></svg>
+            <span>Edit Code</span>
+          </button>`;
+        }
+        html += `<button class="btn-unified primary" id="ctxCreateTask">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+          <span>Create Task</span>
+        </button>`;
+        html += `<button class="btn-unified" id="ctxDownload">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+          <span>Download</span>
+        </button>`;
+        html += `<button class="btn-unified" id="ctxMove">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="5 9 2 12 5 15"></polyline><polyline points="9 5 12 2 15 5"></polyline><polyline points="15 19 12 22 9 19"></polyline><polyline points="19 9 22 12 19 15"></polyline><line x1="2" y1="12" x2="22" y2="12"></line><line x1="12" y1="2" x2="12" y2="22"></line></svg>
+          <span>Move</span>
+        </button>`;
+        html += `<button class="btn-unified" id="ctxRename">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 3a2.828 2.828 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5L17 3z"></path></svg>
+          <span>Rename</span>
+        </button>`;
       }
-      html += `<button class="btn danger" id="ctxDelete">Delete</button>`;
+      html += `<button class="btn-unified danger" id="ctxDelete">
+        <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+        <span>Delete</span>
+      </button>`;
       container.innerHTML = html;
       
       modal.classList.add('active');
@@ -750,27 +796,18 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
         if (data.success) {
           statusText.textContent = `Success: ${action}`;
           showToast(`Action successful: ${action.replace('_', ' ')}`, 'success');
-          
-          // NOTE: Removed redundant setTimeout(loadUsers/loadTree) here.
-          // Real-time Supabase subscriptions on profiles/user_roles/user_devices
-          // already trigger loadUsers automatically, and callers like uploadFilesSequential
-          // already call loadTree after completion. The old code caused double API calls.
           return data;
         } else {
           statusText.textContent = `Error: ${data.error}`;
           customAlert(`Error: ${data.error}`);
-          return null;
+          return { success: false, error: data.error };
         }
       } catch(e) {
         clearTimeout(timeoutId);
-        if (e.name === 'AbortError') {
-          statusText.textContent = `Timeout: ${action} took too long (30s)`;
-          customAlert(`Request timed out after 30 seconds: ${action}`);
-        } else {
-          statusText.textContent = 'Network error: ' + e.message;
-          customAlert('Network error: ' + e.message);
-        }
-        return null;
+        const errorMsg = e.name === 'AbortError' ? `Timeout: ${action} took too long (30s)` : 'Network error: ' + e.message;
+        statusText.textContent = errorMsg;
+        customAlert(errorMsg);
+        return { success: false, error: errorMsg };
       }
     }
 
@@ -1055,9 +1092,19 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
           targetEl.classList.add('active');
           if (targetId === 'viewApiKeys' && typeof window.loadApiKeys === 'function') {
             window.loadApiKeys();
+          } else if (targetId === 'viewDashboard') {
+            if (typeof window.fetchHybridLogs === 'function') window.fetchHybridLogs();
+            if (typeof window.loadContributions === 'function') window.loadContributions();
+          } else if (targetId === 'viewFiles') {
+            if (typeof window.loadTree === 'function' && (!window.currentTree || window.currentTree.length === 0)) window.loadTree();
+          } else if (targetId === 'viewUsers') {
+            if (typeof window.loadDivisions === 'function' && !window.divisionData) window.loadDivisions();
+            if (typeof window.loadUsers === 'function') window.loadUsers();
+          } else if (targetId === 'viewTasks') {
+            if (typeof window.loadTasks === 'function') window.loadTasks();
           }
         }
-      }
+      };
     });
 
     // Users Logic
@@ -1100,16 +1147,19 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
                   displayUsers = [];
               }
           }
+          
           window.lastLoadedUsers = displayUsers;
           window.lastBannedDevs = bannedDevs;
           renderUsers(displayUsers, bannedDevs);
-          renderDashboard(data.users, data.globalStats);
+          
+          const dashTotalUsers = document.getElementById('dashTotalUsers');
+          if(dashTotalUsers) dashTotalUsers.textContent = data.users.length;
         } else {
-          userBrowser.innerHTML = `<div style="padding:24px; color:var(--danger);">Failed to load users: ${data.error}</div>`;
+          userBrowser.innerHTML = `<div style="padding:48px; color:var(--danger); text-align:center;">Failed to load users: ${data.error}</div>`;
         }
-      } catch(e) {
+      } catch (e) {
         clearTimeout(userTimeoutId);
-        userBrowser.innerHTML = `<div style="padding:24px; color:var(--danger);">${e.name === 'AbortError' ? 'Loading timed out (30s). Try refreshing.' : 'Error: ' + e.message}</div>`;
+        userBrowser.innerHTML = `<div style="padding:48px; color:var(--danger); text-align:center;">Failed to load users: ${e.name === 'AbortError' ? 'Request timed out (30s)' : e.message}</div>`;
       }
     }
 
@@ -1202,9 +1252,9 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
            for (var di = 0; di < devices.length; di++) {
               var dev = devices[di];
               var isDevBanned = bannedDevs.includes(dev.id);
-              devRows += '<div style="display:flex; justify-content:space-between; align-items:center; padding: 4px 0; border-bottom: 1px solid var(--border-light);">';
-              devRows += '<span style="font-family:var(--font-mono); font-size:12px; max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="' + dev.id + '">' + dev.id.substr(0,14) + '...</span>';
-              devRows += '<div style="display:flex; gap: 4px;">';
+              devRows += '<div style="display:flex; justify-content:space-between; align-items:center; padding: 6px 0; border-bottom: 1px solid var(--border-light);">';
+              devRows += '<span style="font-family:var(--font-mono); font-size:13px; max-width: 140px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;" title="' + dev.id + '">' + dev.id.substr(0,14) + '...</span>';
+              devRows += '<div style="display:flex; gap: 6px;">';
               devRows += '<button class="btn-card ' + (isDevBanned ? 'primary' : 'danger') + ' btn-block-dev" data-dev="' + dev.id + '" data-banned="' + isDevBanned + '">';
               devRows += (isDevBanned ? 'Unban' : 'Block');
               devRows += '</button>';
@@ -1212,11 +1262,11 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
               devRows += 'Delete';
               devRows += '</button></div></div>';
            }
-           devicesHtml = '<div style="margin-top:12px; font-size:13px; color:var(--text-muted); border-top:1px solid var(--border-light); padding-top:10px;">';
-           devicesHtml += '<div style="font-weight:600; margin-bottom:6px;">Known Devices (' + devices.length + ')</div>';
+           devicesHtml = '<div style="margin-top:14px; font-size:13.5px; color:var(--text-main); border-top:1px solid var(--border-light); padding-top:12px;">';
+           devicesHtml += '<div style="font-weight:700; margin-bottom:8px;">Known Devices (' + devices.length + ')</div>';
            devicesHtml += devRows + '</div>';
         } else {
-           devicesHtml = '<div style="margin-top:12px; font-size:13px; color:var(--text-muted); border-top:1px solid var(--border-light); padding-top:10px;">No known devices yet.</div>';
+           devicesHtml = '<div style="margin-top:14px; font-size:13.5px; color:var(--text-muted); border-top:1px solid var(--border-light); padding-top:12px;">No known devices yet.</div>';
         }
 
         // Build card actions
@@ -1248,70 +1298,77 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
           '<div class="card-actions">' + actionsHtml + '</div>' +
           devicesHtml;
 
-        if (card.querySelector('.btn-make-admin')) {
-          card.querySelector('.btn-make-admin').onclick = async (e) => {
+        const btnMake = card.querySelector('.btn-make-admin');
+        if (btnMake) {
+          btnMake.onclick = async (e) => {
             if(await customConfirm(`Make ${email} an Admin?`)) {
-              e.target.textContent = '...';
-              adminAction('add_admin', { targetUserId: u.id, identifier: email }).catch(() => e.target.textContent = 'Make Admin');
+              await withButtonLoading(btnMake, async () => {
+                await adminAction('add_admin', { targetUserId: u.id, identifier: email });
+                loadUsers();
+              }, 'Updating...');
             }
           };
         }
 
-        if (card.querySelector('.btn-revoke')) {
-          card.querySelector('.btn-revoke').onclick = async (e) => {
+        const btnRevoke = card.querySelector('.btn-revoke');
+        if (btnRevoke) {
+          btnRevoke.onclick = async (e) => {
             if(await customConfirm(`Remove admin privileges for ${email}?`)) {
-              e.target.textContent = '...';
-              adminAction('remove_admin', { identifier: email }).catch(() => e.target.textContent = 'Revoke Admin');
+              await withButtonLoading(btnRevoke, async () => {
+                await adminAction('remove_admin', { identifier: email });
+                loadUsers();
+              }, 'Updating...');
             }
           };
         }
 
-        if (card.querySelector('.btn-ban')) {
-          card.querySelector('.btn-ban').onclick = async (e) => {
+        const btnBan = card.querySelector('.btn-ban');
+        if (btnBan) {
+          btnBan.onclick = async (e) => {
             const actionText = isBanned ? 'unban' : 'ban';
             if(await customConfirm(`Are you sure you want to ${actionText} ${email}?`)) {
-              e.target.textContent = '...';
-              adminAction('ban_user', { userId: u.id, banned: !isBanned }).catch(() => e.target.textContent = actionText === 'ban' ? 'Ban' : 'Unban');
+              await withButtonLoading(btnBan, async () => {
+                await adminAction('ban_user', { userId: u.id, banned: !isBanned });
+                loadUsers();
+              }, 'Updating...');
             }
           };
         }
 
-        if (card.querySelector('.btn-reset-pwd')) {
-          card.querySelector('.btn-reset-pwd').onclick = async (e) => {
+        const btnReset = card.querySelector('.btn-reset-pwd');
+        if (btnReset) {
+          btnReset.onclick = async (e) => {
             const newPassword = await customPrompt(`Enter new password for ${email}:`, 'MrCapsules2026!');
             if (newPassword && newPassword.trim() !== '') {
               if (newPassword.trim().length < 6) {
-                alert('Password must be at least 6 characters long.');
+                customAlert('Password must be at least 6 characters long.');
                 return;
               }
-              e.target.textContent = '...';
-              adminAction('reset_user_password', { userId: u.id, newPassword: newPassword.trim() })
-                .then(res => {
-                  e.target.textContent = 'Reset Pwd';
-                  if (res && res.success) {
-                    if (window.showToast) window.showToast('Password for ' + email + ' reset successfully!');
-                    else alert('Password for ' + email + ' reset successfully!');
-                  }
-                })
-                .catch(err => {
-                  e.target.textContent = 'Reset Pwd';
-                  alert('Failed to reset password: ' + (err.message || err));
-                });
+              await withButtonLoading(btnReset, async () => {
+                const res = await adminAction('reset_user_password', { userId: u.id, newPassword: newPassword.trim() });
+                if (res && res.success) {
+                  showToast('Password for ' + email + ' reset successfully!', 'success');
+                }
+              }, 'Resetting...');
             }
           };
         }
 
-        if (card.querySelector('.btn-del-user')) {
-          card.querySelector('.btn-del-user').onclick = async (e) => {
+        const btnDel = card.querySelector('.btn-del-user');
+        if (btnDel) {
+          btnDel.onclick = async (e) => {
             if(await customConfirm(`WARNING: This will permanently delete the user ${email} from the database. This action cannot be undone. Proceed?`)) {
-              e.target.textContent = '...';
-              adminAction('delete_user', { userId: u.id }).catch(() => e.target.textContent = 'Delete');
+              await withButtonLoading(btnDel, async () => {
+                await adminAction('delete_user', { userId: u.id });
+                loadUsers();
+              }, 'Deleting...');
             }
           };
         }
 
-        if (card.querySelector('.btn-remove-div')) {
-          card.querySelector('.btn-remove-div').onclick = async (e) => {
+        const btnRemoveDiv = card.querySelector('.btn-remove-div');
+        if (btnRemoveDiv) {
+          btnRemoveDiv.onclick = async (e) => {
              const targetEmail = e.target.getAttribute('data-email');
              if(window.removeMember) {
                  window.removeMember(targetEmail, window.currentDivisionId);
@@ -1328,34 +1385,36 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
              
              if(!await customConfirm(`Are you sure you want to ${currentlyBanned ? 'unban' : 'block'} this device?`)) return;
              
-             e.target.textContent = '...';
-             try {
-                const cfgData = await adminAction('get_config');
-                if (!cfgData) throw new Error("Failed to get config from backend");
-                const configObj = cfgData.config || {};
-                let arr = configObj.bannedDevices || [];
-                
-                if (currentlyBanned) {
-                   arr = arr.filter(id => id !== devId);
-                } else {
-                   if(!arr.includes(devId)) arr.push(devId);
-                }
-                
-                await adminAction('update_config', { bannedDevices: arr });
-                window._cachedBannedDevices = arr; // Update cache immediately
-                
-                if (window.sessionRoom) {
-                   if (!currentlyBanned) {
-                      await window.sessionRoom.send({ type: 'broadcast', event: 'ban_device', payload: { deviceId: devId } });
-                   } else {
-                      await window.sessionRoom.send({ type: 'broadcast', event: 'unban_device', payload: { deviceId: devId } });
-                   }
-                }
-                loadUsers();
-             } catch(err) {
-                customAlert('Error updating config: ' + err.message);
-                e.target.textContent = 'Error';
-             }
+             await withButtonLoading(btn, async () => {
+               try {
+                  const cfgData = await adminAction('get_config');
+                  if (!cfgData || !cfgData.success) throw new Error(cfgData?.error || "Failed to get config from backend");
+                  const configObj = cfgData.config || {};
+                  let arr = configObj.bannedDevices || [];
+                  
+                  if (currentlyBanned) {
+                     arr = arr.filter(id => id !== devId);
+                  } else {
+                     if(!arr.includes(devId)) arr.push(devId);
+                  }
+                  
+                  await adminAction('update_config', { bannedDevices: arr });
+                  window._cachedBannedDevices = arr; // Update cache immediately
+                  
+                  if (window.sessionRoom) {
+                     try {
+                       if (!currentlyBanned) {
+                          await window.sessionRoom.send({ type: 'broadcast', event: 'ban_device', payload: { deviceId: devId } });
+                       } else {
+                          await window.sessionRoom.send({ type: 'broadcast', event: 'unban_device', payload: { deviceId: devId } });
+                       }
+                     } catch(realtimeErr) { console.warn('Realtime notify failed:', realtimeErr); }
+                  }
+                  loadUsers();
+               } catch(err) {
+                  customAlert('Error updating config: ' + err.message);
+               }
+             }, 'Updating...');
           };
         });
 
@@ -1369,19 +1428,19 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
 
              if (!await customConfirm(`Delete device "${devId.substr(0,14)}..." from user ${targetEmail}?`)) return;
 
-             e.target.textContent = '...';
-             try {
-                const res = await adminAction('remove_user_device', { userId: targetUserId, deviceId: devId });
-                if (res && res.success) {
-                   customAlert(`Device deleted successfully from ${targetEmail}`);
-                   loadUsers();
-                } else {
-                   throw new Error(res ? res.error : 'Failed to delete device');
-                }
-             } catch(err) {
-                customAlert('Error deleting device: ' + err.message);
-                e.target.textContent = 'Delete';
-             }
+             await withButtonLoading(btn, async () => {
+               try {
+                  const res = await adminAction('remove_user_device', { userId: targetUserId, deviceId: devId });
+                  if (res && res.success) {
+                     showToast(`Device deleted successfully from ${targetEmail}`, 'success');
+                     loadUsers();
+                  } else {
+                     throw new Error(res ? res.error : 'Failed to delete device');
+                  }
+               } catch(err) {
+                  customAlert('Error deleting device: ' + err.message);
+               }
+             }, 'Deleting...');
           };
         });
 
@@ -1390,40 +1449,49 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
       if (window.applyUserFilters) window.applyUserFilters();
     }
 
-    document.getElementById('btnRefreshDashboard').onclick = () => {
-      fetchHybridLogs();
-      if(window.loadContributions) window.loadContributions();
-    };
+    const btnRefreshDash = document.getElementById('btnRefreshDashboard');
+    if (btnRefreshDash) {
+      btnRefreshDash.onclick = async () => {
+        await withButtonLoading(btnRefreshDash, async () => {
+          if (window.fetchHybridLogs) await window.fetchHybridLogs();
+          if (window.loadContributions) await window.loadContributions();
+          if (window.loadUsers) await window.loadUsers();
+          showToast('Dashboard analytics refreshed', 'success');
+        }, 'Refreshing...');
+      };
+    }
 
     const btnGuestCleanup = document.getElementById('btnGuestCleanup');
     if (btnGuestCleanup) {
       btnGuestCleanup.onclick = async () => {
         const resultEl = document.getElementById('guestCleanupResult');
-        btnGuestCleanup.disabled = true;
-        btnGuestCleanup.textContent = 'Cleaning...';
         resultEl.textContent = 'Processing...';
         resultEl.style.color = 'var(--text-muted)';
-        try {
-          const { data: { session } } = await supabaseClient.auth.getSession();
-          const res = await fetch('/api/guest-cleanup', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${session.access_token}` },
-            body: JSON.stringify({ max_age_hours: 24 })
-          });
-          const data = await res.json();
-          if (res.ok) {
-            resultEl.style.color = 'var(--text-main)';
-            resultEl.textContent = `[SUCCESS] Deleted ${data.deleted}/${data.total_guests_found} guests`;
-          } else {
+        await withButtonLoading(btnGuestCleanup, async () => {
+          try {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            const res = await fetch('/api/guest-cleanup', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${session ? session.access_token : sessionToken}` },
+              body: JSON.stringify({ max_age_hours: 24 })
+            });
+            const data = await res.json();
+            if (res.ok && data.success !== false) {
+              resultEl.style.color = 'var(--text-main)';
+              resultEl.textContent = `[SUCCESS] Deleted ${data.deleted || 0}/${data.total_guests_found || 0} guests`;
+              showToast(`Cleaned ${data.deleted || 0} stale guests`, 'success');
+              if (window.loadUsers) window.loadUsers();
+            } else {
+              resultEl.style.color = 'var(--danger)';
+              resultEl.textContent = `[ERROR] ${data.error || 'Failed to cleanup guests'}`;
+              showToast(data.error || 'Cleanup failed', 'error');
+            }
+          } catch(e) {
             resultEl.style.color = 'var(--danger)';
-            resultEl.textContent = `[ERROR] ${data.error}`;
+            resultEl.textContent = `[ERROR] ${e.message}`;
+            showToast(e.message, 'error');
           }
-        } catch(e) {
-          resultEl.style.color = 'var(--danger)';
-          resultEl.textContent = `[ERROR] ${e.message}`;
-        }
-        btnGuestCleanup.disabled = false;
-        btnGuestCleanup.textContent = 'Clean Guests (24h+)';
+        }, 'Cleaning...');
       };
     }
 
@@ -1454,11 +1522,11 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
     // User filter tabs
     document.querySelectorAll('.user-filter').forEach(function(btn) {
       btn.onclick = function() {
-        document.querySelectorAll('.user-filter').forEach(function(b) { b.classList.remove('active'); b.style.background = 'transparent'; b.style.color = 'var(--text-main)'; });
+        document.querySelectorAll('.user-filter').forEach(function(b) {
+          b.classList.remove('active');
+        });
         btn.classList.add('active');
-        btn.style.background = 'var(--accent)';
-        btn.style.color = 'var(--bg-main)';
-        window.currentFilter = btn.getAttribute('data-filter');
+        window.currentFilter = btn.getAttribute('data-filter') || 'all';
         if(window.applyUserFilters) window.applyUserFilters();
       };
     });
@@ -1948,16 +2016,16 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
       oauthListEl.innerHTML = tokens.map(function(t) {
         var created = new Date(t.created_at).toLocaleString();
         var expires = t.expires_at ? new Date(t.expires_at).toLocaleString() : 'No expiry';
-        return '<div style="display:flex; justify-content:space-between; align-items:center; padding:14px 18px; border:1px solid var(--border-light); border-radius:10px; margin-bottom:10px; background:var(--bg-card); gap:12px;">' +
+        return '<div style="display:flex; justify-content:space-between; align-items:center; padding:16px 20px; border:1px solid var(--border-light); border-radius:10px; margin-bottom:12px; background:var(--bg-card); gap:12px;">' +
           '<div>' +
-            '<div style="font-weight:700; font-size:14px; color:var(--text-main); margin-bottom:4px; display:flex; align-items:center; gap:8px;">' +
+            '<div style="font-weight:700; font-size:15px; color:var(--text-main); margin-bottom:6px; display:flex; align-items:center; gap:8px;">' +
               '<span style="color:#d97706;">🤖 Claude AI Connector</span>' +
-              '<span style="font-size:11px; background:var(--accent-soft); color:var(--accent); padding:2px 8px; border-radius:99px; font-weight:600;">ACTIVE</span>' +
+              '<span style="font-size:12px; background:var(--accent-soft); color:var(--accent); padding:3px 10px; border-radius:99px; font-weight:700;">ACTIVE</span>' +
             '</div>' +
-            '<div style="font-size:13px; color:var(--text-main); margin-bottom:4px;">Account: <strong>' + sanitize(t.user_email) + '</strong></div>' +
-            '<code style="font-size:11px; background:var(--bg-inset); padding:2px 8px; border-radius:4px; color:var(--text-muted);">' + sanitize(t.token_prefix) + '</code>' +
-            '<span style="font-size:12px; color:var(--text-muted); margin-left:12px;">Authorized ' + created + '</span>' +
-            '<span style="font-size:12px; color:var(--text-muted); margin-left:8px;">&middot; Expires: ' + expires + '</span>' +
+            '<div style="font-size:14px; color:var(--text-main); margin-bottom:6px;">Account: <strong>' + sanitize(t.user_email) + '</strong></div>' +
+            '<code style="font-size:12.5px; background:var(--bg-inset); padding:3px 8px; border-radius:4px; color:var(--c4); font-weight:600;">' + sanitize(t.token_prefix) + '</code>' +
+            '<span style="font-size:13px; color:var(--text-muted); margin-left:12px;">Authorized ' + created + '</span>' +
+            '<span style="font-size:13px; color:var(--text-muted); margin-left:8px;">&middot; Expires: ' + expires + '</span>' +
           '</div>' +
           '<button class="btn-unified sm danger" onclick="window._revokeOAuthToken(\'' + sanitize(t.token_id).replace(/'/g, "\\'") + '\', \'' + sanitize(t.user_email).replace(/'/g, "\\'") + '\')">Disconnect</button>' +
         '</div>';
@@ -2006,14 +2074,14 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
         var created = new Date(k.created_at).toLocaleDateString();
         var lastUsed = k.last_used_at ? new Date(k.last_used_at).toLocaleDateString() : 'Never';
         var expiresInfo = k.expires_at ? ('Expires ' + new Date(k.expires_at).toLocaleDateString()) : 'No expiry';
-        return '<div style="display:flex; justify-content:space-between; align-items:center; padding:14px 18px; border:1px solid var(--border-light); border-radius:10px; margin-bottom:10px; background:var(--bg-card);">' +
+        return '<div style="display:flex; justify-content:space-between; align-items:center; padding:16px 20px; border:1px solid var(--border-light); border-radius:10px; margin-bottom:12px; background:var(--bg-card);">' +
           '<div>' +
-            '<div style="font-weight:600; font-size:14px; color:var(--text-main); margin-bottom:4px;">' + sanitize(k.name) + '</div>' +
-            '<code style="font-size:12px; background:var(--bg-inset); padding:2px 8px; border-radius:4px; color:var(--text-muted);">' + sanitize(k.key_prefix) + '...</code>' +
-            '<span style="font-size:12px; color:var(--text-muted); margin-left:12px;">Created ' + created + '</span>' +
-            '<span style="font-size:12px; color:var(--text-muted); margin-left:8px;">&middot; Last used: ' + lastUsed + '</span>' +
-            '<span style="font-size:12px; color:var(--text-muted); margin-left:8px;">&middot; ' + (k.request_count || 0) + ' requests</span>' +
-            '<span style="font-size:12px; color:var(--text-muted); margin-left:8px;">&middot; ' + expiresInfo + '</span>' +
+            '<div style="font-weight:700; font-size:15px; color:var(--text-main); margin-bottom:6px;">' + sanitize(k.name) + '</div>' +
+            '<code style="font-size:13px; background:var(--bg-inset); padding:3px 8px; border-radius:4px; color:var(--c4); font-weight:600;">' + sanitize(k.key_prefix) + '...</code>' +
+            '<span style="font-size:13px; color:var(--text-muted); margin-left:12px;">Created ' + created + '</span>' +
+            '<span style="font-size:13px; color:var(--text-muted); margin-left:8px;">&middot; Last used: ' + lastUsed + '</span>' +
+            '<span style="font-size:13px; color:var(--text-muted); margin-left:8px;">&middot; ' + (k.request_count || 0) + ' requests</span>' +
+            '<span style="font-size:13px; color:var(--text-muted); margin-left:8px;">&middot; ' + expiresInfo + '</span>' +
             '</div>' +
           '<button class="btn-unified sm danger" onclick="window._revokeApiKey(\'' + k.id + '\', \'' + sanitize(k.name).replace(/'/g, "\\'") + '\')">Revoke</button>' +
         '</div>';

@@ -1,16 +1,16 @@
 # Graph Report - MR-CAPSULES-main  (2026-08-15)
 
 ## Corpus Check
-- 354 files · ~27,396,711 words
+- 349 files · ~27,417,061 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 8449 nodes · 15232 edges · 352 communities (338 shown, 14 thin omitted)
+- 8438 nodes · 15225 edges · 347 communities (333 shown, 14 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 343 edges (avg confidence: 0.5)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `d5fd5178`
+- Built from commit: `70abdecf`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -325,7 +325,6 @@
 - 3.1 LECTURE_Am I Kinetic - Farmakokinetik.html
 - DoctorTablet MCP Note Synthesis Rules
 - download_offbit.js
-- download_offbit.js
 - font-review.html
 - font-review.html
 
@@ -350,7 +349,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (352 total, 14 thin omitted)
+## Communities (347 total, 14 thin omitted)
 
 ### Community 0 - "2.4 CBT 2_K20C AM I CINEMATIC.html"
 Cohesion: 0.06
@@ -1540,16 +1539,12 @@ Nodes (34): activeTypes, endSession(), KEYS, makeQ(), nextQ(), nextType(), pick_
 Cohesion: 0.29
 Nodes (6): 1. Dynamic Author Resolution (Nama Lengkap Tanpa Gelar), 2. Pre-Writing Analysis & Concept Mapping, 3. Karakter Catatan (High-Density & Anti-PPT Style), 4. Elemen Terstruktur Wajib, 5. Integrasi Tool MCP `doctortablet_save_note`, DoctorTablet MCP Note Synthesis Rules
 
-### Community 348 - "download_offbit.js"
-Cohesion: 0.67
-Nodes (3): download(), fontDir, zipPath
-
 ### Community 349 - "download_offbit.js"
 Cohesion: 0.67
 Nodes (3): download(), fontDir, zipPath
 
 ## Knowledge Gaps
-- **2422 isolated node(s):** `fileCache`, `_statusTextEl`, `_statusBarEl`, `_itemCountEl`, `fileInput` (+2417 more)
+- **2421 isolated node(s):** `fileCache`, `_statusTextEl`, `_statusBarEl`, `_itemCountEl`, `fileInput` (+2416 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **14 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -1558,15 +1553,15 @@ _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `4b. Workflow Logic Enhancements — `admin-workflow.js`` connect `4b. Workflow Logic Enhancements — `admin-workflow.js`` to `Priority Badges injection logic inside Kanban Board and Syllabus Tables:`, `4. Frontend Application Logic`?**
   _High betweenness centrality (0.000) - this node is a cross-community bridge._
-- **Why does `2. Backend Serverless API Implementation` connect `2. Backend Serverless API Implementation` to `Admin Page Feature Expansion — Unified Comprehensive Implementation Plan`?**
+- **Why does `3a. Document Markup Changes — `admin.html`` connect `3a. Document Markup Changes — `admin.html`` to `Admin Page Feature Expansion — Unified Comprehensive Implementation Plan`?**
+  _High betweenness centrality (0.000) - this node is a cross-community bridge._
+- **Why does `3. Frontend Client Implementation` connect `Admin Page Feature Expansion — Unified Comprehensive Implementation Plan` to `3a. Document Markup Changes — `admin.html``?**
   _High betweenness centrality (0.000) - this node is a cross-community bridge._
 - **What connects `fileCache`, `_statusTextEl`, `_statusBarEl` to the rest of the system?**
-  _2422 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _2421 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `2.4 CBT 2_K20C AM I CINEMATIC.html` be split into smaller, more focused modules?**
   _Cohesion score 0.06398730830248546 - nodes in this community are weakly interconnected._
 - **Should `2.5 PRAKTIKUM_PRAKTIKUM 2.html` be split into smaller, more focused modules?**
   _Cohesion score 0.06821480406386067 - nodes in this community are weakly interconnected._
 - **Should `index.html` be split into smaller, more focused modules?**
   _Cohesion score 0.08220211161387632 - nodes in this community are weakly interconnected._
-- **Should `2.5 PRAKTIKUM_PRAKTIKUM 1.html` be split into smaller, more focused modules?**
-  _Cohesion score 0.07142857142857142 - nodes in this community are weakly interconnected._

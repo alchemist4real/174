@@ -39,7 +39,7 @@
   --border-light:  color-mix(in srgb, var(--c3) 20%, transparent);
   --border-medium: color-mix(in srgb, var(--c3) 45%, transparent);
   --border-heavy:  color-mix(in srgb, var(--c3) 80%, transparent);
-  --text-muted:    color-mix(in srgb, var(--c3) 75%, var(--c1));
+  --text-muted:    color-mix(in srgb, var(--c3) 86%, var(--c1));
   /* modal / overlay scrim — the page background at high opacity */
   --scrim:         color-mix(in srgb, var(--c1) 92%, transparent);
   --scanline-c:    color-mix(in srgb, var(--c3) 3%, transparent);

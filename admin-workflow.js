@@ -72,13 +72,56 @@ async function initWorkflow() {
     
     if(divRes.success && divRes.division) {
         currentUserDivision = divRes.division.division_id;
+        const waInput = document.getElementById('myWaInput');
+        if (waInput && divRes.division.whatsapp) {
+            waInput.value = divRes.division.whatsapp;
+        }
     } else if (divRes.success && !divRes.division) {
         // User has no division, show picker
         if (!isAdminUser) {
-            document.getElementById('divisionPickerModal').classList.add('active');
+            document.getElementById('divisionPickerModal')?.classList.add('active');
         }
     }
 
+    // Bind static task creation & refresh buttons
+    const btnCreateTask = document.getElementById('btnCreateTask');
+    if (btnCreateTask) {
+        btnCreateTask.onclick = () => createNewTaskPrompt();
+    }
+    const btnRefreshTasks = document.getElementById('btnRefreshTasks');
+    if (btnRefreshTasks) {
+        btnRefreshTasks.onclick = async () => {
+            if (typeof withButtonLoading === 'function') {
+                await withButtonLoading(btnRefreshTasks, async () => {
+                    await loadTasks();
+                    showToast('Tasks refreshed', 'success');
+                }, 'Refreshing...');
+            } else {
+                await loadTasks();
+                showToast('Tasks refreshed', 'success');
+            }
+        };
+    }
+    const btnRefreshOrg = document.getElementById('btnRefreshOrganization');
+    if (btnRefreshOrg) {
+        btnRefreshOrg.onclick = async () => {
+            if (typeof withButtonLoading === 'function') {
+                await withButtonLoading(btnRefreshOrg, async () => {
+                    await loadDivisions();
+                    if (window.loadUsers) await window.loadUsers();
+                    showToast('Organization data refreshed', 'success');
+                }, 'Refreshing...');
+            } else {
+                await loadDivisions();
+                if (window.loadUsers) await window.loadUsers();
+                showToast('Organization data refreshed', 'success');
+            }
+        };
+    }
+    const btnAddDivMem = document.getElementById('btnAddDivisionMember');
+    if (btnAddDivMem) {
+        btnAddDivMem.onclick = () => window.promptAddMember(window.currentDivisionId);
+    }
 
     // Real-time subscription for divisions (debounced)
     if (window.supabaseClient) {
@@ -257,12 +300,12 @@ function renderKanban(tasks) {
             else if (dueTime < now + 86400000 * 3) dueColor = 'var(--accent)';
         }
 
-        let meta = `<div style="font-size:13px; margin-bottom:6px;"><span style="color:var(--text-muted)">Sem:</span> ${task.semester || '-'} | <span style="color:var(--text-muted)">Blk:</span> ${task.block || '-'}</div>`;
+        let meta = `<div style="font-size:13.5px; margin-bottom:6px;"><span style="color:var(--text-main); font-weight:600;">Sem:</span> ${task.semester || '-'} | <span style="color:var(--text-main); font-weight:600;">Blk:</span> ${task.block || '-'}</div>`;
         if (task.assigned_to_user) {
-            meta += `<div style="font-size:13px; margin-bottom:6px;"><span style="color:var(--text-muted)">Dev:</span> ${task.assigned_to_user.username || task.assigned_to_user.email.split('@')[0]}</div>`;
+            meta += `<div style="font-size:13.5px; margin-bottom:6px;"><span style="color:var(--text-main); font-weight:600;">Dev:</span> ${task.assigned_to_user.username || task.assigned_to_user.email.split('@')[0]}</div>`;
         }
         if (task.reviewed_by_user) {
-            meta += `<div style="font-size:13px; margin-bottom:6px;"><span style="color:var(--text-muted)">Rev:</span> ${task.reviewed_by_user.username || task.reviewed_by_user.email.split('@')[0]}</div>`;
+            meta += `<div style="font-size:13.5px; margin-bottom:6px;"><span style="color:var(--text-main); font-weight:600;">Rev:</span> ${task.reviewed_by_user.username || task.reviewed_by_user.email.split('@')[0]}</div>`;
         }
         
         let activeDateLabel = '';
@@ -274,20 +317,20 @@ function renderKanban(tasks) {
         else if (task.status === 'done' && task.completed_at) { activeDateLabel = 'Done'; activeDateVal = task.completed_at; }
         
         if (activeDateVal) {
-            meta += `<div style="margin-top:6px; font-size:12px;"><span style="color:var(--text-muted)">${activeDateLabel}:</span> <span>${new Date(activeDateVal).toLocaleDateString()}</span></div>`;
+            meta += `<div style="margin-top:6px; font-size:13px;"><span style="color:var(--text-main); font-weight:600;">${activeDateLabel}:</span> <span>${new Date(activeDateVal).toLocaleDateString()}</span></div>`;
         }
 
         if (dueDateStr) {
-            meta += `<div style="margin-top:6px; font-size:12px;"><span style="color:var(--text-muted)">Due:</span> <span style="color:${dueColor}; font-weight:bold;">${dueDateStr}</span></div>`;
+            meta += `<div style="margin-top:6px; font-size:13px;"><span style="color:var(--text-main); font-weight:600;">Due:</span> <span style="color:${dueColor}; font-weight:bold;">${dueDateStr}</span></div>`;
         }
         if (task.target_path) {
-            meta += `<div style="margin-top:6px; font-size:12px;"><span style="color:var(--text-muted)">File:</span> <span style="font-family:var(--font-mono); color:var(--accent);">${sanitize(task.target_path)}</span></div>`;
+            meta += `<div style="margin-top:6px; font-size:13px;"><span style="color:var(--text-main); font-weight:600;">File:</span> <span style="font-family:var(--font-mono); color:var(--accent); font-weight:600;">${sanitize(task.target_path)}</span></div>`;
         }
 
         el.dataset.taskId = task.id;
         el.innerHTML = `
-            <div style="font-weight:700; font-size:16px; margin-bottom:8px; line-height:1.3; color:var(--text-main);">${sanitize(task.title)}</div>
-            <div style="color:var(--text-muted); font-size:14px; margin-bottom:12px; line-height:1.5;">${sanitize(displayDesc)}</div>
+            <div style="font-weight:700; font-size:16.5px; margin-bottom:8px; line-height:1.3; color:var(--text-main);">${sanitize(task.title)}</div>
+            <div style="color:var(--text-main); opacity:0.9; font-size:14px; margin-bottom:12px; line-height:1.5;">${sanitize(displayDesc)}</div>
             ${meta}
         `;
         
@@ -571,11 +614,11 @@ function openTaskModal(task) {
 
 window.loadTaskLogs = async function(taskId) {
     const container = document.getElementById('taskLogsContainer_' + taskId);
-    container.innerHTML = '<div style="text-align:center; color:var(--text-muted); font-size:11px;">Loading logs...</div>';
+    container.innerHTML = '<div style="text-align:center; color:var(--text-muted); font-size:13px; padding:12px;">Loading logs...</div>';
     const res = await apiCall('tasks', { action: 'get_task_logs', task_id: taskId });
     if(res.success) {
         if(res.logs.length === 0) {
-            container.innerHTML = '<div style="font-size:11px; color:var(--text-muted);">No activity logs found.</div>';
+            container.innerHTML = '<div style="font-size:13px; color:var(--text-muted); padding:12px; text-align:center;">No activity logs found.</div>';
             return;
         }
         
@@ -585,28 +628,28 @@ window.loadTaskLogs = async function(taskId) {
         if (isRejected) {
             const lastReject = res.logs.find(l => l.action === 'rejected');
             if (lastReject && lastReject.note) {
-                rejectNoteHtml = `<div style="margin-bottom:12px; padding:8px; background:transparent; border:1.5px solid var(--danger); border-radius:var(--radius-card);">
-                    <div style="font-size:10px; font-weight:bold; color:var(--danger); text-transform:uppercase;">Latest Rejection Reason</div>
-                    <div style="font-size:11px; color:var(--text-main); margin-top:4px;">"${lastReject.note}"</div>
+                rejectNoteHtml = `<div style="margin-bottom:14px; padding:12px; background:transparent; border:1.5px solid var(--danger); border-radius:var(--radius-card);">
+                    <div style="font-size:12px; font-weight:bold; color:var(--danger); text-transform:uppercase; letter-spacing:0.5px;">Latest Rejection Reason</div>
+                    <div style="font-size:13.5px; color:var(--text-main); margin-top:6px; line-height:1.4;">"${lastReject.note}"</div>
                 </div>`;
             }
         }
 
         container.innerHTML = rejectNoteHtml + res.logs.map(l => {
-            let noteHtml = l.note ? `<div style="color:var(--text-main); font-style:italic; margin-top:4px; padding-left:8px; border-left:2px solid var(--border-medium);">"${l.note}"</div>` : '';
+            let noteHtml = l.note ? `<div style="color:var(--text-main); font-style:italic; margin-top:6px; padding-left:10px; border-left:2px solid var(--border-medium); font-size:13px;">"${l.note}"</div>` : '';
             let actionColor = 'var(--accent)';
             if (l.action === 'rejected' || l.action === 'deleted') actionColor = 'var(--danger)';
             else if (l.action === 'phase_reset' || l.action === 'retracked') actionColor = 'var(--warning, #e6a23c)';
             else if (l.action === 're_review_requested' || l.action === 'resubmitted') actionColor = 'var(--accent)';
 
-            return `<div style="font-size:11px; border-bottom:1px solid var(--border-light); padding:8px 0;">
-                <div><span style="color:${actionColor}; font-weight:600;">${l.action.replace(/_/g, ' ').toUpperCase()}</span> by <b>${l.user ? (l.user.username || l.user.email.split('@')[0]) : 'System'}</b></div>
-                <div style="color:var(--text-muted); font-size:10px; margin-top:2px;">${new Date(l.created_at).toLocaleString()}</div>
+            return `<div style="font-size:13px; border-bottom:1px solid var(--border-light); padding:10px 0;">
+                <div><span style="color:${actionColor}; font-weight:700;">${l.action.replace(/_/g, ' ').toUpperCase()}</span> by <b>${l.user ? (l.user.username || l.user.email.split('@')[0]) : 'System'}</b></div>
+                <div style="color:var(--text-muted); font-size:12px; margin-top:3px;">${new Date(l.created_at).toLocaleString()}</div>
                 ${noteHtml}
             </div>`;
         }).join('');
     } else {
-        container.innerHTML = `<div style="color:var(--danger); font-size:11px;">Failed to load logs.</div>`;
+        container.innerHTML = `<div style="color:var(--danger); font-size:13px; padding:12px;">Failed to load logs.</div>`;
     }
 }
 
@@ -726,7 +769,6 @@ window.selectDivision = function(divId) {
         }
         if(document.getElementById('orgViewTitle')) document.getElementById('orgViewTitle').textContent = 'All Users';
         if(document.getElementById('orgViewDesc')) document.getElementById('orgViewDesc').textContent = 'Manage all registered members in the system.';
-        if(document.getElementById('allUsersControls')) document.getElementById('allUsersControls').style.display = 'flex';
         if(document.getElementById('btnAddDivisionMember')) document.getElementById('btnAddDivisionMember').style.display = 'none';
     } else {
         const btn = document.querySelector('.btn-div-item[data-id="' + divId + '"]');
@@ -739,7 +781,6 @@ window.selectDivision = function(divId) {
             if(document.getElementById('orgViewTitle')) document.getElementById('orgViewTitle').textContent = div.name;
             if(document.getElementById('orgViewDesc')) document.getElementById('orgViewDesc').textContent = 'Viewing members of ' + div.name;
         }
-        if(document.getElementById('allUsersControls')) document.getElementById('allUsersControls').style.display = 'none';
         if(document.getElementById('btnAddDivisionMember')) document.getElementById('btnAddDivisionMember').style.display = 'inline-block';
     }
     
@@ -755,22 +796,42 @@ async function loadDivisions() {
         const list = document.getElementById('divisionSidebarList');
         if(!list) return; // wait until DOM is ready or exists
         
-        // Remove existing dynamic division buttons
-        list.querySelectorAll('.btn-div-item').forEach(el => el.remove());
+        // Remove only dynamic division buttons with data-id attribute, preserving static #btnDivFilterAll
+        list.querySelectorAll('.btn-div-item[data-id]').forEach(el => el.remove());
         
+        // Ensure static #btnDivFilterAll button is properly wired
+        const btnAll = document.getElementById('btnDivFilterAll');
+        if (btnAll) {
+            btnAll.onclick = () => window.selectDivision('all');
+            if (!window.currentDivisionId || window.currentDivisionId === 'all') {
+                btnAll.classList.add('active');
+            } else {
+                btnAll.classList.remove('active');
+            }
+        }
+
         // Show WA Config for all users
         const waConfig = document.getElementById('waConfigContainer');
         if(waConfig) waConfig.style.display = 'block';
         
-        // Re-bind WA save just in case
+        // Re-bind WA save
         const btnSaveWa = document.getElementById('btnSaveWa');
         if(btnSaveWa) {
             btnSaveWa.onclick = async () => {
-                const wa = document.getElementById('myWaInput').value;
-                window.showToast('Saving...');
-                const wRes = await apiCall('divisions', { action: 'update_whatsapp', whatsapp: wa });
-                if(wRes.success) window.showToast('WhatsApp updated!', 'success');
-                else window.showToast('Failed: ' + wRes.error, 'error');
+                const waInput = document.getElementById('myWaInput');
+                const wa = waInput ? waInput.value.trim() : '';
+                if (typeof withButtonLoading === 'function') {
+                    await withButtonLoading(btnSaveWa, async () => {
+                        const wRes = await apiCall('divisions', { action: 'update_whatsapp', whatsapp: wa });
+                        if(wRes && wRes.success) showToast('WhatsApp updated successfully!', 'success');
+                        else showToast('Failed: ' + (wRes?.error || 'Unknown error'), 'error');
+                    }, 'Saving...');
+                } else {
+                    showToast('Saving...');
+                    const wRes = await apiCall('divisions', { action: 'update_whatsapp', whatsapp: wa });
+                    if(wRes && wRes.success) showToast('WhatsApp updated successfully!', 'success');
+                    else showToast('Failed: ' + (wRes?.error || 'Unknown error'), 'error');
+                }
             };
         }
         
@@ -790,27 +851,41 @@ async function loadDivisions() {
         });
         
         // If current division is not 'all', refresh the user view
-        if(window.currentDivisionId !== 'all') {
+        if(window.currentDivisionId && window.currentDivisionId !== 'all') {
             window.selectDivision(window.currentDivisionId);
         }
     }
 }
 
 window.promptAddMember = async function(divId) {
-    const email = await customPrompt("Enter member's exact email address:");
-    if(!email) return;
-    window.showToast('Assigning member...');
-    const res = await apiCall('divisions', { action: 'assign_member', target_email: email, division_id: divId });
-    if(res.success) { window.showToast('Assigned!', 'success'); loadDivisions(); }
-    else window.showToast('Failed: ' + res.error, 'error');
+    let targetDivId = divId || window.currentDivisionId;
+    if (!targetDivId || targetDivId === 'all') {
+        const selected = await customPrompt("Choose division to add member into (development, review, management):", "development");
+        if (!selected) return;
+        targetDivId = selected.toLowerCase().trim();
+    }
+    const email = await customPrompt(`Enter member's exact email address for division "${targetDivId}":`);
+    if(!email || !email.trim()) return;
+    showToast('Assigning member...');
+    const res = await apiCall('divisions', { action: 'assign_member', target_email: email.trim(), division_id: targetDivId });
+    if(res && res.success) { 
+        showToast('Assigned successfully!', 'success'); 
+        loadDivisions(); 
+    } else { 
+        showToast('Failed: ' + (res?.error || 'Unknown error'), 'error'); 
+    }
 };
 
 window.removeMember = async function(email, divId) {
     if(!await customConfirm('Remove ' + email + ' from this division?')) return;
-    window.showToast('Removing...');
+    showToast('Removing...');
     const res = await apiCall('divisions', { action: 'remove_member', target_email: email, division_id: divId });
-    if(res.success) { window.showToast('Removed!', 'success'); loadDivisions(); }
-    else window.showToast('Failed: ' + res.error, 'error');
+    if(res && res.success) { 
+        showToast('Removed successfully!', 'success'); 
+        loadDivisions(); 
+    } else { 
+        showToast('Failed: ' + (res?.error || 'Unknown error'), 'error'); 
+    }
 };
 
 // =======================

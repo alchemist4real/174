@@ -33,6 +33,7 @@ export default async function handler(req, res) {
         if (Array.isArray(data) && data.length > 0) {
           return res.status(200).json({
             allowSignup: data[0].allow_signup ?? true,
+            allowGuest: data[0].allow_guest ?? true,
             maintenanceMode: data[0].maintenance_mode ?? false,
             bannedDevices: data[0].banned_devices || []
           });
@@ -42,6 +43,7 @@ export default async function handler(req, res) {
 
     return res.status(200).json({
       allowSignup: true,
+      allowGuest: true,
       maintenanceMode: false,
       bannedDevices: []
     });
