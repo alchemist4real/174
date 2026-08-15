@@ -57,19 +57,13 @@
   --card-hover:    color-mix(in srgb, var(--c1) 70%, var(--c3));
   --active-art-bg: color-mix(in srgb, var(--c3) 85%, var(--c1));
 
-  /* ── Accent-forward tokens — high contrast ── */
-  /* Soft fill for badges, hover backgrounds, muted highlights */
+  /* ── Flat & High Contrast Tokens (Zero Gradients, Zero Glows) ── */
   --accent-soft:       color-mix(in srgb, var(--c3) 15%, transparent);
-  /* Glow / shadow color derived from accent — used in box-shadow */
-  --accent-glow:       color-mix(in srgb, var(--c3) 30%, transparent);
-  /* Hover surface: subtle accent wash over panel color */
+  --accent-glow:       transparent;
   --surface-hover:     color-mix(in srgb, var(--c3) 12%, var(--c2));
-  /* Focus ring: semi-transparent accent halo on inputs */
   --focus-ring:        color-mix(in srgb, var(--c3) 45%, transparent);
-  /* Accent gradient for primary buttons, active badges */
-  --gradient-accent:   linear-gradient(135deg, var(--c3) 0%, var(--c4) 100%);
-  /* Border color when hovering interactive cards */
-  --card-border-hover: var(--c3);
+  --gradient-accent:   var(--c3);
+  --card-border-hover: var(--c4);
 
   /* ── Strict 2-Font System ── */
   --font-sans:      'OffBit-DotBold', monospace;
@@ -1064,13 +1058,13 @@ iframe {
     }
 
     /* Toggle Switch */
-    .switch-label { display: flex; align-items: center; gap: 8px; cursor: pointer; font-size: 13px; color: var(--c3); font-weight: 500; }
-    .switch { position: relative; display: inline-block; width: 34px; height: 20px; }
-    .switch input { opacity: 0; width: 0; height: 0; }
-    .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: var(--border-light); transition: .4s; border-radius: 8px; }
-    .slider:before { position: absolute; content: ""; height: 14px; width: 14px; left: 3px; bottom: 3px; background-color: var(--c1); transition: .4s; border-radius: 50%; }
-    input:checked + .slider { background-color: var(--gradient-accent); }
-    input:checked + .slider:before { transform: translateX(14px); background-color: var(--c1); }
+    .switch-label { display: inline-flex; align-items: center; gap: 10px; cursor: pointer; font-size: 14px; color: var(--c3); font-weight: 600; user-select: none; }
+    .switch { position: relative; display: inline-block; width: 36px; height: 20px; flex-shrink: 0; }
+    .switch input { opacity: 0; width: 0; height: 0; position: absolute; }
+    .slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: transparent; border: 1.5px solid var(--c3); transition: background-color .25s ease, border-color .25s ease; border-radius: 20px; }
+    .slider:before { position: absolute; content: ""; height: 12px; width: 12px; left: 2.5px; bottom: 2.5px; background-color: var(--c3); transition: transform .25s ease, background-color .25s ease; border-radius: 50%; }
+    input:checked + .slider { background-color: var(--c3); border-color: var(--c3); }
+    input:checked + .slider:before { transform: translateX(16px); background-color: var(--c1); }
 
     /* Utilities */
     .hidden { display: none !important; }@keyframes toastIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } } @keyframes toastOut { from { transform: translateX(0); opacity: 1; } to { transform: translateX(100%); opacity: 0; } }
