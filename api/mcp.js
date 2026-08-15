@@ -1401,6 +1401,47 @@ async function revokeApiKey(userId, params, su, sk) {
   return { revoked: true };
 }
 
+async function listOAuthTokens(userId, userEmail, isSuperAdmin, su, sk) {
+  let query = `${su}/rest/v1/oauth_tokens?revoked=eq.false&select=access_token,client_id,user_id,user_email,resource,expires_at,created_at&order=created_at.desc`;
+  if (!isSuperAdmin) {
+    query += `&user_id=eq.${encodeURIComponent(userId)}`;
+  }
+  try {
+    const res = await fetch(query, {
+      headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}` }
+    });
+    if (!res.ok) {
+      return { tokens: [] };
+    }
+    const rows = await res.json();
+    if (!Array.isArray(rows)) return { tokens: [] };
+    const tokens = rows.map(r => ({
+      token_id: r.access_token,
+      token_prefix: r.access_token ? `${r.access_token.slice(0, 12)}...` : 'mrc_oauth...',
+      client_id: r.client_id,
+      user_id: r.user_id,
+      user_email: r.user_email || userEmail,
+      resource: r.resource,
+      expires_at: r.expires_at,
+      created_at: r.created_at
+    }));
+    return { tokens };
+  } catch (e) {
+    console.error('Error listing oauth tokens:', e);
+    return { tokens: [] };
+  }
+}
+
+async function revokeOAuthToken(tokenIdOrAccessToken, su, sk) {
+  const res = await fetch(`${su}/rest/v1/oauth_tokens?access_token=eq.${encodeURIComponent(tokenIdOrAccessToken)}`, {
+    method: 'PATCH',
+    headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ revoked: true })
+  });
+  if (!res.ok) throw new Error('Failed to revoke OAuth token');
+  return { revoked: true };
+}
+
 // ═══════════════════════════════════════════════════════════════
 // CONTENT HANDLERS
 // ═══════════════════════════════════════════════════════════════

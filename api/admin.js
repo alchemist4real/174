@@ -72,7 +72,12 @@ export default async function handler(req, res) {
   const isAdmin = isSuperAdmin || hasAdminRole;
   const canAccessDashboard = isAdmin || hasDivision;
 
-  const { action, path, contentBase64, sha } = req.body;
+  const host = req.headers.host || 'localhost';
+  const urlObj = new URL(req.url, `https://${host}`);
+  const queryAction = req.query?.action || urlObj.searchParams.get('action');
+  const body = (typeof req.body === 'object' && req.body !== null) ? req.body : {};
+  const action = body.action || queryAction;
+  const { path, contentBase64, sha } = body;
 
   if (action === 'check') {
     return res.status(200).json({ success: true, isSuperAdmin, isAdmin, hasDivision, email: email });
@@ -83,7 +88,7 @@ export default async function handler(req, res) {
   }
 
   // Destructive operations check
-  if (['delete', 'delete_files', 'rename_file', 'upload', 'update_config', 'add_admin', 'remove_admin', 'ban_user'].includes(action)) {
+  if (['delete', 'delete_files', 'rename_file', 'upload', 'update_config', 'add_admin', 'remove_admin', 'ban_user', 'cleanup_guests'].includes(action)) {
     if (!isAdmin) {
       return res.status(403).json({ error: 'Forbidden. Admin privileges required.' });
     }

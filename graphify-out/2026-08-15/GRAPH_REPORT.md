@@ -1,16 +1,16 @@
 # Graph Report - MR-CAPSULES-main  (2026-08-15)
 
 ## Corpus Check
-- 349 files · ~27,417,061 words
+- 351 files · ~27,421,308 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 8438 nodes · 15225 edges · 347 communities (333 shown, 14 thin omitted)
+- 8446 nodes · 15241 edges · 353 communities (339 shown, 14 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 343 edges (avg confidence: 0.5)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `70abdecf`
+- Built from commit: `d7a1d28e`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -323,13 +323,19 @@
 - PULL_REQUEST_TEMPLATE.md
 - 3.1 LECTURE_Am I Kinetic - Farmakokinetik.html
 - 3.1 LECTURE_Am I Kinetic - Farmakokinetik.html
+- handler
+- logAction
+- contentUpload
+- err400
+- err403
 - DoctorTablet MCP Note Synthesis Rules
+- uploadSessions
 - download_offbit.js
 - font-review.html
 - font-review.html
 
 ## God Nodes (most connected - your core abstractions)
-1. `routeMethod()` - 78 edges
+1. `routeMethod()` - 80 edges
 2. `logAction()` - 26 edges
 3. `err400()` - 25 edges
 4. `4b. Workflow Logic Enhancements — `admin-workflow.js`` - 18 edges
@@ -349,7 +355,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (347 total, 14 thin omitted)
+## Communities (353 total, 14 thin omitted)
 
 ### Community 0 - "2.4 CBT 2_K20C AM I CINEMATIC.html"
 Cohesion: 0.06
@@ -361,7 +367,7 @@ Nodes (51): activeTypes, DEF_POOL, endSession(), genIMTQ(), genPersenLemakQ(), g
 
 ### Community 2 - "index.html"
 Cohesion: 0.08
-Nodes (46): ./fp.js, apply(), applyData(), applyPerfMode(), applyPersona(), backgroundSync(), buildCoverflow(), cards (+38 more)
+Nodes (48): ./fp.js, apply(), applyData(), applyPerfMode(), applyPersona(), backgroundSync(), buildCoverflow(), cards (+40 more)
 
 ### Community 3 - "2.5 PRAKTIKUM_PRAKTIKUM 1.html"
 Cohesion: 0.07
@@ -425,7 +431,7 @@ Nodes (45): activeTypes, DEF_POOL, endSession(), genHarvardCepatQ(), genHarvardL
 
 ### Community 18 - "admin.js"
 Cohesion: 0.09
-Nodes (50): adminAction(), applyAdminPersona(), authMessage, authOverlay, bindKeyEvents(), btnGuestCleanup, currentTree, customConfirm() (+42 more)
+Nodes (50): adminAction(), applyAdminPersona(), authMessage, authOverlay, bindKeyEvents(), btnGuestCleanup, btnRefreshDash, currentTree (+42 more)
 
 ### Community 19 - "2.5 LECTURE_K13B am-i-special-2.html"
 Cohesion: 0.07
@@ -868,7 +874,7 @@ Cohesion: 0.38
 Nodes (11): apiCall(), createNewTaskPrompt(), initWorkflow(), loadContributions(), loadDivisions(), loadTasks(), openTaskModal(), parseCBTHtml() (+3 more)
 
 ### Community 129 - "admin-workflow.js"
-Cohesion: 0.38
+Cohesion: 0.39
 Nodes (11): apiCall(), createNewTaskPrompt(), initTaskKanbanDelegation(), initWorkflow(), loadDivisions(), loadTasks(), openTaskModal(), parseCBTHtml() (+3 more)
 
 ### Community 130 - "1.2-1_flashcard biochemical romance.html"
@@ -928,8 +934,8 @@ Cohesion: 0.50
 Nodes (3): cleanUrls, headers, routes
 
 ### Community 166 - "mcp.js"
-Cohesion: 0.05
-Nodes (110): activityLogsList(), authenticateApiKey(), authenticateJWT(), authenticateOAuthAccessToken(), canonicalizeUrl(), checkRateLimit(), cleanExpiredUploadSessions(), codebaseDeleteFile() (+102 more)
+Cohesion: 0.10
+Nodes (38): activityLogsList(), codebaseSearch(), configGet(), contentList(), contentTree(), contentUploadFromAgentPath(), contributionsLeaderboard(), contributionsMy() (+30 more)
 
 ### Community 167 - "authorize.js"
 Cohesion: 0.50
@@ -949,11 +955,11 @@ Nodes (6): 1. System Architecture & Database Schema Migrations, 3. Frontend Clie
 
 ### Community 172 - "index.html"
 Cohesion: 0.08
-Nodes (45): ./fp.js, apply(), applyData(), applyPerfMode(), applyPersona(), backgroundSync(), buildCoverflow(), cards (+37 more)
+Nodes (47): ./fp.js, apply(), applyData(), applyPerfMode(), applyPersona(), backgroundSync(), buildCoverflow(), cards (+39 more)
 
 ### Community 173 - "admin.js"
 Cohesion: 0.09
-Nodes (50): adminAction(), applyAdminPersona(), authMessage, authOverlay, bindKeyEvents(), btnGuestCleanup, currentTree, customConfirm() (+42 more)
+Nodes (50): adminAction(), applyAdminPersona(), authMessage, authOverlay, bindKeyEvents(), btnGuestCleanup, btnRefreshDash, currentTree (+42 more)
 
 ### Community 174 - "2.5 PRAKTIKUM_PRAKTIKUM 1.html"
 Cohesion: 0.08
@@ -1456,7 +1462,7 @@ Cohesion: 0.38
 Nodes (11): apiCall(), createNewTaskPrompt(), initWorkflow(), loadContributions(), loadDivisions(), loadTasks(), openTaskModal(), parseCBTHtml() (+3 more)
 
 ### Community 299 - "admin-workflow.js"
-Cohesion: 0.38
+Cohesion: 0.39
 Nodes (11): apiCall(), createNewTaskPrompt(), initTaskKanbanDelegation(), initWorkflow(), loadDivisions(), loadTasks(), openTaskModal(), parseCBTHtml() (+3 more)
 
 ### Community 300 - "1.2-1_flashcard biochemical romance.html"
@@ -1535,16 +1541,40 @@ Nodes (34): activeTypes, endSession(), KEYS, makeQ(), nextQ(), nextType(), pick_
 Cohesion: 0.10
 Nodes (34): activeTypes, endSession(), KEYS, makeQ(), nextQ(), nextType(), pick_pool(), pool_absorbsi (+26 more)
 
+### Community 334 - "handler"
+Cohesion: 0.20
+Nodes (13): authenticateApiKey(), authenticateJWT(), authenticateOAuthAccessToken(), canonicalizeUrl(), checkRateLimit(), getMcpToolsList(), handleDirectUpload(), handleMcpStreamableGet() (+5 more)
+
+### Community 335 - "logAction"
+Cohesion: 0.15
+Nodes (14): codebaseDeleteFile(), codebaseReadFile(), configUpdate(), contentDelete(), divisionsAddMember(), divisionsRemoveMember(), logAction(), tasksDelete() (+6 more)
+
+### Community 336 - "contentUpload"
+Cohesion: 0.23
+Nodes (14): codebaseWriteFile(), contentDeleteFiles(), contentGet(), contentRename(), contentUpload(), docsAddSection(), docsAddTab(), docsDeleteTab() (+6 more)
+
+### Community 337 - "err400"
+Cohesion: 0.24
+Nodes (14): createApiKey(), doctortabletCreateCategory(), doctortabletDeleteNote(), doctortabletExportMergedDocument(), doctortabletFetchNotes(), doctortabletListCategories(), doctortabletListNotes(), doctortabletReadNote() (+6 more)
+
+### Community 338 - "err403"
+Cohesion: 0.18
+Nodes (11): customMcpToolsMap, err403(), executeCustomTool(), getActiveCustomTools(), mcpCreateTool(), mcpDeleteTool(), mcpListCustomTools(), revokeApiKey() (+3 more)
+
 ### Community 347 - "DoctorTablet MCP Note Synthesis Rules"
 Cohesion: 0.29
 Nodes (6): 1. Dynamic Author Resolution (Nama Lengkap Tanpa Gelar), 2. Pre-Writing Analysis & Concept Mapping, 3. Karakter Catatan (High-Density & Anti-PPT Style), 4. Elemen Terstruktur Wajib, 5. Integrasi Tool MCP `doctortablet_save_note`, DoctorTablet MCP Note Synthesis Rules
+
+### Community 348 - "uploadSessions"
+Cohesion: 0.39
+Nodes (8): cleanExpiredUploadSessions(), restoreUploadSessionFromSb(), uploadCancel(), uploadChunk(), uploadCommit(), uploadInit(), uploadSessions, uploadStatus()
 
 ### Community 349 - "download_offbit.js"
 Cohesion: 0.67
 Nodes (3): download(), fontDir, zipPath
 
 ## Knowledge Gaps
-- **2421 isolated node(s):** `fileCache`, `_statusTextEl`, `_statusBarEl`, `_itemCountEl`, `fileInput` (+2416 more)
+- **2423 isolated node(s):** `fileCache`, `_statusTextEl`, `_statusBarEl`, `_itemCountEl`, `fileInput` (+2418 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **14 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
@@ -1553,15 +1583,15 @@ _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `4b. Workflow Logic Enhancements — `admin-workflow.js`` connect `4b. Workflow Logic Enhancements — `admin-workflow.js`` to `Priority Badges injection logic inside Kanban Board and Syllabus Tables:`, `4. Frontend Application Logic`?**
   _High betweenness centrality (0.000) - this node is a cross-community bridge._
-- **Why does `3a. Document Markup Changes — `admin.html`` connect `3a. Document Markup Changes — `admin.html`` to `Admin Page Feature Expansion — Unified Comprehensive Implementation Plan`?**
-  _High betweenness centrality (0.000) - this node is a cross-community bridge._
-- **Why does `3. Frontend Client Implementation` connect `Admin Page Feature Expansion — Unified Comprehensive Implementation Plan` to `3a. Document Markup Changes — `admin.html``?**
+- **Why does `2. Backend Serverless API Implementation` connect `2. Backend Serverless API Implementation` to `Admin Page Feature Expansion — Unified Comprehensive Implementation Plan`?**
   _High betweenness centrality (0.000) - this node is a cross-community bridge._
 - **What connects `fileCache`, `_statusTextEl`, `_statusBarEl` to the rest of the system?**
-  _2421 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _2423 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `2.4 CBT 2_K20C AM I CINEMATIC.html` be split into smaller, more focused modules?**
   _Cohesion score 0.06398730830248546 - nodes in this community are weakly interconnected._
 - **Should `2.5 PRAKTIKUM_PRAKTIKUM 2.html` be split into smaller, more focused modules?**
   _Cohesion score 0.06821480406386067 - nodes in this community are weakly interconnected._
 - **Should `index.html` be split into smaller, more focused modules?**
-  _Cohesion score 0.08220211161387632 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.07609427609427609 - nodes in this community are weakly interconnected._
+- **Should `2.5 PRAKTIKUM_PRAKTIKUM 1.html` be split into smaller, more focused modules?**
+  _Cohesion score 0.07142857142857142 - nodes in this community are weakly interconnected._

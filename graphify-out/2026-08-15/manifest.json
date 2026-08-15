@@ -5,23 +5,23 @@
     "semantic_hash": "d48db7cbcbd87d2238f12157551c6e21"
   },
   "admin-workflow.js": {
-    "mtime": 1786771903.3042963,
-    "ast_hash": "6fc8280da919086e8516cf48c34929fb",
+    "mtime": 1786775231.2251697,
+    "ast_hash": "fc755f9a6d276ab0f129db8a014335bd",
     "semantic_hash": ""
   },
   "admin.html": {
-    "mtime": 1786767583.935398,
-    "ast_hash": "05e1d507456d227d3f143f02f6691372",
+    "mtime": 1786772806.8472464,
+    "ast_hash": "888c5da654d838565b0aad2573db5e76",
     "semantic_hash": ""
   },
   "admin.js": {
-    "mtime": 1786771923.1334262,
-    "ast_hash": "1cc8222efdda20046e82c0cb5cfe1864",
+    "mtime": 1786775624.7267795,
+    "ast_hash": "cff01d3807fc87ca3ad5d717602d34c1",
     "semantic_hash": ""
   },
   "api/admin.js": {
-    "mtime": 1785472726.8800526,
-    "ast_hash": "2dee4966be6750aca3f592b0b60f0130",
+    "mtime": 1786774473.694218,
+    "ast_hash": "de368bb79bc36848476073e7f32dbd6b",
     "semantic_hash": ""
   },
   "api/content.js": {
@@ -720,7 +720,7 @@
     "semantic_hash": "9a4ce52b5ae1fd97684b9f35a9cd04a6"
   },
   "data.js": {
-    "mtime": 1786771939.4460876,
+    "mtime": 1786775631.3197737,
     "ast_hash": "d38288e55e340dcc9335a77ca6369366",
     "semantic_hash": ""
   },
@@ -735,8 +735,8 @@
     "semantic_hash": "794b3b4c39f4c920d7dbe0fffbd3e10c"
   },
   "index.html": {
-    "mtime": 1786771641.3911908,
-    "ast_hash": "8d135bfa91ef789b0d56d1e5de4e47b9",
+    "mtime": 1786775774.1289303,
+    "ast_hash": "dcaafd4f5557eefb81d556db8996983a",
     "semantic_hash": ""
   },
   "live.html": {
@@ -765,8 +765,8 @@
     "semantic_hash": ""
   },
   "api/mcp.js": {
-    "mtime": 1786251358.6139224,
-    "ast_hash": "4c1f27f57b90266122630d45f852d32d",
+    "mtime": 1786775598.758054,
+    "ast_hash": "f05ae2af93cbbfcc857512138658cb6f",
     "semantic_hash": ""
   },
   ".agents/rules/graphify.md": {
@@ -1080,18 +1080,18 @@
     "semantic_hash": ""
   },
   "public/admin-workflow.js": {
-    "mtime": 1786771903.3042963,
-    "ast_hash": "6fc8280da919086e8516cf48c34929fb",
+    "mtime": 1786775231.2251697,
+    "ast_hash": "fc755f9a6d276ab0f129db8a014335bd",
     "semantic_hash": ""
   },
   "public/admin.html": {
-    "mtime": 1786767583.935398,
-    "ast_hash": "05e1d507456d227d3f143f02f6691372",
+    "mtime": 1786772806.8472464,
+    "ast_hash": "888c5da654d838565b0aad2573db5e76",
     "semantic_hash": ""
   },
   "public/admin.js": {
-    "mtime": 1786771923.1334262,
-    "ast_hash": "1cc8222efdda20046e82c0cb5cfe1864",
+    "mtime": 1786775624.7267795,
+    "ast_hash": "cff01d3807fc87ca3ad5d717602d34c1",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.2/1.2 Ident PK_Flashcard PK 2.html": {
@@ -1760,7 +1760,7 @@
     "semantic_hash": ""
   },
   "public/data.js": {
-    "mtime": 1786771939.4460876,
+    "mtime": 1786775631.3197737,
     "ast_hash": "d38288e55e340dcc9335a77ca6369366",
     "semantic_hash": ""
   },
@@ -1770,8 +1770,8 @@
     "semantic_hash": ""
   },
   "public/index.html": {
-    "mtime": 1786771641.3911908,
-    "ast_hash": "8d135bfa91ef789b0d56d1e5de4e47b9",
+    "mtime": 1786775372.2070465,
+    "ast_hash": "55b1205548588d362367f12be6263dbe",
     "semantic_hash": ""
   },
   "public/live.html": {
@@ -2065,8 +2065,8 @@
     "semantic_hash": ""
   },
   "api/env.js": {
-    "mtime": 1785469759.0520043,
-    "ast_hash": "88aa8cbe6f2d39c8b0aa042c8172e207",
+    "mtime": 1786772764.775254,
+    "ast_hash": "fa95a583c419571a85e1f0cb40b1a1b9",
     "semantic_hash": ""
   },
   "favicon.svg": {
@@ -2332,6 +2332,16 @@
   "public/assets/offbit_specimen.png": {
     "mtime": 1786770505.4309285,
     "ast_hash": "f4995481330c17d842625a97ba343f18",
+    "semantic_hash": ""
+  },
+  "add_allow_guest.sql": {
+    "mtime": 1786772745.6787233,
+    "ast_hash": "497bf0b9ec615cee940d97516ecb440e",
+    "semantic_hash": ""
+  },
+  "public/add_allow_guest.sql": {
+    "mtime": 1786772745.6787233,
+    "ast_hash": "497bf0b9ec615cee940d97516ecb440e",
     "semantic_hash": ""
   }
 }

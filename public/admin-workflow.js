@@ -79,7 +79,11 @@ async function initWorkflow() {
     } else if (divRes.success && !divRes.division) {
         // User has no division, show picker
         if (!isAdminUser) {
-            document.getElementById('divisionPickerModal')?.classList.add('active');
+            const divModal = document.getElementById('divisionPickerModal');
+            if (divModal) {
+                if (window.ModalManager) ModalManager.open(divModal);
+                else divModal.classList.add('active');
+            }
         }
     }
 
@@ -154,7 +158,11 @@ window.joinDivision = async function(divId) {
     showToast('Bergabung dengan divisi...');
     const res = await apiCall('divisions', { action: 'join_division', division_id: divId });
     if(res.success) {
-        document.getElementById('divisionPickerModal').classList.remove('active');
+        const divModal = document.getElementById('divisionPickerModal');
+        if (divModal) {
+            if (window.ModalManager) ModalManager.close(divModal);
+            else divModal.classList.remove('active');
+        }
         showToast('Berhasil bergabung!', 'success');
         setTimeout(() => window.location.reload(), 1000);
     } else {
@@ -411,11 +419,16 @@ async function createNewTaskPrompt() {
         });
     }
 
-    modal.classList.add('active');
+    if (window.ModalManager) ModalManager.open(modal);
+    else modal.classList.add('active');
 
     return new Promise((resolve) => {
+        let isResolved = false;
         const cleanup = () => {
-            modal.classList.remove('active');
+            if (isResolved) return;
+            isResolved = true;
+            if (window.ModalManager) ModalManager.close(modal);
+            else modal.classList.remove('active');
             btnCancel.onclick = null;
             btnConfirm.onclick = null;
         };
@@ -506,12 +519,12 @@ function renderTasksAsSyllabus(tasks) {
             
             // Use data-task-id instead of inline onclick with JSON to prevent XSS
             html += `<tr class="syllabus-row" data-task-id="${t.id}" style="border-bottom:1px solid var(--border-light); transition:background 0.2s; cursor:pointer;" onmouseover="this.style.background='var(--bg-hover)'" onmouseout="this.style.background='transparent'">
-                <td style="padding:16px 24px; font-size:14px; color:var(--text-muted);">${t.semester || '-'} / ${t.block || '-'}</td>
-                <td style="padding:16px 24px; font-size:15px; font-weight:600;">${t.title}</td>
-                <td style="padding:16px 24px;"><span class="badge" style="background:var(--bg-card); padding:6px 10px; font-size:11px; border:1px solid var(--border-light); color:var(--text-main);">${t.category || '-'}</span></td>
-                <td style="padding:16px 24px;"><span class="badge ${badgeClass}" style="padding:6px 10px; font-size:11px;">${t.status.toUpperCase()}</span></td>
-                <td style="padding:16px 24px; font-size:14px;">${assignee}</td>
-                <td style="padding:16px 24px;"><button class="btn-card">View details</button></td>
+                <td style="padding:16px 24px; font-size:14px; color:var(--text-muted); white-space:nowrap;">${t.semester || '-'} / ${t.block || '-'}</td>
+                <td style="padding:16px 24px; font-size:15px; font-weight:600; word-break:break-word; max-width:320px;">${t.title}</td>
+                <td style="padding:16px 24px; white-space:nowrap;"><span class="badge" style="background:var(--bg-card); padding:6px 10px; font-size:11px; border:1px solid var(--border-light); color:var(--text-main);">${t.category || '-'}</span></td>
+                <td style="padding:16px 24px; white-space:nowrap;"><span class="badge ${badgeClass}" style="padding:6px 10px; font-size:11px;">${t.status.toUpperCase()}</span></td>
+                <td style="padding:16px 24px; font-size:14px; word-break:break-all; max-width:200px;">${assignee}</td>
+                <td style="padding:16px 24px; white-space:nowrap;"><button class="btn-card">View details</button></td>
             </tr>`;
         });
     });
@@ -577,15 +590,15 @@ function openTaskModal(task) {
     document.getElementById('contextTitle').textContent = task.title;
     const acts = document.getElementById('contextActions');
     
-    let details = `<div style="font-size:14px; margin-bottom:20px; padding:20px; background:var(--c1); border:var(--border-main); border-radius:var(--radius-card); line-height:1.6;">
+    let details = `<div style="font-size:14px; margin-bottom:20px; padding:20px; background:var(--c1); border:var(--border-main); border-radius:var(--radius-card); line-height:1.6; min-width:0; overflow:hidden;">
         <div style="margin-bottom:8px;"><b>Status:</b> <span class="badge" style="background:var(--bg-main); border:1px solid var(--border-light); padding:4px 8px; margin-left:4px;">${task.status.toUpperCase()}</span></div>
         <div style="margin-bottom:8px;"><b>Category:</b> ${task.category || '-'}</div>
-        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px;">
-            <span><b>Developer:</b> ${task.assigned_to_user ? task.assigned_to_user.email : 'Unassigned'}</span>
-            ${task.assigned_to_user && task.assigned_to_user.whatsapp ? `<a href="https://wa.me/${task.assigned_to_user.whatsapp}?text=Hi, regarding Mr. Capsules task '${task.title}'" target="_blank" class="btn-card primary" style="text-decoration:none;">Contact WA</a>` : ''}
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; gap:8px; flex-wrap:wrap; min-width:0;">
+            <span style="min-width:0; overflow-wrap:break-word; word-break:break-all; flex:1;"><b>Developer:</b> ${task.assigned_to_user ? task.assigned_to_user.email : 'Unassigned'}</span>
+            ${task.assigned_to_user && task.assigned_to_user.whatsapp ? `<a href="https://wa.me/${task.assigned_to_user.whatsapp}?text=Hi, regarding Mr. Capsules task '${task.title}'" target="_blank" class="btn-card primary" style="text-decoration:none; flex-shrink:0;">Contact WA</a>` : ''}
         </div>
         <div style="margin-bottom:8px;"><b>Reviewer:</b> ${task.reviewed_by_user ? (task.reviewed_by_user.username || task.reviewed_by_user.email.split('@')[0]) : 'Unassigned'}</div>
-        ${task.target_path ? `<div style="margin-top:16px;"><b>Target File:</b> <span style="font-family:var(--font-mono); color:var(--accent);">${task.target_path}</span></div>` : ''}
+        ${task.target_path ? `<div style="margin-top:16px; word-break:break-all; overflow-wrap:anywhere;"><b>Target File:</b> <span style="font-family:var(--font-mono); color:var(--accent);">${task.target_path}</span></div>` : ''}
         <div style="margin-top:16px; padding-top:16px; border-top:1px solid var(--border-light);">
             <div style="font-size:12px; font-weight:700; color:var(--text-muted); margin-bottom:8px; text-transform:uppercase; letter-spacing:1px;">Timeline</div>
             <div style="display:grid; grid-template-columns:auto 1fr; gap:6px 16px; font-size:13px;">
@@ -598,7 +611,7 @@ function openTaskModal(task) {
         </div>
         <div style="margin-top:16px; padding-top:16px; border-top:1px solid var(--border-light);">
             <div style="font-weight:700; margin-bottom:8px;">Description & Notes:</div>
-            <div style="white-space:pre-wrap; color:var(--text-main);">${task.description || 'No description provided.'}</div>
+            <div style="white-space:pre-wrap; word-break:break-word; overflow-wrap:break-word; color:var(--text-main);">${task.description || 'No description provided.'}</div>
         </div>
         <div style="margin-top:12px;"><button class="btn-card w-100" style="justify-content:center;" onclick="loadTaskLogs('${task.id}')">View Activity Logs</button></div>
         <div id="taskLogsContainer_${task.id}" style="margin-top:8px; max-height:150px; overflow-y:auto;"></div>
@@ -609,7 +622,8 @@ function openTaskModal(task) {
     }
 
     acts.innerHTML = details + `<div style="display:flex; gap:8px; justify-content:center; flex-wrap:wrap;">${actionsHtml}</div>`;
-    modal.classList.add('active');
+    if (window.ModalManager) ModalManager.open(modal);
+    else modal.classList.add('active');
 }
 
 window.loadTaskLogs = async function(taskId) {
@@ -704,7 +718,11 @@ window.updateTask = async function(taskId, action) {
         note = await customPrompt("Optional: Any final notes?");
     }
 
-    document.getElementById('contextModal').classList.remove('active');
+    const ctxModal = document.getElementById('contextModal');
+    if (ctxModal) {
+        if (window.ModalManager) ModalManager.close(ctxModal);
+        else ctxModal.classList.remove('active');
+    }
     showToast('Updating task...');
     const payload = { action, task_id: taskId, note: note ? note.trim() : null, ...payloadExtra };
     const res = await apiCall('tasks', payload);
@@ -717,7 +735,11 @@ window.updateTask = async function(taskId, action) {
 };
 
 window.openTaskFile = function(path) {
-    document.getElementById('contextModal').classList.remove('active');
+    const ctxModal = document.getElementById('contextModal');
+    if (ctxModal) {
+        if (window.ModalManager) ModalManager.close(ctxModal);
+        else ctxModal.classList.remove('active');
+    }
     // Switch to Files tab
     const filesTab = document.querySelector('.tab[data-target="viewFiles"]');
     if(filesTab) filesTab.click();
@@ -920,12 +942,12 @@ window.loadContributions = async function() {
         resLeader.leaderboard.forEach((u, i) => {
             const medal = i === 0 ? '1st' : (i === 1 ? '2nd' : (i === 2 ? '3rd' : `${i+1}.`));
             list.innerHTML += `
-                <li style="display:flex; justify-content:space-between; padding:12px 24px; border-bottom:1px solid var(--border-light); align-items:center;">
-                    <div style="display:flex; gap:16px; align-items:center;">
-                        <span style="font-size:16px; font-weight:600; width:24px;">${medal}</span>
-                        <span style="font-size:14px;">${u.username || u.email.split('@')[0]}</span>
+                <li style="display:flex; justify-content:space-between; padding:12px 24px; border-bottom:1px solid var(--border-light); align-items:center; gap:12px; min-width:0;">
+                    <div style="display:flex; gap:16px; align-items:center; min-width:0; flex:1;">
+                        <span style="font-size:16px; font-weight:600; width:24px; flex-shrink:0;">${medal}</span>
+                        <span style="font-size:14px; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${u.username || u.email.split('@')[0]}</span>
                     </div>
-                    <div style="font-weight:700; color:var(--accent);">${u.points} pts</div>
+                    <div style="font-weight:700; color:var(--accent); flex-shrink:0;">${u.points} pts</div>
                 </li>
             `;
         });

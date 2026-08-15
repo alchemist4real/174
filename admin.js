@@ -81,15 +81,15 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
         var timeStr = new Date(log.time).toLocaleString();
         if (log.type === 'login') {
           item.innerHTML = '<div style="font-size:13px; font-weight:600; color:var(--c4);">' + timeStr + ' - [SYSTEM: LOGIN]</div>' +
-            '<div style="font-weight:700; font-size:14.5px; margin-top:2px;">' + sanitize(log.user) + '</div>' +
-            '<div style="font-size:14px; margin-top:2px;">' + sanitize(log.email || '') + '</div>' +
-            '<div style="font-size:12px; color:var(--text-muted); opacity:0.95; margin-top:4px;">Devices: ' + sanitize(log.devStr || 'Unknown') + '</div>';
+            '<div style="font-weight:700; font-size:14.5px; margin-top:2px; word-break:break-word;">' + sanitize(log.user) + '</div>' +
+            '<div style="font-size:14px; margin-top:2px; word-break:break-all;">' + sanitize(log.email || '') + '</div>' +
+            '<div style="font-size:12px; color:var(--text-muted); opacity:0.95; margin-top:4px; word-break:break-all;">Devices: ' + sanitize(log.devStr || 'Unknown') + '</div>';
         } else if (log.type === 'online') {
           item.innerHTML = '<div style="font-size:13px; font-weight:600; color:var(--c4);">' + timeStr + ' - [LIVE PRESENCE]</div>' +
-            '<div style="font-weight:700; font-size:14.5px; color:var(--text-main); margin-top:2px;">' + sanitize(log.user) + ' came online</div>';
+            '<div style="font-weight:700; font-size:14.5px; color:var(--text-main); margin-top:2px; word-break:break-word;">' + sanitize(log.user) + ' came online</div>';
         } else if (log.type === 'offline') {
           item.innerHTML = '<div style="font-size:13px; font-weight:600; color:var(--text-muted);">' + timeStr + ' - [LIVE PRESENCE]</div>' +
-            '<div style="font-weight:700; font-size:14.5px; color:var(--danger); margin-top:2px;">' + sanitize(log.user) + ' went offline</div>';
+            '<div style="font-weight:700; font-size:14.5px; color:var(--danger); margin-top:2px; word-break:break-word;">' + sanitize(log.user) + ' went offline</div>';
         }
         logList.appendChild(item);
       });
@@ -160,9 +160,131 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
       }, 150);
     });
 
+    // ============================================================================
+    // UNIFIED MODAL MANAGER WITH DYNAMIC Z-INDEX STACKING
+    // Ensures nested modals stack correctly without z-index collisions,
+    // traps focus, handles Escape key close, and restores focus cleanly.
+    // ============================================================================
+    const ModalManager = (function () {
+      const modalStack = [];
+      let keydownListenerAttached = false;
+      const FOCUSABLE_SELECTOR = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+      const BASE_Z = 10000;
+
+      function handleGlobalKeydown(e) {
+        if (modalStack.length === 0) return;
+        const currentModalInfo = modalStack[modalStack.length - 1];
+        const { modalEl, options } = currentModalInfo;
+
+        if (e.key === 'Escape' || e.keyCode === 27) {
+          if (options.closeOnEscape !== false) {
+            e.preventDefault();
+            close(modalEl, { reason: 'escape' });
+          }
+          return;
+        }
+
+        if (e.key === 'Tab' || e.keyCode === 9) {
+          const focusables = Array.from(modalEl.querySelectorAll(FOCUSABLE_SELECTOR))
+            .filter(el => (el.offsetWidth > 0 || el.offsetHeight > 0 || el === document.activeElement) && !el.disabled);
+
+          if (focusables.length === 0) {
+            e.preventDefault();
+            return;
+          }
+
+          const firstEl = focusables[0];
+          const lastEl = focusables[focusables.length - 1];
+
+          if (e.shiftKey) {
+            if (document.activeElement === firstEl || !modalEl.contains(document.activeElement)) {
+              e.preventDefault();
+              lastEl.focus();
+            }
+          } else {
+            if (document.activeElement === lastEl || !modalEl.contains(document.activeElement)) {
+              e.preventDefault();
+              firstEl.focus();
+            }
+          }
+        }
+      }
+
+      function ensureListener() {
+        if (!keydownListenerAttached) {
+          document.addEventListener('keydown', handleGlobalKeydown, true);
+          keydownListenerAttached = true;
+        }
+      }
+
+      function open(modalEl, options = {}) {
+        if (!modalEl) return;
+        ensureListener();
+
+        // Calculate dynamic z-index to guarantee top-most stacking for nested modals
+        const currentZ = BASE_Z + ((modalStack.length + 1) * 20);
+        modalEl.style.zIndex = currentZ;
+
+        const previousActiveElement = document.activeElement;
+        const modalInfo = { modalEl, previousActiveElement, options, onClose: options.onClose || null, zIndex: currentZ };
+        modalStack.push(modalInfo);
+
+        modalEl.classList.add('active');
+        modalEl.classList.remove('hidden');
+        modalEl.setAttribute('aria-modal', 'true');
+        modalEl.setAttribute('role', 'dialog');
+
+        setTimeout(() => {
+          const initialFocus = options.initialFocusEl || modalEl.querySelector(FOCUSABLE_SELECTOR);
+          if (initialFocus && typeof initialFocus.focus === 'function') initialFocus.focus();
+        }, 60);
+      }
+
+      function close(modalEl, resultData = null) {
+        if (!modalEl) return;
+        const stackIdx = modalStack.findIndex(item => item.modalEl === modalEl);
+        let modalInfo = null;
+        if (stackIdx !== -1) {
+          [modalInfo] = modalStack.splice(stackIdx, 1);
+        }
+
+        modalEl.classList.remove('active');
+        if (modalEl.id === 'lightboxModal') {
+          modalEl.classList.add('hidden');
+        }
+        modalEl.style.zIndex = '';
+        modalEl.removeAttribute('aria-modal');
+
+        if (modalInfo && typeof modalInfo.onClose === 'function') {
+          try { modalInfo.onClose(resultData); } catch (e) { console.error('Error in modal onClose:', e); }
+        }
+
+        // Restore focus to previous active element or previous modal in stack
+        if (modalInfo && modalInfo.previousActiveElement && typeof modalInfo.previousActiveElement.focus === 'function') {
+          modalInfo.previousActiveElement.focus();
+        } else if (modalStack.length > 0) {
+          const topModal = modalStack[modalStack.length - 1];
+          const topFocusable = topModal.modalEl.querySelector(FOCUSABLE_SELECTOR);
+          if (topFocusable) topFocusable.focus();
+        }
+      }
+
+      function isTopModal(modalEl) {
+        if (modalStack.length === 0) return false;
+        return modalStack[modalStack.length - 1].modalEl === modalEl;
+      }
+
+      function getActiveCount() {
+        return modalStack.length;
+      }
+
+      return { open, close, isTopModal, getActiveCount };
+    })();
+
+    window.ModalManager = ModalManager;
+
     // Custom Modals Logic
-    window.customPrompt = customPrompt;
-    function customPrompt(title, defaultValue = '') {
+    window.customPrompt = function customPrompt(title, defaultValue = '') {
       return new Promise((resolve) => {
         const modal = document.getElementById('promptModal');
         const titleEl = document.getElementById('promptTitle');
@@ -171,29 +293,122 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
         const btnConfirm = document.getElementById('promptConfirm');
         const btnHeaderCancel = document.getElementById('promptHeaderCancel');
 
-        titleEl.textContent = title;
+        let msgEl = document.getElementById('promptMessageText');
+        if (!msgEl) {
+          msgEl = document.createElement('div');
+          msgEl.id = 'promptMessageText';
+          msgEl.className = 'prompt-message-text';
+          inputEl.parentNode.insertBefore(msgEl, inputEl);
+        }
+
+        if (title.length > 30) {
+          titleEl.textContent = 'INPUT REQUIRED';
+          msgEl.textContent = title;
+          msgEl.style.display = 'block';
+        } else {
+          titleEl.textContent = title;
+          msgEl.style.display = 'none';
+        }
+
         inputEl.value = defaultValue;
         inputEl.style.display = 'block';
-        modal.classList.add('active');
-        inputEl.focus();
+        btnCancel.style.display = '';
+        btnConfirm.textContent = 'Confirm';
 
-        const cleanup = () => {
-          modal.classList.remove('active');
+        let resolved = false;
+        const cleanupAndResolve = (val) => {
+          if (resolved) return;
+          resolved = true;
+          if (msgEl) msgEl.style.display = 'none';
+          btnCancel.onclick = null;
+          btnConfirm.onclick = null;
+          inputEl.onkeydown = null;
+          if (btnHeaderCancel) btnHeaderCancel.onclick = null;
+          ModalManager.close(modal);
+          resolve(val);
+        };
+
+        btnCancel.onclick = () => cleanupAndResolve(null);
+        btnConfirm.onclick = () => cleanupAndResolve(inputEl.value);
+        if (btnHeaderCancel) {
+          btnHeaderCancel.onclick = () => cleanupAndResolve(null);
+        }
+
+        inputEl.onkeydown = (e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            cleanupAndResolve(inputEl.value);
+          }
+        };
+
+        ModalManager.open(modal, {
+          initialFocusEl: inputEl,
+          onClose: () => cleanupAndResolve(null)
+        });
+      });
+    };
+
+    window.customConfirm = function customConfirm(title, message = '') {
+      return new Promise((resolve) => {
+        const modal = document.getElementById('promptModal');
+        const titleEl = document.getElementById('promptTitle');
+        const inputEl = document.getElementById('promptInput');
+        const btnCancel = document.getElementById('promptCancel');
+        const btnConfirm = document.getElementById('promptConfirm');
+        const btnHeaderCancel = document.getElementById('promptHeaderCancel');
+
+        let msgEl = document.getElementById('promptMessageText');
+        if (!msgEl) {
+          msgEl = document.createElement('div');
+          msgEl.id = 'promptMessageText';
+          msgEl.className = 'prompt-message-text';
+          inputEl.parentNode.insertBefore(msgEl, inputEl);
+        }
+
+        if (message) {
+          titleEl.textContent = title;
+          msgEl.textContent = message;
+        } else if (title.length > 25) {
+          titleEl.textContent = 'CONFIRM ACTION';
+          msgEl.textContent = title;
+        } else {
+          titleEl.textContent = title;
+          msgEl.textContent = '';
+        }
+        msgEl.style.display = msgEl.textContent ? 'block' : 'none';
+
+        inputEl.style.display = 'none';
+        btnCancel.style.display = '';
+        btnConfirm.textContent = 'Confirm';
+
+        let resolved = false;
+        const cleanupAndResolve = (val) => {
+          if (resolved) return;
+          resolved = true;
+          if (msgEl) msgEl.style.display = 'none';
+          inputEl.style.display = '';
           btnCancel.onclick = null;
           btnConfirm.onclick = null;
           if (btnHeaderCancel) btnHeaderCancel.onclick = null;
+          ModalManager.close(modal);
+          resolve(val);
         };
 
-        btnCancel.onclick = () => { cleanup(); resolve(null); };
-        btnConfirm.onclick = () => { cleanup(); resolve(inputEl.value); };
+        btnCancel.onclick = () => cleanupAndResolve(false);
+        btnConfirm.onclick = () => cleanupAndResolve(true);
         if (btnHeaderCancel) {
-          btnHeaderCancel.onclick = () => { cleanup(); resolve(null); };
+          btnHeaderCancel.onclick = () => cleanupAndResolve(false);
         }
-      });
-    }
 
-    window.customConfirm = customConfirm;
-    function customConfirm(title) {
+        ModalManager.open(modal, {
+          initialFocusEl: btnConfirm,
+          onClose: () => cleanupAndResolve(false)
+        });
+      });
+    };
+
+    window.customAlert = function customAlert(title, msg) {
+      if (!msg) { msg = title; title = 'Alert'; }
       return new Promise((resolve) => {
         const modal = document.getElementById('promptModal');
         const titleEl = document.getElementById('promptTitle');
@@ -204,22 +419,43 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
 
         titleEl.textContent = title;
         inputEl.style.display = 'none';
-        modal.classList.add('active');
 
-        const cleanup = () => {
-          modal.classList.remove('active');
-          btnCancel.onclick = null;
+        let msgEl = document.getElementById('promptMessageText');
+        if (!msgEl) {
+          msgEl = document.createElement('div');
+          msgEl.id = 'promptMessageText';
+          msgEl.className = 'prompt-message-text';
+          inputEl.parentNode.insertBefore(msgEl, inputEl);
+        }
+        msgEl.textContent = msg;
+        msgEl.style.display = 'block';
+
+        btnCancel.style.display = 'none';
+        btnConfirm.textContent = 'OK';
+
+        let resolved = false;
+        const cleanupAndResolve = () => {
+          if (resolved) return;
+          resolved = true;
+          msgEl.style.display = 'none';
+          inputEl.style.display = '';
+          btnCancel.style.display = '';
+          btnConfirm.textContent = 'Confirm';
           btnConfirm.onclick = null;
           if (btnHeaderCancel) btnHeaderCancel.onclick = null;
+          ModalManager.close(modal);
+          resolve();
         };
 
-        btnCancel.onclick = () => { cleanup(); resolve(false); };
-        btnConfirm.onclick = () => { cleanup(); resolve(true); };
-        if (btnHeaderCancel) {
-          btnHeaderCancel.onclick = () => { cleanup(); resolve(false); };
-        }
+        btnConfirm.onclick = () => cleanupAndResolve();
+        if (btnHeaderCancel) btnHeaderCancel.onclick = () => cleanupAndResolve();
+
+        ModalManager.open(modal, {
+          initialFocusEl: btnConfirm,
+          onClose: () => cleanupAndResolve()
+        });
       });
-    }
+    };
 
     // Init Auth
     (async function initSupabaseAndAuth() {
@@ -671,7 +907,7 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
     function openContextModal(item) {
       const modal = document.getElementById('contextModal');
       const container = document.getElementById('contextActions');
-      document.getElementById('contextTitle').textContent = item.name; // textContent is safe
+      document.getElementById('contextTitle').textContent = item.name;
       
       let html = '';
       if (item.type !== 'folder') {
@@ -704,17 +940,22 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
       </button>`;
       container.innerHTML = html;
       
-      modal.classList.add('active');
+      ModalManager.open(modal);
+      
+      const contextCancelBtn = document.getElementById('contextCancel');
+      if (contextCancelBtn) {
+        contextCancelBtn.onclick = () => ModalManager.close(modal);
+      }
       
       if (document.getElementById('ctxEdit')) {
         document.getElementById('ctxEdit').onclick = async () => {
-          modal.classList.remove('active');
+          ModalManager.close(modal);
           openEditor(item);
         };
       }
       if (document.getElementById('ctxDownload')) {
         document.getElementById('ctxDownload').onclick = async () => {
-          modal.classList.remove('active');
+          ModalManager.close(modal);
           try {
             const blob = await fetchFileSecureBlob(item.path);
             const url = window.URL.createObjectURL(blob);
@@ -730,7 +971,7 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
       }
       if (document.getElementById('ctxMove')) {
         document.getElementById('ctxMove').onclick = async (e) => {
-          modal.classList.remove('active');
+          ModalManager.close(modal);
           const newDir = await customPrompt("Enter new directory path (e.g. content/semester 1/):", currentPath);
           if (!newDir || newDir === currentPath) return;
           adminAction('rename_file', { path: item.path, newPath: newDir.replace(/\/$/, '') + '/' + item.name }).then(() => loadTree()).catch(e => showToast('Move failed: ' + e.message, 'error'));
@@ -738,7 +979,7 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
       }
       if (document.getElementById('ctxRename')) {
         document.getElementById('ctxRename').onclick = async () => {
-          modal.classList.remove('active');
+          ModalManager.close(modal);
           const newName = await customPrompt("Enter new file name:", item.name);
           if (!newName || newName === item.name) return;
           adminAction('rename_file', { path: item.path, newPath: currentPath + newName }).then(() => loadTree()).catch(e => showToast('Rename failed: ' + e.message, 'error'));
@@ -746,7 +987,7 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
       }
       if (document.getElementById('ctxCreateTask')) {
         document.getElementById('ctxCreateTask').onclick = () => {
-          modal.classList.remove('active');
+          ModalManager.close(modal);
           window._prefilledTaskPath = item.path;
           const tasksTab = document.querySelector('.tab[data-target="viewTasks"]');
           if (tasksTab) tasksTab.click();
@@ -760,7 +1001,7 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
       }
       if (document.getElementById('ctxDelete')) {
         document.getElementById('ctxDelete').onclick = async () => {
-          modal.classList.remove('active');
+          ModalManager.close(modal);
           if (item.type === 'folder') {
             const folderFiles = currentTree.filter(f => f.path.startsWith(item.path) && f.type === 'blob');
             if (folderFiles.length === 0) {
@@ -870,7 +1111,9 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
     });
 
     document.getElementById('lightboxClose').onclick = () => {
-      document.getElementById('lightboxModal').classList.add('hidden');
+      const lb = document.getElementById('lightboxModal');
+      if (window.ModalManager) ModalManager.close(lb);
+      else lb.classList.add('hidden');
       document.getElementById('lightboxImage').classList.add('hidden');
       document.getElementById('lightboxText').classList.add('hidden');
     };
@@ -895,9 +1138,10 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
       const modal = document.getElementById('lightboxModal');
       const img = document.getElementById('lightboxImage');
       const txt = document.getElementById('lightboxText');
-      modal.classList.remove('hidden');
+      
       img.classList.add('hidden');
       txt.classList.add('hidden');
+      ModalManager.open(modal);
 
       const rawUrl = `${GITHUB_RAW_BASE}/${encodeURI(item.path)}`;
 
@@ -946,7 +1190,7 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
       const emodal = document.getElementById('editorModal');
       const emodalContainer = document.getElementById('editorModalContainer');
       document.getElementById('editorTitle').textContent = `Editing: ${item.name}`;
-      emodal.classList.add('active');
+      ModalManager.open(emodal);
       
       const iframe = document.getElementById('editorPreview');
       
@@ -1028,15 +1272,15 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
          setTimeout(() => window.cmEditor.refresh(), 100);
       };
 
-      document.getElementById('editorClose').onclick = () => emodal.classList.remove('active');
-      document.getElementById('editorCancel').onclick = () => emodal.classList.remove('active');
+      document.getElementById('editorClose').onclick = () => ModalManager.close(emodal);
+      document.getElementById('editorCancel').onclick = () => ModalManager.close(emodal);
       document.getElementById('editorSave').onclick = async (ev) => {
         ev.target.textContent = 'Saving...';
         const content = window.cmEditor.getValue();
         const base64 = utf8ToBase64(content);
         await adminAction('upload', { path: item.path, contentBase64: base64, sha: item.sha });
         ev.target.textContent = 'Save Changes';
-        emodal.classList.remove('active');
+        ModalManager.close(emodal);
         loadTree();
       };
     }
@@ -1469,22 +1713,15 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
         resultEl.style.color = 'var(--text-muted)';
         await withButtonLoading(btnGuestCleanup, async () => {
           try {
-            const { data: { session } } = await supabaseClient.auth.getSession();
-            const res = await fetch('/api/guest-cleanup', {
-              method: 'POST',
-              headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${session ? session.access_token : sessionToken}` },
-              body: JSON.stringify({ max_age_hours: 24 })
-            });
-            const data = await res.json();
-            if (res.ok && data.success !== false) {
+            const data = await adminAction('cleanup_guests', { max_age_hours: 24 });
+            if (data && data.success !== false) {
               resultEl.style.color = 'var(--text-main)';
               resultEl.textContent = `[SUCCESS] Deleted ${data.deleted || 0}/${data.total_guests_found || 0} guests`;
               showToast(`Cleaned ${data.deleted || 0} stale guests`, 'success');
               if (window.loadUsers) window.loadUsers();
             } else {
               resultEl.style.color = 'var(--danger)';
-              resultEl.textContent = `[ERROR] ${data.error || 'Failed to cleanup guests'}`;
-              showToast(data.error || 'Cleanup failed', 'error');
+              resultEl.textContent = `[ERROR] ${data?.error || 'Failed to cleanup guests'}`;
             }
           } catch(e) {
             resultEl.style.color = 'var(--danger)';
@@ -1756,148 +1993,6 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
       ToastManager.show(msg, type);
     };
 
-    // ============================================================================
-    // UNIFIED MODAL MANAGER
-    // Enforces Escape key close, focus trapping inside dialog, focus restoration.
-    // ============================================================================
-    const ModalManager = (function () {
-      const modalStack = [];
-      let keydownListenerAttached = false;
-      const FOCUSABLE_SELECTOR = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
-
-      function handleGlobalKeydown(e) {
-        if (modalStack.length === 0) return;
-        const currentModalInfo = modalStack[modalStack.length - 1];
-        const { modalEl, options } = currentModalInfo;
-
-        if (e.key === 'Escape' || e.keyCode === 27) {
-          if (options.closeOnEscape !== false) {
-            e.preventDefault();
-            close(modalEl, { reason: 'escape' });
-          }
-          return;
-        }
-
-        if (e.key === 'Tab' || e.keyCode === 9) {
-          const focusables = Array.from(modalEl.querySelectorAll(FOCUSABLE_SELECTOR))
-            .filter(el => el.offsetWidth > 0 || el.offsetHeight > 0 || el === document.activeElement);
-
-          if (focusables.length === 0) {
-            e.preventDefault();
-            return;
-          }
-
-          const firstEl = focusables[0];
-          const lastEl = focusables[focusables.length - 1];
-
-          if (e.shiftKey) {
-            if (document.activeElement === firstEl || !modalEl.contains(document.activeElement)) {
-              e.preventDefault();
-              lastEl.focus();
-            }
-          } else {
-            if (document.activeElement === lastEl || !modalEl.contains(document.activeElement)) {
-              e.preventDefault();
-              firstEl.focus();
-            }
-          }
-        }
-      }
-
-      function ensureListener() {
-        if (!keydownListenerAttached) {
-          document.addEventListener('keydown', handleGlobalKeydown, true);
-          keydownListenerAttached = true;
-        }
-      }
-
-      function open(modalEl, options = {}) {
-        if (!modalEl) return;
-        ensureListener();
-        const previousActiveElement = document.activeElement;
-        const modalInfo = { modalEl, previousActiveElement, options, onClose: options.onClose || null };
-        modalStack.push(modalInfo);
-        modalEl.classList.add('active');
-        modalEl.setAttribute('aria-modal', 'true');
-        modalEl.setAttribute('role', 'dialog');
-        setTimeout(() => {
-          const initialFocus = options.initialFocusEl || modalEl.querySelector(FOCUSABLE_SELECTOR);
-          if (initialFocus && typeof initialFocus.focus === 'function') initialFocus.focus();
-        }, 50);
-      }
-
-      function close(modalEl, resultData = null) {
-        if (!modalEl) return;
-        const stackIdx = modalStack.findIndex(item => item.modalEl === modalEl);
-        if (stackIdx === -1) {
-          modalEl.classList.remove('active');
-          return;
-        }
-        const [modalInfo] = modalStack.splice(stackIdx, 1);
-        modalEl.classList.remove('active');
-        modalEl.removeAttribute('aria-modal');
-        if (typeof modalInfo.onClose === 'function') modalInfo.onClose(resultData);
-        if (modalInfo.previousActiveElement && typeof modalInfo.previousActiveElement.focus === 'function') {
-          modalInfo.previousActiveElement.focus();
-        }
-      }
-
-      return { open, close };
-    })();
-
-    window.ModalManager = ModalManager;
-
-    window.customAlert = function customAlert(title, msg) {
-      if (!msg) { msg = title; title = 'Alert'; }
-      return new Promise((resolve) => {
-        const modal = document.getElementById('promptModal');
-        const titleEl = document.getElementById('promptTitle');
-        const inputEl = document.getElementById('promptInput');
-        const btnCancel = document.getElementById('promptCancel');
-        const btnConfirm = document.getElementById('promptConfirm');
-        const btnHeaderCancel = document.getElementById('promptHeaderCancel');
-
-        titleEl.textContent = title;
-        inputEl.style.display = 'none';
-        
-        let msgEl = document.getElementById('promptMessageText');
-        if (!msgEl) {
-           msgEl = document.createElement('div');
-           msgEl.id = 'promptMessageText';
-           msgEl.style.marginBottom = '16px';
-           msgEl.style.fontSize = '14px';
-           inputEl.parentNode.insertBefore(msgEl, inputEl);
-        }
-        msgEl.textContent = msg;
-        msgEl.style.display = 'block';
-
-        btnCancel.style.display = 'none';
-        btnConfirm.textContent = 'OK';
-
-        let isResolved = false;
-        const cleanupAndResolve = () => {
-          if (isResolved) return;
-          isResolved = true;
-          msgEl.style.display = 'none';
-          inputEl.style.display = '';
-          btnCancel.style.display = '';
-          btnConfirm.textContent = 'Confirm';
-          btnConfirm.onclick = null;
-          if (btnHeaderCancel) btnHeaderCancel.onclick = null;
-          ModalManager.close(modal);
-          resolve();
-        };
-
-        btnConfirm.onclick = () => cleanupAndResolve();
-        if (btnHeaderCancel) btnHeaderCancel.onclick = () => cleanupAndResolve();
-
-        ModalManager.open(modal, {
-          initialFocusEl: btnConfirm,
-          onClose: () => cleanupAndResolve()
-        });
-      });
-    };
-
     function setButtonLoading(btn, isLoading, loadingText = 'Processing...') {
       const el = typeof btn === 'string' ? document.querySelector(btn) : btn;
       if (!el) return;
@@ -2016,18 +2111,20 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
       oauthListEl.innerHTML = tokens.map(function(t) {
         var created = new Date(t.created_at).toLocaleString();
         var expires = t.expires_at ? new Date(t.expires_at).toLocaleString() : 'No expiry';
-        return '<div style="display:flex; justify-content:space-between; align-items:center; padding:16px 20px; border:1px solid var(--border-light); border-radius:10px; margin-bottom:12px; background:var(--bg-card); gap:12px;">' +
-          '<div>' +
+        return '<div style="display:flex; justify-content:space-between; align-items:center; padding:16px 20px; border:1px solid var(--border-light); border-radius:10px; margin-bottom:12px; background:var(--bg-card); gap:16px; width:100%; box-sizing:border-box; flex-wrap:wrap;">' +
+          '<div style="flex:1; min-width:240px;">' +
             '<div style="font-weight:700; font-size:15px; color:var(--text-main); margin-bottom:6px; display:flex; align-items:center; gap:8px;">' +
-              '<span style="color:#d97706;">🤖 Claude AI Connector</span>' +
+              '<span style="color:var(--c4); font-weight:700;">Claude AI Connector</span>' +
               '<span style="font-size:12px; background:var(--accent-soft); color:var(--accent); padding:3px 10px; border-radius:99px; font-weight:700;">ACTIVE</span>' +
             '</div>' +
-            '<div style="font-size:14px; color:var(--text-main); margin-bottom:6px;">Account: <strong>' + sanitize(t.user_email) + '</strong></div>' +
-            '<code style="font-size:12.5px; background:var(--bg-inset); padding:3px 8px; border-radius:4px; color:var(--c4); font-weight:600;">' + sanitize(t.token_prefix) + '</code>' +
-            '<span style="font-size:13px; color:var(--text-muted); margin-left:12px;">Authorized ' + created + '</span>' +
-            '<span style="font-size:13px; color:var(--text-muted); margin-left:8px;">&middot; Expires: ' + expires + '</span>' +
+            '<div style="font-size:14px; color:var(--text-main); margin-bottom:6px; word-break:break-all;">Account: <strong>' + sanitize(t.user_email) + '</strong></div>' +
+            '<div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">' +
+              '<code style="font-size:12.5px; background:var(--bg-inset); padding:3px 8px; border-radius:4px; color:var(--c4); font-weight:600;">' + sanitize(t.token_prefix) + '</code>' +
+              '<span style="font-size:13px; color:var(--text-muted);">Authorized ' + created + '</span>' +
+              '<span style="font-size:13px; color:var(--text-muted);">&middot; Expires: ' + expires + '</span>' +
+            '</div>' +
           '</div>' +
-          '<button class="btn-unified sm danger" onclick="window._revokeOAuthToken(\'' + sanitize(t.token_id).replace(/'/g, "\\'") + '\', \'' + sanitize(t.user_email).replace(/'/g, "\\'") + '\')">Disconnect</button>' +
+          '<button class="btn-unified sm danger" style="flex-shrink:0;" onclick="window._revokeOAuthToken(\'' + sanitize(t.token_id).replace(/'/g, "\\'") + '\', \'' + sanitize(t.user_email).replace(/'/g, "\\'") + '\')">Disconnect</button>' +
         '</div>';
       }).join('');
 
@@ -2074,16 +2171,18 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
         var created = new Date(k.created_at).toLocaleDateString();
         var lastUsed = k.last_used_at ? new Date(k.last_used_at).toLocaleDateString() : 'Never';
         var expiresInfo = k.expires_at ? ('Expires ' + new Date(k.expires_at).toLocaleDateString()) : 'No expiry';
-        return '<div style="display:flex; justify-content:space-between; align-items:center; padding:16px 20px; border:1px solid var(--border-light); border-radius:10px; margin-bottom:12px; background:var(--bg-card);">' +
-          '<div>' +
-            '<div style="font-weight:700; font-size:15px; color:var(--text-main); margin-bottom:6px;">' + sanitize(k.name) + '</div>' +
-            '<code style="font-size:13px; background:var(--bg-inset); padding:3px 8px; border-radius:4px; color:var(--c4); font-weight:600;">' + sanitize(k.key_prefix) + '...</code>' +
-            '<span style="font-size:13px; color:var(--text-muted); margin-left:12px;">Created ' + created + '</span>' +
-            '<span style="font-size:13px; color:var(--text-muted); margin-left:8px;">&middot; Last used: ' + lastUsed + '</span>' +
-            '<span style="font-size:13px; color:var(--text-muted); margin-left:8px;">&middot; ' + (k.request_count || 0) + ' requests</span>' +
-            '<span style="font-size:13px; color:var(--text-muted); margin-left:8px;">&middot; ' + expiresInfo + '</span>' +
+        return '<div style="display:flex; justify-content:space-between; align-items:center; padding:16px 20px; border:1px solid var(--border-light); border-radius:10px; margin-bottom:12px; background:var(--bg-card); gap:16px; width:100%; box-sizing:border-box; flex-wrap:wrap;">' +
+          '<div style="flex:1; min-width:240px;">' +
+            '<div style="font-weight:700; font-size:15px; color:var(--text-main); margin-bottom:6px; word-break:break-word;">' + sanitize(k.name) + '</div>' +
+            '<div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap;">' +
+              '<code style="font-size:13px; background:var(--bg-inset); padding:3px 8px; border-radius:4px; color:var(--c4); font-weight:600;">' + sanitize(k.key_prefix) + '...</code>' +
+              '<span style="font-size:13px; color:var(--text-muted);">Created ' + created + '</span>' +
+              '<span style="font-size:13px; color:var(--text-muted);">&middot; Last used: ' + lastUsed + '</span>' +
+              '<span style="font-size:13px; color:var(--text-muted);">&middot; ' + (k.request_count || 0) + ' requests</span>' +
+              '<span style="font-size:13px; color:var(--text-muted);">&middot; ' + expiresInfo + '</span>' +
             '</div>' +
-          '<button class="btn-unified sm danger" onclick="window._revokeApiKey(\'' + k.id + '\', \'' + sanitize(k.name).replace(/'/g, "\\'") + '\')">Revoke</button>' +
+          '</div>' +
+          '<button class="btn-unified sm danger" style="flex-shrink:0;" onclick="window._revokeApiKey(\'' + k.id + '\', \'' + sanitize(k.name).replace(/'/g, "\\'") + '\')">Revoke</button>' +
         '</div>';
       }).join('');
 

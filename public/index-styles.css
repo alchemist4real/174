@@ -554,13 +554,13 @@ iframe {
 .guide-footer { display: flex; justify-content: space-between; align-items: center; }
 .guide-step-count { font-size: 12px; font-weight: 500; opacity: 0.85; letter-spacing: 0.08em; }
 
-/* Intercept Modal */
-#interactionModeModal, #usernameSetupModal, #divisionSetupModal {
+/* Intercept & Recovery Modals */
+#interactionModeModal, #usernameSetupModal, #divisionSetupModal, #forgotPasswordModal {
   position: fixed; inset: 0; background: var(--scrim); z-index: 99999;
   display: flex; align-items: center; justify-content: center; flex-direction: column;
   opacity: 0; pointer-events: none; visibility: hidden; transition: opacity 0.3s ease, visibility 0.3s;
 }
-#interactionModeModal.active, #usernameSetupModal.active, #divisionSetupModal.active { opacity: 1; pointer-events: auto; visibility: visible; }
+#interactionModeModal.active, #usernameSetupModal.active, #divisionSetupModal.active, #forgotPasswordModal.active { opacity: 1; pointer-events: auto; visibility: visible; }
 
 /* Reset Password Modal */
 #resetPasswordModal {

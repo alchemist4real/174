@@ -51,13 +51,13 @@
         <button type="button" class="auth-btn" id="btnSignIn">LOG IN</button>
         <button type="button" class="auth-btn auth-btn-outline" id="btnSignUp">SIGN UP</button>
         <button type="button" class="auth-btn auth-btn-outline" id="btnGuest" style="margin-top: 8px; border-color: var(--accent); color: var(--accent);">GUEST MODE</button>
-        <button type="button" class="btn-text" id="btnForgotPwd" style="font-size: 12px; margin-top: 8px; opacity: 0.85; justify-content: center; width: 100%;">FORGOT PASSWORD?</button>
+        <button type="button" class="btn-text" id="btnForgotPwd" style="font-size: 12px; margin-top: 8px; opacity: 0.85; justify-content: center; width: 100%;">FORGOT PASSWORD? CONTACT ADMIN</button>
         <div class="auth-msg" id="authMsg"></div>
       </form>
     </div>
   </div>
   <div class="credit-footer">
-    Maintained by Mr. Capsules Community • <a href="/docs.html" target="_blank" style="color: inherit; text-decoration: underline;">READ DOCS</a>
+    Maintained by Mr. Capsules Community • <a href="/docs.html" target="_blank" style="color: inherit; text-decoration: underline;">READ DOCS</a> • <a href="javascript:void(0)" id="footerContactAdmin" style="color: inherit; text-decoration: underline;">CONTACT ADMIN</a>
   </div>
 </div>
 
@@ -822,7 +822,10 @@ try {
         }
         isSignupAllowed = config.allowSignup !== false;
         if (!isSignupAllowed && btnSignUp) {
-          btnSignUp.style.display = 'none';
+          btnSignUp.textContent = 'REQUEST ACCESS (SIGN UP CLOSED)';
+          btnSignUp.style.opacity = '0.9';
+          btnSignUp.style.borderColor = 'var(--text-main)';
+          btnSignUp.title = 'Sign up is closed. Click to contact admin for access.';
         }
         const isGuestAllowed = config.allowGuest !== false;
         const btnGuestEl = document.getElementById('btnGuest');
@@ -1211,7 +1214,8 @@ try {
 
     btnSignUp.addEventListener('click', async () => {
       if (!isSignupAllowed) {
-        showAuthMsg("Pendaftaran saat ini dinonaktifkan oleh administrator.", true);
+        showAuthMsg("Pendaftaran publik ditutup. Buka opsi kontak admin...", false);
+        openContactModal('request_access');
         return;
       }
       const email = authEmail.value ? authEmail.value.trim() : '';
@@ -1303,25 +1307,227 @@ try {
       });
     }
 
-    btnForgotPwd.addEventListener('click', async () => {
-      if (!authEmail.value) {
-        showAuthMsg("PLEASE ENTER YOUR EMAIL ADDRESS", true);
-        return;
+    // ── Forgot Password & Contact Admin Modal Engine ──
+    const forgotPasswordModal = document.getElementById('forgotPasswordModal');
+    const forgotModalEmail = document.getElementById('forgotModalEmail');
+    const contactModalTitle = document.getElementById('contactModalTitle');
+    const contactModalSubtitle = document.getElementById('contactModalSubtitle');
+    const autoResetSection = document.getElementById('autoResetSection');
+    const btnContactWa = document.getElementById('btnContactWa');
+    const btnContactWaText = document.getElementById('btnContactWaText');
+    const btnContactEmail = document.getElementById('btnContactEmail');
+    const btnCopyAdminWa = document.getElementById('btnCopyAdminWa');
+    const copyAdminWaText = document.getElementById('copyAdminWaText');
+    const btnCopyAdminEmail = document.getElementById('btnCopyAdminEmail');
+    const copyAdminEmailText = document.getElementById('copyAdminEmailText');
+    const btnSendResetLink = document.getElementById('btnSendResetLink');
+    const forgotModalMsg = document.getElementById('forgotModalMsg');
+    const btnCloseForgotModal = document.getElementById('btnCloseForgotModal');
+    const footerContactAdmin = document.getElementById('footerContactAdmin');
+
+    const ADMIN_WA_RAW = '081372406462';
+    const ADMIN_WA_INTL = '6281372406462';
+    const ADMIN_EMAIL_ADDR = 'muqorroben@gmail.com';
+
+    let currentContactMode = 'forgot_password'; // 'forgot_password' | 'request_access'
+
+    function updateContactLinks() {
+      const email = (forgotModalEmail ? forgotModalEmail.value : '').trim();
+      if (btnContactWa) {
+        let text = '';
+        if (currentContactMode === 'request_access') {
+          text = email 
+            ? `Halo Admin Mr. Capsules, pendaftaran akun publik sedang ditutup. Saya ingin meminta akses / pembuatan akun baru (${email}). Mohon bantuan infonya.`
+            : `Halo Admin Mr. Capsules, pendaftaran akun publik sedang ditutup. Saya ingin meminta akses / pembuatan akun baru. Mohon bantuan infonya.`;
+        } else {
+          text = email 
+            ? `Halo Admin Mr. Capsules, saya lupa password akun saya (${email}). Mohon bantuan reset password.`
+            : `Halo Admin Mr. Capsules, saya lupa password akun saya. Mohon bantuan reset password.`;
+        }
+        btnContactWa.href = `https://wa.me/${ADMIN_WA_INTL}?text=${encodeURIComponent(text)}`;
       }
-      if (!isValidEmail(authEmail.value)) {
-        showAuthMsg("INVALID EMAIL FORMAT", true);
-        return;
+      if (btnContactEmail) {
+        let subject = '';
+        let body = '';
+        if (currentContactMode === 'request_access') {
+          subject = `Access Request - Mr. Capsules`;
+          body = email
+            ? `Halo Admin,\n\nSaya ingin meminta akses pendaftaran akun baru Mr. Capsules.\nEmail: ${email}\n\nTerima kasih.`
+            : `Halo Admin,\n\nSaya ingin meminta akses pendaftaran akun baru Mr. Capsules.\n\nTerima kasih.`;
+        } else {
+          subject = `Password Reset Request - Mr. Capsules`;
+          body = email
+            ? `Halo Admin,\n\nSaya lupa password untuk akun Mr. Capsules saya:\nEmail: ${email}\n\nMohon bantuan untuk mereset password akun saya.\n\nTerima kasih.`
+            : `Halo Admin,\n\nSaya lupa password untuk akun Mr. Capsules saya.\nMohon bantuan untuk mereset password akun saya.\n\nTerima kasih.`;
+        }
+        btnContactEmail.href = `mailto:${ADMIN_EMAIL_ADDR}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
       }
-      showAuthMsg("Sending reset link...", false);
-      const { error } = await supabase.auth.resetPasswordForEmail(authEmail.value, {
-        redirectTo: window.location.origin + window.location.pathname
-      });
-      if (error) {
-        showAuthMsg(error.message, true);
+    }
+
+    function openContactModal(mode = 'forgot_password') {
+      currentContactMode = mode;
+      if (!forgotPasswordModal) return;
+      if (forgotModalEmail && authEmail) {
+        forgotModalEmail.value = authEmail.value || '';
+      }
+      if (forgotModalMsg) {
+        forgotModalMsg.textContent = '';
+      }
+
+      if (mode === 'request_access') {
+        if (contactModalTitle) contactModalTitle.textContent = 'REQUEST ACCESS';
+        if (contactModalSubtitle) contactModalSubtitle.textContent = `Pendaftaran publik saat ini ditutup. Hubungi Admin via WhatsApp (${ADMIN_WA_RAW}) atau Email untuk meminta akses akun.`;
+        if (autoResetSection) autoResetSection.style.display = 'none';
       } else {
-        showAuthMsg("Password reset link sent to your email.", false);
+        if (contactModalTitle) contactModalTitle.textContent = 'ACCOUNT RECOVERY';
+        if (contactModalSubtitle) contactModalSubtitle.textContent = `Lupa kata sandi? Hubungi Admin via WhatsApp (${ADMIN_WA_RAW}) atau Email, atau kirim tautan reset otomatis ke email Anda.`;
+        if (autoResetSection) autoResetSection.style.display = 'block';
+      }
+
+      updateContactLinks();
+      forgotPasswordModal.classList.add('active');
+    }
+
+    function closeForgotModal() {
+      if (forgotPasswordModal) {
+        forgotPasswordModal.classList.remove('active');
+      }
+    }
+
+    if (btnForgotPwd) {
+      btnForgotPwd.addEventListener('click', () => {
+        openContactModal('forgot_password');
+      });
+    }
+
+    if (footerContactAdmin) {
+      footerContactAdmin.addEventListener('click', (e) => {
+        e.preventDefault();
+        openContactModal(!isSignupAllowed ? 'request_access' : 'forgot_password');
+      });
+    }
+
+    if (btnCloseForgotModal) {
+      btnCloseForgotModal.addEventListener('click', () => {
+        closeForgotModal();
+      });
+    }
+
+    if (forgotPasswordModal) {
+      forgotPasswordModal.addEventListener('click', (e) => {
+        if (e.target === forgotPasswordModal) {
+          closeForgotModal();
+        }
+      });
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && forgotPasswordModal && forgotPasswordModal.classList.contains('active')) {
+        closeForgotModal();
       }
     });
+
+    if (forgotModalEmail) {
+      forgotModalEmail.addEventListener('input', () => {
+        updateContactLinks();
+        if (authEmail) authEmail.value = forgotModalEmail.value;
+      });
+    }
+
+    if (btnCopyAdminWa) {
+      btnCopyAdminWa.addEventListener('click', () => {
+        navigator.clipboard.writeText(ADMIN_WA_RAW).then(() => {
+          if (copyAdminWaText) {
+            const orig = copyAdminWaText.textContent;
+            copyAdminWaText.textContent = 'COPIED!';
+            setTimeout(() => {
+              copyAdminWaText.textContent = orig;
+            }, 2000);
+          }
+          if (forgotModalMsg) {
+            forgotModalMsg.style.color = 'var(--accent)';
+            forgotModalMsg.textContent = `Admin WhatsApp copied: ${ADMIN_WA_RAW}`;
+          }
+        }).catch(() => {
+          if (forgotModalMsg) {
+            forgotModalMsg.style.color = 'var(--text-main)';
+            forgotModalMsg.textContent = `Admin WhatsApp: ${ADMIN_WA_RAW}`;
+          }
+        });
+      });
+    }
+
+    if (btnCopyAdminEmail) {
+      btnCopyAdminEmail.addEventListener('click', () => {
+        navigator.clipboard.writeText(ADMIN_EMAIL_ADDR).then(() => {
+          if (copyAdminEmailText) {
+            const orig = copyAdminEmailText.textContent;
+            copyAdminEmailText.textContent = 'COPIED!';
+            setTimeout(() => {
+              copyAdminEmailText.textContent = orig;
+            }, 2000);
+          }
+          if (forgotModalMsg) {
+            forgotModalMsg.style.color = 'var(--accent)';
+            forgotModalMsg.textContent = `Admin email copied: ${ADMIN_EMAIL_ADDR}`;
+          }
+        }).catch(() => {
+          if (forgotModalMsg) {
+            forgotModalMsg.style.color = 'var(--text-main)';
+            forgotModalMsg.textContent = `Admin email: ${ADMIN_EMAIL_ADDR}`;
+          }
+        });
+      });
+    }
+
+    if (btnSendResetLink) {
+      btnSendResetLink.addEventListener('click', async () => {
+        const email = (forgotModalEmail ? forgotModalEmail.value : '').trim();
+        if (!email) {
+          if (forgotModalMsg) {
+            forgotModalMsg.style.color = 'var(--danger)';
+            forgotModalMsg.textContent = "PLEASE ENTER YOUR EMAIL ADDRESS";
+          }
+          return;
+        }
+        if (!isValidEmail(email)) {
+          if (forgotModalMsg) {
+            forgotModalMsg.style.color = 'var(--danger)';
+            forgotModalMsg.textContent = "INVALID EMAIL FORMAT";
+          }
+          return;
+        }
+        if (forgotModalMsg) {
+          forgotModalMsg.style.color = 'var(--text-main)';
+          forgotModalMsg.textContent = "Sending reset link...";
+        }
+        btnSendResetLink.disabled = true;
+        try {
+          const { error } = await supabase.auth.resetPasswordForEmail(email, {
+            redirectTo: window.location.origin + window.location.pathname
+          });
+          if (error) {
+            if (forgotModalMsg) {
+              forgotModalMsg.style.color = 'var(--danger)';
+              forgotModalMsg.textContent = `${error.message}. Hubungi admin via WhatsApp (${ADMIN_WA_RAW}) / Email jika kendala berlanjut.`;
+            }
+          } else {
+            if (forgotModalMsg) {
+              forgotModalMsg.style.color = 'var(--accent)';
+              forgotModalMsg.textContent = "Password reset link sent! Check your inbox/spam or contact admin.";
+            }
+          }
+        } catch(e) {
+          if (forgotModalMsg) {
+            forgotModalMsg.style.color = 'var(--danger)';
+            forgotModalMsg.textContent = "Request failed. Please contact admin directly.";
+          }
+        } finally {
+          btnSendResetLink.disabled = false;
+        }
+      });
+    }
+    
     
     btnLogout.addEventListener('click', async () => {
       try {
@@ -1659,6 +1865,66 @@ try {
   
   initAdminCheck();
 </script>
+
+<!-- Forgot Password / Contact Admin Modal -->
+<div id="forgotPasswordModal">
+  <div style="background:var(--bg-modal); border:1.5px solid var(--text-main); border-radius:var(--radius-card); padding:28px 24px; max-width:420px; width:90%; text-align:center; box-shadow: 0 10px 30px rgba(0,0,0,0.15);">
+    <div id="contactModalTitle" style="font-size:22px; color:var(--text-main); margin-bottom:8px; font-family:var(--font-sans); letter-spacing:0.5px;">ACCOUNT RECOVERY</div>
+    <div id="contactModalSubtitle" style="font-size:13px; color:var(--text-muted); opacity:0.9; margin-bottom:18px; line-height:1.5; font-family:var(--font-mono);">
+      Forgot your password? Hubungi Admin via WhatsApp (081372406462) atau Email untuk bantuan akun Anda.
+    </div>
+    
+    <div style="display:flex; flex-direction:column; gap:10px; text-align:left;">
+      <div>
+        <label for="forgotModalEmail" style="font-size:11px; font-family:var(--font-sans); color:var(--text-main); margin-bottom:4px; display:block; letter-spacing:0.5px;">YOUR REGISTERED / TARGET EMAIL</label>
+        <input type="email" id="forgotModalEmail" class="auth-input" placeholder="ENTER YOUR EMAIL" style="width:100%;">
+      </div>
+      
+      <div style="display:flex; flex-direction:column; gap:8px; margin-top:4px;">
+        <a id="btnContactWa" href="https://wa.me/6281372406462?text=Halo%20Admin%20Mr.%20Capsules%2C%20saya%20lupa%20password%20akun%20saya.%20Mohon%20bantuan%20reset%20password." target="_blank" class="auth-btn" style="text-decoration:none; display:flex; align-items:center; justify-content:center; gap:8px; background:var(--text-main); color:var(--bg-main); font-family:var(--font-sans); font-size:12px; padding:10px; cursor:pointer;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12.04 2c-5.46 0-9.91 4.45-9.91 9.91 0 1.75.46 3.45 1.32 4.95L2.05 22l5.25-1.38c1.45.79 3.08 1.21 4.74 1.21 5.46 0 9.91-4.45 9.91-9.91 0-2.65-1.03-5.14-2.9-7.01A9.816 9.816 0 0 0 12.04 2zm.01 1.67c2.2 0 4.26.86 5.82 2.42a8.225 8.225 0 0 1 2.41 5.83c0 4.54-3.7 8.24-8.24 8.24-1.44 0-2.85-.38-4.09-1.11l-.29-.17-3.04.8 1.01-2.96-.19-.3a8.21 8.21 0 0 1-1.26-4.5c0-4.54 3.69-8.24 8.24-8.24zm4.52 11.66c-.25-.12-1.47-.72-1.7-.81-.23-.08-.39-.12-.56.12-.17.25-.64.81-.79.97-.14.17-.29.19-.54.06-.25-.12-1.05-.39-2-1.23-.74-.66-1.24-1.47-1.39-1.72-.14-.25-.02-.38.11-.5.11-.11.25-.29.37-.43.12-.14.17-.25.25-.41.08-.17.04-.31-.02-.43s-.56-1.34-.76-1.84c-.2-.48-.41-.42-.56-.43h-.48c-.17 0-.44.06-.67.31-.23.25-.88.86-.88 2.1s.9 2.44 1.02 2.61c.12.17 1.77 2.7 4.28 3.79.6.26 1.07.41 1.43.53.6.19 1.15.16 1.58.1.48-.07 1.47-.6 1.68-1.18.21-.58.21-1.07.14-1.18-.06-.11-.22-.18-.47-.3z"/></svg>
+          <span id="btnContactWaText">CONTACT ADMIN (WA: 081372406462)</span>
+        </a>
+        
+        <a id="btnContactEmail" href="mailto:muqorroben@gmail.com?subject=Password%20Reset%20Request%20-%20Mr.%20Capsules&body=Halo%20Admin%2C%0A%0ASaya%20lupa%20password%20untuk%20akun%20Mr.%20Capsules%20saya.%0AMohon%20bantuan%20reset%20password.%0ATerima%20kasih." class="auth-btn auth-btn-outline" style="text-decoration:none; display:flex; align-items:center; justify-content:center; gap:8px; font-family:var(--font-sans); font-size:12px; padding:10px; cursor:pointer;">
+          <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect width="20" height="16" x="2" y="4" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+          EMAIL ADMIN (muqorroben@gmail.com)
+        </a>
+
+        <div style="display:grid; grid-template-columns: 1fr 1fr; gap:8px;">
+          <button type="button" id="btnCopyAdminWa" class="auth-btn auth-btn-outline" style="display:flex; align-items:center; justify-content:center; gap:6px; font-family:var(--font-sans); font-size:11px; padding:8px; opacity:0.9; cursor:pointer;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+            <span id="copyAdminWaText">COPY WA NUMBER</span>
+          </button>
+          
+          <button type="button" id="btnCopyAdminEmail" class="auth-btn auth-btn-outline" style="display:flex; align-items:center; justify-content:center; gap:6px; font-family:var(--font-sans); font-size:11px; padding:8px; opacity:0.9; cursor:pointer;">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect width="14" height="14" x="8" y="8" rx="2" ry="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+            <span id="copyAdminEmailText">COPY EMAIL</span>
+          </button>
+        </div>
+
+        <div id="autoResetSection">
+          <div style="margin: 4px 0; display:flex; align-items:center; gap:8px;">
+            <div style="flex:1; height:1px; background:var(--border-light);"></div>
+            <span style="font-size:10px; color:var(--text-muted); font-family:var(--font-sans); opacity:0.8;">OR AUTO-RESET LINK</span>
+            <div style="flex:1; height:1px; background:var(--border-light);"></div>
+          </div>
+
+          <button type="button" id="btnSendResetLink" class="auth-btn auth-btn-outline" style="display:flex; align-items:center; justify-content:center; gap:8px; font-family:var(--font-sans); font-size:12px; padding:10px; cursor:pointer; width:100%;">
+            SEND RESET LINK TO EMAIL
+          </button>
+        </div>
+      </div>
+      
+      <div id="forgotModalMsg" class="auth-msg" style="text-align:center; min-height:16px;"></div>
+      
+      <button type="button" id="btnCloseForgotModal" class="btn-text" style="font-size:12px; margin-top:4px; opacity:0.85; justify-content:center; width:100%; font-family:var(--font-sans); cursor:pointer;">
+        CANCEL / BACK TO LOGIN
+      </button>
+    </div>
+  </div>
+</div>
+
 <!-- Reset Password Modal -->
 <div id="resetPasswordModal">
   <div style="background:var(--bg-modal); border:1.5px solid var(--text-main); border-radius:var(--radius-card); padding:32px; max-width:400px; width:90%; text-align:center;">
