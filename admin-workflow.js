@@ -491,14 +491,14 @@ function renderTasksAsSyllabus(tasks) {
     tbody.innerHTML = '';
     
     if(tasks.length === 0) {
-        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:24px; color:var(--text-muted);">No tasks found in syllabus.</td></tr>';
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding:36px; color:var(--text-muted); font-family:var(--font-primary); font-size:14px;">NO TASKS FOUND IN SYLLABUS</td></tr>';
         return;
     }
     
     // Group tasks by Semester and Block
     const grouped = {};
     tasks.forEach(t => {
-        const key = `Semester ${t.semester || '-'} / ${t.block || '-'}`;
+        const key = `SEMESTER ${t.semester || '-'} / ${t.block || '-'}`;
         if(!grouped[key]) grouped[key] = [];
         grouped[key].push(t);
     });
@@ -508,30 +508,29 @@ function renderTasksAsSyllabus(tasks) {
     let html = '';
     sortedKeys.forEach(key => {
         // Group Header
-        html += `<tr style="background:var(--bg-main);"><td colspan="6" style="padding:8px 16px; font-weight:600; color:var(--accent); border-bottom:1px solid var(--border-light);">${key}</td></tr>`;
+        html += `<tr class="syllabus-group-header-row"><td colspan="6" class="syllabus-group-header-td">${key} (${grouped[key].length} Tasks)</td></tr>`;
         
         grouped[key].forEach(t => {
             const badgeClass = 
-                t.status === 'open' ? '' : 
+                t.status === 'open' ? 'badge-member' : 
                 (t.status === 'done' ? 'badge-admin' : 'badge-banned');
             
-            const assignee = t.assigned_to_user ? (t.assigned_to_user.username || t.assigned_to_user.email.split('@')[0]) : '<span style="color:var(--text-muted)">Unassigned</span>';
+            const assignee = t.assigned_to_user ? (t.assigned_to_user.username || t.assigned_to_user.email.split('@')[0]) : '<span style="color:var(--text-muted); font-style:italic;">Unassigned</span>';
             
-            // Use data-task-id instead of inline onclick with JSON to prevent XSS
-            html += `<tr class="syllabus-row" data-task-id="${t.id}" style="border-bottom:1px solid var(--border-light); transition:background 0.2s; cursor:pointer;" onmouseover="this.style.background='var(--bg-hover)'" onmouseout="this.style.background='transparent'">
-                <td style="padding:16px 24px; font-size:14px; color:var(--text-muted); white-space:nowrap;">${t.semester || '-'} / ${t.block || '-'}</td>
-                <td style="padding:16px 24px; font-size:15px; font-weight:600; word-break:break-word; max-width:320px;">${t.title}</td>
-                <td style="padding:16px 24px; white-space:nowrap;"><span class="badge" style="background:var(--bg-card); padding:6px 10px; font-size:11px; border:1px solid var(--border-light); color:var(--text-main);">${t.category || '-'}</span></td>
-                <td style="padding:16px 24px; white-space:nowrap;"><span class="badge ${badgeClass}" style="padding:6px 10px; font-size:11px;">${t.status.toUpperCase()}</span></td>
-                <td style="padding:16px 24px; font-size:14px; word-break:break-all; max-width:200px;">${assignee}</td>
-                <td style="padding:16px 24px; white-space:nowrap;"><button class="btn-card">View details</button></td>
+            html += `<tr class="syllabus-row" data-task-id="${t.id}">
+                <td style="white-space:nowrap; font-weight:700;">${sanitize(t.semester || '-')} / ${sanitize(t.block || '-')}</td>
+                <td style="font-weight:700; word-break:break-word; max-width:320px; color:var(--c3); font-family:var(--font-primary); font-size:14px;">${sanitize(t.title)}</td>
+                <td style="white-space:nowrap;"><span class="badge badge-division">${sanitize(t.category || '-')}</span></td>
+                <td style="white-space:nowrap;"><span class="badge ${badgeClass}">${sanitize((t.status || '').toUpperCase())}</span></td>
+                <td style="word-break:break-all; max-width:180px; font-size:12.5px;">${assignee}</td>
+                <td style="white-space:nowrap; text-align:right;"><button class="btn-card primary" style="min-height:28px; padding:4px 10px; font-size:11px;">View Details</button></td>
             </tr>`;
         });
     });
     
     tbody.innerHTML = html;
     
-    // Bind click handlers programmatically (safe, no XSS)
+    // Bind click handlers programmatically
     tbody.querySelectorAll('.syllabus-row').forEach(row => {
         row.addEventListener('click', () => {
             const taskId = row.getAttribute('data-task-id');

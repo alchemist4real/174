@@ -358,7 +358,8 @@ function getMcpToolsList() {
     { name: 'config_get', description: 'Get app configuration settings (Admin only)', inputSchema: { type: 'object', properties: {} } },
     { name: 'config_update', description: 'Update app settings (Admin only)', inputSchema: { type: 'object', properties: { allowSignup: { type: 'boolean' }, maintenanceMode: { type: 'boolean' } } } },
     { name: 'contributions_leaderboard', description: 'Get the contribution points leaderboard', inputSchema: { type: 'object', properties: {} } },
-    { name: 'contributions_my', description: 'Get your own contribution history', inputSchema: { type: 'object', properties: {} } },
+    { name: 'contributions_my', description: 'Get your own contribution history and total points', inputSchema: { type: 'object', properties: {} } },
+    { name: 'contributions_record', description: 'Manually award or record contribution points for a user (Management/Admin only)', inputSchema: { type: 'object', properties: { user_id: { type: 'string', description: 'Target user UUID' }, user_email: { type: 'string', description: 'Target user email' }, points: { type: 'number', description: 'Points to award (e.g. 1, 2, 5)' }, type: { type: 'string', description: 'Contribution type or description' }, task_id: { type: 'string', description: 'Optional task UUID' } }, required: ['points'] } },
     { name: 'review_issues', description: 'Get review issues for a task (reviewer only)', inputSchema: { type: 'object', properties: { task_id: { type: 'string' } }, required: ['task_id'] } },
     { name: 'review_report', description: 'Report a review issue on a task', inputSchema: { type: 'object', properties: { task_id: { type: 'string' }, issue_type: { type: 'string' }, description: { type: 'string' } }, required: ['task_id'] } },
     { name: 'review_resolve', description: 'Mark a review issue as resolved', inputSchema: { type: 'object', properties: { issue_id: { type: 'string' } }, required: ['issue_id'] } },
@@ -789,7 +790,7 @@ async function routeMethod(method, params, auth, roles, cfg) {
   if (m === 'tasks_reject') {
     if (!roles.isReviewer) throw err403('Review division only');
     if (!params.task_id) throw err400('Missing params.task_id');
-    return tasksReject(params.task_id, params.note || '', su, sk);
+    return tasksReject(params.task_id, params.note || '', auth.userId, su, sk);
   }
   if (m === 'tasks_logs') {
     if (!roles.hasDivision && !roles.isAdmin) throw err403('Division membership required');
@@ -951,6 +952,10 @@ async function routeMethod(method, params, auth, roles, cfg) {
 
   if (m === 'contributions_leaderboard') return contributionsLeaderboard(su, sk);
   if (m === 'contributions_my') return contributionsMy(auth.userId, su, sk);
+  if (m === 'contributions_record') {
+    if (!roles.isManagement && !roles.isAdmin) throw err403('Management or Admin only');
+    return contributionsRecord(params, auth.email, su, sk);
+  }
 
   if (m === 'review_issues') {
     if (!roles.isReviewer) throw err403('Review division only');
@@ -1731,9 +1736,29 @@ async function restoreUploadSessionFromSb(uploadId, su, sk) {
   }
 }
 
+async function rewardUserForUpload(adminEmail, path, su, sk) {
+  if (!su || !sk || !adminEmail) return;
+  try {
+    const usersRes = await fetch(`${su}/auth/v1/admin/users?per_page=1000`, {
+      headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}` }
+    });
+    if (usersRes.ok) {
+      const { users } = await usersRes.json();
+      const u = (users || []).find(x => x.email === adminEmail);
+      if (u) {
+        const isDoc = (path || '').includes('docs.html');
+        const pts = isDoc ? 1 : 2;
+        const type = isDoc ? 'docs_update' : 'content_upload';
+        await recordContribution(u.id, pts, null, type, su, sk);
+      }
+    }
+  } catch (e) {}
+}
+
 // ═══════════════════════════════════════════════════════════════
 // ROBUST DIRECT FILE UPLOAD (Contents API + Git Data API Conflict Retries)
 // ═══════════════════════════════════════════════════════════════
+
 async function contentUpload(params, adminEmail, githubToken, owner, repo, su, sk) {
   const { path, isChunkedCommit } = params;
   let contentBase64 = params.contentBase64;
@@ -1788,6 +1813,7 @@ async function contentUpload(params, adminEmail, githubToken, owner, repo, su, s
     if (putRes.ok) {
       const putData = await putRes.json();
       await logAction(adminEmail, 'mcp_upload', { path, method: 'contents_api' }, su, sk);
+      await rewardUserForUpload(adminEmail, path, su, sk);
       return { success: true, path, sha: putData.content?.sha || putData.commit?.sha };
     }
   } catch (e) {
@@ -1831,6 +1857,7 @@ async function contentUpload(params, adminEmail, githubToken, owner, repo, su, s
       }
 
       await logAction(adminEmail, 'mcp_upload', { path, attempt }, su, sk);
+      await rewardUserForUpload(adminEmail, path, su, sk);
       return { success: true, path, sha: newCommit.sha };
     } catch (err) {
       lastErr = err;
@@ -1984,46 +2011,90 @@ async function tasksCreate(params, userId, su, sk) {
 }
 
 async function tasksClaim(taskId, userId, su, sk) {
-  const res = await fetch(`${su}/rest/v1/content_tasks?id=eq.${taskId}`, {
+  const res = await fetch(`${su}/rest/v1/content_tasks?id=eq.${encodeURIComponent(taskId)}`, {
     method: 'PATCH',
     headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}`, 'Content-Type': 'application/json', 'Prefer': 'return=representation' },
     body: JSON.stringify({ assigned_to: userId, status: 'in_progress', assigned_at: new Date().toISOString() })
   });
   if (!res.ok) throw new Error(await res.text());
   const [task] = await res.json();
+
+  await fetch(`${su}/rest/v1/task_logs`, {
+    method: 'POST',
+    headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ task_id: taskId, user_id: userId, action: 'claimed', old_status: 'open', new_status: 'in_progress' })
+  });
+
   return { task };
 }
 
 async function tasksSubmit(taskId, userId, su, sk) {
-  const res = await fetch(`${su}/rest/v1/content_tasks?id=eq.${taskId}`, {
+  const res = await fetch(`${su}/rest/v1/content_tasks?id=eq.${encodeURIComponent(taskId)}`, {
     method: 'PATCH',
     headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}`, 'Content-Type': 'application/json', 'Prefer': 'return=representation' },
     body: JSON.stringify({ status: 'developed', submitted_at: new Date().toISOString() })
   });
   if (!res.ok) throw new Error(await res.text());
   const [task] = await res.json();
+
+  await fetch(`${su}/rest/v1/task_logs`, {
+    method: 'POST',
+    headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ task_id: taskId, user_id: userId, action: 'submitted', old_status: 'in_progress', new_status: 'developed' })
+  });
+
   return { task };
 }
 
 async function tasksApprove(taskId, userId, su, sk) {
-  const res = await fetch(`${su}/rest/v1/content_tasks?id=eq.${taskId}`, {
+  const fetchOld = await fetch(`${su}/rest/v1/content_tasks?id=eq.${encodeURIComponent(taskId)}`, {
+    headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}` }
+  });
+  const oldTasks = await fetchOld.json();
+  const prevTask = Array.isArray(oldTasks) && oldTasks.length > 0 ? oldTasks[0] : null;
+
+  const res = await fetch(`${su}/rest/v1/content_tasks?id=eq.${encodeURIComponent(taskId)}`, {
     method: 'PATCH',
     headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}`, 'Content-Type': 'application/json', 'Prefer': 'return=representation' },
-    body: JSON.stringify({ status: 'done', completed_at: new Date().toISOString() })
+    body: JSON.stringify({ status: 'done', completed_at: new Date().toISOString(), reviewed_by: userId })
   });
   if (!res.ok) throw new Error(await res.text());
   const [task] = await res.json();
-  return { task };
+
+  // Log approval
+  await fetch(`${su}/rest/v1/task_logs`, {
+    method: 'POST',
+    headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ task_id: taskId, user_id: userId, action: 'approved', old_status: prevTask?.status || 'in_review', new_status: 'done', note: 'Approved via MCP' })
+  });
+
+  // Award reviewer 1 point
+  await recordContribution(userId, 1, taskId, 'task_approved', su, sk);
+
+  // Award assigned developer 3 points
+  const assigneeId = prevTask?.assigned_to || task?.assigned_to;
+  if (assigneeId) {
+    await recordContribution(assigneeId, 3, taskId, 'task_completed', su, sk);
+  }
+
+  return { task, points_awarded: { reviewer: 1, developer: assigneeId ? 3 : 0 } };
 }
 
-async function tasksReject(taskId, note, su, sk) {
-  const res = await fetch(`${su}/rest/v1/content_tasks?id=eq.${taskId}`, {
+async function tasksReject(taskId, note, userId, su, sk) {
+  const res = await fetch(`${su}/rest/v1/content_tasks?id=eq.${encodeURIComponent(taskId)}`, {
     method: 'PATCH',
     headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}`, 'Content-Type': 'application/json', 'Prefer': 'return=representation' },
     body: JSON.stringify({ status: 'in_progress' })
   });
   if (!res.ok) throw new Error(await res.text());
   const [task] = await res.json();
+
+  await fetch(`${su}/rest/v1/task_logs`, {
+    method: 'POST',
+    headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ task_id: taskId, user_id: userId, action: 'rejected', old_status: 'in_review', new_status: 'in_progress', note: note || '' })
+  });
+
   return { task };
 }
 
@@ -2306,6 +2377,25 @@ async function configUpdate(params, adminEmail, su, sk) {
 // CONTRIBUTIONS HANDLERS
 // ═══════════════════════════════════════════════════════════════
 
+async function recordContribution(userId, points, taskId, type, su, sk) {
+  if (!userId) return;
+  try {
+    const payload = {
+      user_id: userId,
+      points: Number(points) || 1
+    };
+    if (taskId) payload.task_id = taskId;
+    if (type) payload.type = type;
+    await fetch(`${su}/rest/v1/contributions`, {
+      method: 'POST',
+      headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+  } catch (err) {
+    console.warn('Failed to record contribution in MCP:', err.message);
+  }
+}
+
 async function contributionsLeaderboard(su, sk) {
   const res = await fetch(`${su}/rest/v1/contributions?select=points,user_id`, {
     headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}` }
@@ -2333,7 +2423,28 @@ async function contributionsMy(userId, su, sk) {
     headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}` }
   });
   const data = await res.json();
-  return { contributions: data };
+  const list = Array.isArray(data) ? data : [];
+  const total = list.reduce((sum, c) => sum + (c.points || 0), 0);
+  return { total_points: total, count: list.length, contributions: list };
+}
+
+async function contributionsRecord(params, adminEmail, su, sk) {
+  let targetUserId = params.user_id;
+  if (!targetUserId && params.user_email) {
+    const usersRes = await fetch(`${su}/auth/v1/admin/users?per_page=1000`, {
+      headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}` }
+    });
+    if (usersRes.ok) {
+      const { users } = await usersRes.json();
+      const u = (users || []).find(x => x.email === params.user_email);
+      if (u) targetUserId = u.id;
+    }
+  }
+  if (!targetUserId) throw err400('Missing or invalid target user (provide valid user_id or user_email)');
+  const points = Number(params.points) || 1;
+  await recordContribution(targetUserId, points, params.task_id || null, params.type || 'mcp_contribution', su, sk);
+  await logAction(adminEmail, 'mcp_record_contribution', { targetUserId, points, type: params.type, taskId: params.task_id }, su, sk);
+  return { success: true, user_id: targetUserId, points_awarded: points };
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -2460,30 +2571,44 @@ async function tasksDelete(taskId, adminEmail, su, sk) {
 }
 
 async function tasksUnclaim(taskId, userId, su, sk) {
-  const res = await fetch(`${su}/rest/v1/content_tasks?id=eq.${taskId}`, {
+  const res = await fetch(`${su}/rest/v1/content_tasks?id=eq.${encodeURIComponent(taskId)}`, {
     method: 'PATCH',
     headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ status: 'open', assignee_id: null, claimed_at: null })
+    body: JSON.stringify({ status: 'open', assigned_to: null, assigned_at: null })
   });
   if (!res.ok) throw new Error('Failed to unclaim task: ' + await res.text());
+
+  await fetch(`${su}/rest/v1/task_logs`, {
+    method: 'POST',
+    headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ task_id: taskId, user_id: userId, action: 'unclaimed', old_status: 'in_progress', new_status: 'open' })
+  });
+
   return { success: true };
 }
 
 async function tasksStartReview(taskId, userId, su, sk) {
-  const res = await fetch(`${su}/rest/v1/content_tasks?id=eq.${taskId}`, {
+  const res = await fetch(`${su}/rest/v1/content_tasks?id=eq.${encodeURIComponent(taskId)}`, {
     method: 'PATCH',
     headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ status: 'in_review', reviewer_id: userId })
+    body: JSON.stringify({ status: 'in_review', review_started_at: new Date().toISOString(), reviewed_by: userId })
   });
   if (!res.ok) throw new Error('Failed to start review: ' + await res.text());
+
+  await fetch(`${su}/rest/v1/task_logs`, {
+    method: 'POST',
+    headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ task_id: taskId, user_id: userId, action: 'review_started', old_status: 'developed', new_status: 'in_review' })
+  });
+
   return { success: true };
 }
 
 async function tasksAddNote(taskId, userId, note, su, sk) {
-  const res = await fetch(`${su}/rest/v1/task_activity_logs`, {
+  const res = await fetch(`${su}/rest/v1/task_logs`, {
     method: 'POST',
     headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ task_id: taskId, actor_id: userId, action: 'add_note', note })
+    body: JSON.stringify({ task_id: taskId, user_id: userId, action: 'commented', note: note })
   });
   if (!res.ok) throw new Error('Failed to add note: ' + await res.text());
   return { success: true };
