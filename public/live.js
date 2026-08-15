@@ -104,7 +104,7 @@ async function loadTasks() {
 
     const btnCreateTask = document.getElementById('btnCreateTask');
     if (btnCreateTask && (isAdminUser || currentUserDivision === 'management')) {
-        btnCreateTask.style.display = 'block';
+        btnCreateTask.style.display = 'inline-flex';
         btnCreateTask.onclick = () => createNewTaskPrompt();
     }
 

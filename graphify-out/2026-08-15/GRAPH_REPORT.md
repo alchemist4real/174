@@ -1,16 +1,16 @@
 # Graph Report - MR-CAPSULES-main  (2026-08-15)
 
 ## Corpus Check
-- 351 files · ~27,422,586 words
+- 351 files · ~27,423,564 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 8442 nodes · 15233 edges · 353 communities (339 shown, 14 thin omitted)
+- 8450 nodes · 15247 edges · 353 communities (339 shown, 14 thin omitted)
 - Extraction: 98% EXTRACTED · 2% INFERRED · 0% AMBIGUOUS · INFERRED: 343 edges (avg confidence: 0.5)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `d7a1d28e`
+- Built from commit: `7f45790b`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -430,8 +430,8 @@ Cohesion: 0.08
 Nodes (45): activeTypes, DEF_POOL, endSession(), genHarvardCepatQ(), genHarvardLambatQ(), genLegKlinis(), genLegNormaQ(), genSitUpNormaQ() (+37 more)
 
 ### Community 18 - "admin.js"
-Cohesion: 0.09
-Nodes (48): adminAction(), applyAdminPersona(), authMessage, authOverlay, bindKeyEvents(), btnGuestCleanup, btnRefreshDash, currentTree (+40 more)
+Cohesion: 0.08
+Nodes (51): adminAction(), applyAdminPersona(), authMessage, authOverlay, bindKeyEvents(), bindUserActionEvents(), btnGuestCleanup, btnRefreshDash (+43 more)
 
 ### Community 19 - "2.5 LECTURE_K13B am-i-special-2.html"
 Cohesion: 0.07
@@ -955,15 +955,15 @@ Nodes (6): 1. System Architecture & Database Schema Migrations, 3. Frontend Clie
 
 ### Community 172 - "index.html"
 Cohesion: 0.08
-Nodes (47): ./fp.js, apply(), applyData(), applyPerfMode(), applyPersona(), backgroundSync(), buildCoverflow(), cards (+39 more)
+Nodes (48): ./fp.js, apply(), applyData(), applyPerfMode(), applyPersona(), backgroundSync(), buildCoverflow(), cards (+40 more)
 
 ### Community 173 - "admin.js"
-Cohesion: 0.09
-Nodes (48): adminAction(), applyAdminPersona(), authMessage, authOverlay, bindKeyEvents(), btnGuestCleanup, btnRefreshDash, currentTree (+40 more)
+Cohesion: 0.08
+Nodes (51): adminAction(), applyAdminPersona(), authMessage, authOverlay, bindKeyEvents(), bindUserActionEvents(), btnGuestCleanup, btnRefreshDash (+43 more)
 
 ### Community 174 - "2.5 PRAKTIKUM_PRAKTIKUM 1.html"
 Cohesion: 0.08
-Nodes (49): activeTypes, AKTIV_LIST, AKTIVITAS_METs, BOUCHARD_HITUNG_KONSEP, BOUCHARD_KAT, BOUCHARD_KAT_KONSEP, DEFINISI_POOL, downloadCert() (+41 more)
+Nodes (48): activeTypes, AKTIV_LIST, AKTIVITAS_METs, BOUCHARD_HITUNG_KONSEP, BOUCHARD_KAT, BOUCHARD_KAT_KONSEP, DEFINISI_POOL, downloadCert() (+40 more)
 
 ### Community 175 - "1.3 CBT 1_10. Fungsi Medulla Spinalis dan Saraf Spinal.html"
 Cohesion: 0.10
@@ -1574,19 +1574,19 @@ Cohesion: 0.67
 Nodes (3): download(), fontDir, zipPath
 
 ## Knowledge Gaps
-- **2421 isolated node(s):** `fileCache`, `_statusTextEl`, `_statusBarEl`, `_itemCountEl`, `fileInput` (+2416 more)
+- **2423 isolated node(s):** `fileCache`, `_statusTextEl`, `_statusBarEl`, `_itemCountEl`, `fileInput` (+2418 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **14 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `Priority Badges injection logic inside Kanban Board and Syllabus Tables:` connect `Priority Badges injection logic inside Kanban Board and Syllabus Tables:` to `4b. Workflow Logic Enhancements — `admin-workflow.js``?**
-  _High betweenness centrality (0.000) - this node is a cross-community bridge._
 - **Why does `4b. Workflow Logic Enhancements — `admin-workflow.js`` connect `4b. Workflow Logic Enhancements — `admin-workflow.js`` to `Priority Badges injection logic inside Kanban Board and Syllabus Tables:`, `4. Frontend Application Logic`?**
   _High betweenness centrality (0.000) - this node is a cross-community bridge._
+- **Why does `2. Backend Serverless API Implementation` connect `2. Backend Serverless API Implementation` to `Admin Page Feature Expansion — Unified Comprehensive Implementation Plan`?**
+  _High betweenness centrality (0.000) - this node is a cross-community bridge._
 - **What connects `fileCache`, `_statusTextEl`, `_statusBarEl` to the rest of the system?**
-  _2421 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _2423 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `2.4 CBT 2_K20C AM I CINEMATIC.html` be split into smaller, more focused modules?**
   _Cohesion score 0.06398730830248546 - nodes in this community are weakly interconnected._
 - **Should `2.5 PRAKTIKUM_PRAKTIKUM 2.html` be split into smaller, more focused modules?**
