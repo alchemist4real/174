@@ -37,6 +37,60 @@
     <div id="authMessage" role="status" aria-live="polite" class="auth-status-msg">Verifying Identity...</div>
   </div>
 
+  <!-- Mobile Top Header Bar (<= 768px) -->
+  <header class="admin-mobile-header" id="adminMobileHeader">
+    <div class="admin-mobile-header-left">
+      <a href="/" class="btn-back-home" title="Back to Website">
+        <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square" stroke-linejoin="miter" aria-hidden="true"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+      </a>
+      <div class="admin-mobile-brand">
+        <img src="/logo.svg" alt="logo" class="admin-mobile-brand-img">
+        <span class="admin-mobile-brand-title">Mr. Capsules</span>
+      </div>
+    </div>
+    <div class="admin-mobile-header-right">
+      <button id="btnMobileUserMenu" class="btn-unified admin-mobile-user-btn" title="Account Menu">
+        <span id="mobileUserInitials">AD</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Mobile User Profile Bottom Sheet / Modal -->
+  <div id="mobileUserModal" class="settings-overlay">
+    <div class="settings-box mobile-user-box">
+      <div class="settings-header">
+        <span class="modal-title">USER PROFILE</span>
+        <button class="btn-text" id="mobileUserModalClose" onclick="if(window.ModalManager) ModalManager.close(document.getElementById('mobileUserModal')); else document.getElementById('mobileUserModal').classList.remove('active');">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          CLOSE
+        </button>
+      </div>
+      <div class="settings-body settings-body-gap">
+        <div class="mobile-user-card-info">
+          <div id="mobileUserAvatarLarge" class="user-avatar-badge mobile-user-avatar-large">AD</div>
+          <div class="mobile-user-details">
+            <div id="mobileUserNameDisplay" class="mobile-user-name">Administrator</div>
+            <div id="mobileUserEmailDisplay" class="mobile-user-email">admin@capsules.local</div>
+            <div class="mobile-user-badges" id="mobileUserBadges"></div>
+          </div>
+        </div>
+
+        <div class="mobile-wa-section">
+          <label class="form-label" for="mobileWaInput">WhatsApp API Number</label>
+          <div class="mobile-wa-input-row">
+            <input type="text" id="mobileWaInput" class="auth-input settings-input-full" placeholder="e.g. 62812...">
+            <button class="btn-unified primary" id="btnSaveWaMobile">Save</button>
+          </div>
+        </div>
+
+        <div class="modal-actions mobile-user-actions">
+          <a href="/" class="btn-unified mobile-modal-btn">Back to Website</a>
+          <button id="btnSignOutMobile" class="btn-unified danger mobile-modal-btn">Sign Out</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
 
 
   <div class="content-area">
@@ -249,6 +303,17 @@
             </div>
             
             <div class="user-filter-container">
+                <div class="mobile-filter-dropdowns">
+                  <select id="mobileDivisionSelect" class="auth-input mobile-division-dropdown" onchange="window.selectDivision(this.value)" aria-label="Select Division">
+                    <option value="all">Division: All Members</option>
+                  </select>
+                  <select id="mobileUserFilterSelect" class="auth-input mobile-user-filter-dropdown" aria-label="Filter Users">
+                    <option value="all">Filter: ALL USERS</option>
+                    <option value="admin">Filter: ADMINS ONLY</option>
+                    <option value="online">Filter: ONLINE ONLY</option>
+                    <option value="banned">Filter: BANNED ONLY</option>
+                  </select>
+                </div>
                 <div class="search-wrap-box">
                   <svg class="search-icon-svg" viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
                   <input type="text" id="searchUsersInput" class="auth-input search-users-input" placeholder="Search user, email, role, device...">
@@ -299,6 +364,14 @@
                 <option value="syllabus" selected>Syllabus View</option>
                 <option value="kanban">Kanban View</option>
             </select>
+            <select id="kanbanMobileColumnSelect" class="auth-input task-select mobile-kanban-column-select hidden" onchange="switchMobileKanbanColumn(this.value)">
+                <option value="all">Column: All Columns</option>
+                <option value="col-open">Column: Open</option>
+                <option value="col-in_progress">Column: In Progress</option>
+                <option value="col-developed">Column: Developed</option>
+                <option value="col-in_review">Column: In Review</option>
+                <option value="col-done">Column: Done</option>
+            </select>
           </div>
           <div class="task-board-controls">
             <input type="text" id="filterTaskSearch" class="auth-input task-input-search" placeholder="Search tasks..." oninput="if(window.applyTaskFilters) window.applyTaskFilters()">
@@ -325,14 +398,16 @@
                 <option value="me">My Tasks</option>
                 <option value="unassigned">Unassigned</option>
             </select>
-            <button id="btnCreateTask" class="btn-unified primary task-btn-new">
-              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
-              <span>New Task</span>
-            </button>
-            <button id="btnRefreshTasks" class="btn-unified">
-              <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
-              <span>Refresh</span>
-            </button>
+            <div class="task-action-btns">
+              <button id="btnCreateTask" class="btn-unified primary task-btn-new">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>
+                <span>New Task</span>
+              </button>
+              <button id="btnRefreshTasks" class="btn-unified">
+                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="23 4 23 10 17 10"></polyline><polyline points="1 20 1 14 7 14"></polyline><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"></path></svg>
+                <span>Refresh</span>
+              </button>
+            </div>
           </div>
         </div>
         <div id="taskKanban" class="hidden task-kanban-layout">
@@ -677,29 +752,29 @@
       </div>
     </div>
     <div class="tabs hidden" id="adminTabs">
-      <div class="tab active" data-target="viewDashboard">
+      <div class="tab active" data-target="viewDashboard" title="Dashboard">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="3" y1="9" x2="21" y2="9"></line><line x1="9" y1="21" x2="9" y2="9"></line></svg>
-        Dashboard
+        <span class="tab-label">Dashboard</span>
       </div>
-      <div class="tab" data-target="viewFiles">
+      <div class="tab" data-target="viewFiles" title="Files">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"></path></svg>
-        Files
+        <span class="tab-label">Files</span>
       </div>
-      <div class="tab" data-target="viewUsers">
+      <div class="tab" data-target="viewUsers" title="Team">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
-        Team
+        <span class="tab-label">Team</span>
       </div>
-      <div class="tab" data-target="viewTasks">
+      <div class="tab" data-target="viewTasks" title="Tasks">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-        Tasks
+        <span class="tab-label">Tasks</span>
       </div>
-      <div class="tab" data-target="viewApiKeys" id="tabApiKeys">
+      <div class="tab" data-target="viewApiKeys" id="tabApiKeys" title="API Keys">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect><path d="M7 11V7a5 5 0 0 1 10 0v4"></path></svg>
-        API Keys
+        <span class="tab-label">API Keys</span>
       </div>
-      <div class="tab" data-target="viewDocs" id="tabDocs">
+      <div class="tab" data-target="viewDocs" id="tabDocs" title="Docs">
         <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
-        Docs
+        <span class="tab-label">Docs</span>
       </div>
     </div>
     <div class="user-info bottom-dock-user-info">

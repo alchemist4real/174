@@ -489,7 +489,63 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
       sessionToken = session.access_token;
       window.dispatchEvent(new CustomEvent('adminReady', { detail: { token: sessionToken } }));
       const badgeEl = document.getElementById('userBadge');
+      const username = session.user.user_metadata?.username || session.user.email.split('@')[0];
+      const email = session.user.email || '';
+      const initials = (username.length >= 2 ? username.substring(0, 2) : username).toUpperCase();
+      
       if (badgeEl) badgeEl.textContent = session.user.user_metadata?.username || session.user.email;
+      
+      const mobileInitialsEl = document.getElementById('mobileUserInitials');
+      if (mobileInitialsEl) mobileInitialsEl.textContent = initials;
+      const mobileAvatarEl = document.getElementById('mobileUserAvatarLarge');
+      if (mobileAvatarEl) mobileAvatarEl.textContent = initials;
+      const mobileNameEl = document.getElementById('mobileUserNameDisplay');
+      if (mobileNameEl) mobileNameEl.textContent = username;
+      const mobileEmailEl = document.getElementById('mobileUserEmailDisplay');
+      if (mobileEmailEl) mobileEmailEl.textContent = email;
+      const mobileWaInput = document.getElementById('mobileWaInput');
+      if (mobileWaInput && session.user.user_metadata?.whatsapp) {
+        mobileWaInput.value = session.user.user_metadata.whatsapp;
+      }
+
+      const btnMobileMenu = document.getElementById('btnMobileUserMenu');
+      if (btnMobileMenu) {
+        btnMobileMenu.onclick = () => {
+          const modal = document.getElementById('mobileUserModal');
+          if (modal) {
+            if (window.ModalManager) window.ModalManager.open(modal);
+            else modal.classList.add('active');
+          }
+        };
+      }
+
+      const btnSignOutMobile = document.getElementById('btnSignOutMobile');
+      if (btnSignOutMobile) {
+        btnSignOutMobile.onclick = () => {
+          if (supabaseClient) supabaseClient.auth.signOut().then(() => window.location.href = '/');
+          else window.location.href = '/';
+        };
+      }
+
+      const btnSaveWaMobile = document.getElementById('btnSaveWaMobile');
+      if (btnSaveWaMobile) {
+        btnSaveWaMobile.onclick = async () => {
+          const waInput = document.getElementById('mobileWaInput');
+          const wa = waInput ? waInput.value.trim() : '';
+          const saveFn = async () => {
+            if (typeof apiCall === 'function') {
+              const wRes = await apiCall('divisions', { action: 'update_whatsapp', whatsapp: wa });
+              if (wRes && wRes.success) showToast('WhatsApp updated!', 'success');
+              else showToast('Failed: ' + (wRes?.error || 'Unknown error'), 'error');
+            }
+          };
+          if (typeof withButtonLoading === 'function') {
+            await withButtonLoading(btnSaveWaMobile, saveFn, 'Saving...');
+          } else {
+            await saveFn();
+          }
+        };
+      }
       
       try {
         const controller = new AbortController();
@@ -511,6 +567,18 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
           window.isSuperAdmin = !!data.isSuperAdmin;
           window.isAdmin = !!(data.isAdmin || data.isSuperAdmin);
           if (badgeEl) badgeEl.dataset.role = window.isSuperAdmin ? 'superadmin' : (window.isAdmin ? 'admin' : 'user');
+
+          const mobileBadgesEl = document.getElementById('mobileUserBadges');
+          if (mobileBadgesEl) {
+            let bHtml = '';
+            if (window.isSuperAdmin) bHtml += '<span class="badge badge-admin">SUPERADMIN</span>';
+            else if (window.isAdmin) bHtml += '<span class="badge badge-admin">ADMIN</span>';
+            else bHtml += '<span class="badge badge-member">MEMBER</span>';
+            if (session.user.user_metadata?.division) {
+              bHtml += `<span class="badge badge-division">${sanitize(session.user.user_metadata.division.toUpperCase())}</span>`;
+            }
+            mobileBadgesEl.innerHTML = bHtml;
+          }
 
           // Initialize all views data
           loadUsers();
@@ -1898,6 +1966,30 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
       searchUsersInputEl.addEventListener('input', () => {
         if (window.applyUserFilters) window.applyUserFilters();
       });
+    }
+
+    // User Filter Buttons & Mobile Filter Dropdown wiring
+    document.querySelectorAll('.user-filter').forEach(btn => {
+      btn.onclick = () => {
+        document.querySelectorAll('.user-filter').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        window.currentFilter = btn.getAttribute('data-filter') || 'all';
+        const mobileSelect = document.getElementById('mobileUserFilterSelect');
+        if (mobileSelect) mobileSelect.value = window.currentFilter;
+        if (window.applyUserFilters) window.applyUserFilters();
+      };
+    });
+
+    const mobileFilterSelect = document.getElementById('mobileUserFilterSelect');
+    if (mobileFilterSelect) {
+      mobileFilterSelect.onchange = (e) => {
+        window.currentFilter = e.target.value || 'all';
+        document.querySelectorAll('.user-filter').forEach(b => {
+          if (b.getAttribute('data-filter') === window.currentFilter) b.classList.add('active');
+          else b.classList.remove('active');
+        });
+        if (window.applyUserFilters) window.applyUserFilters();
+      };
     }
 
     // User polling removed in favor of Supabase realtime channel (users_changed)

@@ -472,18 +472,36 @@ window.toggleTasksView = function() {
     const view = document.getElementById('tasksViewToggle').value;
     const kanban = document.getElementById('taskKanban');
     const syllabus = document.getElementById('syllabusTableContainer');
+    const mobileKanbanSelect = document.getElementById('kanbanMobileColumnSelect');
     if (view === 'kanban') {
         kanban.classList.remove('hidden');
         kanban.style.display = 'flex';
         syllabus.classList.add('hidden');
         syllabus.style.display = '';
+        if (mobileKanbanSelect) mobileKanbanSelect.classList.remove('hidden');
     } else {
         kanban.classList.add('hidden');
         kanban.style.display = '';
         syllabus.classList.remove('hidden');
         syllabus.style.display = '';
+        if (mobileKanbanSelect) mobileKanbanSelect.classList.add('hidden');
     }
 }
+
+window.switchMobileKanbanColumn = function(colId) {
+    const kanbanCols = document.querySelectorAll('.kanban-column');
+    kanbanCols.forEach(col => {
+        if (colId === 'all') {
+            col.classList.remove('mobile-hidden');
+        } else {
+            if (col.id === colId) {
+                col.classList.remove('mobile-hidden');
+            } else {
+                col.classList.add('mobile-hidden');
+            }
+        }
+    });
+};
 
 function renderTasksAsSyllabus(tasks) {
     const tbody = document.getElementById('syllabusTableBody');
@@ -776,6 +794,12 @@ window.openTaskFile = function(path) {
 window.selectDivision = function(divId) {
     window.currentDivisionId = divId;
     
+    // Sync mobile division dropdown if exists
+    const mobileDivSelect = document.getElementById('mobileDivisionSelect');
+    if (mobileDivSelect && mobileDivSelect.value !== divId) {
+        mobileDivSelect.value = divId;
+    }
+    
     // Clear active class from all sidebar buttons
     const btnAll = document.getElementById('btnDivFilterAll');
     if(btnAll) btnAll.classList.remove('active');
@@ -815,6 +839,21 @@ async function loadDivisions() {
     if(res.success && res.divisions) {
         window.divisionData = res.divisions;
         const list = document.getElementById('divisionSidebarList');
+        const mobileDivSelect = document.getElementById('mobileDivisionSelect');
+        
+        if (mobileDivSelect) {
+            mobileDivSelect.innerHTML = '<option value="all">Division: All Members</option>';
+            res.divisions.forEach(div => {
+                const opt = document.createElement('option');
+                opt.value = div.id;
+                opt.textContent = `Division: ${div.name} (${div.member_count})`;
+                mobileDivSelect.appendChild(opt);
+            });
+            if (window.currentDivisionId) {
+                mobileDivSelect.value = window.currentDivisionId;
+            }
+        }
+        
         if(!list) return; // wait until DOM is ready or exists
         
         // Remove only dynamic division buttons with data-id attribute, preserving static #btnDivFilterAll

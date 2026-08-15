@@ -769,51 +769,623 @@ a { color: var(--c4); text-decoration: none; }
       margin: 0; padding: 0; border: none; z-index: 9999;
     }
 
-    /* Mobile Responsiveness (Android Mode) */
+    /* Mobile Top Header (hidden on desktop) */
+    .admin-mobile-header {
+      display: none;
+    }
+    .mobile-filter-dropdowns {
+      display: none;
+    }
+    .mobile-kanban-column-select {
+      display: none;
+    }
+    .mobile-user-box {
+      max-width: 440px;
+    }
+    .mobile-user-card-info {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      padding: 14px;
+      background: var(--c2);
+      border-radius: var(--radius-card);
+      border: 1.5px solid var(--c3);
+    }
+    .mobile-user-avatar-large {
+      width: 46px;
+      height: 46px;
+      min-width: 46px;
+      font-size: 16px;
+      font-weight: 700;
+      border-radius: 50%;
+      background: var(--c1);
+      color: var(--c3);
+      border: 1.5px solid var(--c3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-primary);
+    }
+    .mobile-user-details {
+      display: flex;
+      flex-direction: column;
+      gap: 3px;
+      min-width: 0;
+      flex: 1;
+    }
+    .mobile-user-name {
+      font-family: var(--font-primary);
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text-main);
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+    .mobile-user-email {
+      font-family: var(--font-secondary);
+      font-size: 12.5px;
+      color: var(--text-muted);
+      word-break: break-all;
+    }
+    .mobile-user-badges {
+      display: flex;
+      gap: 6px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+    .mobile-wa-section {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .mobile-wa-input-row {
+      display: flex;
+      gap: 8px;
+      align-items: center;
+    }
+    .mobile-user-actions {
+      display: flex;
+      gap: 8px;
+      width: 100%;
+    }
+    .mobile-modal-btn {
+      flex: 1;
+      justify-content: center;
+      text-align: center;
+      min-height: 40px;
+    }
+
+    /* ═══════════════════════════════════════════════════════════════
+       MOBILE RESPONSIVENESS & TOUCH OPTIMIZATION (<= 768px)
+       ═══════════════════════════════════════════════════════════════ */
     @media (max-width: 768px) {
-      .bottom-dock { padding: 0; height: 64px; }
+      /* Mobile Top Header */
+      .admin-mobile-header {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 52px;
+        background: var(--c1);
+        border-bottom: 1.5px solid var(--c3);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 12px;
+        z-index: 90;
+        box-sizing: border-box;
+      }
+      .admin-mobile-header-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        min-width: 0;
+      }
+      .admin-mobile-brand {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        min-width: 0;
+      }
+      .admin-mobile-brand-img {
+        height: 22px;
+        width: 22px;
+        flex-shrink: 0;
+      }
+      .admin-mobile-brand-title {
+        font-family: var(--font-sans);
+        font-size: 15.5px;
+        font-weight: 700;
+        color: var(--text-main);
+        letter-spacing: 0.06em;
+        white-space: nowrap;
+      }
+      .admin-mobile-user-btn {
+        width: 36px;
+        height: 36px;
+        min-height: 36px;
+        padding: 0 !important;
+        border-radius: 50% !important;
+        font-size: 12px;
+        font-weight: 700;
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        background: var(--c2);
+        color: var(--c3);
+        border: 1.5px solid var(--c3);
+        flex-shrink: 0;
+        cursor: pointer;
+      }
+
+      /* Content Area Viewport Fit */
+      .content-area {
+        height: calc(100dvh - 56px - max(env(safe-area-inset-bottom, 0px), 8px) - 52px);
+        margin-top: 52px;
+        overflow: hidden;
+      }
+
+      /* Bottom Dock Navigation */
+      .bottom-dock {
+        padding: 0 2px max(env(safe-area-inset-bottom, 0px), 8px) 2px;
+        height: calc(56px + max(env(safe-area-inset-bottom, 0px), 8px));
+        box-sizing: border-box;
+        background: var(--c1);
+        border-top: 1.5px solid var(--c3);
+        z-index: var(--z-dock, 100);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
       .bottom-dock .brand { display: none !important; }
       .bottom-dock .user-info { display: none !important; }
-      .bottom-dock .tabs { width: 100%; justify-content: space-around; align-items: center; gap: 0; }
-      .bottom-dock .tab { flex-direction: column; justify-content: center; padding: 12px 6px; font-size: 12px; flex: 1; height: 100%; border: none; border-radius: 8px; align-items: center; }
-      .bottom-dock .tab svg { margin-bottom: 6px; width: 24px; height: 24px; }
-      .bottom-dock .tab.active { background: transparent; color: var(--c4); border-color: transparent; border-top: 2px solid var(--c4); }
-      
-      .toolbar { flex-wrap: wrap; padding: 12px 16px; gap: 8px; }
-      .toolbar > div { width: 100%; justify-content: space-between; display: flex; gap: 8px; }
-      .toolbar .auth-input { flex: 1; min-width: 0; }
-      .toolbar .btn-unified { flex: 1; justify-content: center; padding: 8px; font-size: 12px; }
-      #btnToggleView span, #btnRefresh span { display: none; }
-      
-      .file-actions { opacity: 1 !important; display: flex !important; position: static !important; background: transparent !important; border: none !important; margin-left: auto; }
-      .file-browser.grid-mode .file-actions .btn-unified { width: auto !important; padding: 6px 12px !important; }
-      .file-browser.grid-mode { grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); padding: 16px; gap: 12px; }
-      
+      .bottom-dock .tabs {
+        width: 100%;
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        gap: 1px;
+        height: 56px;
+      }
+      .bottom-dock .tab {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        padding: 4px 1px;
+        font-size: 10.5px;
+        flex: 1 1 0;
+        height: 100%;
+        min-width: 0;
+        border: none;
+        border-radius: 4px;
+        background: transparent;
+        color: var(--text-muted);
+        gap: 3px;
+        transition: color 0.15s ease, background 0.15s ease;
+        user-select: none;
+        cursor: pointer;
+        box-sizing: border-box;
+      }
+      .bottom-dock .tab svg {
+        width: 20px;
+        height: 20px;
+        margin-bottom: 0;
+        stroke: currentColor;
+        flex-shrink: 0;
+      }
+      .bottom-dock .tab .tab-label {
+        font-family: var(--font-primary);
+        font-size: 10px;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+        text-transform: uppercase;
+        line-height: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 100%;
+        display: block;
+      }
+      .bottom-dock .tab.active {
+        background: color-mix(in srgb, var(--c3) 12%, transparent);
+        color: var(--c4);
+        border: none;
+        border-top: 2.5px solid var(--c4);
+        border-radius: 0 0 6px 6px;
+        font-weight: 800;
+      }
+
+      /* ── View 1: Dashboard Mobile Layout ── */
+      #viewDashboard {
+        display: none;
+        flex-direction: column;
+        height: 100%;
+        overflow-y: auto;
+      }
+      #viewDashboard.active {
+        display: flex;
+      }
+      #viewDashboard .toolbar {
+        padding: 12px 14px;
+        justify-content: space-between;
+      }
+      .dashboard-container {
+        padding: 12px !important;
+        gap: 14px !important;
+        display: flex;
+        flex-direction: column;
+      }
+      .analytics-grid {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 10px !important;
+        width: 100%;
+      }
+      .analytics-card {
+        padding: 14px !important;
+      }
+      .analytics-card:last-child {
+        grid-column: 1 / -1;
+      }
+      .dashboard-row {
+        display: flex;
+        flex-direction: column !important;
+        gap: 14px !important;
+        width: 100%;
+      }
+      .card-column {
+        min-width: 100% !important;
+        max-height: 380px !important;
+      }
+
+      /* ── View 2: Files Mobile Layout ── */
+      #viewFiles {
+        display: none;
+        flex-direction: column;
+        height: 100%;
+        overflow: hidden;
+      }
+      #viewFiles.active {
+        display: flex;
+      }
+      #viewFiles .toolbar {
+        padding: 10px 12px;
+        gap: 8px;
+        flex-wrap: wrap;
+      }
+      #viewFiles .toolbar > button {
+        flex: 1;
+      }
+      .toolbar-actions {
+        display: flex;
+        gap: 6px;
+        width: 100%;
+      }
+      .path-bar {
+        padding: 8px 12px;
+        font-size: 12px;
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+      .file-browser {
+        padding: 12px;
+        flex: 1;
+        overflow-y: auto;
+      }
+      .file-browser.grid-mode {
+        grid-template-columns: repeat(auto-fill, minmax(125px, 1fr)) !important;
+        padding: 12px !important;
+        gap: 10px !important;
+      }
+
+      /* ── View 3: Users & Team Mobile Layout (Dropdowns replacing horizontal scroll) ── */
+      .view-section-row {
+        flex-direction: column !important;
+        height: 100%;
+        overflow: hidden;
+      }
+      .org-sidebar {
+        display: none !important; /* Replaced by mobile division selector dropdown */
+      }
+      .main-content-layout {
+        width: 100% !important;
+        height: 100% !important;
+        flex: 1;
+        overflow-y: auto;
+      }
+      .org-toolbar-layout {
+        padding: 12px 14px !important;
+      }
+      .toolbar-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+      }
+      .toolbar-row .btn-flex-layout {
+        width: 100%;
+        display: flex;
+        gap: 8px;
+      }
+      .toolbar-row .btn-flex-layout .btn-unified {
+        flex: 1;
+        justify-content: center;
+        padding: 8px 10px;
+        font-size: 12px;
+      }
+      .switch-controls-row {
+        flex-direction: column !important;
+        padding: 10px 14px !important;
+        gap: 12px !important;
+      }
+      .switch-group {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        width: 100%;
+      }
+      .switch-label {
+        font-size: 11px;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 4px;
+      }
+      .announcement-group {
+        display: flex;
+        gap: 8px;
+        width: 100%;
+      }
+      .announcement-input {
+        flex: 1;
+        width: auto !important;
+        min-width: 0;
+      }
+      .mobile-filter-dropdowns {
+        display: flex !important;
+        gap: 8px;
+        width: 100%;
+        margin-bottom: 4px;
+      }
+      .mobile-division-dropdown,
+      .mobile-user-filter-dropdown {
+        flex: 1;
+        min-width: 0;
+        font-size: 13px;
+        padding: 8px 10px;
+        border-radius: var(--radius-card);
+        background-color: var(--c2);
+        color: var(--c3);
+        border: 1.5px solid var(--c3);
+        font-family: var(--font-primary);
+        font-weight: 700;
+      }
+      .user-filter-container {
+        padding: 10px 14px !important;
+        flex-direction: column !important;
+        gap: 8px !important;
+        overflow-x: visible !important;
+      }
+      .user-filter-pill-group {
+        display: none !important; /* Replaced by mobile dropdown on small screens */
+      }
+      .user-stats-ribbon {
+        margin-left: 0 !important;
+        width: 100%;
+        text-align: center;
+      }
+      .user-grid {
+        grid-template-columns: 1fr !important;
+        padding: 12px !important;
+        gap: 12px !important;
+      }
+      .user-card {
+        padding: 14px;
+      }
+      .card-actions {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 6px;
+        margin-top: 10px;
+      }
+      .card-actions .btn-card {
+        width: 100%;
+        justify-content: center;
+        font-size: 11px;
+        padding: 6px 8px;
+      }
+
+      /* ── View 4: Tasks Mobile Layout (Dropdowns replacing 1600px/750px scrollbars) ── */
+      #viewTasks {
+        display: none;
+        flex-direction: column;
+        height: 100%;
+        overflow: hidden;
+      }
+      #viewTasks.active {
+        display: flex;
+      }
+      .task-board-toolbar-wrap {
+        padding: 12px 14px !important;
+        flex-direction: column;
+        align-items: stretch;
+        gap: 10px;
+      }
+      .task-board-toolbar {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: 100%;
+      }
+      .task-board-title {
+        font-size: 17px !important;
+        white-space: nowrap;
+      }
+      .mobile-kanban-column-select {
+        display: block !important;
+        font-size: 12.5px;
+        padding: 8px 10px;
+        flex: 1;
+        min-width: 0;
+      }
+      .task-board-controls {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        width: 100%;
+      }
+      .task-input-search {
+        grid-column: 1 / -1;
+        width: 100% !important;
+      }
+      .task-action-btns {
+        grid-column: 1 / -1;
+        display: flex;
+        gap: 8px;
+      }
+      .task-action-btns .btn-unified {
+        flex: 1;
+        justify-content: center;
+      }
+
+      /* Kanban Mobile: Stacked / Filtered Column (Zero 1600px horizontal scroll) */
+      .task-kanban-layout {
+        flex-direction: column !important;
+        padding: 12px !important;
+        gap: 14px !important;
+        overflow-x: hidden !important;
+        overflow-y: auto !important;
+      }
+      .kanban-column {
+        min-width: 100% !important;
+        width: 100% !important;
+        max-height: none !important;
+        padding: 14px !important;
+        box-sizing: border-box;
+      }
+      .kanban-column.mobile-hidden {
+        display: none !important;
+      }
+
+      /* Syllabus Mobile: Responsive Task Cards (Zero 750px table scrollbar) */
+      .syllabus-table-container {
+        padding: 12px !important;
+        overflow-y: auto;
+      }
+      .syllabus-table-wrapper {
+        border: none !important;
+        background: transparent !important;
+        overflow-x: visible !important;
+        width: 100% !important;
+      }
+      .syllabus-table {
+        min-width: 100% !important;
+        width: 100% !important;
+        display: block;
+      }
+      .syllabus-table thead {
+        display: none !important; /* Hide wide table header on mobile */
+      }
+      .syllabus-table tbody {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+      }
+      .syllabus-group-header-row {
+        display: block;
+        border-radius: var(--radius-card);
+        margin-top: 8px;
+        margin-bottom: 2px;
+        border: 1.5px solid var(--c3);
+        background: var(--c1) !important;
+      }
+      .syllabus-group-header-td {
+        display: block;
+        padding: 10px 14px;
+        font-size: 13px;
+        font-weight: 700;
+        border: none !important;
+      }
+      .syllabus-row {
+        display: flex;
+        flex-direction: column;
+        background: var(--c2);
+        border: 1.5px solid var(--c3);
+        border-radius: var(--radius-card);
+        padding: 12px 14px;
+        gap: 8px;
+        transition: transform 0.1s ease;
+      }
+      .syllabus-row:active {
+        transform: scale(0.99);
+      }
+      .syllabus-row td {
+        display: block;
+        padding: 0 !important;
+        border: none !important;
+        color: var(--c3);
+      }
+      .syllabus-row td:nth-child(1) { /* Sem / Block */
+        font-size: 12px;
+        color: var(--text-muted);
+        font-weight: 600;
+      }
+      .syllabus-row td:nth-child(2) { /* Title */
+        font-size: 15px;
+        font-weight: 700;
+        color: var(--text-main);
+        max-width: 100% !important;
+        line-height: 1.35;
+      }
+      .syllabus-row td:nth-child(3),
+      .syllabus-row td:nth-child(4) { /* Badges */
+        display: inline-block;
+        margin-right: 6px;
+      }
+      .syllabus-row td:nth-child(5) { /* Assignee */
+        font-size: 12.5px;
+        color: var(--text-muted);
+        margin-top: 4px;
+      }
+      .syllabus-row td:nth-child(6) { /* Action button */
+        margin-top: 6px;
+        display: flex;
+      }
+      .syllabus-row td:nth-child(6) button {
+        width: 100%;
+        justify-content: center;
+        min-height: 32px;
+        font-size: 12px;
+      }
+
+      /* ── View 5: API Keys Mobile Layout ── */
+      .api-keys-container {
+        padding: 14px !important;
+      }
+      .api-keys-card {
+        padding: 16px !important;
+        margin-bottom: 16px !important;
+      }
+      .api-keys-form-row {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+      }
+      .api-keys-form-row > div {
+        width: 100% !important;
+        min-width: 0 !important;
+      }
+      .api-keys-form-row .btn-unified {
+        width: 100%;
+        justify-content: center;
+      }
+
       #lightboxText { width: 95%; height: 95%; font-size: 12px; padding: 16px; }
       .navbar { padding: 0 16px; }
       .file-item { padding: 12px 16px; gap: 12px; }
       .file-icon { margin-right: 0; }
       .file-name { font-size: 13px; }
-      .path-bar { overflow-x: auto; white-space: nowrap; padding: 12px 16px; }
-      .user-grid { grid-template-columns: 1fr; padding: 16px; gap: 12px; }
-      .user-card { padding: 12px; }
-      .card-actions { gap: 6px; }
-      .card-actions .btn-card { font-size: 10px; padding: 6px 8px; }
-      
-      
-      /* Contributions Mobile Stack */
-      #viewContributions > div { padding: 16px !important; gap: 16px !important; height: auto !important; }
-      #viewContributions > div > div { min-width: 100% !important; flex: none !important; width: 100% !important; max-height: none !important; }
-
-      .task-board-container { padding: 12px !important; }
-      .review-tools-container .btn-unified { flex: 1; justify-content: center; width: 100%; }
-      /* Dashboard Mobile Fixes */
-      #viewDashboard > div { padding: 16px !important; gap: 16px !important; }
-      .dashboard-container > div { min-width: 100% !important; flex: none !important; width: 100% !important; max-height: none !important; }
-      
-      /* Filter Tabs Mobile */
-      .user-filter-container { padding: 8px 16px !important; overflow-x: auto; }
-      .user-filter { padding: 6px 12px !important; flex-shrink: 0; }
     }
 
     /* Toggle Switch */
@@ -2470,20 +3042,85 @@ input:checked + .slider-danger-style:before {
 
 
 
+.docs-mobile-select {
+  display: none;
+}
+
 /* ── Docs top-nav responsive (placed last so it overrides base rules) ──
-   Prevents brand + tab navigation from overflowing narrow screens,
-   which previously widened the page and clipped the docs content. */
+   Replaces cramped tabs on mobile with a clean dropdown selector and
+   ensures tables, code blocks, and headings fit mobile screen widths. */
 @media (max-width: 768px) {
-  .top-nav { padding: 0 12px; gap: 8px; }
-  .top-nav .brand { margin-right: 8px; gap: 8px; }
-  .top-nav .brand img { height: 20px; }
-  .docs-brand-text { display: none !important; }
-  .top-nav .tabs { flex: 1 1 auto; min-width: 0; overflow-x: auto; }
-  .top-nav .tab { padding: 0 10px; font-size: 12px; white-space: nowrap; }
-  .docs-content-area { padding: 0 16px; overflow-x: hidden; }
-  .docs-container { margin: 24px auto 60px auto; }
-  .docs-title { font-size: 22px; }
-  .docs-section { padding: 16px; }
+  .top-nav {
+    padding: 0 12px;
+    gap: 10px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .top-nav .brand {
+    margin-right: 0;
+    gap: 8px;
+    display: flex;
+    align-items: center;
+  }
+  .top-nav .brand img {
+    height: 22px;
+  }
+  .docs-brand-text {
+    display: none !important;
+  }
+  .top-nav .tabs {
+    display: none !important; /* Replaced by clean dropdown selector on mobile */
+  }
+  .docs-mobile-select {
+    display: block !important;
+    flex: 1;
+    min-width: 0;
+    max-width: 240px;
+    font-size: 12.5px;
+    font-weight: 700;
+    padding: 8px 10px;
+    border-radius: var(--radius-card);
+    background: var(--c2);
+    color: var(--c3);
+    border: 1.5px solid var(--c3);
+    font-family: var(--font-primary);
+  }
+  .docs-content-area {
+    padding: 0 14px;
+    overflow-x: hidden;
+  }
+  .docs-container {
+    margin: 16px auto 60px auto;
+  }
+  .docs-title {
+    font-size: 20px;
+    margin-bottom: 16px;
+  }
+  .docs-section {
+    padding: 16px;
+    margin-bottom: 16px;
+  }
+  .docs-section h2 {
+    font-size: 17px;
+  }
+  .docs-table {
+    display: block;
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    border-radius: var(--radius-card);
+  }
+  .docs-table th, .docs-table td {
+    padding: 10px 12px;
+    font-size: 12.5px;
+    white-space: nowrap;
+  }
+  .alert-box {
+    padding: 14px;
+    font-size: 13.5px;
+  }
 }
 
 /* ── Docs top-nav brand + back-button polish ──

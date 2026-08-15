@@ -63,6 +63,15 @@
       </div>
     </div>
 
+    <!-- Mobile Section Dropdown Selector (<= 768px) -->
+    <select id="docsMobileTabSelect" class="auth-input docs-mobile-select" aria-label="Pilih Dokumen">
+      <option value="docsGeneral">1. General Guide</option>
+      <option value="docsMcp">2. MCP &amp; API Gateway</option>
+      <option value="docsManagement">3. Management Division</option>
+      <option value="docsDevelopment">4. Development Division</option>
+      <option value="docsReview">5. Review &amp; QA Division</option>
+    </select>
+
   </div>
   
   <div class="docs-content-area">
@@ -1108,30 +1117,45 @@ Tolong update explanation soal nomor 13 di file tersebut."</pre>
     function initTabs() {
       const tabs = document.querySelectorAll('.top-nav .tab');
       const containers = document.querySelectorAll('.docs-container');
+      const mobileSelect = document.getElementById('docsMobileTabSelect');
+
+      function activateTab(target) {
+        if (!target) return;
+        tabs.forEach(t => {
+          if (t.getAttribute('data-target') === target) t.classList.add('active');
+          else t.classList.remove('active');
+        });
+        containers.forEach(c => {
+          if (c.id === target) c.classList.add('active');
+          else c.classList.remove('active');
+        });
+        if (mobileSelect && mobileSelect.value !== target) {
+          mobileSelect.value = target;
+        }
+        if (history.pushState) {
+          history.pushState(null, null, '#' + target);
+        } else {
+          location.hash = '#' + target;
+        }
+      }
 
       tabs.forEach(tab => {
         tab.onclick = () => {
           const target = tab.getAttribute('data-target');
-          if (!target) return;
-          tabs.forEach(t => t.classList.remove('active'));
-          containers.forEach(c => c.classList.remove('active'));
-          
-          tab.classList.add('active');
-          const targetEl = document.getElementById(target);
-          if (targetEl) targetEl.classList.add('active');
-
-          if (history.pushState) {
-            history.pushState(null, null, '#' + target);
-          } else {
-            location.hash = '#' + target;
-          }
+          activateTab(target);
         };
       });
 
+      if (mobileSelect) {
+        mobileSelect.onchange = (e) => {
+          activateTab(e.target.value);
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        };
+      }
+
       const hash = location.hash.replace('#', '');
       if (hash) {
-        const targetTab = document.querySelector(`.top-nav .tab[data-target="${hash}"]`);
-        if (targetTab) targetTab.click();
+        activateTab(hash);
       }
     }
 
