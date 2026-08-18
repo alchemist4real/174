@@ -1,11 +1,11 @@
 # Graph Report - MR-CAPSULES-main  (2026-08-18)
 
 ## Corpus Check
-- 391 files · ~27,532,426 words
+- 392 files · ~27,532,908 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 7678 nodes · 15449 edges · 390 communities (357 shown, 33 thin omitted)
+- 7680 nodes · 15451 edges · 392 communities (359 shown, 33 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 77 edges (avg confidence: 0.51)
 - Token cost: 0 input · 0 output
 
@@ -309,6 +309,7 @@
 - 2.4 CBT 2_K21 AM I COMMUNICATIVE.html
 - Admin Page Feature Expansion — Unified Comprehensive Implementation Plan
 - 5. Verification & Testing Protocol
+- err403
 - 2.3 CBT_Kicaw.html
 - mock_server.js
 - 4. Frontend Application Logic
@@ -322,6 +323,7 @@
 - 2.2_ Anggur Merah.html
 - 🤝 Contributing to MR-CAPSULES
 - vercel.json
+- contributionsRecord
 - 1.3 CBT 1_0. materuy.html
 - 1.4 CBT_0. COKI PARDEDE.html
 - 🤝 Contributing to MR-CAPSULES
@@ -401,7 +403,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (390 total, 33 thin omitted)
+## Communities (392 total, 33 thin omitted)
 
 ### Community 0 - "2.4 CBT 2_K20C AM I CINEMATIC.html"
 Cohesion: 0.07
@@ -1009,7 +1011,7 @@ Nodes (14): curCards, downloadCert(), flashcardsData, KEYS, navCard(), nextQ(), 
 
 ### Community 166 - "mcp.js"
 Cohesion: 0.09
-Nodes (44): activityLogsList(), codebaseSearch(), configGet(), configUpdate(), contentList(), contentTree(), contentUploadFromAgentPath(), contributionsLeaderboard() (+36 more)
+Nodes (42): activityLogsList(), codebaseSearch(), configGet(), contentList(), contentTree(), contentUploadFromAgentPath(), contributionsLeaderboard(), contributionsMy() (+34 more)
 
 ### Community 167 - "authorize.js"
 Cohesion: 0.50
@@ -1559,6 +1561,10 @@ Nodes (6): 1. System Architecture & Database Schema Migrations, 3. Frontend Clie
 Cohesion: 0.29
 Nodes (7): 1. Verification of Task Edit, Delete & Clone (Tiers 1a, A1), 2. Verification of Notifications & Realtime Channels (Tier 2a), 2b. Verification of Dashboard Charts (Tier 2b), 4. Verification of CSV Import & Exports (Tiers 2d, B4), 5. Verification of Version History Control (Tier 2c), 5. Verification & Testing Protocol, 6. Verification of Division Join Requests (Tier 3a)
 
+### Community 305 - "err403"
+Cohesion: 0.18
+Nodes (11): customMcpToolsMap, err403(), executeCustomTool(), getActiveCustomTools(), mcpCreateTool(), mcpDeleteTool(), mcpListCustomTools(), revokeApiKey() (+3 more)
+
 ### Community 306 - "2.3 CBT_Kicaw.html"
 Cohesion: 0.29
 Nodes (15): allScores, answered, clearHistory(), jumpTo(), KEYS, loadStats(), navigate(), QUESTIONS (+7 more)
@@ -1603,6 +1609,10 @@ Nodes (7): 1. 🎛️ Division Management (Pengurus), 2. 💻 Division Developme
 Cohesion: 0.50
 Nodes (3): cleanUrls, headers, routes
 
+### Community 320 - "contributionsRecord"
+Cohesion: 0.50
+Nodes (4): contributionsRecord(), recordContribution(), rewardUserForUpload(), tasksApprove()
+
 ### Community 321 - "1.3 CBT 1_0. materuy.html"
 Cohesion: 0.40
 Nodes (3): allHtmlPaths, blocks, contentDir
@@ -1632,20 +1642,20 @@ Cohesion: 0.40
 Nodes (4): catalog, content, dataPath, jsonStr
 
 ### Community 334 - "handler"
-Cohesion: 0.15
-Nodes (19): authenticateApiKey(), authenticateJWT(), authenticateOAuthAccessToken(), canonicalizeUrl(), checkRateLimit(), getMcpToolsList(), handleDirectUpload(), handleMcpStreamableGet() (+11 more)
+Cohesion: 0.14
+Nodes (18): authenticateApiKey(), authenticateJWT(), authenticateOAuthAccessToken(), canonicalizeUrl(), checkRateLimit(), getMcpToolsList(), handleDirectUpload(), handleMcpStreamableGet() (+10 more)
 
 ### Community 335 - "logAction"
-Cohesion: 0.18
-Nodes (15): codebaseDeleteFile(), codebaseReadFile(), codebaseWriteFile(), contentDelete(), contentDeleteFiles(), contentRename(), divisionsRemoveMember(), err404() (+7 more)
+Cohesion: 0.20
+Nodes (14): codebaseDeleteFile(), codebaseWriteFile(), configUpdate(), contentDelete(), contentDeleteFiles(), contentRename(), divisionsAddMember(), err404() (+6 more)
 
 ### Community 336 - "contentUpload"
-Cohesion: 0.27
-Nodes (12): contentGet(), contentUpload(), contributionsRecord(), docsAddSection(), docsAddTab(), docsDeleteTab(), docsUpdateSection(), docsUpdateTab() (+4 more)
+Cohesion: 0.50
+Nodes (8): contentGet(), contentUpload(), docsAddSection(), docsAddTab(), docsDeleteTab(), docsUpdateSection(), docsUpdateTab(), sanitizeDocsHtml()
 
 ### Community 337 - "err400"
-Cohesion: 0.17
-Nodes (20): customMcpToolsMap, doctortabletCreateCategory(), doctortabletDeleteNote(), doctortabletExportMergedDocument(), doctortabletFetchNotes(), doctortabletListCategories(), doctortabletListNotes(), doctortabletReadNote() (+12 more)
+Cohesion: 0.27
+Nodes (13): codebaseReadFile(), doctortabletCreateCategory(), doctortabletDeleteNote(), doctortabletExportMergedDocument(), doctortabletFetchNotes(), doctortabletListCategories(), doctortabletListNotes(), doctortabletReadNote() (+5 more)
 
 ### Community 338 - "err403"
 Cohesion: 0.10

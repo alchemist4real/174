@@ -1,11 +1,11 @@
 # Graph Report - MR-CAPSULES-main  (2026-08-18)
 
 ## Corpus Check
-- 392 files · ~27,532,908 words
+- 389 files · ~27,532,870 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 7680 nodes · 15451 edges · 392 communities (359 shown, 33 thin omitted)
+- 7675 nodes · 15450 edges · 387 communities (355 shown, 32 thin omitted)
 - Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 77 edges (avg confidence: 0.51)
 - Token cost: 0 input · 0 output
 
@@ -174,7 +174,6 @@
 - authorize.js
 - token.js
 - 2.5 PRAKTIKUM_PRAKTIKUM 2.html
-- register.js
 - Admin Page Feature Expansion — Unified Comprehensive Implementation Plan
 - index.html
 - admin.js
@@ -309,7 +308,6 @@
 - 2.4 CBT 2_K21 AM I COMMUNICATIVE.html
 - Admin Page Feature Expansion — Unified Comprehensive Implementation Plan
 - 5. Verification & Testing Protocol
-- err403
 - 2.3 CBT_Kicaw.html
 - mock_server.js
 - 4. Frontend Application Logic
@@ -323,7 +321,6 @@
 - 2.2_ Anggur Merah.html
 - 🤝 Contributing to MR-CAPSULES
 - vercel.json
-- contributionsRecord
 - 1.3 CBT 1_0. materuy.html
 - 1.4 CBT_0. COKI PARDEDE.html
 - 🤝 Contributing to MR-CAPSULES
@@ -337,7 +334,6 @@
 - err400
 - err403
 - DoctorTablet MCP Note Synthesis Rules
-- uploadSessions
 - download_offbit.js
 - font-review.html
 - font-review.html
@@ -403,7 +399,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (392 total, 33 thin omitted)
+## Communities (387 total, 32 thin omitted)
 
 ### Community 0 - "2.4 CBT 2_K20C AM I CINEMATIC.html"
 Cohesion: 0.07
@@ -478,8 +474,8 @@ Cohesion: 0.08
 Nodes (45): activeTypes, DEF_POOL, endSession(), genHarvardCepatQ(), genHarvardLambatQ(), genLegKlinis(), genLegNormaQ(), genSitUpNormaQ() (+37 more)
 
 ### Community 18 - "admin.js"
-Cohesion: 0.07
-Nodes (54): adminAction(), applyAdminPersona(), authMessage, authOverlay, bindKeyEvents(), bindUserActionEvents(), btnGuestCleanup, btnRefreshDash (+46 more)
+Cohesion: 0.08
+Nodes (51): adminAction(), applyAdminPersona(), authMessage, authOverlay, bindUserActionEvents(), btnGuestCleanup, btnRefreshDash, currentTree (+43 more)
 
 ### Community 19 - "2.5 LECTURE_K13B am-i-special-2.html"
 Cohesion: 0.07
@@ -1010,12 +1006,12 @@ Cohesion: 0.19
 Nodes (14): curCards, downloadCert(), flashcardsData, KEYS, navCard(), nextQ(), quizPool, quizSet (+6 more)
 
 ### Community 166 - "mcp.js"
-Cohesion: 0.09
-Nodes (42): activityLogsList(), codebaseSearch(), configGet(), contentList(), contentTree(), contentUploadFromAgentPath(), contributionsLeaderboard(), contributionsMy() (+34 more)
+Cohesion: 0.08
+Nodes (50): activityLogsList(), codebaseSearch(), configGet(), contentList(), contentTree(), contentUploadFromAgentPath(), contributionsLeaderboard(), contributionsMy() (+42 more)
 
 ### Community 167 - "authorize.js"
-Cohesion: 0.50
-Nodes (4): canonicalizeUrl(), handler(), RFC-8707, RFC-8414
+Cohesion: 0.38
+Nodes (6): canonicalizeUrl(), handleClientRegistration(), handler(), RFC-8707, RFC-7591, RFC-8414
 
 ### Community 168 - "token.js"
 Cohesion: 0.43
@@ -1034,8 +1030,8 @@ Cohesion: 0.08
 Nodes (47): ./fp.js, apply(), applyData(), applyPerfMode(), applyPersona(), backgroundSync(), buildCoverflow(), cards (+39 more)
 
 ### Community 173 - "admin.js"
-Cohesion: 0.08
-Nodes (51): adminAction(), applyAdminPersona(), authMessage, authOverlay, bindUserActionEvents(), btnGuestCleanup, btnRefreshDash, currentTree (+43 more)
+Cohesion: 0.07
+Nodes (54): bindKeyEvents(), adminAction(), applyAdminPersona(), authMessage, authOverlay, bindKeyEvents(), bindUserActionEvents(), btnGuestCleanup (+46 more)
 
 ### Community 174 - "2.5 PRAKTIKUM_PRAKTIKUM 1.html"
 Cohesion: 0.08
@@ -1561,10 +1557,6 @@ Nodes (6): 1. System Architecture & Database Schema Migrations, 3. Frontend Clie
 Cohesion: 0.29
 Nodes (7): 1. Verification of Task Edit, Delete & Clone (Tiers 1a, A1), 2. Verification of Notifications & Realtime Channels (Tier 2a), 2b. Verification of Dashboard Charts (Tier 2b), 4. Verification of CSV Import & Exports (Tiers 2d, B4), 5. Verification of Version History Control (Tier 2c), 5. Verification & Testing Protocol, 6. Verification of Division Join Requests (Tier 3a)
 
-### Community 305 - "err403"
-Cohesion: 0.18
-Nodes (11): customMcpToolsMap, err403(), executeCustomTool(), getActiveCustomTools(), mcpCreateTool(), mcpDeleteTool(), mcpListCustomTools(), revokeApiKey() (+3 more)
-
 ### Community 306 - "2.3 CBT_Kicaw.html"
 Cohesion: 0.29
 Nodes (15): allScores, answered, clearHistory(), jumpTo(), KEYS, loadStats(), navigate(), QUESTIONS (+7 more)
@@ -1609,10 +1601,6 @@ Nodes (7): 1. 🎛️ Division Management (Pengurus), 2. 💻 Division Developme
 Cohesion: 0.50
 Nodes (3): cleanUrls, headers, routes
 
-### Community 320 - "contributionsRecord"
-Cohesion: 0.50
-Nodes (4): contributionsRecord(), recordContribution(), rewardUserForUpload(), tasksApprove()
-
 ### Community 321 - "1.3 CBT 1_0. materuy.html"
 Cohesion: 0.40
 Nodes (3): allHtmlPaths, blocks, contentDir
@@ -1642,20 +1630,20 @@ Cohesion: 0.40
 Nodes (4): catalog, content, dataPath, jsonStr
 
 ### Community 334 - "handler"
-Cohesion: 0.14
-Nodes (18): authenticateApiKey(), authenticateJWT(), authenticateOAuthAccessToken(), canonicalizeUrl(), checkRateLimit(), getMcpToolsList(), handleDirectUpload(), handleMcpStreamableGet() (+10 more)
+Cohesion: 0.15
+Nodes (19): authenticateApiKey(), authenticateJWT(), authenticateOAuthAccessToken(), canonicalizeUrl(), checkRateLimit(), getMcpToolsList(), handleDirectUpload(), handleMcpStreamableGet() (+11 more)
 
 ### Community 335 - "logAction"
-Cohesion: 0.20
-Nodes (14): codebaseDeleteFile(), codebaseWriteFile(), configUpdate(), contentDelete(), contentDeleteFiles(), contentRename(), divisionsAddMember(), err404() (+6 more)
+Cohesion: 0.19
+Nodes (13): codebaseDeleteFile(), codebaseWriteFile(), configUpdate(), contentDelete(), divisionsAddMember(), divisionsRemoveMember(), handleAccountManager(), logAction() (+5 more)
 
 ### Community 336 - "contentUpload"
-Cohesion: 0.50
-Nodes (8): contentGet(), contentUpload(), docsAddSection(), docsAddTab(), docsDeleteTab(), docsUpdateSection(), docsUpdateTab(), sanitizeDocsHtml()
+Cohesion: 0.26
+Nodes (13): contentDeleteFiles(), contentGet(), contentRename(), contentUpload(), docsAddSection(), docsAddTab(), docsDeleteTab(), docsGet() (+5 more)
 
 ### Community 337 - "err400"
-Cohesion: 0.27
-Nodes (13): codebaseReadFile(), doctortabletCreateCategory(), doctortabletDeleteNote(), doctortabletExportMergedDocument(), doctortabletFetchNotes(), doctortabletListCategories(), doctortabletListNotes(), doctortabletReadNote() (+5 more)
+Cohesion: 0.15
+Nodes (23): cleanExpiredUploadSessions(), codebaseReadFile(), createApiKey(), doctortabletCreateCategory(), doctortabletDeleteNote(), doctortabletExportMergedDocument(), doctortabletFetchNotes(), doctortabletListCategories() (+15 more)
 
 ### Community 338 - "err403"
 Cohesion: 0.10
@@ -1664,10 +1652,6 @@ Nodes (34): activeTypes, endSession(), KEYS, makeQ(), nextQ(), nextType(), pick_
 ### Community 347 - "DoctorTablet MCP Note Synthesis Rules"
 Cohesion: 0.29
 Nodes (6): 1. Dynamic Author Resolution (Nama Lengkap Tanpa Gelar), 2. Pre-Writing Analysis & Concept Mapping, 3. Karakter Catatan (High-Density & Anti-PPT Style), 4. Elemen Terstruktur Wajib, 5. Integrasi Tool MCP `doctortablet_save_note`, DoctorTablet MCP Note Synthesis Rules
-
-### Community 348 - "uploadSessions"
-Cohesion: 0.39
-Nodes (8): cleanExpiredUploadSessions(), restoreUploadSessionFromSb(), uploadCancel(), uploadChunk(), uploadCommit(), uploadInit(), uploadSessions, uploadStatus()
 
 ### Community 349 - "download_offbit.js"
 Cohesion: 0.67
@@ -1716,13 +1700,13 @@ Nodes (3): dir, files, renames
 ## Knowledge Gaps
 - **1399 isolated node(s):** `fileCache`, `_statusTextEl`, `_statusBarEl`, `_itemCountEl`, `fileInput` (+1394 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **33 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **32 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `MockResponse` connect `admin.js` to `handler`?**
-  _High betweenness centrality (0.000) - this node is a cross-community bridge._
+  _High betweenness centrality (0.001) - this node is a cross-community bridge._
 - **Why does `bindKeyEvents()` connect `admin.js` to `admin.js`?**
   _High betweenness centrality (0.000) - this node is a cross-community bridge._
 - **What connects `fileCache`, `_statusTextEl`, `_statusBarEl` to the rest of the system?**

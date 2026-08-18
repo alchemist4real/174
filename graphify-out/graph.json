@@ -714,7 +714,7 @@
       "source_location": "L2272",
       "_origin": "ast",
       "id": "admin_bindkeyevents",
-      "community": 18,
+      "community": 173,
       "community_name": "admin.js",
       "norm_label": "bindkeyevents()"
     },
@@ -774,28 +774,6 @@
       "norm_label": "copyrevealedkey()"
     },
     {
-      "label": "_uptime.js",
-      "file_type": "code",
-      "source_file": "api/_uptime.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "api_uptime",
-      "community": 158,
-      "community_name": "uptime.js",
-      "norm_label": "_uptime.js"
-    },
-    {
-      "label": "handler()",
-      "file_type": "code",
-      "source_file": "api/_uptime.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "api_uptime_handler",
-      "community": 158,
-      "community_name": "uptime.js",
-      "norm_label": "handler()"
-    },
-    {
       "label": "admin.js",
       "file_type": "code",
       "source_file": "api/admin.js",
@@ -815,28 +793,6 @@
       "id": "api_admin_handler",
       "community": 150,
       "community_name": "admin.js",
-      "norm_label": "handler()"
-    },
-    {
-      "label": "ai-plugin.js",
-      "file_type": "code",
-      "source_file": "api/ai-plugin.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "api_ai_plugin",
-      "community": 334,
-      "community_name": "handler",
-      "norm_label": "ai-plugin.js"
-    },
-    {
-      "label": "handler()",
-      "file_type": "code",
-      "source_file": "api/ai-plugin.js",
-      "source_location": "L4",
-      "_origin": "ast",
-      "id": "api_ai_plugin_handler",
-      "community": 334,
-      "community_name": "handler",
       "norm_label": "handler()"
     },
     {
@@ -873,6 +829,17 @@
       "norm_label": "handler()"
     },
     {
+      "label": "handleClientRegistration()",
+      "file_type": "code",
+      "source_file": "api/authorize.js",
+      "source_location": "L510",
+      "_origin": "ast",
+      "id": "api_authorize_handleclientregistration",
+      "community": 167,
+      "community_name": "authorize.js",
+      "norm_label": "handleclientregistration()"
+    },
+    {
       "label": "RFC-8707",
       "file_type": "concept",
       "source_file": "api/authorize.js",
@@ -884,10 +851,21 @@
       "norm_label": "rfc-8707"
     },
     {
+      "label": "RFC-7591",
+      "file_type": "concept",
+      "source_file": "api/authorize.js",
+      "source_location": "L64",
+      "_origin": "ast",
+      "id": "docref_rfc_7591",
+      "community": 167,
+      "community_name": "authorize.js",
+      "norm_label": "rfc-7591"
+    },
+    {
       "label": "RFC-8414",
       "file_type": "concept",
       "source_file": "api/authorize.js",
-      "source_location": "L62",
+      "source_location": "L69",
       "_origin": "ast",
       "id": "docref_rfc_8414",
       "community": 167,
@@ -1088,8 +1066,8 @@
       "source_location": "L690",
       "_origin": "ast",
       "id": "api_mcp_ghapi",
-      "community": 335,
-      "community_name": "logAction",
+      "community": 336,
+      "community_name": "contentUpload",
       "norm_label": "ghapi()"
     },
     {
@@ -1121,8 +1099,8 @@
       "source_location": "L1096",
       "_origin": "ast",
       "id": "api_mcp_err403",
-      "community": 305,
-      "community_name": "err403",
+      "community": 166,
+      "community_name": "mcp.js",
       "norm_label": "err403()"
     },
     {
@@ -1132,8 +1110,8 @@
       "source_location": "L1097",
       "_origin": "ast",
       "id": "api_mcp_err404",
-      "community": 335,
-      "community_name": "logAction",
+      "community": 336,
+      "community_name": "contentUpload",
       "norm_label": "err404()"
     },
     {
@@ -1143,8 +1121,8 @@
       "source_location": "L1099",
       "_origin": "ast",
       "id": "api_mcp_sanitizeandnormalizepath",
-      "community": 305,
-      "community_name": "err403",
+      "community": 166,
+      "community_name": "mcp.js",
       "norm_label": "sanitizeandnormalizepath()"
     },
     {
@@ -1154,8 +1132,8 @@
       "source_location": "L1112",
       "_origin": "ast",
       "id": "api_mcp_validatepath",
-      "community": 305,
-      "community_name": "err403",
+      "community": 166,
+      "community_name": "mcp.js",
       "norm_label": "validatepath()"
     },
     {
@@ -1165,8 +1143,8 @@
       "source_location": "L1120",
       "_origin": "ast",
       "id": "api_mcp_validatecodebasepath",
-      "community": 305,
-      "community_name": "err403",
+      "community": 166,
+      "community_name": "mcp.js",
       "norm_label": "validatecodebasepath()"
     },
     {
@@ -1176,8 +1154,8 @@
       "source_location": "L1133",
       "_origin": "ast",
       "id": "api_mcp_validatetoolarguments",
-      "community": 337,
-      "community_name": "err400",
+      "community": 334,
+      "community_name": "handler",
       "norm_label": "validatetoolarguments()"
     },
     {
@@ -1242,8 +1220,8 @@
       "source_location": "L1257",
       "_origin": "ast",
       "id": "api_mcp_custommcptoolsmap",
-      "community": 305,
-      "community_name": "err403",
+      "community": 166,
+      "community_name": "mcp.js",
       "norm_label": "custommcptoolsmap"
     },
     {
@@ -1253,8 +1231,8 @@
       "source_location": "L1259",
       "_origin": "ast",
       "id": "api_mcp_getactivecustomtools",
-      "community": 305,
-      "community_name": "err403",
+      "community": 166,
+      "community_name": "mcp.js",
       "norm_label": "getactivecustomtools()"
     },
     {
@@ -1264,8 +1242,8 @@
       "source_location": "L1284",
       "_origin": "ast",
       "id": "api_mcp_mcpcreatetool",
-      "community": 305,
-      "community_name": "err403",
+      "community": 166,
+      "community_name": "mcp.js",
       "norm_label": "mcpcreatetool()"
     },
     {
@@ -1275,8 +1253,8 @@
       "source_location": "L1335",
       "_origin": "ast",
       "id": "api_mcp_mcpdeletetool",
-      "community": 305,
-      "community_name": "err403",
+      "community": 166,
+      "community_name": "mcp.js",
       "norm_label": "mcpdeletetool()"
     },
     {
@@ -1286,8 +1264,8 @@
       "source_location": "L1345",
       "_origin": "ast",
       "id": "api_mcp_mcplistcustomtools",
-      "community": 305,
-      "community_name": "err403",
+      "community": 166,
+      "community_name": "mcp.js",
       "norm_label": "mcplistcustomtools()"
     },
     {
@@ -1297,8 +1275,8 @@
       "source_location": "L1350",
       "_origin": "ast",
       "id": "api_mcp_executecustomtool",
-      "community": 305,
-      "community_name": "err403",
+      "community": 166,
+      "community_name": "mcp.js",
       "norm_label": "executecustomtool()"
     },
     {
@@ -1319,8 +1297,8 @@
       "source_location": "L1388",
       "_origin": "ast",
       "id": "api_mcp_createapikey",
-      "community": 166,
-      "community_name": "mcp.js",
+      "community": 337,
+      "community_name": "err400",
       "norm_label": "createapikey()"
     },
     {
@@ -1330,8 +1308,8 @@
       "source_location": "L1437",
       "_origin": "ast",
       "id": "api_mcp_revokeapikey",
-      "community": 305,
-      "community_name": "err403",
+      "community": 166,
+      "community_name": "mcp.js",
       "norm_label": "revokeapikey()"
     },
     {
@@ -1396,8 +1374,8 @@
       "source_location": "L1566",
       "_origin": "ast",
       "id": "api_mcp_uploadsessions",
-      "community": 348,
-      "community_name": "uploadSessions",
+      "community": 337,
+      "community_name": "err400",
       "norm_label": "uploadsessions"
     },
     {
@@ -1407,8 +1385,8 @@
       "source_location": "L1569",
       "_origin": "ast",
       "id": "api_mcp_cleanexpireduploadsessions",
-      "community": 348,
-      "community_name": "uploadSessions",
+      "community": 337,
+      "community_name": "err400",
       "norm_label": "cleanexpireduploadsessions()"
     },
     {
@@ -1418,8 +1396,8 @@
       "source_location": "L1579",
       "_origin": "ast",
       "id": "api_mcp_uploadinit",
-      "community": 348,
-      "community_name": "uploadSessions",
+      "community": 337,
+      "community_name": "err400",
       "norm_label": "uploadinit()"
     },
     {
@@ -1429,8 +1407,8 @@
       "source_location": "L1611",
       "_origin": "ast",
       "id": "api_mcp_uploadchunk",
-      "community": 348,
-      "community_name": "uploadSessions",
+      "community": 337,
+      "community_name": "err400",
       "norm_label": "uploadchunk()"
     },
     {
@@ -1440,8 +1418,8 @@
       "source_location": "L1655",
       "_origin": "ast",
       "id": "api_mcp_uploadcommit",
-      "community": 348,
-      "community_name": "uploadSessions",
+      "community": 337,
+      "community_name": "err400",
       "norm_label": "uploadcommit()"
     },
     {
@@ -1451,8 +1429,8 @@
       "source_location": "L1711",
       "_origin": "ast",
       "id": "api_mcp_uploadstatus",
-      "community": 348,
-      "community_name": "uploadSessions",
+      "community": 337,
+      "community_name": "err400",
       "norm_label": "uploadstatus()"
     },
     {
@@ -1462,8 +1440,8 @@
       "source_location": "L1742",
       "_origin": "ast",
       "id": "api_mcp_uploadcancel",
-      "community": 348,
-      "community_name": "uploadSessions",
+      "community": 337,
+      "community_name": "err400",
       "norm_label": "uploadcancel()"
     },
     {
@@ -1473,8 +1451,8 @@
       "source_location": "L1751",
       "_origin": "ast",
       "id": "api_mcp_restoreuploadsessionfromsb",
-      "community": 348,
-      "community_name": "uploadSessions",
+      "community": 337,
+      "community_name": "err400",
       "norm_label": "restoreuploadsessionfromsb()"
     },
     {
@@ -1484,8 +1462,8 @@
       "source_location": "L1788",
       "_origin": "ast",
       "id": "api_mcp_rewarduserforupload",
-      "community": 320,
-      "community_name": "contributionsRecord",
+      "community": 166,
+      "community_name": "mcp.js",
       "norm_label": "rewarduserforupload()"
     },
     {
@@ -1528,8 +1506,8 @@
       "source_location": "L1994",
       "_origin": "ast",
       "id": "api_mcp_contentrename",
-      "community": 335,
-      "community_name": "logAction",
+      "community": 336,
+      "community_name": "contentUpload",
       "norm_label": "contentrename()"
     },
     {
@@ -1550,8 +1528,8 @@
       "source_location": "L2038",
       "_origin": "ast",
       "id": "api_mcp_taskscreate",
-      "community": 166,
-      "community_name": "mcp.js",
+      "community": 337,
+      "community_name": "err400",
       "norm_label": "taskscreate()"
     },
     {
@@ -1583,8 +1561,8 @@
       "source_location": "L2098",
       "_origin": "ast",
       "id": "api_mcp_tasksapprove",
-      "community": 320,
-      "community_name": "contributionsRecord",
+      "community": 166,
+      "community_name": "mcp.js",
       "norm_label": "tasksapprove()"
     },
     {
@@ -1726,8 +1704,8 @@
       "source_location": "L2816",
       "_origin": "ast",
       "id": "api_mcp_recordcontribution",
-      "community": 320,
-      "community_name": "contributionsRecord",
+      "community": 166,
+      "community_name": "mcp.js",
       "norm_label": "recordcontribution()"
     },
     {
@@ -1759,8 +1737,8 @@
       "source_location": "L2867",
       "_origin": "ast",
       "id": "api_mcp_contributionsrecord",
-      "community": 320,
-      "community_name": "contributionsRecord",
+      "community": 166,
+      "community_name": "mcp.js",
       "norm_label": "contributionsrecord()"
     },
     {
@@ -1781,8 +1759,8 @@
       "source_location": "L2897",
       "_origin": "ast",
       "id": "api_mcp_reviewissuesreport",
-      "community": 166,
-      "community_name": "mcp.js",
+      "community": 337,
+      "community_name": "err400",
       "norm_label": "reviewissuesreport()"
     },
     {
@@ -1847,8 +1825,8 @@
       "source_location": "L2961",
       "_origin": "ast",
       "id": "api_mcp_divisionsremovemember",
-      "community": 166,
-      "community_name": "mcp.js",
+      "community": 335,
+      "community_name": "logAction",
       "norm_label": "divisionsremovemember()"
     },
     {
@@ -1858,8 +1836,8 @@
       "source_location": "L2971",
       "_origin": "ast",
       "id": "api_mcp_contentdeletefiles",
-      "community": 335,
-      "community_name": "logAction",
+      "community": 336,
+      "community_name": "contentUpload",
       "norm_label": "contentdeletefiles()"
     },
     {
@@ -1869,8 +1847,8 @@
       "source_location": "L2999",
       "_origin": "ast",
       "id": "api_mcp_tasksdelete",
-      "community": 166,
-      "community_name": "mcp.js",
+      "community": 335,
+      "community_name": "logAction",
       "norm_label": "tasksdelete()"
     },
     {
@@ -1946,8 +1924,8 @@
       "source_location": "L3083",
       "_origin": "ast",
       "id": "api_mcp_docsget",
-      "community": 166,
-      "community_name": "mcp.js",
+      "community": 336,
+      "community_name": "contentUpload",
       "norm_label": "docsget()"
     },
     {
@@ -2034,8 +2012,8 @@
       "source_location": "L3283",
       "_origin": "ast",
       "id": "api_mcp_usersblockdevice",
-      "community": 166,
-      "community_name": "mcp.js",
+      "community": 335,
+      "community_name": "logAction",
       "norm_label": "usersblockdevice()"
     },
     {
@@ -2290,39 +2268,6 @@
       "community": 334,
       "community_name": "handler",
       "norm_label": "handler()"
-    },
-    {
-      "label": "register.js",
-      "file_type": "code",
-      "source_file": "api/register.js",
-      "source_location": "L1",
-      "_origin": "ast",
-      "id": "api_register",
-      "community": 170,
-      "community_name": "register.js",
-      "norm_label": "register.js"
-    },
-    {
-      "label": "handler()",
-      "file_type": "code",
-      "source_file": "api/register.js",
-      "source_location": "L6",
-      "_origin": "ast",
-      "id": "api_register_handler",
-      "community": 170,
-      "community_name": "register.js",
-      "norm_label": "handler()"
-    },
-    {
-      "label": "RFC-7591",
-      "file_type": "concept",
-      "source_file": "api/register.js",
-      "source_location": "L2",
-      "_origin": "ast",
-      "id": "docref_rfc_7591",
-      "community": 170,
-      "community_name": "register.js",
-      "norm_label": "rfc-7591"
     },
     {
       "label": "tasks.js",
@@ -41482,7 +41427,7 @@
       "source_location": "L2272",
       "_origin": "ast",
       "id": "public_admin_bindkeyevents",
-      "community": 18,
+      "community": 173,
       "community_name": "admin.js",
       "norm_label": "bindkeyevents()"
     },
@@ -81612,7 +81557,7 @@
       "source_location": "L5",
       "_origin": "ast",
       "id": "scratch_test_openapi_mockresponse",
-      "community": 18,
+      "community": 173,
       "community_name": "admin.js",
       "norm_label": "mockresponse"
     },
@@ -81623,7 +81568,7 @@
       "source_location": "L6",
       "_origin": "ast",
       "id": "scratch_test_openapi_mockresponse_constructor",
-      "community": 18,
+      "community": 173,
       "community_name": "admin.js",
       "norm_label": ".constructor()"
     },
@@ -81634,7 +81579,7 @@
       "source_location": "L11",
       "_origin": "ast",
       "id": "scratch_test_openapi_mockresponse_status",
-      "community": 18,
+      "community": 173,
       "community_name": "admin.js",
       "norm_label": ".status()"
     },
@@ -81645,7 +81590,7 @@
       "source_location": "L15",
       "_origin": "ast",
       "id": "scratch_test_openapi_mockresponse_setheader",
-      "community": 18,
+      "community": 173,
       "community_name": "admin.js",
       "norm_label": ".setheader()"
     },
@@ -81656,7 +81601,7 @@
       "source_location": "L18",
       "_origin": "ast",
       "id": "scratch_test_openapi_mockresponse_json",
-      "community": 18,
+      "community": 173,
       "community_name": "admin.js",
       "norm_label": ".json()"
     },
@@ -81667,7 +81612,7 @@
       "source_location": "L22",
       "_origin": "ast",
       "id": "scratch_test_openapi_mockresponse_send",
-      "community": 18,
+      "community": 173,
       "community_name": "admin.js",
       "norm_label": ".send()"
     },
@@ -81678,7 +81623,7 @@
       "source_location": "L26",
       "_origin": "ast",
       "id": "scratch_test_openapi_mockresponse_end",
-      "community": 18,
+      "community": 173,
       "community_name": "admin.js",
       "norm_label": ".end()"
     },
@@ -86247,17 +86192,6 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "api/_uptime.js",
-      "source_location": "L1",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "api_uptime",
-      "target": "api_uptime_handler",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
       "source_file": "api/admin.js",
       "source_location": "L1",
       "weight": 1.0,
@@ -86269,36 +86203,23 @@
     {
       "relation": "contains",
       "confidence": "EXTRACTED",
-      "source_file": "api/ai-plugin.js",
-      "source_location": "L4",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "api_ai_plugin",
-      "target": "api_ai_plugin_handler",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "deferred": true,
-      "confidence": "EXTRACTED",
-      "source_file": "scratch/test_openapi.js",
-      "source_location": "L161",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "scratch_test_openapi_runtests",
-      "target": "api_ai_plugin",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
       "source_file": "api/authorize.js",
       "source_location": "L6",
       "weight": 1.0,
       "_origin": "ast",
       "source": "api_authorize",
       "target": "api_authorize_canonicalizeurl",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "contains",
+      "confidence": "EXTRACTED",
+      "source_file": "api/authorize.js",
+      "source_location": "L510",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "api_authorize",
+      "target": "api_authorize_handleclientregistration",
       "confidence_score": 1.0
     },
     {
@@ -86327,7 +86248,18 @@
       "relation": "cites",
       "confidence": "EXTRACTED",
       "source_file": "api/authorize.js",
-      "source_location": "L62",
+      "source_location": "L64",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "api_authorize",
+      "target": "docref_rfc_7591",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "cites",
+      "confidence": "EXTRACTED",
+      "source_file": "api/authorize.js",
+      "source_location": "L69",
       "weight": 1.0,
       "_origin": "ast",
       "source": "api_authorize",
@@ -86335,15 +86267,40 @@
       "confidence_score": 1.0
     },
     {
+      "relation": "imports_from",
+      "context": "import",
+      "deferred": true,
+      "confidence": "EXTRACTED",
+      "source_file": "scratch/test_openapi.js",
+      "source_location": "L173",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "scratch_test_openapi_runtests",
+      "target": "api_authorize",
+      "confidence_score": 1.0
+    },
+    {
       "relation": "calls",
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "api/authorize.js",
-      "source_location": "L96",
+      "source_location": "L103",
       "weight": 1.0,
       "_origin": "ast",
       "source": "api_authorize_handler",
       "target": "api_authorize_canonicalizeurl",
+      "confidence_score": 1.0
+    },
+    {
+      "relation": "calls",
+      "context": "call",
+      "confidence": "EXTRACTED",
+      "source_file": "api/authorize.js",
+      "source_location": "L66",
+      "weight": 1.0,
+      "_origin": "ast",
+      "source": "api_authorize_handler",
+      "target": "api_authorize_handleclientregistration",
       "confidence_score": 1.0
     },
     {
@@ -87880,7 +87837,7 @@
       "confidence": "EXTRACTED",
       "confidence_score": 1.0,
       "source_file": "api/openapi.js",
-      "source_location": "L244",
+      "source_location": "L272",
       "weight": 1.0,
       "_origin": "ast",
       "source": "api_openapi_handler",
@@ -90371,7 +90328,7 @@
       "relation": "references",
       "confidence": "EXTRACTED",
       "source_file": "api/openapi.js",
-      "source_location": "L254",
+      "source_location": "L282",
       "weight": 1.0,
       "_origin": "ast",
       "source": "api_openapi_handler",
@@ -90383,7 +90340,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "api/openapi.js",
-      "source_location": "L473",
+      "source_location": "L501",
       "weight": 1.0,
       "_origin": "ast",
       "source": "api_openapi_handler",
@@ -90395,7 +90352,7 @@
       "context": "call",
       "confidence": "EXTRACTED",
       "source_file": "api/openapi.js",
-      "source_location": "L266",
+      "source_location": "L294",
       "weight": 1.0,
       "_origin": "ast",
       "source": "api_openapi_handler",
@@ -90424,28 +90381,6 @@
       "_origin": "ast",
       "source": "scratch_test_openapi_runtests",
       "target": "api_openapi_handler",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "api/register.js",
-      "source_location": "L6",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "api_register",
-      "target": "api_register_handler",
-      "confidence_score": 1.0
-    },
-    {
-      "relation": "cites",
-      "confidence": "EXTRACTED",
-      "source_file": "api/register.js",
-      "source_location": "L2",
-      "weight": 1.0,
-      "_origin": "ast",
-      "source": "api_register",
-      "target": "docref_rfc_7591",
       "confidence_score": 1.0
     },
     {

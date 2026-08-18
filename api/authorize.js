@@ -115,28 +115,62 @@ export default async function handler(req, res) {
     `);
   }
 
-  const ALLOWED_REDIRECT_PATTERNS = [
-    /^https:\/\/claude\.ai\/api\/mcp\/auth_callback/,
-    /^https:\/\/.*\.claude\.ai\//,
-    /^https:\/\/chat\.openai\.com\/aip\/[^\/]+\/oauth\/callback/,
-    /^https:\/\/chatgpt\.com\/aip\/[^\/]+\/oauth\/callback/,
-    /^https:\/\/chat\.openai\.com\/api\/actions\/oauth\/callback/,
-    /^https:\/\/chatgpt\.com\/api\/actions\/oauth\/callback/,
-    /^https:\/\/platform\.openai\.com\/oauth\/callback/,
-    /^https:\/\/.*\.openai\.com\//,
-    /^https:\/\/.*\.chatgpt\.com\//,
-    /^http:\/\/localhost(:\d+)?\//,
-    /^http:\/\/127\.0\.0\.1(:\d+)?\//
-  ];
+  function isAllowedRedirectUri(uri) {
+    if (!uri || typeof uri !== 'string') return false;
+    const trimmed = uri.trim();
 
-  if (!ALLOWED_REDIRECT_PATTERNS.some(p => p.test(redirectUri))) {
+    // Support custom desktop application URI schemes
+    if (/^(chatgpt|openai|claude|vscode|cursor):\/\//i.test(trimmed)) {
+      return true;
+    }
+
+    try {
+      const parsed = new URL(trimmed);
+      const host = parsed.hostname.toLowerCase();
+      const protocol = parsed.protocol.toLowerCase();
+
+      if (protocol !== 'http:' && protocol !== 'https:') {
+        return false;
+      }
+
+      if (
+        host === 'localhost' ||
+        host === '127.0.0.1' ||
+        host.endsWith('.localhost') ||
+        host.endsWith('.local')
+      ) {
+        return true;
+      }
+
+      if (
+        host === 'chatgpt.com' ||
+        host.endsWith('.chatgpt.com') ||
+        host === 'openai.com' ||
+        host.endsWith('.openai.com') ||
+        host === 'claude.ai' ||
+        host.endsWith('.claude.ai') ||
+        host === 'anthropic.com' ||
+        host.endsWith('.anthropic.com') ||
+        host === 'mr-capsules.vercel.app' ||
+        host.endsWith('.vercel.app')
+      ) {
+        return true;
+      }
+
+      return false;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  if (!isAllowedRedirectUri(redirectUri)) {
     return res.status(400).send(`
       <!DOCTYPE html>
       <html>
       <head><title>Authorization Error | Mr. Capsules</title></head>
       <body style="font-family:sans-serif; padding:40px; text-align:center; background:#0f172a; color:#f8fafc;">
         <h2>Invalid redirect_uri parameter</h2>
-        <p>The redirect URI is not allowed.</p>
+        <p>The redirect URI <code>${escHtml(redirectUri)}</code> is not allowed.</p>
       </body>
       </html>
     `);

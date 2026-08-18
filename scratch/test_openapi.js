@@ -183,6 +183,24 @@ async function runTests() {
   console.log('Client ID generated:', res12.body?.client_id);
   console.log('Client Name:', res12.body?.client_name);
 
+  console.log('\n=== TEST 13: OAuth Authorize with ChatGPT Redirect URI ===');
+  const chatgptRedirect = 'https://chatgpt.com/aip/connectors/asdk_app_6a83c38084a0819180a70cadf82fe277/oauth/callback';
+  const req13 = {
+    method: 'GET',
+    url: `/authorize?response_type=code&client_id=client_mrc_test&redirect_uri=${encodeURIComponent(chatgptRedirect)}&state=xyz123`,
+    headers: { host: 'mr-capsules.vercel.app', origin: 'https://chatgpt.com' }
+  };
+  const res13 = new MockResponse();
+  await authorizeHandler(req13, res13);
+  console.log('Authorize status:', res13.statusCode);
+  const isHtmlApprovalPage = typeof res13.body === 'string' && res13.body.includes('Sign In & Connect');
+  console.log('Returned HTML Approval Page:', isHtmlApprovalPage);
+  if (res13.statusCode !== 200 || !isHtmlApprovalPage) {
+    console.error('FAIL: ChatGPT OAuth redirect_uri rejected!');
+  } else {
+    console.log('PASS: ChatGPT OAuth redirect_uri accepted successfully');
+  }
+
   console.log('\nAll tests completed successfully!');
 }
 
