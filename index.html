@@ -1077,80 +1077,84 @@ try {
       }
     });
 
-    const setupUsernameInput = document.getElementById('setupUsernameInput');
-    const btnSubmitSetupUsername = document.getElementById('btnSubmitSetupUsername');
-    const setupUsernameMsg = document.getElementById('setupUsernameMsg');
+    // Deferred: register onboarding handlers after DOM is fully parsed
+    // (modal HTML is defined after this script block, so elements don't exist yet)
+    document.addEventListener('DOMContentLoaded', () => {
+      const setupUsernameInput = document.getElementById('setupUsernameInput');
+      const btnSubmitSetupUsername = document.getElementById('btnSubmitSetupUsername');
+      const setupUsernameMsg = document.getElementById('setupUsernameMsg');
 
-    if (btnSubmitSetupUsername && setupUsernameInput) {
-      btnSubmitSetupUsername.addEventListener('click', async () => {
-        const val = setupUsernameInput.value.trim().toLowerCase();
-        if (val.length < 3 || !/^[a-z0-9_]+$/.test(val)) {
-          setupUsernameMsg.style.color = 'var(--danger)';
-          setupUsernameMsg.textContent = 'Minimum 3 chars, alphanumeric and underscores only.';
-          return;
-        }
-        btnSubmitSetupUsername.textContent = '...';
-        const { error } = await supabase.auth.updateUser({
-          data: { username: val }
-        });
-        if (!error) {
-          currentUsername = val;
-          authUsername.value = currentUsername;
-          updateGreeting();
-          document.getElementById('usernameSetupModal').classList.remove('active');
-          // Force session refresh to get updated metadata
-          const { data } = await supabase.auth.refreshSession();
-          if(data.session) await checkOnboarding(data.session);
-        } else {
-          btnSubmitSetupUsername.textContent = 'SAVE & CONTINUE';
-          setupUsernameMsg.style.color = 'var(--danger)';
-          setupUsernameMsg.textContent = error.message;
-        }
-      });
-    }
-
-    const btnSubmitSetupDivision = document.getElementById('btnSubmitSetupDivision');
-    const setupDivisionSelect = document.getElementById('setupDivisionSelect');
-    const setupWhatsappInput = document.getElementById('setupWhatsappInput');
-    const setupDivisionMsg = document.getElementById('setupDivisionMsg');
-
-    if (btnSubmitSetupDivision) {
-      btnSubmitSetupDivision.addEventListener('click', async () => {
-        const division_id = setupDivisionSelect.value;
-        const whatsapp = setupWhatsappInput.value.trim();
-        if (!division_id) {
-          setupDivisionMsg.style.color = 'var(--danger)';
-          setupDivisionMsg.textContent = 'Please select a division.';
-          return;
-        }
-        btnSubmitSetupDivision.textContent = '...';
-        
-        try {
-          const { data: { session } } = await supabase.auth.getSession();
-          const res = await fetch('/api/divisions', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${session.access_token}` },
-            body: JSON.stringify({ action: 'join_division', division_id, whatsapp })
+      if (btnSubmitSetupUsername && setupUsernameInput) {
+        btnSubmitSetupUsername.addEventListener('click', async () => {
+          const val = setupUsernameInput.value.trim().toLowerCase();
+          if (val.length < 3 || !/^[a-z0-9_]+$/.test(val)) {
+            setupUsernameMsg.style.color = 'var(--danger)';
+            setupUsernameMsg.textContent = 'Minimum 3 chars, alphanumeric and underscores only.';
+            return;
+          }
+          btnSubmitSetupUsername.textContent = '...';
+          const { error } = await supabase.auth.updateUser({
+            data: { username: val }
           });
+          if (!error) {
+            currentUsername = val;
+            authUsername.value = currentUsername;
+            updateGreeting();
+            document.getElementById('usernameSetupModal').classList.remove('active');
+            // Force session refresh to get updated metadata
+            const { data } = await supabase.auth.refreshSession();
+            if(data.session) await checkOnboarding(data.session);
+          } else {
+            btnSubmitSetupUsername.textContent = 'SAVE & CONTINUE';
+            setupUsernameMsg.style.color = 'var(--danger)';
+            setupUsernameMsg.textContent = error.message;
+          }
+        });
+      }
+
+      const btnSubmitSetupDivision = document.getElementById('btnSubmitSetupDivision');
+      const setupDivisionSelect = document.getElementById('setupDivisionSelect');
+      const setupWhatsappInput = document.getElementById('setupWhatsappInput');
+      const setupDivisionMsg = document.getElementById('setupDivisionMsg');
+
+      if (btnSubmitSetupDivision) {
+        btnSubmitSetupDivision.addEventListener('click', async () => {
+          const division_id = setupDivisionSelect.value;
+          const whatsapp = setupWhatsappInput.value.trim();
+          if (!division_id) {
+            setupDivisionMsg.style.color = 'var(--danger)';
+            setupDivisionMsg.textContent = 'Please select a division.';
+            return;
+          }
+          btnSubmitSetupDivision.textContent = '...';
           
-          const resData = await res.json();
-          if (!res.ok) throw new Error(resData.error || 'Failed to join division.');
-          
-          // Mark division as selected in user metadata
-          const { error } = await supabase.auth.updateUser({ data: { division_selected: true } });
-          if (error) throw error;
-          
-          document.getElementById('divisionSetupModal').classList.remove('active');
-          // Force session refresh to get updated metadata
-          const { data: refreshed } = await supabase.auth.refreshSession();
-          if(refreshed.session) await checkOnboarding(refreshed.session);
-        } catch(e) {
-          btnSubmitSetupDivision.textContent = 'SAVE & CONTINUE';
-          setupDivisionMsg.style.color = 'var(--danger)';
-          setupDivisionMsg.textContent = e.message;
-        }
-      });
-    }
+          try {
+            const { data: { session } } = await supabase.auth.getSession();
+            const res = await fetch('/api/divisions', {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${session.access_token}` },
+              body: JSON.stringify({ action: 'join_division', division_id, whatsapp })
+            });
+            
+            const resData = await res.json();
+            if (!res.ok) throw new Error(resData.error || 'Failed to join division.');
+            
+            // Mark division as selected in user metadata
+            const { error } = await supabase.auth.updateUser({ data: { division_selected: true } });
+            if (error) throw error;
+            
+            document.getElementById('divisionSetupModal').classList.remove('active');
+            // Force session refresh to get updated metadata
+            const { data: refreshed } = await supabase.auth.refreshSession();
+            if(refreshed.session) await checkOnboarding(refreshed.session);
+          } catch(e) {
+            btnSubmitSetupDivision.textContent = 'SAVE & CONTINUE';
+            setupDivisionMsg.style.color = 'var(--danger)';
+            setupDivisionMsg.textContent = e.message;
+          }
+        });
+      }
+    });
 
     btnSaveUsername.addEventListener('click', async () => {
       const val = authUsername.value.trim().toLowerCase();

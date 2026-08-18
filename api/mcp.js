@@ -5,39 +5,42 @@ import zlib from 'zlib';
 // Exposes 78 tools (MR-CAPSULES 71 tools + Doctor Tablet 7 tools)
 
 export default async function handler(req, res) {
-  // ── CORS — Required for Claude.ai web, Claude Code, and other MCP clients ──
-  // Claude.ai sends requests from https://claude.ai origin.
-  // We must NOT use wildcard '*' when we also want to send credentials.
-  // Instead whitelist the known MCP client origins explicitly.
-  const allowedOrigins = [
-    'https://claude.ai',
-    'https://www.claude.ai',
-    'https://api.anthropic.com',
-    'https://claude.anthropic.com',
-  ];
-  const requestOrigin = req.headers.origin || '';
-  const isAllowedOrigin = allowedOrigins.includes(requestOrigin);
+  // ── CORS — Whitelist for Claude, ChatGPT, OpenAI, and Developer Environments ──
+  function isOriginAllowed(origin) {
+    if (!origin) return true;
+    const lower = origin.toLowerCase();
+    return (
+      lower.endsWith('claude.ai') ||
+      lower.endsWith('anthropic.com') ||
+      lower.endsWith('openai.com') ||
+      lower.endsWith('chatgpt.com') ||
+      lower.endsWith('oaistatic.com') ||
+      lower.endsWith('oaiusercontent.com') ||
+      lower.endsWith('vercel.app') ||
+      lower.includes('localhost') ||
+      lower.includes('127.0.0.1')
+    );
+  }
 
-  // For requests with no Origin header (server-to-server calls, curl, etc.)
-  if (requestOrigin) {
-    if (isAllowedOrigin) {
-      res.setHeader('Access-Control-Allow-Origin', requestOrigin);
-    }
+  const requestOrigin = req.headers.origin || '';
+  if (requestOrigin && isOriginAllowed(requestOrigin)) {
+    res.setHeader('Access-Control-Allow-Origin', requestOrigin);
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
     res.setHeader('Vary', 'Origin');
   } else {
     res.setHeader('Access-Control-Allow-Origin', '*');
   }
 
-  // Required headers per MCP spec 2025-06-18
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, DELETE, OPTIONS');
+  // Required headers per MCP spec 2025-06-18 & OpenAI Custom GPT Actions
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS, PATCH');
   res.setHeader(
     'Access-Control-Allow-Headers',
-    'Authorization, Content-Type, Accept, Mcp-Session-Id, Last-Event-ID, x-api-key, api-key'
+    'Authorization, Content-Type, Accept, Mcp-Session-Id, Last-Event-ID, x-api-key, api-key, openai-gpt-id, openai-organization-id, openai-account-id, openai-conversation-id'
   );
-  res.setHeader('Access-Control-Expose-Headers', 'Mcp-Session-Id');
+  res.setHeader('Access-Control-Expose-Headers', 'Mcp-Session-Id, Content-Disposition');
   res.setHeader('Access-Control-Max-Age', '86400');
 
-  // Preflight — MUST return 200 (not 204) for Claude.ai compatibility
+  // Preflight — MUST return 200 (not 204) for Claude.ai and OpenAI compatibility
   if (req.method === 'OPTIONS') {
     return res.status(200).end();
   }
@@ -56,9 +59,6 @@ export default async function handler(req, res) {
     return handleDirectUpload(req, res, SUPABASE_URL, SB_SERVICE_KEY, GITHUB_TOKEN, GH_OWNER, GH_REPO, SUPERADMIN_EMAIL);
   }
 
-  if (!SB_SERVICE_KEY) {
-    return res.status(500).json({ success: false, error: 'Server configuration error: missing service key' });
-  }
 
   if (req.url && req.url.includes('oauth-protected-resource')) {
     const host = req.headers['x-forwarded-host'] || req.headers.host || 'mr-capsules.vercel.app';
@@ -111,22 +111,24 @@ export default async function handler(req, res) {
 
     // MCP initialize handshake — respond immediately, no auth needed
     if (method === 'initialize') {
+      const clientProtocolVersion = body.params?.protocolVersion || '2024-11-05';
       return res.status(200).json({
         jsonrpc: '2.0',
         id: mcpRequestId,
         result: {
-          protocolVersion: '2025-06-18',
+          protocolVersion: clientProtocolVersion,
           capabilities: {
             tools: { listChanged: false },
-            resources: { listChanged: false }
+            resources: { listChanged: false },
+            prompts: { listChanged: false },
+            logging: {}
           },
-          serverInfo: { name: 'mr-capsules-v2', version: '1.0.1' }
+          serverInfo: { name: 'mr-capsules', version: '1.2.0' }
         }
       });
     }
 
     // MCP notifications (initialized, cancelled) — no response needed
-    // MCP notifications — no response body needed
     if (method === 'notifications/initialized' || method === 'notifications/cancelled' || method.startsWith('notifications/')) {
       return res.status(202).end();
     }
@@ -146,15 +148,23 @@ export default async function handler(req, res) {
         ...t,
         name: t.name.replace(/\./g, '_')
       }));
-      const customTools = (await getActiveCustomTools(SUPABASE_URL, SB_SERVICE_KEY)).map(ct => ({
-        name: ct.name,
-        description: `[Custom Tool] ${ct.description}`,
-        inputSchema: ct.inputSchema || { type: 'object', properties: {} }
-      }));
+      let customTools = [];
+      try {
+        customTools = (await getActiveCustomTools(SUPABASE_URL, SB_SERVICE_KEY)).map(ct => ({
+          name: ct.name,
+          description: `[Custom Tool] ${ct.description}`,
+          inputSchema: ct.inputSchema || { type: 'object', properties: {} }
+        }));
+      } catch (e) {
+        customTools = [];
+      }
       return res.status(200).json({
         jsonrpc: '2.0',
         id: mcpRequestId,
-        result: { tools: [...staticTools, ...customTools] }
+        result: {
+          tools: [...staticTools, ...customTools],
+          nextCursor: null
+        }
       });
     }
 
@@ -196,26 +206,51 @@ export default async function handler(req, res) {
       });
     }
   } else {
-    // Direct REST call: { method, params }
-    method = body && body.method;
-    params = (body && body.params) || {};
+    // Direct REST call: ChatGPT Custom GPT Action or { method, params } or unified execute
+    const actionFromQuery = initUrlObj.searchParams.get('action') || initUrlObj.searchParams.get('tool');
+    if (body && typeof body === 'object') {
+      if (body.tool && (actionFromQuery === 'execute' || !actionFromQuery)) {
+        method = body.tool;
+        params = body.parameters || body.args || body.arguments || body.params || {};
+      } else if (body.action || body.method) {
+        method = body.action || body.method;
+        params = body.params || body.arguments || body.args || body;
+      } else if (actionFromQuery && actionFromQuery !== 'execute') {
+        method = actionFromQuery;
+        params = body.params || body;
+      } else {
+        method = body.method;
+        params = body.params || body;
+      }
+    } else {
+      method = actionFromQuery;
+      params = {};
+    }
   }
 
   if (!method) {
     const errResp = isMcpJsonRpc
       ? { jsonrpc: '2.0', id: mcpRequestId, error: { code: -32600, message: 'Missing method' } }
-      : { success: false, error: 'Missing method in body' };
+      : { success: false, error: 'Missing method or action parameter in request body/URL' };
     return res.status(400).json(errResp);
   }
 
   // ── system.health is public, no auth needed ───────────────────────────────
-  if (method === 'system.health') {
+  if (method === 'system.health' || method === 'system_health') {
     const healthResult = {
-      status: 'ok', version: '1.0.0',
-      transport: 'Streamable HTTP (MCP 2025-06-18)',
-      endpoint: 'POST /api/mcp — JSON-RPC or { method, params }',
-      claude_ai_setup: 'Add https://mr-capsules.vercel.app/api/mcp as remote MCP server in Claude.ai settings',
-      docs: 'https://mr-capsules.vercel.app/docs.html'
+      status: 'ok',
+      version: '1.2.0',
+      transport: 'Streamable HTTP (MCP 2025-06-18) + OpenAPI 3.0.3 Actions',
+      endpoints: {
+        mcp: 'POST /api/mcp (JSON-RPC or Streamable HTTP)',
+        chatgpt_actions: 'POST /api/actions/{tool_name} (REST)',
+        openapi_spec: 'GET /api/openapi.json (OpenAPI 3.0.3)'
+      },
+      ai_assistants_setup: {
+        claude: 'Add https://mr-capsules.vercel.app/api/mcp as Custom Connector in Claude.ai',
+        chatgpt: 'Import OpenAPI schema from https://mr-capsules.vercel.app/api/openapi.json into Custom GPT Actions'
+      },
+      docs: 'https://mr-capsules.vercel.app/docs'
     };
     if (isMcpJsonRpc) {
       return res.status(200).json({ jsonrpc: '2.0', id: mcpRequestId, result: { content: [{ type: 'text', text: JSON.stringify(healthResult, null, 2) }] } });
@@ -224,6 +259,10 @@ export default async function handler(req, res) {
   }
 
   // ── Authenticate ─────────────────────────────────────────────────────────
+  if (!SB_SERVICE_KEY) {
+    return res.status(500).json({ success: false, error: 'Server configuration error: missing service key' });
+  }
+
   // Supports OAuth Bearer Access Tokens (mrc_at_...), API keys (mrc_...), and JWTs
   const authHeader = (req.headers.authorization || '').trim();
   const xApiKey = (req.headers['x-api-key'] || req.headers['api-key'] || '').trim();
@@ -328,7 +367,7 @@ export default async function handler(req, res) {
 // This is what Claude sees in its tool picker
 // ═══════════════════════════════════════════════════════════════
 
-function getMcpToolsList() {
+export function getMcpToolsList() {
   return [
     { name: 'system_health', description: 'Health check — returns server info and usage instructions', inputSchema: { type: 'object', properties: {} } },
     { name: 'content_list', description: 'List all educational content organized by semester, block, and category', inputSchema: { type: 'object', properties: {} } },
@@ -352,6 +391,8 @@ function getMcpToolsList() {
     { name: 'tasks_logs', description: 'Get activity history for a task', inputSchema: { type: 'object', properties: { task_id: { type: 'string' } }, required: ['task_id'] } },
     { name: 'divisions_list', description: 'List all organization divisions', inputSchema: { type: 'object', properties: {} } },
     { name: 'divisions_my', description: 'Get your division membership', inputSchema: { type: 'object', properties: {} } },
+    { name: 'account_manager', description: 'Unified account manager: create accounts, set passwords, set usernames/names, assign divisions, grant/revoke admin roles, ban/unban users, fetch detailed profiles, or delete accounts.', inputSchema: { type: 'object', properties: { action: { type: 'string', enum: ['create', 'update', 'set_password', 'set_username', 'set_division', 'set_admin', 'set_ban', 'get', 'list', 'delete'], description: 'Operation to perform' }, user_id: { type: 'string', description: 'Target user UUID' }, email: { type: 'string', description: 'User email address' }, password: { type: 'string', description: 'Password for creation or reset (min 6 chars)' }, username: { type: 'string', description: 'Username handle' }, full_name: { type: 'string', description: 'User full name (e.g. Ahmad Muqorrobin)' }, whatsapp: { type: 'string', description: 'WhatsApp contact number' }, division_id: { type: 'string', enum: ['management', 'development', 'review', 'none'], description: 'Division assignment ("management", "development", "review", or "none" to unassign)' }, is_admin: { type: 'boolean', description: 'True to grant admin privileges, false to revoke' }, banned: { type: 'boolean', description: 'True to ban user account, false to unban' }, query: { type: 'string', description: 'Optional search keyword when action is "list"' } }, required: ['action'] } },
+    { name: 'users_create', description: 'Directly create a new user account with email, password, optional username/full name, division, and admin status (Admin only).', inputSchema: { type: 'object', properties: { email: { type: 'string', description: 'User email address' }, password: { type: 'string', description: 'Account password (minimum 6 characters)' }, full_name: { type: 'string', description: 'Full name (e.g. Ahmad Muqorrobin)' }, username: { type: 'string', description: 'Username' }, whatsapp: { type: 'string', description: 'WhatsApp phone number' }, division_id: { type: 'string', enum: ['management', 'development', 'review'], description: 'Division to assign' }, is_admin: { type: 'boolean', description: 'Grant admin rights' } }, required: ['email', 'password'] } },
     { name: 'users_list', description: 'List all registered users (SuperAdmin only)', inputSchema: { type: 'object', properties: {} } },
     { name: 'users_ban', description: 'Ban or unban a user (SuperAdmin only)', inputSchema: { type: 'object', properties: { user_id: { type: 'string' }, banned: { type: 'boolean' } }, required: ['user_id', 'banned'] } },
     { name: 'users_reset_password', description: 'Reset a user password by user_id or email (Admin / SuperAdmin only)', inputSchema: { type: 'object', properties: { user_id: { type: 'string' }, email: { type: 'string' }, new_password: { type: 'string' } }, required: ['new_password'] } },
@@ -885,6 +926,14 @@ async function routeMethod(method, params, auth, roles, cfg) {
     if (!roles.isAdmin) throw err403('Admin only');
     if (!params.device_id || params.banned === undefined) throw err400('Missing params.device_id or params.banned');
     return usersBlockDevice(params.device_id, params.banned, auth.email, su, sk);
+  }
+
+  if (m === 'account_manager' || m === 'account_manage' || m === 'users_manage_account') {
+    return handleAccountManager(params, auth, roles, su, sk, SUPERADMIN_EMAIL);
+  }
+  if (m === 'users_create' || m === 'account_create') {
+    if (!roles.isAdmin && !roles.isSuperAdmin) throw err403('Admin or SuperAdmin only');
+    return handleAccountManager({ ...params, action: 'create' }, auth, roles, su, sk, SUPERADMIN_EMAIL);
   }
 
   if (m === 'users_list') {
@@ -2280,65 +2329,452 @@ async function divisionsMyDivision(userId, su, sk) {
 // USERS HANDLERS
 // ═══════════════════════════════════════════════════════════════
 
-async function usersList(su, sk) {
-  const res = await fetch(`${su}/auth/v1/admin/users?per_page=1000`, {
-    headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}` }
-  });
-  if (!res.ok) throw new Error('Failed to fetch users');
-  const data = await res.json();
-  return { users: data.users || [] };
-}
+async function handleAccountManager(params, auth, roles, su, sk, superadminEmail) {
+  const action = (params.action || '').toLowerCase().trim();
+  if (!action) throw err400('Missing params.action');
 
-async function usersBan(userId, banned, adminEmail, su, sk) {
-  const getRes = await fetch(`${su}/auth/v1/admin/users/${userId}`, {
-    headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}` }
-  });
-  const userData = await getRes.json();
-  const newMeta = { ...(userData.app_metadata || {}), banned: !!banned };
-  const res = await fetch(`${su}/auth/v1/admin/users/${userId}`, {
-    method: 'PUT',
-    headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ app_metadata: newMeta })
-  });
-  if (!res.ok) throw new Error(await res.text());
-  await logAction(adminEmail, banned ? 'mcp_ban_user' : 'mcp_unban_user', { target: userData.email }, su, sk);
-  return { success: true, banned };
-}
+  // Helper to resolve a target user by ID or Email
+  async function resolveTargetUser(idInput, emailInput) {
+    if (idInput && String(idInput).includes('-')) {
+      const getRes = await fetch(`${su}/auth/v1/admin/users/${idInput}`, {
+        headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}` }
+      });
+      if (getRes.ok) {
+        return await getRes.json();
+      }
+    }
+    const targetEmail = (emailInput || (typeof idInput === 'string' && idInput.includes('@') ? idInput : '')).trim().toLowerCase();
+    if (targetEmail) {
+      const listRes = await fetch(`${su}/auth/v1/admin/users?per_page=1000`, {
+        headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}` }
+      });
+      if (listRes.ok) {
+        const data = await listRes.json();
+        const found = (data.users || []).find(u =>
+          (u.email && u.email.toLowerCase() === targetEmail) ||
+          (u.user_metadata && u.user_metadata.email && u.user_metadata.email.toLowerCase() === targetEmail) ||
+          (u.user_metadata && u.user_metadata.username && u.user_metadata.username.toLowerCase() === targetEmail)
+        );
+        if (found) return found;
+      }
+    }
+    return null;
+  }
 
-async function usersDelete(userId, su, sk) {
-  const res = await fetch(`${su}/auth/v1/admin/users/${userId}`, {
-    method: 'DELETE',
-    headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}` }
-  });
-  if (!res.ok) throw new Error(await res.text());
-  return { success: true, deleted_user_id: userId };
-}
+  // 1. ACTION: CREATE
+  if (action === 'create') {
+    if (!roles.isAdmin && !roles.isSuperAdmin) throw err403('Admin or SuperAdmin only');
+    const email = (params.email || '').trim().toLowerCase();
+    const password = params.password;
+    if (!email || !email.includes('@')) throw err400('Valid params.email is required');
+    if (!password || password.length < 6) throw err400('params.password must be at least 6 characters');
 
-async function usersResetPassword(userId, email, newPassword, adminEmail, su, sk) {
-  let targetId = userId;
-  if (!targetId && email) {
-    const res = await fetch(`${su}/auth/v1/admin/users?page=1&per_page=1000`, {
+    const fullName = (params.full_name || params.name || '').trim();
+    const username = (params.username || email.split('@')[0]).trim();
+    const whatsapp = (params.whatsapp || '').trim();
+
+    // Check if user already exists
+    const existing = await resolveTargetUser(null, email);
+    if (existing) {
+      throw err400(`A user with email "${email}" already exists (ID: ${existing.id})`);
+    }
+
+    const createPayload = {
+      email: email,
+      password: password,
+      email_confirm: true,
+      user_metadata: {
+        full_name: fullName || username,
+        username: username,
+        whatsapp: whatsapp,
+        email: email
+      },
+      app_metadata: {
+        provider: 'email',
+        providers: ['email'],
+        banned: false
+      }
+    };
+
+    const createRes = await fetch(`${su}/auth/v1/admin/users`, {
+      method: 'POST',
+      headers: {
+        'apikey': sk,
+        'Authorization': `Bearer ${sk}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(createPayload)
+    });
+
+    if (!createRes.ok) {
+      const errBody = await createRes.text();
+      throw new Error('Failed to create user: ' + errBody);
+    }
+
+    const createdUser = await createRes.json();
+    const createdUserId = createdUser.id;
+
+    // Optional division assignment
+    let assignedDivision = null;
+    if (params.division_id && ['management', 'development', 'review'].includes(params.division_id.toLowerCase())) {
+      const divId = params.division_id.toLowerCase();
+      await fetch(`${su}/rest/v1/division_members`, {
+        method: 'POST',
+        headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}`, 'Content-Type': 'application/json', 'Prefer': 'resolution=merge-duplicates' },
+        body: JSON.stringify({ user_id: createdUserId, division_id: divId, whatsapp: whatsapp })
+      });
+      assignedDivision = divId;
+    }
+
+    // Optional admin promotion
+    let isAdminSet = false;
+    if (params.is_admin === true) {
+      if (!roles.isSuperAdmin) throw err403('Only SuperAdmin can grant admin privileges during user creation');
+      await fetch(`${su}/rest/v1/user_roles`, {
+        method: 'POST',
+        headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}`, 'Content-Type': 'application/json', 'Prefer': 'resolution=merge-duplicates' },
+        body: JSON.stringify({ identifier: email, role: 'admin' })
+      });
+      isAdminSet = true;
+    }
+
+    await logAction(auth.email, 'mcp_account_create', { targetUserId: createdUserId, email, division: assignedDivision, isAdmin: isAdminSet }, su, sk);
+
+    return {
+      success: true,
+      message: `Account for ${email} created successfully`,
+      user: {
+        id: createdUserId,
+        email: email,
+        full_name: fullName || username,
+        username: username,
+        whatsapp: whatsapp,
+        division: assignedDivision || 'None',
+        is_admin: isAdminSet,
+        created_at: createdUser.created_at
+      }
+    };
+  }
+
+  // 2. ACTION: GET
+  if (action === 'get' || action === 'profile') {
+    let target = null;
+    if (params.user_id || params.email) {
+      target = await resolveTargetUser(params.user_id, params.email);
+    } else {
+      target = await resolveTargetUser(auth.userId, auth.email);
+    }
+    if (!target) throw err400('User not found');
+
+    const targetEmail = target.email || '';
+    const isSelf = target.id === auth.userId || (targetEmail && targetEmail.toLowerCase() === auth.email?.toLowerCase());
+    if (!isSelf && !roles.isAdmin && !roles.isSuperAdmin) {
+      throw err403('Admin privileges required to view another user profile');
+    }
+
+    // Fetch division
+    const divRes = await fetch(`${su}/rest/v1/division_members?user_id=eq.${target.id}&select=division_id,whatsapp`, {
       headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}` }
     });
-    if (!res.ok) throw new Error(await res.text());
-    const data = await res.json();
-    const found = (data.users || []).find(u => u.email === email || (u.user_metadata && u.user_metadata.email === email));
-    if (!found) throw new Error(`User with email "${email}" not found`);
-    targetId = found.id;
+    const divRows = divRes.ok ? await divRes.json() : [];
+    const divId = divRows && divRows.length > 0 ? divRows[0].division_id : 'None';
+    const divWa = divRows && divRows.length > 0 ? divRows[0].whatsapp : (target.user_metadata?.whatsapp || '');
+
+    // Fetch admin role
+    const roleRes = await fetch(`${su}/rest/v1/user_roles?identifier=eq.${encodeURIComponent(targetEmail)}&select=role`, {
+      headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}` }
+    });
+    const roleRows = roleRes.ok ? await roleRes.json() : [];
+    const isTargetAdmin = (roleRows && roleRows.some(r => r.role === 'admin')) || (superadminEmail && targetEmail.toLowerCase() === superadminEmail.toLowerCase());
+    const isTargetSuperAdmin = superadminEmail && targetEmail.toLowerCase() === superadminEmail.toLowerCase();
+
+    // Fetch contributions
+    const contribRes = await fetch(`${su}/rest/v1/contributions?user_id=eq.${target.id}&select=points`, {
+      headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}` }
+    });
+    const contribRows = contribRes.ok ? await contribRes.json() : [];
+    const totalPoints = Array.isArray(contribRows) ? contribRows.reduce((sum, c) => sum + (c.points || 0), 0) : 0;
+
+    return {
+      success: true,
+      user: {
+        id: target.id,
+        email: target.email,
+        full_name: target.user_metadata?.full_name || target.user_metadata?.name || target.email?.split('@')[0] || '',
+        username: target.user_metadata?.username || target.email?.split('@')[0] || '',
+        whatsapp: divWa,
+        division: divId,
+        is_admin: isTargetAdmin,
+        is_superadmin: isTargetSuperAdmin,
+        banned: !!target.app_metadata?.banned,
+        created_at: target.created_at,
+        last_sign_in_at: target.last_sign_in_at,
+        contribution_points: totalPoints,
+        registered_devices_count: Array.isArray(target.user_metadata?.devices) ? target.user_metadata.devices.length : 0
+      }
+    };
   }
-  if (!targetId) throw new Error('Missing user_id or email');
-  if (!newPassword || newPassword.length < 6) throw new Error('Password must be at least 6 characters long');
 
-  const res = await fetch(`${su}/auth/v1/admin/users/${targetId}`, {
-    method: 'PUT',
-    headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ password: newPassword })
-  });
+  // 3. ACTION: LIST
+  if (action === 'list') {
+    if (!roles.isAdmin && !roles.isSuperAdmin) throw err403('Admin or SuperAdmin only');
+    const usersRes = await fetch(`${su}/auth/v1/admin/users?per_page=1000`, {
+      headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}` }
+    });
+    if (!usersRes.ok) throw new Error('Failed to fetch user list');
+    const { users } = await usersRes.json();
 
-  if (!res.ok) throw new Error(await res.text());
-  const userData = await res.json();
-  await logAction(adminEmail, 'mcp_reset_user_password', { target: userData.email || email, targetId }, su, sk);
-  return { success: true, message: `Password for ${userData.email || email} reset successfully` };
+    const [divsRes, rolesRes] = await Promise.all([
+      fetch(`${su}/rest/v1/division_members?select=user_id,division_id,whatsapp`, {
+        headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}` }
+      }),
+      fetch(`${su}/rest/v1/user_roles?select=identifier,role`, {
+        headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}` }
+      })
+    ]);
+
+    const divs = divsRes.ok ? await divsRes.json() : [];
+    const roleList = rolesRes.ok ? await rolesRes.json() : [];
+
+    const divMap = new Map((divs || []).map(d => [d.user_id, d]));
+    const adminSet = new Set((roleList || []).filter(r => r.role === 'admin').map(r => (r.identifier || '').toLowerCase()));
+
+    const query = (params.query || '').toLowerCase().trim();
+
+    const enriched = (users || []).map(u => {
+      const email = (u.email || '').toLowerCase();
+      const divInfo = divMap.get(u.id);
+      const isUserAdmin = adminSet.has(email) || (superadminEmail && email === superadminEmail.toLowerCase());
+      const isSuper = superadminEmail && email === superadminEmail.toLowerCase();
+      return {
+        id: u.id,
+        email: u.email,
+        full_name: u.user_metadata?.full_name || u.user_metadata?.name || u.email?.split('@')[0] || '',
+        username: u.user_metadata?.username || u.email?.split('@')[0] || '',
+        whatsapp: divInfo?.whatsapp || u.user_metadata?.whatsapp || '',
+        division: divInfo?.division_id || 'None',
+        is_admin: isUserAdmin,
+        is_superadmin: isSuper,
+        banned: !!u.app_metadata?.banned,
+        created_at: u.created_at,
+        last_sign_in_at: u.last_sign_in_at
+      };
+    }).filter(u => {
+      if (!query) return true;
+      return (
+        u.email.toLowerCase().includes(query) ||
+        u.full_name.toLowerCase().includes(query) ||
+        u.username.toLowerCase().includes(query) ||
+        u.division.toLowerCase().includes(query)
+      );
+    });
+
+    return {
+      success: true,
+      total: enriched.length,
+      users: enriched
+    };
+  }
+
+  // 4. ACTION: SET_PASSWORD / RESET_PASSWORD
+  if (action === 'set_password' || action === 'reset_password') {
+    const target = await resolveTargetUser(params.user_id, params.email);
+    if (!target) throw err400('Target user not found');
+    const isSelf = target.id === auth.userId;
+    if (!isSelf && !roles.isAdmin && !roles.isSuperAdmin) {
+      throw err403('Admin privileges required to reset another user password');
+    }
+    const newPass = params.password || params.new_password;
+    if (!newPass || newPass.length < 6) throw err400('params.password must be at least 6 characters');
+
+    const res = await fetch(`${su}/auth/v1/admin/users/${target.id}`, {
+      method: 'PUT',
+      headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: newPass })
+    });
+    if (!res.ok) throw new Error(await res.text());
+    await logAction(auth.email, 'mcp_account_set_password', { targetUserId: target.id, targetEmail: target.email }, su, sk);
+    return { success: true, message: `Password for ${target.email} updated successfully`, user_id: target.id };
+  }
+
+  // 5. ACTION: SET_USERNAME / SET_NAME
+  if (action === 'set_username' || action === 'set_name') {
+    const target = await resolveTargetUser(params.user_id, params.email);
+    if (!target) throw err400('Target user not found');
+    const isSelf = target.id === auth.userId;
+    if (!isSelf && !roles.isAdmin && !roles.isSuperAdmin) {
+      throw err403('Admin privileges required to update another user profile');
+    }
+
+    const currentMeta = target.user_metadata || {};
+    const updatedMeta = { ...currentMeta };
+    if (params.username !== undefined) updatedMeta.username = String(params.username).trim();
+    if (params.full_name !== undefined || params.name !== undefined) {
+      updatedMeta.full_name = String(params.full_name || params.name).trim();
+    }
+    if (params.whatsapp !== undefined) updatedMeta.whatsapp = String(params.whatsapp).trim();
+
+    const res = await fetch(`${su}/auth/v1/admin/users/${target.id}`, {
+      method: 'PUT',
+      headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user_metadata: updatedMeta })
+    });
+    if (!res.ok) throw new Error(await res.text());
+    await logAction(auth.email, 'mcp_account_set_username', { targetUserId: target.id, metadata: updatedMeta }, su, sk);
+    return { success: true, user_id: target.id, user_metadata: updatedMeta };
+  }
+
+  // 6. ACTION: SET_DIVISION
+  if (action === 'set_division') {
+    const target = await resolveTargetUser(params.user_id, params.email);
+    if (!target) throw err400('Target user not found');
+    const isSelf = target.id === auth.userId;
+    if (!isSelf && !roles.isAdmin && !roles.isSuperAdmin) {
+      throw err403('Admin privileges required to change division of another user');
+    }
+
+    const divisionId = (params.division_id || '').toLowerCase().trim();
+    if (!divisionId) throw err400('params.division_id is required ("management", "development", "review", or "none")');
+
+    if (divisionId === 'none') {
+      await fetch(`${su}/rest/v1/division_members?user_id=eq.${target.id}`, {
+        method: 'DELETE',
+        headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}` }
+      });
+      await logAction(auth.email, 'mcp_account_remove_division', { targetUserId: target.id }, su, sk);
+      return { success: true, user_id: target.id, division: 'None' };
+    }
+
+    if (!['management', 'development', 'review'].includes(divisionId)) {
+      throw err400('Invalid division_id. Must be "management", "development", "review", or "none"');
+    }
+
+    const wa = params.whatsapp || target.user_metadata?.whatsapp || '';
+    // Remove previous division and add new one
+    await fetch(`${su}/rest/v1/division_members?user_id=eq.${target.id}`, {
+      method: 'DELETE',
+      headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}` }
+    });
+    const addRes = await fetch(`${su}/rest/v1/division_members`, {
+      method: 'POST',
+      headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ user_id: target.id, division_id: divisionId, whatsapp: wa })
+    });
+    if (!addRes.ok) throw new Error(await addRes.text());
+    await logAction(auth.email, 'mcp_account_set_division', { targetUserId: target.id, divisionId }, su, sk);
+    return { success: true, user_id: target.id, division: divisionId };
+  }
+
+  // 7. ACTION: SET_ADMIN
+  if (action === 'set_admin') {
+    if (!roles.isSuperAdmin) throw err403('SuperAdmin only');
+    const target = await resolveTargetUser(params.user_id, params.email);
+    if (!target) throw err400('Target user not found');
+    const targetEmail = (target.email || '').trim().toLowerCase();
+    const makeAdmin = params.is_admin === true || params.admin === true;
+
+    if (makeAdmin) {
+      await usersAddAdmin(targetEmail, auth.email, su, sk);
+    } else {
+      await usersRemoveAdmin(targetEmail, auth.email, su, sk);
+    }
+    return { success: true, email: targetEmail, is_admin: makeAdmin };
+  }
+
+  // 8. ACTION: SET_BAN
+  if (action === 'set_ban' || action === 'ban') {
+    if (!roles.isSuperAdmin) throw err403('SuperAdmin only');
+    const target = await resolveTargetUser(params.user_id, params.email);
+    if (!target) throw err400('Target user not found');
+    const shouldBan = params.banned !== undefined ? !!params.banned : true;
+    return usersBan(target.id, shouldBan, auth.email, su, sk);
+  }
+
+  // 9. ACTION: DELETE
+  if (action === 'delete') {
+    if (!roles.isSuperAdmin) throw err403('SuperAdmin only');
+    const target = await resolveTargetUser(params.user_id, params.email);
+    if (!target) throw err400('Target user not found');
+    return usersDelete(target.id, su, sk);
+  }
+
+  // 10. ACTION: UPDATE (Composite)
+  if (action === 'update') {
+    const target = await resolveTargetUser(params.user_id, params.email);
+    if (!target) throw err400('Target user not found');
+    const isSelf = target.id === auth.userId;
+    if (!isSelf && !roles.isAdmin && !roles.isSuperAdmin) {
+      throw err403('Admin privileges required to update another user');
+    }
+
+    const updates = {};
+    const metaUpdates = { ...(target.user_metadata || {}) };
+    let hasMetaUpdate = false;
+
+    if (params.password && params.password.length >= 6) {
+      updates.password = params.password;
+    }
+    if (params.username !== undefined) {
+      metaUpdates.username = String(params.username).trim();
+      hasMetaUpdate = true;
+    }
+    if (params.full_name !== undefined || params.name !== undefined) {
+      metaUpdates.full_name = String(params.full_name || params.name).trim();
+      hasMetaUpdate = true;
+    }
+    if (params.whatsapp !== undefined) {
+      metaUpdates.whatsapp = String(params.whatsapp).trim();
+      hasMetaUpdate = true;
+    }
+    if (hasMetaUpdate) updates.user_metadata = metaUpdates;
+
+    if (Object.keys(updates).length > 0) {
+      const putRes = await fetch(`${su}/auth/v1/admin/users/${target.id}`, {
+        method: 'PUT',
+        headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify(updates)
+      });
+      if (!putRes.ok) throw new Error(await putRes.text());
+    }
+
+    if (params.division_id !== undefined) {
+      const divId = (params.division_id || '').toLowerCase().trim();
+      if (divId === 'none') {
+        await fetch(`${su}/rest/v1/division_members?user_id=eq.${target.id}`, {
+          method: 'DELETE',
+          headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}` }
+        });
+      } else if (['management', 'development', 'review'].includes(divId)) {
+        await fetch(`${su}/rest/v1/division_members?user_id=eq.${target.id}`, {
+          method: 'DELETE',
+          headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}` }
+        });
+        await fetch(`${su}/rest/v1/division_members`, {
+          method: 'POST',
+          headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ user_id: target.id, division_id: divId, whatsapp: metaUpdates.whatsapp || '' })
+        });
+      }
+    }
+
+    if (params.is_admin !== undefined && roles.isSuperAdmin) {
+      const targetEmail = (target.email || '').trim().toLowerCase();
+      if (params.is_admin === true) {
+        await usersAddAdmin(targetEmail, auth.email, su, sk);
+      } else {
+        await usersRemoveAdmin(targetEmail, auth.email, su, sk);
+      }
+    }
+
+    if (params.banned !== undefined && roles.isSuperAdmin) {
+      await usersBan(target.id, !!params.banned, auth.email, su, sk);
+    }
+
+    await logAction(auth.email, 'mcp_account_update', { targetUserId: target.id }, su, sk);
+    return { success: true, message: `User ${target.email} updated successfully`, user_id: target.id };
+  }
+
+  throw err400(`Unknown action "${action}". Supported actions: create, update, set_password, set_username, set_division, set_admin, set_ban, get, list, delete`);
 }
 
 // ═══════════════════════════════════════════════════════════════
@@ -2919,10 +3355,33 @@ async function logAction(adminEmail, action, details, su, sk) {
 
 async function handleMcpStreamableGet(req, res, su, sk) {
   const host = req.headers['x-forwarded-host'] || req.headers.host || 'mr-capsules.vercel.app';
+  const acceptHeader = (req.headers.accept || '').toLowerCase();
+
+  // If client expects JSON or standard probe, return JSON server discovery
+  if (!acceptHeader.includes('text/event-stream')) {
+    return res.status(200).json({
+      name: 'mr-capsules',
+      version: '1.2.0',
+      protocol: 'mcp',
+      protocolVersion: '2024-11-05',
+      transport: 'Streamable HTTP (MCP 2024-11-05 / 2025-06-18) + OpenAPI Actions',
+      endpoints: {
+        mcp: `https://${host}/api/mcp`,
+        openapi: `https://${host}/api/openapi.json`,
+        ai_plugin: `https://${host}/.well-known/ai-plugin.json`
+      },
+      capabilities: {
+        tools: { listChanged: false },
+        resources: { listChanged: false },
+        prompts: { listChanged: false }
+      },
+      status: 'ready'
+    });
+  }
+
   const sessionId = `mrc-${Date.now()}`;
 
   // Return SSE stream per Streamable HTTP / SSE spec
-  // Claude.ai web uses this GET stream to establish connection reachability
   res.setHeader('Content-Type', 'text/event-stream');
   res.setHeader('Cache-Control', 'no-cache, no-transform');
   res.setHeader('Connection', 'keep-alive');

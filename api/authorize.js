@@ -23,9 +23,47 @@ export default async function handler(req, res) {
   const SB_SERVICE_KEY = process.env.SUPABASE_SERVICE_ROLE_KEY;
   const issuer = `https://${host}`;
 
+  function isOriginAllowed(origin) {
+    if (!origin) return true;
+    const lower = origin.toLowerCase();
+    return (
+      lower.endsWith('claude.ai') ||
+      lower.endsWith('anthropic.com') ||
+      lower.endsWith('openai.com') ||
+      lower.endsWith('chatgpt.com') ||
+      lower.endsWith('oaistatic.com') ||
+      lower.endsWith('oaiusercontent.com') ||
+      lower.endsWith('vercel.app') ||
+      lower.includes('localhost') ||
+      lower.includes('127.0.0.1')
+    );
+  }
+
+  const requestOrigin = req.headers.origin || '';
+  if (requestOrigin && isOriginAllowed(requestOrigin)) {
+    res.setHeader('Access-Control-Allow-Origin', requestOrigin);
+    res.setHeader('Access-Control-Allow-Credentials', 'true');
+    res.setHeader('Vary', 'Origin');
+  } else {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+  }
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.setHeader('Access-Control-Allow-Headers', 'Authorization, Content-Type, Accept');
+
+  if (req.method === 'OPTIONS') {
+    return res.status(200).end();
+  }
+
   // Helper for HTML escaping
   function escHtml(s) {
     return String(s || '').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+  }
+
+  const url = new URL(req.url, `https://${host}`);
+
+  // RFC 7591 Dynamic Client Registration Endpoint
+  if (req.url && (req.url.includes('/register') || url.searchParams.get('action') === 'register' || (req.method === 'POST' && req.body && req.body.client_name))) {
+    return handleClientRegistration(req, res, SUPABASE_URL, SB_SERVICE_KEY);
   }
 
   // RFC 8414 & OpenID Connect Discovery Metadata
@@ -54,7 +92,7 @@ export default async function handler(req, res) {
     });
   }
 
-  const url = new URL(req.url, `https://${host}`);
+  // Parse OAuth query parameters
   const redirectUri = url.searchParams.get('redirect_uri');
   const state = url.searchParams.get('state') || '';
   const responseType = url.searchParams.get('response_type') || 'code';
@@ -80,6 +118,13 @@ export default async function handler(req, res) {
   const ALLOWED_REDIRECT_PATTERNS = [
     /^https:\/\/claude\.ai\/api\/mcp\/auth_callback/,
     /^https:\/\/.*\.claude\.ai\//,
+    /^https:\/\/chat\.openai\.com\/aip\/[^\/]+\/oauth\/callback/,
+    /^https:\/\/chatgpt\.com\/aip\/[^\/]+\/oauth\/callback/,
+    /^https:\/\/chat\.openai\.com\/api\/actions\/oauth\/callback/,
+    /^https:\/\/chatgpt\.com\/api\/actions\/oauth\/callback/,
+    /^https:\/\/platform\.openai\.com\/oauth\/callback/,
+    /^https:\/\/.*\.openai\.com\//,
+    /^https:\/\/.*\.chatgpt\.com\//,
     /^http:\/\/localhost(:\d+)?\//,
     /^http:\/\/127\.0\.0\.1(:\d+)?\//
   ];
@@ -230,13 +275,17 @@ export default async function handler(req, res) {
   // Render modern Mr. Capsules User Login Page with Session Auto-Detection
   const actionUrl = `/authorize?client_id=${encodeURIComponent(clientId)}&redirect_uri=${encodeURIComponent(redirectUri)}&state=${encodeURIComponent(state)}&code_challenge=${encodeURIComponent(codeChallenge)}&code_challenge_method=${encodeURIComponent(codeChallengeMethod)}&resource=${encodeURIComponent(canonicalResource)}`;
 
+  // Detect client type for tailored UI branding
+  const isChatGPT = (redirectUri && (redirectUri.includes('openai.com') || redirectUri.includes('chatgpt.com'))) || clientId.includes('chatgpt') || clientId.includes('openai');
+  const clientDisplayName = isChatGPT ? 'ChatGPT' : (clientId.includes('claude') || (redirectUri && redirectUri.includes('claude.ai')) ? 'Claude' : 'AI Assistant');
+
   const html = `
     <!DOCTYPE html>
     <html lang="en">
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Authorize Claude | Mr. Capsules</title>
+      <title>Authorize ${escHtml(clientDisplayName)} | Mr. Capsules</title>
       <link rel="icon" type="image/png" href="/logo.png">
       <link rel="icon" type="image/svg+xml" href="/logo.svg">
       <link rel="apple-touch-icon" href="/apple-touch-icon.png">
@@ -362,10 +411,10 @@ export default async function handler(req, res) {
         <div class="logo-row">
           <img src="/logo.svg" alt="MR-CAPSULES" class="logo-icon">
           <span class="plus-icon">&amp;</span>
-          <span class="claude-badge">Claude</span>
+          <span class="claude-badge">${escHtml(clientDisplayName)}</span>
         </div>
         <h1>Connect to Mr. Capsules</h1>
-        <p>Authorize Claude AI to access educational content and task management tools.</p>
+        <p>Authorize ${escHtml(clientDisplayName)} to access educational content, task management, and DoctorTablet notes.</p>
 
         <div id="session-detected-box" class="session-detected-box">
           <strong>✓ Active Browser Session Detected</strong>
@@ -456,4 +505,77 @@ export default async function handler(req, res) {
 
   res.setHeader('Content-Type', 'text/html; charset=utf-8');
   return res.status(200).send(html);
+}
+
+async function handleClientRegistration(req, res, SUPABASE_URL, SB_SERVICE_KEY) {
+  if (req.method !== 'POST') {
+    return res.status(405).json({ error: 'invalid_request', error_description: 'Method not allowed' });
+  }
+
+  const clientIp = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || 'unknown';
+  const rateLimitKey = `register_${clientIp}`;
+  if (!global._registerRateLimit) global._registerRateLimit = new Map();
+  const now = Date.now();
+  const lastCall = global._registerRateLimit.get(rateLimitKey) || 0;
+  if (now - lastCall < 60000) {
+    return res.status(429).json({ error: 'rate_limit', error_description: 'Too many registrations. Please wait a minute.' });
+  }
+  global._registerRateLimit.set(rateLimitKey, now);
+
+  let body = req.body;
+  if (Buffer.isBuffer(body)) {
+    body = body.toString('utf-8');
+  }
+  if (typeof body === 'string') {
+    try { body = JSON.parse(body); } catch(e) {
+      return res.status(400).json({ error: 'invalid_request', error_description: 'Invalid JSON body' });
+    }
+  }
+
+  body = body || {};
+  const clientName = body.client_name || 'Claude / ChatGPT MCP Client';
+  const redirectUris = Array.isArray(body.redirect_uris) && body.redirect_uris.length > 0
+    ? body.redirect_uris
+    : ['https://claude.ai/api/mcp/auth_callback'];
+
+  const clientId = `client_mrc_${crypto.randomBytes(16).toString('hex')}`;
+  const clientSecret = `secret_mrc_${crypto.randomBytes(24).toString('hex')}`;
+  const issuedAt = Math.floor(Date.now() / 1000);
+
+  if (SB_SERVICE_KEY) {
+    try {
+      await fetch(`${SUPABASE_URL}/rest/v1/oauth_clients`, {
+        method: 'POST',
+        headers: {
+          'apikey': SB_SERVICE_KEY,
+          'Authorization': `Bearer ${SB_SERVICE_KEY}`,
+          'Content-Type': 'application/json',
+          'Prefer': 'resolution=merge-duplicates'
+        },
+        body: JSON.stringify({
+          client_id: clientId,
+          client_secret: clientSecret,
+          client_name: clientName,
+          redirect_uris: redirectUris,
+          grant_types: ['authorization_code', 'refresh_token'],
+          response_types: ['code']
+        })
+      });
+    } catch(err) {
+      // Non-fatal if table creation pending
+    }
+  }
+
+  const responsePayload = {
+    client_id: clientId,
+    client_secret: clientSecret,
+    client_id_issued_at: issuedAt,
+    client_name: clientName,
+    redirect_uris: redirectUris,
+    grant_types: ['authorization_code', 'refresh_token'],
+    response_types: ['code'],
+    token_endpoint_auth_method: 'none'
+  };
+
+  return res.status(201).json(responsePayload);
 }

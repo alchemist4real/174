@@ -460,7 +460,7 @@
     "semantic_hash": "9a4ce52b5ae1fd97684b9f35a9cd04a6"
   },
   "data.js": {
-    "mtime": 1787021250.1441808,
+    "mtime": 1787020967.7561278,
     "ast_hash": "70ac81270d00a20d92ac41c07017ffd3",
     "semantic_hash": ""
   },
@@ -500,13 +500,13 @@
     "semantic_hash": ""
   },
   "vercel.json": {
-    "mtime": 1787021351.4047058,
-    "ast_hash": "7f5939d4a3160b44ad4770654df07aa8",
+    "mtime": 1787020554.7528977,
+    "ast_hash": "3e7bcd256fdf50e09b88273e6f8cdbb0",
     "semantic_hash": ""
   },
   "api/mcp.js": {
-    "mtime": 1787021228.303549,
-    "ast_hash": "86fe74575f926221b6726e83f88f9694",
+    "mtime": 1787020922.1579466,
+    "ast_hash": "69da5f1008284a1a4d8e21827663412c",
     "semantic_hash": ""
   },
   ".agents/rules/graphify.md": {
@@ -790,8 +790,8 @@
     "semantic_hash": ""
   },
   "api/authorize.js": {
-    "mtime": 1787021383.5905712,
-    "ast_hash": "5ec72192d1102ad0f3deb7cf5f2e2d68",
+    "mtime": 1787020575.1877508,
+    "ast_hash": "0e94687cb470ce7ae841c100ed3e47cb",
     "semantic_hash": ""
   },
   "api/token.js": {
@@ -799,9 +799,19 @@
     "ast_hash": "f405510f5f0108c2ce57a8238b534efe",
     "semantic_hash": ""
   },
+  "api/register.js": {
+    "mtime": 1787020599.0844033,
+    "ast_hash": "db4caee3f59417990fb6bc7021ca05d1",
+    "semantic_hash": ""
+  },
   "oauth_setup.sql": {
     "mtime": 1785472743.8301284,
     "ast_hash": "6af03a35f3f316201b321d42f88abcde",
+    "semantic_hash": ""
+  },
+  "api/_uptime.js": {
+    "mtime": 1783161650.892434,
+    "ast_hash": "de130edc3c452afc5c875c0ef2b5ed83",
     "semantic_hash": ""
   },
   "public/.claude/settings.local.json": {
@@ -1230,7 +1240,7 @@
     "semantic_hash": ""
   },
   "public/data.js": {
-    "mtime": 1787021250.1441808,
+    "mtime": 1787020967.7561278,
     "ast_hash": "70ac81270d00a20d92ac41c07017ffd3",
     "semantic_hash": ""
   },
@@ -1260,8 +1270,8 @@
     "semantic_hash": ""
   },
   "public/vercel.json": {
-    "mtime": 1787021215.260919,
-    "ast_hash": "adea73aa2bc262be3d03ed77a2663fdf",
+    "mtime": 1787020554.7528977,
+    "ast_hash": "3e7bcd256fdf50e09b88273e6f8cdbb0",
     "semantic_hash": ""
   },
   "public/.github/workflows/codeql.yml": {
@@ -1535,8 +1545,8 @@
     "semantic_hash": ""
   },
   "api/env.js": {
-    "mtime": 1787021336.0008745,
-    "ast_hash": "5d6a4a357dac9bebb75fdf6818508a26",
+    "mtime": 1786772764.775254,
+    "ast_hash": "fa95a583c419571a85e1f0cb40b1a1b9",
     "semantic_hash": ""
   },
   "favicon.svg": {
@@ -1940,8 +1950,8 @@
     "semantic_hash": ""
   },
   "api/openapi.js": {
-    "mtime": 1787021311.630034,
-    "ast_hash": "e2b84feaa35a76fbacacbcd33acc5a5b",
+    "mtime": 1787020930.7513986,
+    "ast_hash": "fcba82fcd8c828693455823f9dd9e274",
     "semantic_hash": ""
   },
   "content/semester 1/1.2/1.2 CBT 1_Pull up 1.html": {
@@ -2580,8 +2590,8 @@
     "semantic_hash": ""
   },
   "scratch/test_openapi.js": {
-    "mtime": 1787021370.2834601,
-    "ast_hash": "9fdb6200d417b626cce8d9a1ed44e08d",
+    "mtime": 1787020940.3768084,
+    "ast_hash": "6ef5da8cfd36092e66143833da7a2f6f",
     "semantic_hash": ""
   }
 }

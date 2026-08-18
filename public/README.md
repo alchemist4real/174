@@ -125,15 +125,27 @@ graph TD
 
 ---
 
-## 🔌 Connecting AI Assistants via MCP
+## 🔌 Connecting AI Assistants (Claude & ChatGPT Custom GPTs)
 
-You can connect **Claude.ai Web**, **Claude Desktop**, or **Custom Agents** to MR-CAPSULES:
+You can connect **Claude.ai Web**, **Claude Desktop**, **ChatGPT Custom GPTs**, or **Autonomous Agents** to MR-CAPSULES:
 
-1. Open **Admin Panel** &rarr; **API Keys** tab.
-2. Click **+ Generate Key** to create your API key (`mrc_...`).
-3. In **Claude.ai**: Go to `Settings` &rarr; `Connectors` &rarr; `Add Custom Connector`.
-4. Enter URL: `https://mr-capsules.vercel.app/api/mcp`
-5. Click **Connect** (OAuth 2.0 PKCE auto-discovery will automatically authorize your agent!).
+### 🟣 A. Claude.ai Web & Desktop (Streamable HTTP MCP)
+1. Open **Admin Panel** &rarr; **API Keys** tab &rarr; click **+ Generate Key** to create your API key (`mrc_...`).
+2. In **Claude.ai**: Go to `Settings` &rarr; `Connectors` &rarr; `Add Custom Connector`.
+3. Enter Name: `Mr Capsules`, URL: `https://mr-capsules.vercel.app/api/mcp`.
+4. Click **Connect** (OAuth 2.0 PKCE auto-discovery will automatically authorize your agent!).
+
+### 🟢 B. ChatGPT Custom GPTs (OpenAPI 3.0.3 Actions)
+1. In **ChatGPT**: Go to `Explore GPTs` &rarr; `Create / Configure` &rarr; scroll to `Actions` &rarr; click `Create new action`.
+2. Click **Import from URL** and enter OpenAPI Schema URL:
+   - **Essential Preset (~24 Tools, Recommended for OpenAI 30-Limit):** `https://mr-capsules.vercel.app/api/openapi.json`
+   - **DoctorTablet Medical Vault (8 Tools):** `https://mr-capsules.vercel.app/api/openapi.json?category=doctortablet`
+   - **Content & File Storage (12 Tools):** `https://mr-capsules.vercel.app/api/openapi.json?category=content`
+   - **Tasks & Kanban (14 Tools):** `https://mr-capsules.vercel.app/api/openapi.json?category=tasks`
+3. Set **Authentication**:
+   - **API Key (Bearer):** Paste your `mrc_...` key.
+   - **OAuth 2.0:** Auth URL `https://mr-capsules.vercel.app/authorize`, Token URL `https://mr-capsules.vercel.app/token`, Scope `mcp`.
+4. Set **Privacy Policy URL:** `https://mr-capsules.vercel.app/docs#privacy`.
 
 ---
 

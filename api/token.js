@@ -53,9 +53,10 @@ export default async function handler(req, res) {
   }
 
   // RFC 6749 Section 5.1: MUST include Cache-Control: no-store and Pragma: no-cache
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  const requestOrigin = req.headers.origin || '*';
+  res.setHeader('Access-Control-Allow-Origin', requestOrigin);
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization, x-api-key, api-key');
   res.setHeader('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0');
   res.setHeader('Pragma', 'no-cache');
 
@@ -86,6 +87,23 @@ export default async function handler(req, res) {
   }
 
   body = body || {};
+
+  // Extract client credentials from Basic Auth header (ChatGPT Action standard) or body
+  const authHeader = req.headers.authorization || '';
+  let authClientId = body.client_id;
+  let authClientSecret = body.client_secret;
+
+  if (authHeader.startsWith('Basic ')) {
+    try {
+      const creds = Buffer.from(authHeader.slice(6).trim(), 'base64').toString('utf-8');
+      const colonIdx = creds.indexOf(':');
+      if (colonIdx !== -1) {
+        authClientId = creds.slice(0, colonIdx);
+        authClientSecret = creds.slice(colonIdx + 1);
+      }
+    } catch(e) {}
+  }
+
   const grantType = body.grant_type;
 
   if (!grantType) {

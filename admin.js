@@ -2279,6 +2279,50 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
     var btnCopy = document.getElementById('btnCopyApiKey');
     if (btnCopy) btnCopy.onclick = copyRevealedKey;
 
+    var btnCopyOpenApiUrl = document.getElementById('btnCopyOpenApiUrl');
+    if (btnCopyOpenApiUrl) {
+      btnCopyOpenApiUrl.onclick = function() {
+        var preset = (document.getElementById('chatGptPresetSelect')?.value) || 'essential';
+        var url = window.location.origin + '/api/openapi.json?category=' + encodeURIComponent(preset);
+        navigator.clipboard.writeText(url).then(function() {
+          var orig = btnCopyOpenApiUrl.innerText;
+          btnCopyOpenApiUrl.innerText = 'Copied!';
+          setTimeout(function() { btnCopyOpenApiUrl.innerText = orig; }, 1500);
+        });
+      };
+    }
+
+    var btnCopyOpenApiJson = document.getElementById('btnCopyOpenApiJson');
+    if (btnCopyOpenApiJson) {
+      btnCopyOpenApiJson.onclick = async function() {
+        var preset = (document.getElementById('chatGptPresetSelect')?.value) || 'essential';
+        var url = '/api/openapi.json?category=' + encodeURIComponent(preset);
+        btnCopyOpenApiJson.innerText = 'Fetching...';
+        try {
+          var res = await fetch(url);
+          var json = await res.json();
+          await navigator.clipboard.writeText(JSON.stringify(json, null, 2));
+          btnCopyOpenApiJson.innerText = 'JSON Copied!';
+          setTimeout(function() { btnCopyOpenApiJson.innerText = 'Copy JSON'; }, 1500);
+        } catch(e) {
+          btnCopyOpenApiJson.innerText = 'Error!';
+          setTimeout(function() { btnCopyOpenApiJson.innerText = 'Copy JSON'; }, 1500);
+        }
+      };
+    }
+
+    var btnCopyGptPrompt = document.getElementById('btnCopyGptPrompt');
+    if (btnCopyGptPrompt) {
+      btnCopyGptPrompt.onclick = function() {
+        var prompt = 'Anda adalah Medical AI Assistant MR-CAPSULES & DoctorTablet. Anda terhubung ke database modul kedokteran dan catatan klinis via Actions.\n\nAturan Wajib Pembuatan Catatan Medis (doctortablet_save_note):\n1. Analisis & petakan struktur hirarki topik terlebih dahulu.\n2. Tulis materi dengan high-density reasoning, studi kasus, & jebakan ujian (BUKAN transkrip slide PPT mentah).\n3. WAJIB sertakan Callouts GitHub ([!NOTE], [!TIP], [!WARNING]), Tabel komparasi, Diagram Mermaid, dan Rumus Matematika/Skor Medis dalam format LaTeX ($...$ / $$...$$).\n4. Parameter author WAJIB nama lengkap pengguna tanpa gelar akademis (misal: "Ahmad Muqorrobin", jangan sertakan "dr." atau "S.Ked").';
+        navigator.clipboard.writeText(prompt).then(function() {
+          var orig = btnCopyGptPrompt.innerText;
+          btnCopyGptPrompt.innerText = '✓ Prompt Copied to Clipboard!';
+          setTimeout(function() { btnCopyGptPrompt.innerText = orig; }, 2000);
+        });
+      };
+    }
+
     var tab = document.getElementById('tabApiKeys');
     if (tab) {
       tab.addEventListener('click', function() {

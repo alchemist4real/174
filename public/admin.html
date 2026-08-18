@@ -500,12 +500,48 @@
               <code id="apiKeyRevealText" style="flex:1; font-family:var(--font-mono); font-size:13px; background:var(--bg-inset); padding:10px 14px; border-radius:8px; word-break:break-all; color:var(--text-main);"></code>
               <button id="btnCopyApiKey" class="btn-unified primary" style="white-space:nowrap;">Copy</button>
             </div>
-            <div style="font-size:13px; color:var(--text-muted); margin-bottom:8px; font-weight:600;">How to connect to Claude.ai (Custom Connector):</div>
-            <div class="api-keys-step">1. Go to Claude.ai Settings &rarr; Connectors &rarr; Add Custom Connector</div>
-            <div class="api-keys-step">2. Name: <code style="background:var(--bg-inset); padding:2px 5px; border-radius:4px;">Mr Capsules</code></div>
-            <div class="api-keys-step">3. URL: <code style="background:var(--bg-inset); padding:2px 5px; border-radius:4px;">https://mr-capsules.vercel.app/api/mcp</code></div>
-            <div class="api-keys-step">4. Advanced settings: <em>Leave completely blank</em></div>
-            <div class="api-keys-step">5. Click <strong>Add</strong> &rarr; Click <strong>Connect</strong> &rarr; Sign in with your Mr. Capsules account to authorize!</div>
+            
+            <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(320px, 1fr)); gap:16px; margin-top:16px;">
+              <!-- CLAUDE CONNECTOR CARD -->
+              <div style="background:var(--bg-card); border:1px solid var(--border-light); border-radius:10px; padding:16px;">
+                <div style="display:flex; align-items:center; gap:8px; margin-bottom:10px;">
+                  <span style="background:var(--accent-soft); color:var(--accent); font-weight:700; font-size:11px; padding:3px 8px; border-radius:99px;">CLAUDE MCP</span>
+                  <strong style="font-size:13px; color:var(--text-main);">Claude.ai Connector (Streamable HTTP)</strong>
+                </div>
+                <div class="api-keys-step">1. Claude.ai &rarr; <strong>Settings</strong> &rarr; <strong>Connectors</strong> &rarr; <strong>Add Custom Connector</strong></div>
+                <div class="api-keys-step">2. Name: <code style="background:var(--bg-inset); padding:2px 5px; border-radius:4px;">Mr Capsules</code></div>
+                <div class="api-keys-step">3. URL: <code style="background:var(--bg-inset); padding:2px 5px; border-radius:4px;">https://mr-capsules.vercel.app/api/mcp</code></div>
+                <div class="api-keys-step">4. Klik <strong>Add</strong> &rarr; <strong>Connect</strong> &rarr; Login akun Mr. Capsules</div>
+              </div>
+
+              <!-- CHATGPT CONNECTOR CARD -->
+              <div style="background:var(--bg-card); border:1px solid var(--border-light); border-radius:10px; padding:16px;">
+                <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
+                  <div style="display:flex; align-items:center; gap:8px;">
+                    <span style="background:rgba(16, 185, 129, 0.15); color:#10b981; font-weight:700; font-size:11px; padding:3px 8px; border-radius:99px;">CHATGPT ACTIONS</span>
+                    <strong style="font-size:13px; color:var(--text-main);">ChatGPT Custom GPT Connector</strong>
+                  </div>
+                </div>
+                <div class="api-keys-step">1. ChatGPT &rarr; <strong>Explore GPTs</strong> &rarr; <strong>Create/Configure</strong> &rarr; <strong>Actions</strong> &rarr; <strong>Create new action</strong></div>
+                <div class="api-keys-step">2. Klik <strong>Import from URL</strong> &rarr; Tempelkan URL Skema OpenAPI:</div>
+                <div style="display:flex; gap:6px; margin:6px 0 8px 0; align-items:center;">
+                  <select id="chatGptPresetSelect" class="auth-input" style="padding:4px 8px; font-size:12px; height:auto;">
+                    <option value="essential">Essential Preset (~24 Tools, Best for 30 Limit)</option>
+                    <option value="doctortablet">DoctorTablet Medical Vault (8 Tools)</option>
+                    <option value="content">Content & Storage (12 Tools)</option>
+                    <option value="tasks">Tasks Board & Kanban (14 Tools)</option>
+                    <option value="all">Full Suite (78 Tools)</option>
+                  </select>
+                  <button id="btnCopyOpenApiUrl" class="btn-unified" style="padding:4px 10px; font-size:12px; white-space:nowrap;">Copy URL</button>
+                  <button id="btnCopyOpenApiJson" class="btn-unified" style="padding:4px 10px; font-size:12px; white-space:nowrap;">Copy JSON</button>
+                </div>
+                <div class="api-keys-step">3. <strong>Authentication:</strong> API Key (Bearer: tempel key di atas) ATAU OAuth 2.0</div>
+                <div class="api-keys-step">4. <strong>Privacy Policy URL:</strong> <code style="background:var(--bg-inset); padding:2px 5px; border-radius:4px;">https://mr-capsules.vercel.app/docs#privacy</code></div>
+                <div style="margin-top:8px;">
+                  <button id="btnCopyGptPrompt" class="btn-unified" style="width:100%; font-size:11px; padding:5px 8px;">📋 Copy DoctorTablet System Prompt</button>
+                </div>
+              </div>
+            </div>
           </div>
 
           <div style="margin-bottom: 28px;">
