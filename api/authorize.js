@@ -335,7 +335,13 @@ export default async function handler(req, res) {
       res.writeHead(302, { Location: callbackUrl.toString() });
       return res.end();
     } else if (!errorMessage) {
-      errorMessage = 'Please sign in or enter valid credentials.';
+      if (sessionToken && !password) {
+        errorMessage = 'Your browser session has expired. Please enter your password below.';
+      } else if (!password) {
+        errorMessage = 'Please enter your password to continue.';
+      } else {
+        errorMessage = 'Please enter your valid login credentials.';
+      }
     }
   }
 
@@ -361,23 +367,23 @@ export default async function handler(req, res) {
       <style>
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-          font-family: var(--font-mono);
-          background: var(--c1);
-          color: var(--c3);
+          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+          background: #09090b;
+          color: #f4f4f5;
           min-height: 100vh;
           display: flex;
           align-items: center;
           justify-content: center;
-          padding: 24px;
+          padding: 20px;
         }
         .auth-card {
-          background: var(--c2);
-          border: 1.5px solid var(--c3);
+          background: #18181b;
+          border: 1px solid #27272a;
           border-radius: 16px;
-          padding: 40px 36px;
+          padding: 36px 32px;
           max-width: 440px;
           width: 100%;
-          box-shadow: 0 16px 36px color-mix(in srgb, var(--c3) 25%, transparent);
+          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
           text-align: center;
           position: relative;
         }
@@ -386,91 +392,104 @@ export default async function handler(req, res) {
           align-items: center;
           justify-content: center;
           gap: 12px;
-          margin-bottom: 24px;
+          margin-bottom: 20px;
         }
-        .logo-icon { width: 36px; height: 36px; }
-        .plus-icon { color: var(--text-muted); font-size: 16px; font-weight: 300; }
-        .claude-badge {
-          background: var(--c3);
-          color: var(--c1);
-          font-weight: 800;
-          font-size: 12px;
-          letter-spacing: 0.05em;
-          padding: 5px 12px;
+        .logo-icon { width: 40px; height: 40px; border-radius: 8px; }
+        .plus-icon { color: #71717a; font-size: 18px; font-weight: 300; }
+        .client-badge {
+          background: ${isChatGPT ? '#10a37f' : '#d97706'};
+          color: #ffffff;
+          font-weight: 700;
+          font-size: 13px;
+          letter-spacing: 0.03em;
+          padding: 6px 14px;
           border-radius: 99px;
-          font-family: var(--font-sans);
         }
         h1 {
-          font-family: var(--font-sans);
-          font-size: 24px;
+          font-size: 22px;
           font-weight: 700;
-          margin-bottom: 8px;
-          color: var(--c3);
-          letter-spacing: 0.02em;
+          margin-bottom: 6px;
+          color: #fafafa;
         }
-        p { color: var(--text-muted); font-size: 14px; line-height: 1.5; margin-bottom: 24px; }
+        p.subtitle {
+          color: #a1a1aa;
+          font-size: 13px;
+          line-height: 1.5;
+          margin-bottom: 22px;
+        }
         .session-detected-box {
           display: none;
-          background: rgba(226, 255, 74, 0.08);
-          border: 1px solid var(--c4);
-          color: var(--c4);
-          padding: 14px 16px;
-          border-radius: 10px;
-          font-size: 14px;
-          margin-bottom: 24px;
-          text-align: left;
-          box-shadow: 0 0 15px rgba(226, 255, 74, 0.1);
-        }
-        .session-detected-box strong { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 3px; }
-        .error-banner {
-          background: rgba(255, 82, 82, 0.12);
-          border: 1px solid var(--danger);
-          color: var(--danger);
+          background: rgba(16, 185, 129, 0.1);
+          border: 1px solid rgba(16, 185, 129, 0.3);
+          color: #34d399;
           padding: 12px 14px;
           border-radius: 8px;
           font-size: 13px;
-          margin-bottom: 24px;
+          margin-bottom: 20px;
           text-align: left;
         }
-        .input-group { margin-bottom: 18px; text-align: left; }
-        label { display: block; font-size: 11px; font-weight: 700; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.08em; }
-        input[type="email"], input[type="password"] {
-          width: 100%;
-          padding: 12px 16px;
+        .session-detected-box strong { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 2px; }
+        .error-banner {
+          background: rgba(239, 68, 68, 0.12);
+          border: 1px solid rgba(239, 68, 68, 0.35);
+          color: #f87171;
+          padding: 12px 14px;
           border-radius: 8px;
-          border: 1px solid var(--border);
-          background: #090909;
-          color: var(--c3);
+          font-size: 13px;
+          margin-bottom: 20px;
+          text-align: left;
+        }
+        .input-group { margin-bottom: 18px; text-align: left; position: relative; }
+        label { display: block; font-size: 11px; font-weight: 600; color: #a1a1aa; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.06em; }
+        input[type="email"], input[type="text"], input[type="password"] {
+          width: 100%;
+          padding: 12px 14px;
+          border-radius: 8px;
+          border: 1px solid #3f3f46;
+          background: #09090b;
+          color: #fafafa;
           font-size: 14px;
           outline: none;
           transition: all 0.2s ease;
         }
-        input[type="email"]:focus, input[type="password"]:focus {
-          border-color: var(--c4);
-          box-shadow: 0 0 12px rgba(226, 255, 74, 0.2);
+        input[type="email"]:focus, input[type="text"]:focus, input[type="password"]:focus {
+          border-color: #38bdf8;
+          box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
         }
+        .password-wrapper { position: relative; }
+        .password-toggle {
+          position: absolute;
+          right: 12px;
+          top: 50%;
+          transform: translateY(-50%);
+          background: none;
+          border: none;
+          color: #71717a;
+          cursor: pointer;
+          font-size: 12px;
+          padding: 4px;
+        }
+        .password-toggle:hover { color: #fafafa; }
         .btn-submit {
           width: 100%;
-          padding: 14px;
+          padding: 13px;
           border-radius: 8px;
           border: none;
-          background: var(--c4);
-          color: #0D0D0D;
+          background: #38bdf8;
+          color: #09090b;
           font-weight: 700;
           font-size: 14px;
           cursor: pointer;
           transition: all 0.2s ease;
-          margin-top: 10px;
-          letter-spacing: 0.02em;
+          margin-top: 6px;
         }
         .btn-submit:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 8px 25px rgba(226, 255, 74, 0.35);
+          background: #7dd3fc;
+          box-shadow: 0 4px 16px rgba(56, 189, 248, 0.35);
         }
-        .footer-note { font-size: 12px; color: var(--text-muted); margin-top: 22px; }
-        .footer-note a { color: var(--c4); text-decoration: none; font-weight: 600; }
+        .footer-note { font-size: 12px; color: #71717a; margin-top: 20px; }
+        .footer-note a { color: #38bdf8; text-decoration: none; font-weight: 500; }
         .footer-note a:hover { text-decoration: underline; }
-        .use-other-account { font-size: 12px; color: var(--text-muted); text-decoration: underline; cursor: pointer; margin-top: 12px; display: none; }
       </style>
     </head>
     <body>
@@ -478,14 +497,14 @@ export default async function handler(req, res) {
         <div class="logo-row">
           <img src="/logo.svg" alt="MR-CAPSULES" class="logo-icon">
           <span class="plus-icon">&amp;</span>
-          <span class="claude-badge">${escHtml(clientDisplayName)}</span>
+          <span class="client-badge">${escHtml(clientDisplayName)}</span>
         </div>
         <h1>Connect to Mr. Capsules</h1>
-        <p>Authorize ${escHtml(clientDisplayName)} to access educational content, task management, and DoctorTablet notes.</p>
+        <p class="subtitle">Authorize ${escHtml(clientDisplayName)} to access medical educational content, task workflows, and DoctorTablet notes.</p>
 
         <div id="session-detected-box" class="session-detected-box">
-          <strong>✓ Active Browser Session Detected</strong>
-          Connected as <span id="detected-user-email"></span>
+          <strong>✓ Active Account Found</strong>
+          <span>Connected as <span id="detected-user-email"></span></span>
         </div>
 
         ${errorMessage ? `<div class="error-banner">${errorMessage}</div>` : ''}
@@ -493,29 +512,31 @@ export default async function handler(req, res) {
         <form id="auth-form" method="POST" action="${actionUrl}">
           <input type="hidden" id="session_token" name="session_token" value="">
           
-          <div class="input-group" id="email-group">
-            <label for="email">Email Address</label>
-            <input type="email" id="email" name="email" placeholder="user@domain.com" required autocomplete="email">
+          <div class="input-group">
+            <label for="email">Email Address / Username</label>
+            <input type="text" id="email" name="email" placeholder="user@domain.com" required autocomplete="username">
           </div>
           
-          <div class="input-group" id="password-group">
+          <div class="input-group">
             <label for="password">Password</label>
-            <input type="password" id="password" name="password" placeholder="••••••••" autocomplete="current-password">
+            <div class="password-wrapper">
+              <input type="password" id="password" name="password" placeholder="Enter your password" autocomplete="current-password" required>
+              <button type="button" class="password-toggle" onclick="togglePasswordVisibility()">Show</button>
+            </div>
           </div>
           
           <button type="submit" id="submit-btn" class="btn-submit">Approve &amp; Connect ${escHtml(clientDisplayName)}</button>
         </form>
 
-        <div id="use-other-link" class="use-other-account" onclick="switchAccount()">Switch account or enter password</div>
-
         <div class="footer-note">
-          Mr. Capsules OAuth 2.0 PKCE Protection • <a href="/admin.html" target="_blank">Admin Portal</a>
+          MR-CAPSULES OAuth 2.0 PKCE Protection • <a href="/admin.html" target="_blank">Admin Portal</a>
         </div>
       </div>
 
       <script>
         (function() {
           try {
+            const hasError = ${JSON.stringify(!!errorMessage)};
             let userEmail = null;
             let tokenVal = null;
 
@@ -539,19 +560,18 @@ export default async function handler(req, res) {
 
             if (userEmail) {
               document.getElementById('email').value = userEmail;
-              if (tokenVal) {
+              if (tokenVal && !hasError) {
                 document.getElementById('session_token').value = tokenVal;
                 document.getElementById('detected-user-email').innerText = userEmail;
                 document.getElementById('session-detected-box').style.display = 'block';
-                document.getElementById('password-group').style.display = 'none';
+                // If valid token found, password is not strictly required for 1-click approval
                 document.getElementById('password').removeAttribute('required');
-                document.getElementById('use-other-link').style.display = 'block';
-                document.getElementById('submit-btn').innerText = 'Approve & Connect ${escHtml(clientDisplayName)} (' + userEmail.split('@')[0] + ')';
-              } else {
-                document.getElementById('password').setAttribute('required', 'required');
-                document.getElementById('password-group').style.display = 'block';
+                document.getElementById('password').placeholder = '•••••••• (or type to re-authenticate)';
               }
-            } else {
+            }
+
+            if (hasError) {
+              document.getElementById('password').focus();
               document.getElementById('password').setAttribute('required', 'required');
             }
           } catch(err) {
@@ -559,14 +579,16 @@ export default async function handler(req, res) {
           }
         })();
 
-        function switchAccount() {
-          document.getElementById('session-detected-box').style.display = 'none';
-          document.getElementById('password-group').style.display = 'block';
-          document.getElementById('password').setAttribute('required', 'required');
-          document.getElementById('email').value = '';
-          document.getElementById('session_token').value = '';
-          document.getElementById('use-other-link').style.display = 'none';
-          document.getElementById('submit-btn').innerText = 'Sign In & Connect';
+        function togglePasswordVisibility() {
+          const passInput = document.getElementById('password');
+          const toggleBtn = document.querySelector('.password-toggle');
+          if (passInput.type === 'password') {
+            passInput.type = 'text';
+            toggleBtn.innerText = 'Hide';
+          } else {
+            passInput.type = 'password';
+            toggleBtn.innerText = 'Show';
+          }
         }
       </script>
     </body>

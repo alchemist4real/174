@@ -193,7 +193,7 @@ async function runTests() {
   const res13 = new MockResponse();
   await authorizeHandler(req13, res13);
   console.log('Authorize status:', res13.statusCode);
-  const isHtmlApprovalPage = typeof res13.body === 'string' && res13.body.includes('Sign In & Connect');
+  const isHtmlApprovalPage = typeof res13.body === 'string' && res13.body.includes('Connect to Mr. Capsules');
   console.log('Returned HTML Approval Page:', isHtmlApprovalPage);
   if (res13.statusCode !== 200 || !isHtmlApprovalPage) {
     console.error('FAIL: ChatGPT OAuth redirect_uri rejected!');
