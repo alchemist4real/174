@@ -212,16 +212,49 @@ export default async function handler(req, res) {
     }
 
     // 2. Try password authentication with Supabase Auth
-    if (!authenticatedUser && email && password && SB_SERVICE_KEY) {
+    if (!authenticatedUser && email && password) {
+      let targetEmail = email.toLowerCase().trim();
+
+      // Auto-resolve username to email if no @ symbol
+      if (!targetEmail.includes('@') && SB_SERVICE_KEY) {
+        try {
+          const uRes = await fetch(`${SUPABASE_URL}/auth/v1/admin/users?per_page=1000`, {
+            headers: { 'apikey': SB_SERVICE_KEY, 'Authorization': `Bearer ${SB_SERVICE_KEY}` }
+          });
+          if (uRes.ok) {
+            const uData = await uRes.json();
+            const matched = (uData.users || []).find(u =>
+              (u.user_metadata?.username && u.user_metadata.username.toLowerCase() === targetEmail) ||
+              (u.user_metadata?.full_name && u.user_metadata.full_name.toLowerCase() === targetEmail) ||
+              (u.email && u.email.toLowerCase().startsWith(targetEmail + '@'))
+            );
+            if (matched) targetEmail = matched.email;
+          }
+        } catch(e) {}
+      }
+
+      const ANON_KEY = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || process.env.SUPABASE_ANON_KEY || 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhkaHZybGtpem9yc2N2ZWh0dHpkIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzcyNjMwNzIsImV4cCI6MjA5MjgzOTA3Mn0.m6L3oEVAfyp2TjYmBCfDRo_30rdsWLEsGVZzRZIy3MU';
+
       try {
-        const authRes = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+        let authRes = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
           method: 'POST',
           headers: {
-            'apikey': SB_SERVICE_KEY,
+            'apikey': ANON_KEY,
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ email, password })
+          body: JSON.stringify({ email: targetEmail, password })
         });
+
+        if (!authRes.ok && SB_SERVICE_KEY) {
+          authRes = await fetch(`${SUPABASE_URL}/auth/v1/token?grant_type=password`, {
+            method: 'POST',
+            headers: {
+              'apikey': SB_SERVICE_KEY,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ email: targetEmail, password })
+          });
+        }
 
         if (authRes.ok) {
           const authData = await authRes.json();
@@ -470,7 +503,7 @@ export default async function handler(req, res) {
             <input type="password" id="password" name="password" placeholder="••••••••" autocomplete="current-password">
           </div>
           
-          <button type="submit" id="submit-btn" class="btn-submit">Approve &amp; Connect Claude</button>
+          <button type="submit" id="submit-btn" class="btn-submit">Approve &amp; Connect ${escHtml(clientDisplayName)}</button>
         </form>
 
         <div id="use-other-link" class="use-other-account" onclick="switchAccount()">Switch account or enter password</div>
@@ -508,13 +541,16 @@ export default async function handler(req, res) {
               document.getElementById('email').value = userEmail;
               if (tokenVal) {
                 document.getElementById('session_token').value = tokenVal;
+                document.getElementById('detected-user-email').innerText = userEmail;
+                document.getElementById('session-detected-box').style.display = 'block';
+                document.getElementById('password-group').style.display = 'none';
+                document.getElementById('password').removeAttribute('required');
+                document.getElementById('use-other-link').style.display = 'block';
+                document.getElementById('submit-btn').innerText = 'Approve & Connect ${escHtml(clientDisplayName)} (' + userEmail.split('@')[0] + ')';
+              } else {
+                document.getElementById('password').setAttribute('required', 'required');
+                document.getElementById('password-group').style.display = 'block';
               }
-              document.getElementById('detected-user-email').innerText = userEmail;
-              document.getElementById('session-detected-box').style.display = 'block';
-              document.getElementById('password-group').style.display = 'none';
-              document.getElementById('password').removeAttribute('required');
-              document.getElementById('use-other-link').style.display = 'block';
-              document.getElementById('submit-btn').innerText = 'Approve & Connect Claude (' + userEmail.split('@')[0] + ')';
             } else {
               document.getElementById('password').setAttribute('required', 'required');
             }
