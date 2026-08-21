@@ -111,7 +111,7 @@ async function loadTasks() {
     const cols = ['open', 'in_progress', 'developed', 'in_review', 'done'];
     cols.forEach(c => {
         const el = document.querySelector(`#col-${c} .kanban-task-list`);
-        if (el) el.innerHTML = '<div style="padding:24px; text-align:center; color:var(--text-muted);">Loading... <div style="display:inline-block; width:16px; height:16px; border:2px solid rgba(255,255,255,0.3); border-radius:50%; border-top-color:#fff; animation:spin 1s ease-in-out infinite; margin-left:8px; vertical-align:middle;"></div></div>';
+        if (el) el.innerHTML = '<div style="padding:24px; text-align:center; color:var(--text-muted);">Loading... <div style="display:inline-block; width:16px; height:16px; border:2px solid var(--border-medium); border-radius:50%; border-top-color:var(--c3); animation:spin 1s ease-in-out infinite; margin-left:8px; vertical-align:middle;"></div></div>';
     });
     const res = await apiCall('tasks', { action: 'list_tasks' });
     if(res.success) {
@@ -153,7 +153,7 @@ function renderKanban(tasks) {
             const dueTime = new Date(dueDateStr).getTime();
             const now = Date.now();
             if (dueTime < now) dueColor = 'var(--danger)';
-            else if (dueTime < now + 86400000 * 3) dueColor = '#ffa500';
+            else if (dueTime < now + 86400000 * 3) dueColor = 'color-mix(in srgb, var(--danger) 65%, var(--c1))';
         }
 
         let meta = `<div><span style="color:var(--text-muted)">Sem:</span> ${task.semester || '-'} | <span style="color:var(--text-muted)">Blk:</span> ${task.block || '-'}</div>`;
@@ -487,12 +487,12 @@ async function loadDivisions() {
         
         // WhatsApp Settings for current user
         const waContainer = document.createElement('div');
-        waContainer.style.cssText = 'grid-column: 1 / -1; background:var(--bg-card); padding:20px 24px; border:var(--border-main); border-radius:var(--radius-card); margin-bottom:24px; display:flex; align-items:center; flex-wrap:wrap; gap:16px; box-shadow:0 2px 10px rgba(0,0,0,0.05); transition:all 0.2s ease;';
-        waContainer.onmouseover = () => { waContainer.style.transform = 'translateY(-2px)'; waContainer.style.boxShadow = '0 6px 15px rgba(0,0,0,0.1)'; };
-        waContainer.onmouseout = () => { waContainer.style.transform = 'translateY(0)'; waContainer.style.boxShadow = '0 2px 10px rgba(0,0,0,0.05)'; };
+        waContainer.style.cssText = 'grid-column: 1 / -1; background:var(--bg-card); padding:20px 24px; border:var(--border-main); border-radius:var(--radius-card); margin-bottom:24px; display:flex; align-items:center; flex-wrap:wrap; gap:16px; box-shadow:0 2px 10px var(--border-light); transition:all 0.2s ease;';
+        waContainer.onmouseover = () => { waContainer.style.transform = 'translateY(-2px)'; waContainer.style.boxShadow = '0 6px 15px var(--border-medium)'; };
+        waContainer.onmouseout = () => { waContainer.style.transform = 'translateY(0)'; waContainer.style.boxShadow = '0 2px 10px var(--border-light)'; };
         waContainer.innerHTML = `
             <div style="font-weight:600; font-size:15px; color:var(--text-main); display:flex; align-items:center; gap:8px;">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#000000;" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
                 WhatsApp Number
             </div>
             <input type="text" id="myWaInput" class="auth-input" placeholder="e.g. 6281234567890" style="width:250px; border-radius:6px; padding:10px 14px;">
@@ -513,7 +513,7 @@ async function loadDivisions() {
             (div.members || []).forEach(m => {
                 membersHtml += `<div style="display:flex; justify-content:space-between; align-items:center; font-size:13px; color:var(--text-main); margin-bottom:8px; padding:8px 12px; background:var(--bg-main); border:var(--border-main); border-radius:var(--radius-card); transition:all 0.2s ease;" onmouseover="this.style.background='var(--bg-hover)';" onmouseout="this.style.background='var(--bg-main)';">
                     <span style="display:flex; align-items:center; gap:8px;">
-                        <div style="width:24px; height:24px; border-radius:50%; background:var(--accent); color:#fff; display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:bold;">${m.charAt(0).toUpperCase()}</div>
+                        <div style="width:24px; height:24px; border-radius:50%; background:var(--accent); color:var(--c1); display:flex; align-items:center; justify-content:center; font-size:11px; font-weight:bold;">${m.charAt(0).toUpperCase()}</div>
                         ${m.split('@')[0]}
                     </span>
                     ${window.isSuperAdmin ? `<button class="btn-card danger" style="padding:4px 8px; font-size:11px; opacity:0.8; transition:all 0.2s ease;" onmouseover="this.style.opacity='1'" onmouseout="this.style.opacity='0.8'" onclick="removeMember('${m}', '${div.id}')">Remove</button>` : ''}
@@ -521,15 +521,15 @@ async function loadDivisions() {
             });
             
             const card = document.createElement('div');
-            card.style.cssText = 'background:var(--bg-card); display:flex; flex-direction:column; padding:24px; border:var(--border-main); border-radius:var(--radius-card); box-shadow:0 4px 15px rgba(0,0,0,0.03); transition:all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);';
-            card.onmouseover = () => { card.style.transform = 'translateY(-4px)'; card.style.boxShadow = '0 12px 24px rgba(0,0,0,0.08)'; card.style.borderColor = 'var(--accent)'; };
-            card.onmouseout = () => { card.style.transform = 'translateY(0)'; card.style.boxShadow = '0 4px 15px rgba(0,0,0,0.03)'; card.style.borderColor = 'var(--text-main)'; };
+            card.style.cssText = 'background:var(--bg-card); display:flex; flex-direction:column; padding:24px; border:var(--border-main); border-radius:var(--radius-card); box-shadow:0 4px 15px var(--border-light); transition:all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);';
+            card.onmouseover = () => { card.style.transform = 'translateY(-4px)'; card.style.boxShadow = '0 12px 24px var(--border-medium)'; card.style.borderColor = 'var(--accent)'; };
+            card.onmouseout = () => { card.style.transform = 'translateY(0)'; card.style.boxShadow = '0 4px 15px var(--border-light)'; card.style.borderColor = 'var(--text-main)'; };
             
             card.innerHTML = `
                 <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:12px;">
                     <div>
                         <h3 style="margin:0; font-size:18px; color:var(--accent); font-weight:700; letter-spacing:-0.3px; font-family:var(--font-sans);">${div.name}</h3>
-                        <div style="display:inline-block; margin-top:6px; padding:2px 8px; background:rgba(0, 0, 0, 0.1); color:var(--accent); border-radius:12px; font-size:11px; font-weight:600;">${div.member_count} Members</div>
+                        <div style="display:inline-block; margin-top:6px; padding:2px 8px; background:var(--border-light); color:var(--accent); border-radius:12px; font-size:11px; font-weight:600;">${div.member_count} Members</div>
                     </div>
                     ${window.isSuperAdmin ? `<button class="btn-unified primary" style="font-size:12px; padding:6px 12px;" onclick="promptAddMember('${div.id}')">+ Add</button>` : ''}
                 </div>
@@ -576,7 +576,7 @@ async function loadContributions() {
         const statusEl = document.getElementById('contributionStatus');
         if(hasRecent || isAdminUser) {
             statusEl.textContent = 'Active Contributor (Access Granted)';
-            statusEl.style.color = '#000000';
+            statusEl.style.color = 'var(--text-main)';
         } else {
             statusEl.textContent = 'Inactive for 30 days (Access Revoked)';
             statusEl.style.color = 'var(--danger)';

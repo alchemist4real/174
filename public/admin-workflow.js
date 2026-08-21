@@ -670,7 +670,7 @@ window.loadTaskLogs = async function(taskId) {
             let noteHtml = l.note ? `<div style="color:var(--text-main); font-style:italic; margin-top:6px; padding-left:10px; border-left:2px solid var(--border-medium); font-size:13px;">"${l.note}"</div>` : '';
             let actionColor = 'var(--accent)';
             if (l.action === 'rejected' || l.action === 'deleted') actionColor = 'var(--danger)';
-            else if (l.action === 'phase_reset' || l.action === 'retracked') actionColor = 'var(--warning, #e6a23c)';
+            else if (l.action === 'phase_reset' || l.action === 'retracked') actionColor = 'color-mix(in srgb, var(--danger) 65%, var(--c1))';
             else if (l.action === 're_review_requested' || l.action === 'resubmitted') actionColor = 'var(--accent)';
 
             return `<div style="font-size:13px; border-bottom:1px solid var(--border-light); padding:10px 0;">

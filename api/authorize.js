@@ -107,7 +107,7 @@ export default async function handler(req, res) {
       <!DOCTYPE html>
       <html>
       <head><title>Authorization Error | Mr. Capsules</title></head>
-      <body style="font-family:sans-serif; padding:40px; text-align:center; background:#0f172a; color:#f8fafc;">
+      <body style="font-family:'OffBit-Dot','Courier New',monospace; padding:40px; text-align:center; background:#DCF4A2; color:#0055A4;">
         <h2>Missing redirect_uri parameter</h2>
         <p>This endpoint is used for OAuth 2.0 authorization by Claude.ai.</p>
       </body>
@@ -168,7 +168,7 @@ export default async function handler(req, res) {
       <!DOCTYPE html>
       <html>
       <head><title>Authorization Error | Mr. Capsules</title></head>
-      <body style="font-family:sans-serif; padding:40px; text-align:center; background:#0f172a; color:#f8fafc;">
+      <body style="font-family:'OffBit-Dot','Courier New',monospace; padding:40px; text-align:center; background:#DCF4A2; color:#0055A4;">
         <h2>Invalid redirect_uri parameter</h2>
         <p>The redirect URI <code>${escHtml(redirectUri)}</code> is not allowed.</p>
       </body>
@@ -316,9 +316,9 @@ export default async function handler(req, res) {
           <!DOCTYPE html>
           <html>
           <head><title>OAuth Server Error</title></head>
-          <body style="font-family:sans-serif; padding:40px; text-align:center; background:#0f172a; color:#f8fafc;">
+          <body style="font-family:'OffBit-Dot','Courier New',monospace; padding:40px; text-align:center; background:#DCF4A2; color:#0055A4;">
             <h2>Failed to issue authorization code</h2>
-            <p style="color:#ef4444;">${escHtml(errText)}</p>
+            <p style="color:#003870;">${escHtml(errText)}</p>
           </body>
           </html>
         `);
@@ -365,11 +365,13 @@ export default async function handler(req, res) {
       <link rel="shortcut icon" href="/favicon.png">
       <link rel="stylesheet" href="/tokens.css">
       <style>
+        /* ── Mr. Capsules 4-color palette (mirrors /tokens.css):
+             --c1 #DCF4A2 base · --c2 #C7E885 panel · --c3 #0055A4 ink · --c4 #003870 accent ── */
         * { box-sizing: border-box; margin: 0; padding: 0; }
         body {
-          font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-          background: #09090b;
-          color: #f4f4f5;
+          font-family: 'OffBit-Dot', 'Courier New', monospace;
+          background: var(--c1, #DCF4A2);
+          color: var(--c3, #0055A4);
           min-height: 100vh;
           display: flex;
           align-items: center;
@@ -377,13 +379,13 @@ export default async function handler(req, res) {
           padding: 20px;
         }
         .auth-card {
-          background: #18181b;
-          border: 1px solid #27272a;
-          border-radius: 16px;
+          background: var(--c1, #DCF4A2);
+          border: 1.5px solid var(--c3, #0055A4);
+          border-radius: 8px;
           padding: 36px 32px;
           max-width: 440px;
           width: 100%;
-          box-shadow: 0 20px 40px rgba(0, 0, 0, 0.45);
+          box-shadow: none;
           text-align: center;
           position: relative;
         }
@@ -395,10 +397,12 @@ export default async function handler(req, res) {
           margin-bottom: 20px;
         }
         .logo-icon { width: 40px; height: 40px; border-radius: 8px; }
-        .plus-icon { color: #71717a; font-size: 18px; font-weight: 300; }
+        .plus-icon { color: var(--text-muted, #0055A4); font-size: 18px; font-weight: 300; opacity: 0.6; }
         .client-badge {
-          background: ${isChatGPT ? '#10a37f' : '#d97706'};
-          color: #ffffff;
+          background: ${isChatGPT ? 'var(--c4, #003870)' : 'transparent'};
+          color: ${isChatGPT ? 'var(--c1, #DCF4A2)' : 'var(--c4, #003870)'};
+          border: 1.5px solid ${isChatGPT ? 'var(--c4, #003870)' : 'var(--border-medium, rgba(0,85,164,0.45))'};
+          font-family: 'OffBit-DotBold', 'Courier New', monospace;
           font-weight: 700;
           font-size: 13px;
           letter-spacing: 0.03em;
@@ -406,22 +410,24 @@ export default async function handler(req, res) {
           border-radius: 99px;
         }
         h1 {
+          font-family: 'OffBit-DotBold', 'Courier New', monospace;
           font-size: 22px;
           font-weight: 700;
           margin-bottom: 6px;
-          color: #fafafa;
+          color: var(--c3, #0055A4);
+          letter-spacing: 0.05em;
         }
         p.subtitle {
-          color: #a1a1aa;
+          color: var(--text-muted, #0055A4);
           font-size: 13px;
           line-height: 1.5;
           margin-bottom: 22px;
         }
         .session-detected-box {
           display: none;
-          background: rgba(16, 185, 129, 0.1);
-          border: 1px solid rgba(16, 185, 129, 0.3);
-          color: #34d399;
+          background: color-mix(in srgb, var(--c3, #0055A4) 8%, transparent);
+          border: 1.5px solid var(--border-medium, rgba(0,85,164,0.45));
+          color: var(--c3, #0055A4);
           padding: 12px 14px;
           border-radius: 8px;
           font-size: 13px;
@@ -430,9 +436,9 @@ export default async function handler(req, res) {
         }
         .session-detected-box strong { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 2px; }
         .error-banner {
-          background: rgba(239, 68, 68, 0.12);
-          border: 1px solid rgba(239, 68, 68, 0.35);
-          color: #f87171;
+          background: color-mix(in srgb, var(--danger, #003870) 10%, transparent);
+          border: 1.5px solid color-mix(in srgb, var(--danger, #003870) 45%, transparent);
+          color: var(--danger, #003870);
           padding: 12px 14px;
           border-radius: 8px;
           font-size: 13px;
@@ -440,56 +446,67 @@ export default async function handler(req, res) {
           text-align: left;
         }
         .input-group { margin-bottom: 18px; text-align: left; position: relative; }
-        label { display: block; font-size: 11px; font-weight: 600; color: #a1a1aa; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.06em; }
+        label {
+          display: block;
+          font-family: 'OffBit-DotBold', 'Courier New', monospace;
+          font-size: 11px;
+          font-weight: 600;
+          color: var(--text-muted, #0055A4);
+          margin-bottom: 6px;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+        }
         input[type="email"], input[type="text"], input[type="password"] {
           width: 100%;
-          padding: 12px 14px;
-          border-radius: 8px;
-          border: 1px solid #3f3f46;
-          background: #09090b;
-          color: #fafafa;
+          padding: 12px 16px;
+          border-radius: 99px;
+          border: 1.5px solid var(--c3, #0055A4);
+          background: transparent;
+          color: var(--c3, #0055A4);
+          font-family: 'OffBit-Dot', 'Courier New', monospace;
           font-size: 14px;
           outline: none;
-          transition: all 0.2s ease;
+          transition: border-color 0.2s ease, box-shadow 0.2s ease;
         }
         input[type="email"]:focus, input[type="text"]:focus, input[type="password"]:focus {
-          border-color: #38bdf8;
-          box-shadow: 0 0 0 2px rgba(56, 189, 248, 0.2);
+          border-color: var(--c4, #003870);
+          box-shadow: 0 0 0 3px var(--focus-ring, rgba(0,85,164,0.45));
         }
         .password-wrapper { position: relative; }
         .password-toggle {
           position: absolute;
-          right: 12px;
+          right: 14px;
           top: 50%;
           transform: translateY(-50%);
           background: none;
           border: none;
-          color: #71717a;
+          color: var(--text-muted, #0055A4);
           cursor: pointer;
+          font-family: 'OffBit-DotBold', 'Courier New', monospace;
           font-size: 12px;
           padding: 4px;
         }
-        .password-toggle:hover { color: #fafafa; }
+        .password-toggle:hover { color: var(--c3, #0055A4); }
         .btn-submit {
           width: 100%;
           padding: 13px;
-          border-radius: 8px;
+          border-radius: 99px;
           border: none;
-          background: #38bdf8;
-          color: #09090b;
+          background: var(--c3, #0055A4);
+          color: var(--c1, #DCF4A2);
+          font-family: 'OffBit-DotBold', 'Courier New', monospace;
           font-weight: 700;
           font-size: 14px;
+          letter-spacing: 0.03em;
           cursor: pointer;
-          transition: all 0.2s ease;
+          transition: opacity 0.2s ease, transform 0.1s ease;
           margin-top: 6px;
         }
-        .btn-submit:hover {
-          background: #7dd3fc;
-          box-shadow: 0 4px 16px rgba(56, 189, 248, 0.35);
-        }
-        .footer-note { font-size: 12px; color: #71717a; margin-top: 20px; }
-        .footer-note a { color: #38bdf8; text-decoration: none; font-weight: 500; }
-        .footer-note a:hover { text-decoration: underline; }
+        .btn-submit:hover { opacity: 0.9; }
+        .btn-submit:active { transform: scale(0.98); }
+        .footer-note { font-size: 12px; color: var(--text-muted, #0055A4); margin-top: 20px; letter-spacing: 0.05em; }
+        .footer-note a { color: var(--c4, #003870); text-decoration: underline; font-weight: 500; }
+        .footer-note a:hover { opacity: 0.8; }
       </style>
     </head>
     <body>
@@ -599,20 +616,46 @@ export default async function handler(req, res) {
   return res.status(200).send(html);
 }
 
+const REGISTRATION_WINDOW_MS = 60000;
+const REGISTRATION_MAX_PER_WINDOW = 30;
+
+// Sliding-window limiter. MCP clients (Claude.ai, ChatGPT) perform RFC 7591
+// Dynamic Client Registration from shared backend egress IPs on every fresh
+// connect, so this must tolerate bursts instead of locking to 1 req/60s.
+export function checkRegistrationRateLimit(clientIp, now = Date.now()) {
+  if (!global._registerRateLimit) global._registerRateLimit = new Map();
+  const store = global._registerRateLimit;
+
+  if (!global._registerRateLimitSweptAt || now - global._registerRateLimitSweptAt > REGISTRATION_WINDOW_MS) {
+    for (const [k, hits] of store) {
+      const fresh = hits.filter(t => now - t < REGISTRATION_WINDOW_MS);
+      if (fresh.length) store.set(k, fresh);
+      else store.delete(k);
+    }
+    global._registerRateLimitSweptAt = now;
+  }
+
+  const key = `register_${clientIp}`;
+  const hits = (store.get(key) || []).filter(t => now - t < REGISTRATION_WINDOW_MS);
+  if (hits.length >= REGISTRATION_MAX_PER_WINDOW) {
+    return { allowed: false, retryAfterSec: Math.max(1, Math.ceil((REGISTRATION_WINDOW_MS - (now - hits[0])) / 1000)) };
+  }
+  hits.push(now);
+  store.set(key, hits);
+  return { allowed: true, retryAfterSec: 0 };
+}
+
 async function handleClientRegistration(req, res, SUPABASE_URL, SB_SERVICE_KEY) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'invalid_request', error_description: 'Method not allowed' });
   }
 
   const clientIp = (req.headers['x-forwarded-for'] || '').split(',')[0].trim() || 'unknown';
-  const rateLimitKey = `register_${clientIp}`;
-  if (!global._registerRateLimit) global._registerRateLimit = new Map();
-  const now = Date.now();
-  const lastCall = global._registerRateLimit.get(rateLimitKey) || 0;
-  if (now - lastCall < 60000) {
-    return res.status(429).json({ error: 'rate_limit', error_description: 'Too many registrations. Please wait a minute.' });
+  const rl = checkRegistrationRateLimit(clientIp);
+  if (!rl.allowed) {
+    res.setHeader('Retry-After', String(rl.retryAfterSec));
+    return res.status(429).json({ error: 'rate_limit', error_description: `Too many client registrations from this address. Retry in ${rl.retryAfterSec}s.` });
   }
-  global._registerRateLimit.set(rateLimitKey, now);
 
   let body = req.body;
   if (Buffer.isBuffer(body)) {

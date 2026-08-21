@@ -174,6 +174,10 @@
             <div class="analytics-card">
               <div class="analytics-label">GUEST CLEANUP</div>
               <div id="guestCleanupResult" role="status" aria-live="polite" class="cleanup-result">Remove stale guest accounts</div>
+              <div class="guest-cleanup-row">
+                <label for="guestCleanupHours">Older than (hours)</label>
+                <input type="number" id="guestCleanupHours" min="1" max="8760" step="1" value="24" inputmode="numeric" />
+              </div>
               <button id="btnGuestCleanup" class="btn-unified guest-cleanup-btn">
                 <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
                 <span>Clean Guests (24h+)</span>
@@ -518,7 +522,7 @@
               <div style="background:var(--bg-card); border:1px solid var(--border-light); border-radius:10px; padding:16px;">
                 <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;">
                   <div style="display:flex; align-items:center; gap:8px;">
-                    <span style="background:rgba(16, 185, 129, 0.15); color:#10b981; font-weight:700; font-size:11px; padding:3px 8px; border-radius:99px;">CHATGPT ACTIONS</span>
+                    <span style="background:var(--accent-soft); color:var(--c4); border:1px solid var(--border-medium); font-weight:700; font-size:11px; padding:3px 8px; border-radius:99px;">CHATGPT ACTIONS</span>
                     <strong style="font-size:13px; color:var(--text-main);">ChatGPT Custom GPT Connector</strong>
                   </div>
                 </div>

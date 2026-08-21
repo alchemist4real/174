@@ -1895,16 +1895,25 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
     if (btnGuestCleanup) {
       btnGuestCleanup.onclick = async () => {
         const resultEl = document.getElementById('guestCleanupResult');
-        resultEl.textContent = 'Processing...';
+        const hoursInput = document.getElementById('guestCleanupHours');
+        let maxAgeHours = parseInt(hoursInput && hoursInput.value, 10);
+        if (!Number.isFinite(maxAgeHours) || maxAgeHours < 1) maxAgeHours = 24;
+        resultEl.textContent = `Processing... (guests older than ${maxAgeHours}h)`;
         resultEl.style.color = 'var(--text-muted)';
         await withButtonLoading(btnGuestCleanup, async () => {
           try {
-            const data = await adminAction('cleanup_guests', { max_age_hours: 24 });
+            const data = await adminAction('cleanup_guests', { max_age_hours: maxAgeHours });
             if (data && data.success !== false) {
               resultEl.style.color = 'var(--text-main)';
-              resultEl.textContent = `[SUCCESS] Deleted ${data.deleted || 0}/${data.total_guests_found || 0} guests`;
+              resultEl.textContent = `[SUCCESS] Deleted ${data.deleted || 0}/${data.total_guests_found || 0} guests (> ${data.max_age_hours || maxAgeHours}h old)` +
+                ((data.failed || 0) > 0 ? ` — ${data.failed} failed` : '');
               showToast(`Cleaned ${data.deleted || 0} stale guests`, 'success');
               if (window.loadUsers) window.loadUsers();
+              if ((data.failed || 0) > 0 && Array.isArray(data.errors) && data.errors.length > 0) {
+                console.warn('cleanup_guests errors:', data.errors);
+                const first = data.errors[0];
+                showToast(`Some guests failed: ${(first.error || first.table || 'unknown error').slice(0, 120)}`, 'error');
+              }
             } else {
               resultEl.style.color = 'var(--danger)';
               resultEl.textContent = `[ERROR] ${data?.error || 'Failed to cleanup guests'}`;

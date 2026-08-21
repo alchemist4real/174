@@ -511,10 +511,11 @@ export default async function handler(req, res) {
     }
 
     if (action === 'cleanup_guests') {
-      const maxAge = typeof req.body?.max_age_hours === 'number' ? req.body.max_age_hours : 24; 
+      const maxAge = (typeof req.body?.max_age_hours === 'number' && req.body.max_age_hours > 0) ? req.body.max_age_hours : 24;
       const cutoff = new Date(Date.now() - maxAge * 60 * 60 * 1000).toISOString();
 
-      let allUsers = [];
+      // 1. Collect stale guests (paginated)
+      const guestUsers = [];
       let page = 1;
       let hasMore = true;
       while (hasMore) {
@@ -527,61 +528,77 @@ export default async function handler(req, res) {
         }
         const usersData = await usersRes.json();
         const users = usersData.users || [];
-        allUsers = allUsers.concat(users);
+        users.forEach(u => {
+          const isGuestEmail = u.email && /^guest_\d+_\d+@mrcapsules\.com$/.test(u.email);
+          const isGuestMeta = u.user_metadata && u.user_metadata.is_guest === true;
+          const isOldEnough = new Date(u.created_at) <= new Date(cutoff);
+          if ((isGuestEmail || isGuestMeta) && isOldEnough) guestUsers.push(u);
+        });
         if (users.length < 100) hasMore = false;
         page++;
       }
 
-      const guestUsers = allUsers.filter(u => {
-        const isGuestEmail = u.email && u.email.match(/^guest_\d+_\d+@mrcapsules\.com$/);
-        const isGuestMeta = u.user_metadata && u.user_metadata.is_guest;
-        const isOldEnough = new Date(u.created_at) <= new Date(cutoff);
-        return (isGuestEmail || isGuestMeta) && isOldEnough;
-      });
-
       let deleted = 0;
       let errors = [];
 
-      for (let i = 0; i < guestUsers.length; i += 5) {
-        const batch = guestUsers.slice(i, i + 5);
-        await Promise.all(batch.map(async (guest) => {
-          try {
-            await fetch(`${supabaseUrl}/rest/v1/division_members?user_id=eq.${guest.id}`, { method: 'DELETE', headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` } });
-            await fetch(`${supabaseUrl}/rest/v1/user_stats?user_id=eq.${guest.id}`, { method: 'DELETE', headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` } });
-            await fetch(`${supabaseUrl}/rest/v1/user_devices?user_id=eq.${guest.id}`, { method: 'DELETE', headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` } });
-            await fetch(`${supabaseUrl}/rest/v1/division_requests?user_id=eq.${guest.id}`, { method: 'DELETE', headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` } });
-            await fetch(`${supabaseUrl}/rest/v1/contributions?user_id=eq.${guest.id}`, { method: 'DELETE', headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` } });
-            await fetch(`${supabaseUrl}/rest/v1/oauth_tokens?user_id=eq.${guest.id}`, { method: 'DELETE', headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` } });
-            await fetch(`${supabaseUrl}/rest/v1/oauth_codes?user_id=eq.${guest.id}`, { method: 'DELETE', headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` } });
+      if (guestUsers.length > 0) {
+        const ids = guestUsers.map(g => g.id);
+        const restHeaders = { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}`, 'Content-Type': 'application/json', 'Prefer': 'return=minimal' };
+        const idFilter = `in.(${ids.join(',')})`;
 
-            await fetch(`${supabaseUrl}/rest/v1/content_tasks?assigned_to=eq.${guest.id}`, {
-              method: 'PATCH',
-              headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}`, 'Content-Type': 'application/json' },
-              body: JSON.stringify({ assigned_to: null })
-            });
+        // 2. Bulk-delete related rows: one request per table instead of N per guest
+        const bulkResults = await Promise.all([
+          'division_members', 'user_stats', 'user_devices', 'division_requests',
+          'contributions', 'oauth_tokens', 'oauth_codes'
+        ].map(t =>
+          fetch(`${supabaseUrl}/rest/v1/${t}?user_id=${idFilter}`, { method: 'DELETE', headers: restHeaders })
+            .then(r => r.ok ? null : `${t}: ${r.status}`)
+            .catch(e => `${t}: ${e.message}`)
+        ));
+        bulkResults.forEach(e => { if (e) errors.push({ table: e }); });
 
-            if (guest.email) {
-              await fetch(`${supabaseUrl}/rest/v1/user_roles?identifier=eq.${encodeURIComponent(guest.email)}`, { method: 'DELETE', headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` } });
+        const patchRes = await fetch(`${supabaseUrl}/rest/v1/content_tasks?assigned_to=${idFilter}`, {
+          method: 'PATCH',
+          headers: restHeaders,
+          body: JSON.stringify({ assigned_to: null })
+        }).catch(e => null);
+        if (patchRes && !patchRes.ok) errors.push({ table: `content_tasks: ${patchRes.status}` });
+
+        const identifiers = [];
+        guestUsers.forEach(g => {
+          if (g.email) identifiers.push(`"${g.email}"`);
+          if (g.user_metadata?.username) identifiers.push(`"${g.user_metadata.username}"`);
+        });
+        if (identifiers.length > 0) {
+          const rolesRes = await fetch(`${supabaseUrl}/rest/v1/user_roles?identifier=in.(${identifiers.join(',')})`, {
+            method: 'DELETE', headers: restHeaders
+          }).catch(e => null);
+          if (rolesRes && !rolesRes.ok) errors.push({ table: `user_roles: ${rolesRes.status}` });
+        }
+
+        // 3. Delete auth users in parallel batches of 10
+        for (let i = 0; i < guestUsers.length; i += 10) {
+          const batch = guestUsers.slice(i, i + 10);
+          await Promise.all(batch.map(async (guest) => {
+            try {
+              const delRes = await fetch(`${supabaseUrl}/auth/v1/admin/users/${guest.id}`, { method: 'DELETE', headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` } });
+              if (delRes.ok) deleted++;
+              else errors.push({ email: guest.email, error: (await delRes.text()).slice(0, 300) });
+            } catch(e) {
+              errors.push({ email: guest.email, error: e.message });
             }
-            if (guest.user_metadata?.username) {
-              await fetch(`${supabaseUrl}/rest/v1/user_roles?identifier=eq.${encodeURIComponent(guest.user_metadata.username)}`, { method: 'DELETE', headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` } });
-            }
-
-            const delRes = await fetch(`${supabaseUrl}/auth/v1/admin/users/${guest.id}`, { method: 'DELETE', headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` } });
-            if (delRes.ok) deleted++;
-            else errors.push({ email: guest.email, error: await delRes.text() });
-          } catch(e) {
-            errors.push({ email: guest.email, error: e.message });
-          }
-        }));
+          }));
+        }
       }
 
-      await logAdminAction('cleanup_guests', { totalFound: guestUsers.length, deleted });
+      await logAdminAction('cleanup_guests', { maxAgeHours: maxAge, totalFound: guestUsers.length, deleted });
       return res.status(200).json({
         success: true,
+        max_age_hours: maxAge,
         total_guests_found: guestUsers.length,
         deleted,
-        errors: errors.length > 0 ? errors : undefined
+        failed: guestUsers.length - deleted,
+        errors: errors.length > 0 ? errors.slice(0, 20) : undefined
       });
     }
 
