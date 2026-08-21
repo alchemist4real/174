@@ -511,6 +511,9 @@ export default async function handler(req, res) {
     }
 
     if (action === 'cleanup_guests') {
+      const sbKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+      if (!sbKey) return res.status(500).json({ error: 'SUPABASE_SERVICE_ROLE_KEY not configured' });
+
       const maxAge = (typeof req.body?.max_age_hours === 'number' && req.body.max_age_hours > 0) ? req.body.max_age_hours : 24;
       const cutoff = new Date(Date.now() - maxAge * 60 * 60 * 1000).toISOString();
 
