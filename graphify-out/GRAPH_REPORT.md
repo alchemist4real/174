@@ -1,7 +1,7 @@
 # Graph Report - MR-CAPSULES-main  (2026-08-25)
 
 ## Corpus Check
-- 397 files · ~27,569,553 words
+- 397 files · ~27,570,105 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
@@ -10,7 +10,7 @@
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `e92463b1`
+- Built from commit: `5983b489`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 

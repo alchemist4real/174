@@ -15,7 +15,7 @@ Contributors operate across three specialized divisions:
 
 ### 2. 💻 Division Development (Pembuat Konten)
 - Crafts CBT choice-based practice pools and HTML summaries.
-- Uses **Viebo Code** (AI Prompt Engineering via Claude / Antigravity) to generate clean HTML without writing code manually.
+- Uses **Vibe Coding** (AI Prompt Engineering via Claude / Antigravity) to generate clean HTML without writing code manually.
 - Moves completed tasks to **Developed (Wait for Review)**.
 
 ### 3. 🔍 Division Review & QA (Koreksi)

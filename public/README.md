@@ -61,7 +61,7 @@ Beyond serving as a static archive, MR-CAPSULES functions as a **hybrid platform
 
 - 📚 **Preserve Knowledge:** Prevent valuable study materials and past questions from getting lost over time.
 - ⚡ **Interactive CBT Format:** Convert static PDFs/notes into interactive choices with immediate answer verification and explanations.
-- 🤝 **AI-Assisted Content Pipeline ("Viebo Code"):** Content creators work as Prompt Engineers alongside AI assistants to generate clean HTML question pools rapidly.
+- 🤝 **AI-Assisted Content Pipeline ("Vibe Coding"):** Content creators work as Prompt Engineers alongside AI assistants to generate clean HTML question pools rapidly.
 - 🔓 **Open Access:** Completely free and non-profit for all students.
 
 ---
@@ -108,7 +108,7 @@ graph TD
         M1["Assigns tasks & oversees Kanban workflow"]
     end
     subgraph D["2. DEVELOPMENT DIVISION"]
-        D1["Creates CBT HTML using Viebo Code<br/>(AI Prompt Engineering + HTML Editor)"]
+        D1["Creates CBT HTML using Vibe Coding<br/>(AI Prompt Engineering + HTML Editor)"]
     end
     subgraph R["3. REVIEW & QA DIVISION"]
         R1["Verifies answers & moves task to DONE"]
@@ -120,7 +120,7 @@ graph TD
 
 ### 👥 Division Roles
 1. **Division Management (Pengurus):** Assigns tasks on the Kanban board, manages member permissions, broadcasts announcements, and oversees project progress.
-2. **Division Development (Pembuat Konten):** Uses **Viebo Code** (generating code using AI like Claude / Antigravity) to create CBT question pools and HTML content, placing them in *Developed (Wait for Review)*.
+2. **Division Development (Pembuat Konten):** Uses **Vibe Coding** (generating code using AI like Claude / Antigravity) to create CBT question pools and HTML content, placing them in *Developed (Wait for Review)*.
 3. **Division Review & QA (Koreksi):** Inspects live previews in the HTML editor, validates key answers against references, and moves verified tasks to *Done*.
 
 ---
