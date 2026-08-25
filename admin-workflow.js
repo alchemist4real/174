@@ -956,16 +956,27 @@ window.loadContributions = async function() {
     const resMe = await apiCall('contributions', { action: 'get_my_contributions' });
     if(resMe.success) {
         const total = resMe.contributions.reduce((sum, c) => sum + c.points, 0);
-        document.getElementById('myPoints').textContent = total;
+        const myPointsEl = document.getElementById('myPoints');
+        if (myPointsEl) {
+            myPointsEl.textContent = total;
+            if (resMe.is_couple || resMe.couple_package) {
+                myPointsEl.title = 'Paket Contribution Couple: Farid & Khesy';
+            }
+        }
         
         // check 30 days
         const hasRecent = resMe.contributions.some(c => new Date(c.created_at) > new Date(Date.now() - 30 * 24 * 60 * 60 * 1000));
         const statusEl = document.getElementById('contributionStatus');
+        const isCouple = resMe.is_couple || resMe.couple_package;
         if(hasRecent || isAdminUser) {
-            statusEl.textContent = 'Active Contributor (Access Granted)';
+            statusEl.innerHTML = isCouple 
+                ? '<span style="font-weight:bold; color:var(--text-main);">💑 Couple Package Active (Access Granted)</span>' 
+                : 'Active Contributor (Access Granted)';
             statusEl.style.color = 'var(--text-main)';
         } else {
-            statusEl.textContent = 'Inactive for 30 days (Access Revoked)';
+            statusEl.textContent = isCouple
+                ? '💑 Couple Inactive for 30 days (Access Revoked)'
+                : 'Inactive for 30 days (Access Revoked)';
             statusEl.style.color = 'var(--danger)';
         }
     } else {
@@ -979,11 +990,12 @@ window.loadContributions = async function() {
         list.innerHTML = '';
         resLeader.leaderboard.forEach((u, i) => {
             const medal = i === 0 ? '1st' : (i === 1 ? '2nd' : (i === 2 ? '3rd' : `${i+1}.`));
+            const coupleBadge = u.is_couple ? ' <span style="font-size:12px; vertical-align:middle;" title="Paket Contribution Couple: Farid & Khesy">💑</span>' : '';
             list.innerHTML += `
                 <li style="display:flex; justify-content:space-between; padding:12px 24px; border-bottom:1px solid var(--border-light); align-items:center; gap:12px; min-width:0;">
                     <div style="display:flex; gap:16px; align-items:center; min-width:0; flex:1;">
                         <span style="font-size:16px; font-weight:600; width:24px; flex-shrink:0;">${medal}</span>
-                        <span style="font-size:14px; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${u.username || u.email.split('@')[0]}</span>
+                        <span style="font-size:14px; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${u.username || u.email.split('@')[0]}${coupleBadge}</span>
                     </div>
                     <div style="font-weight:700; color:var(--accent); flex-shrink:0;">${u.points} pts</div>
                 </li>

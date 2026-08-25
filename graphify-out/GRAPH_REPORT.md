@@ -1,16 +1,16 @@
 # Graph Report - MR-CAPSULES-main  (2026-08-25)
 
 ## Corpus Check
-- 395 files · ~27,558,066 words
+- 397 files · ~27,567,037 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 7838 nodes · 16188 edges · 395 communities (363 shown, 32 thin omitted)
-- Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 85 edges (avg confidence: 0.52)
+- 7907 nodes · 16297 edges · 397 communities (366 shown, 31 thin omitted)
+- Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 86 edges (avg confidence: 0.52)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `b8fc6ee3`
+- Built from commit: `5651fd2b`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -379,6 +379,8 @@
 - clean_public.js
 - uploadSessions
 - contributionsRecord
+- K 4-Am I Injured_ — Konsep Umum Penyakit Quiz.html
+- K 4-Am I Injured_ — Konsep Umum Penyakit Quiz.html
 
 ## God Nodes (most connected - your core abstractions)
 1. `routeMethod()` - 78 edges
@@ -407,7 +409,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (395 total, 32 thin omitted)
+## Communities (397 total, 31 thin omitted)
 
 ### Community 0 - "2.4 CBT 2_K20C AM I CINEMATIC.html"
 Cohesion: 0.07
@@ -968,6 +970,10 @@ Nodes (5): 4. Frontend Application Logic, 4c. Main Page Integration — `index.h
 ### Community 139 - "build.js"
 Cohesion: 0.83
 Nodes (3): build(), copyRecursiveSync(), walkDir()
+
+### Community 140 - "mock_server.js"
+Cohesion: 0.53
+Nodes (4): fetchAllAdminUsers(), handler(), isCoupleMember(), server
 
 ### Community 141 - "1.2 other_Pull up 1.html"
 Cohesion: 0.19
@@ -1658,16 +1664,16 @@ Cohesion: 0.15
 Nodes (19): authenticateApiKey(), authenticateJWT(), authenticateOAuthAccessToken(), canonicalizeUrl(), checkRateLimit(), getMcpToolsList(), handleDirectUpload(), handleMcpStreamableGet() (+11 more)
 
 ### Community 335 - "logAction"
-Cohesion: 0.20
-Nodes (14): codebaseDeleteFile(), codebaseReadFile(), codebaseWriteFile(), contentDelete(), contentDeleteFiles(), contentRename(), divisionsAddMember(), err404() (+6 more)
+Cohesion: 0.22
+Nodes (13): codebaseDeleteFile(), codebaseReadFile(), codebaseWriteFile(), contentDelete(), contentDeleteFiles(), contentRename(), divisionsAddMember(), err404() (+5 more)
 
 ### Community 336 - "contentUpload"
 Cohesion: 0.50
 Nodes (8): contentGet(), contentUpload(), docsAddSection(), docsAddTab(), docsDeleteTab(), docsUpdateSection(), docsUpdateTab(), sanitizeDocsHtml()
 
 ### Community 337 - "err400"
-Cohesion: 0.17
-Nodes (20): customMcpToolsMap, doctortabletCreateCategory(), doctortabletDeleteNote(), doctortabletExportMergedDocument(), doctortabletFetchNotes(), doctortabletListCategories(), doctortabletListNotes(), doctortabletReadNote() (+12 more)
+Cohesion: 0.15
+Nodes (22): customMcpToolsMap, doctortabletCreateCategory(), doctortabletDeleteNote(), doctortabletExportMergedDocument(), doctortabletFetchNotes(), doctortabletListCategories(), doctortabletListNotes(), doctortabletReadNote() (+14 more)
 
 ### Community 338 - "err403"
 Cohesion: 0.10
@@ -1737,10 +1743,18 @@ Nodes (8): cleanExpiredUploadSessions(), restoreUploadSessionFromSb(), uploadCan
 Cohesion: 0.50
 Nodes (4): contributionsRecord(), recordContribution(), rewardUserForUpload(), tasksApprove()
 
+### Community 395 - "K 4-Am I Injured_ — Konsep Umum Penyakit Quiz.html"
+Cohesion: 0.10
+Nodes (32): activeTypes, downloadCert(), endSession(), IMUN_POOL, JEJAS_POOL, KEYS, KLINIS_POOL, KONSEP_POOL (+24 more)
+
+### Community 396 - "K 4-Am I Injured_ — Konsep Umum Penyakit Quiz.html"
+Cohesion: 0.10
+Nodes (32): activeTypes, downloadCert(), endSession(), IMUN_POOL, JEJAS_POOL, KEYS, KLINIS_POOL, KONSEP_POOL (+24 more)
+
 ## Knowledge Gaps
-- **1252 isolated node(s):** `fileCache`, `_statusTextEl`, `_statusBarEl`, `_itemCountEl`, `fileInput` (+1247 more)
+- **1280 isolated node(s):** `fileCache`, `_statusTextEl`, `_statusBarEl`, `_itemCountEl`, `fileInput` (+1275 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **32 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **31 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
@@ -1749,13 +1763,13 @@ _Questions this graph is uniquely positioned to answer:_
   _High betweenness centrality (0.000) - this node is a cross-community bridge._
 - **Why does `bindKeyEvents()` connect `MockResponse` to `admin.js`?**
   _High betweenness centrality (0.000) - this node is a cross-community bridge._
-- **Why does `bindKeyEvents()` connect `MockResponse` to `admin.js`?**
-  _High betweenness centrality (0.000) - this node is a cross-community bridge._
 - **What connects `fileCache`, `_statusTextEl`, `_statusBarEl` to the rest of the system?**
-  _1252 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _1280 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `2.4 CBT 2_K20C AM I CINEMATIC.html` be split into smaller, more focused modules?**
   _Cohesion score 0.07244843997884717 - nodes in this community are weakly interconnected._
 - **Should `2.5 PRAKTIKUM_PRAKTIKUM 2.html` be split into smaller, more focused modules?**
   _Cohesion score 0.07692307692307693 - nodes in this community are weakly interconnected._
 - **Should `index.html` be split into smaller, more focused modules?**
   _Cohesion score 0.05365686944634313 - nodes in this community are weakly interconnected._
+- **Should `2.5 PRAKTIKUM_PRAKTIKUM 1.html` be split into smaller, more focused modules?**
+  _Cohesion score 0.08163265306122448 - nodes in this community are weakly interconnected._

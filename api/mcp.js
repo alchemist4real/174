@@ -2832,6 +2832,32 @@ async function recordContribution(userId, points, taskId, type, su, sk) {
   }
 }
 
+// Couple Contribution Package (Farid & Khesy)
+const COUPLE_EMAILS = new Set([
+  'farid.hmzh00@gmail.com',
+  'khesyian@gmail.com'
+]);
+
+const COUPLE_USER_IDS = new Set([
+  '20326419-e37a-4e46-a473-cb013a21acfe', // Farid (farid.hmzh00@gmail.com)
+  'a197ddbd-7f7f-44ad-8c77-4fd868607241'  // Khesy (khesyian@gmail.com)
+]);
+
+function isCoupleMember(user) {
+  if (!user) return false;
+  if (user.id && COUPLE_USER_IDS.has(user.id)) return true;
+  const email = (user.email || '').toLowerCase();
+  if (COUPLE_EMAILS.has(email)) return true;
+  const meta = user.user_metadata || {};
+  const username = (meta.username || '').toLowerCase();
+  const fullName = (meta.full_name || meta.name || '').toLowerCase();
+
+  const isFarid = (email.includes('farid') || username.includes('farid') || fullName.includes('farid')) && !email.includes('muqorroben');
+  const isKhesy = email.includes('khesy') || email.includes('keisya') || email.includes('kheisya') || username.includes('khesy') || username.includes('keisya') || fullName.includes('khesy') || fullName.includes('keisya');
+
+  return isFarid || isKhesy;
+}
+
 async function contributionsLeaderboard(su, sk) {
   const res = await fetch(`${su}/rest/v1/contributions?select=points,user_id`, {
     headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}` }
@@ -2841,27 +2867,80 @@ async function contributionsLeaderboard(su, sk) {
     headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}` }
   });
   const { users } = await usersRes.json();
+  const allUsers = Array.isArray(users) ? users : [];
+
+  // Calculate pooled points for couple package (Farid & Khesy)
+  const coupleUserIds = new Set(allUsers.filter(isCoupleMember).map(u => u.id));
+  let coupleTotalPoints = 0;
+  (data || []).forEach(c => {
+    if (coupleUserIds.has(c.user_id)) {
+      coupleTotalPoints += (c.points || 0);
+    }
+  });
+
   const scores = {};
   (data || []).forEach(c => {
-    const u = (users || []).find(au => au.id === c.user_id);
+    const u = allUsers.find(au => au.id === c.user_id);
     const email = u ? u.email : 'Unknown';
-    if (!scores[email]) scores[email] = { points: 0, username: u?.user_metadata?.username || email.split('@')[0] };
-    scores[email].points += c.points;
+    const username = u?.user_metadata?.username || email.split('@')[0];
+    const userIsCouple = isCoupleMember(u);
+    if (!scores[email]) scores[email] = { points: 0, username: u?.user_metadata?.username || email.split('@')[0], is_couple: userIsCouple };
+    if (!userIsCouple) scores[email].points += (c.points || 0);
   });
+
+  // Ensure couple users have their points connected/synced to coupleTotalPoints
+  allUsers.filter(isCoupleMember).forEach(cu => {
+    const email = cu.email;
+    const username = cu.user_metadata?.username || cu.email.split('@')[0];
+    scores[email] = {
+      points: coupleTotalPoints,
+      username,
+      is_couple: true
+    };
+  });
+
   const leaderboard = Object.entries(scores)
-    .map(([email, d]) => ({ email, username: d.username, points: d.points }))
+    .map(([email, d]) => ({ email, username: d.username, points: d.points, is_couple: d.is_couple || false }))
     .sort((a, b) => b.points - a.points);
   return { leaderboard };
 }
 
 async function contributionsMy(userId, su, sk) {
-  const res = await fetch(`${su}/rest/v1/contributions?user_id=eq.${userId}&order=created_at.desc`, {
+  let targetUserIds = [userId];
+  const usersRes = await fetch(`${su}/auth/v1/admin/users?per_page=1000`, {
+    headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}` }
+  });
+  let isCouple = false;
+  if (usersRes.ok) {
+    const { users } = await usersRes.json();
+    const allUsers = Array.isArray(users) ? users : [];
+    const currentUser = allUsers.find(u => u.id === userId);
+    if (isCoupleMember(currentUser)) {
+      isCouple = true;
+      const coupleUsers = allUsers.filter(isCoupleMember);
+      if (coupleUsers.length > 0) {
+        targetUserIds = Array.from(new Set(coupleUsers.map(u => u.id)));
+      }
+    }
+  }
+
+  const filterParam = targetUserIds.length > 1
+    ? `user_id=in.(${targetUserIds.join(',')})`
+    : `user_id=eq.${userId}`;
+
+  const res = await fetch(`${su}/rest/v1/contributions?${filterParam}&order=created_at.desc`, {
     headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}` }
   });
   const data = await res.json();
   const list = Array.isArray(data) ? data : [];
   const total = list.reduce((sum, c) => sum + (c.points || 0), 0);
-  return { total_points: total, count: list.length, contributions: list };
+  return {
+    total_points: total,
+    count: list.length,
+    is_couple: isCouple,
+    couple_package: isCouple ? 'Paket Contribution Couple: Farid & Khesy' : null,
+    contributions: list
+  };
 }
 
 async function contributionsRecord(params, adminEmail, su, sk) {
