@@ -161,7 +161,10 @@
 
 <div class="alert-box">
   <strong>💬 INTINYA: MCP = NGOBROL, BUKAN CODING</strong><br>
-  Cukup ketik permintaan dalam bahasa biasa ke chat Claude, misalnya: <em>"Buatkan task baru untuk materi Fisiologi Saraf blok 1.3"</em> atau <em>"Cek file apa saja yang ada di folder blok 2.5"</em>. Claude yang menerjemahkan permintaan itu jadi aksi teknis (memanggil tool <code>tasks_create</code>, <code>content_list</code>, dsb) di belakang layar. Tidak perlu menghafal nama tool atau menulis <p><strong>MR-CAPSULES</strong> menyediakan API Gateway & Model Context Protocol (MCP) serverless ganda berbasis <em>Streamable HTTP (MCP 2025-06-18)</em> dan <em>OpenAPI 3.0.3 REST Actions</em>. Lewat arsitektur ini, AI Assistant seperti <strong>Claude.ai Web</strong>, <strong>Claude Desktop</strong>, <strong>ChatGPT Custom GPTs</strong>, atau AI Agent otonom dapat berkolaborasi langsung mengelola konten, task board, dan catatan medis DoctorTablet.</p>
+  Cukup ketik permintaan dalam bahasa biasa ke chat Claude, misalnya: <em>"Buatkan task baru untuk materi Fisiologi Saraf blok 1.3"</em> atau <em>"Cek file apa saja yang ada di folder blok 2.5"</em>. Claude yang menerjemahkan permintaan itu jadi aksi teknis (memanggil tool <code>tasks_create</code>, <code>content_list</code>, dsb) di belakang layar. Tidak perlu menghafal nama tool atau menulis kode.
+</div>
+
+<p><strong>MR-CAPSULES</strong> menyediakan API Gateway & Model Context Protocol (MCP) serverless ganda berbasis <em>Streamable HTTP (MCP 2025-06-18)</em> dan <em>OpenAPI 3.0.3 REST Actions</em>. Lewat arsitektur ini, AI Assistant seperti <strong>Claude.ai Web</strong>, <strong>Claude Desktop</strong>, <strong>ChatGPT Custom GPTs</strong>, atau AI Agent otonom dapat berkolaborasi langsung mengelola konten, task board, dan catatan medis DoctorTablet.</p>
 
 <h3>A. Cara Mengoperasikan & Mengisi API Key</h3>
 <ol>
@@ -234,17 +237,6 @@
 </ul>
       </div>
 
-      <div class="docs-section" id="privacy">
-        <h2>3. Privacy Policy &amp; Data Protection</h2>
-        <p><strong>MR-CAPSULES Platform</strong> berkomitmen penuh untuk menjaga keamanan, privasi data pengguna, dan integritas materi edukasi kedokteran:</p>
-        <ul>
-          <li><strong>Zero Data Sale:</strong> Kami tidak pernah menjual, menyewakan, atau memperdagangkan data pribadi pengguna kepada pihak ketiga manapun.</li>
-          <li><strong>Autentikasi &amp; Enkripsi:</strong> Seluruh komunikasi data dilindungi melalui enkripsi SSL/TLS (HTTPS). Kunci API dan token OAuth di-hash satu arah menggunakan SHA-256 dengan siklus masa kedaluwarsa ketat.</li>
-          <li><strong>Akses AI Assistant:</strong> AI Assistant (ChatGPT Custom GPT, Claude MCP) hanya dapat mengakses data dan menjalankan perintah sesuai dengan hak akses (role) pengguna yang terotentikasi. Data percakapan diproses secara langsung antara klien AI dan gateway serverless tanpa penyimpanan histori di luar audit log operasional.</li>
-          <li><strong>Penghapusan Data:</strong> Pengguna dapat mencabut kunci API atau memutuskan sesi OAuth kapan saja melalui Admin Panel.</li>
-        </ul>
-      </div>
-
       <div class="docs-section">
         <h2>2. Referensi Lengkap MCP Tools & Hak Akses</h2>
         <div class="alert-box">
@@ -252,7 +244,7 @@
   Tabel-tabel berikut adalah <em>referensi teknis</em> buat yang penasaran ada fungsi apa saja di baliknya. Tapi dalam praktiknya, kamu tidak perlu mengetik nama tool ini secara manual —  cukup chat biasa ke Claude (misalnya: <em>"tolong lihat siapa saja anggota divisi Development"</em>), dan Claude yang akan mencocokkan permintaan itu dengan tool yang tepat (<code>divisions_get_members</code>) lalu menjalankannya.
 </div>
 
-<p>Bagian ini merinci seluruh <strong>70 method/tools</strong> yang tersedia lewat MCP Gateway, dikelompokkan berdasarkan fungsinya, beserta siapa saja yang berwenang memakainya.</p>
+<p>Bagian ini merinci seluruh <strong>78+ method/tools</strong> yang tersedia lewat MCP Gateway, dikelompokkan berdasarkan fungsinya, beserta siapa saja yang berwenang memakainya.</p>
 
 <div class="alert-box">
   <strong>PENTING:</strong> Meski sebuah tool "tampak" di daftar AI Assistant kamu, eksekusinya tetap divalidasi ulang oleh server berdasarkan role akun yang terhubung. Kalau tidak punya hak akses, permintaan akan ditolak (403/permission error) walau tool-nya sempat dipanggil.
@@ -274,7 +266,7 @@
   </thead>
   <tbody>
     <tr><td><code>content_list</code>, <code>content_get</code>, <code>content_tree</code></td><td>Melihat/membaca materi HTML</td><td>Semua pengguna terautentikasi</td></tr>
-    <tr><td><code>content_upload</code>, <code>content_rename</code></td><td>Upload langsung (Base64, max ~3.5MB per request) & move file</td><td>Developer, Reviewer, Admin, SuperAdmin</td></tr>
+    <tr><td><code>content_upload</code>, <code>content_upload_from_agent_path</code>, <code>content_rename</code></td><td>Upload langsung (Base64, max ~3.5MB per request) & move file</td><td>Developer, Reviewer, Admin, SuperAdmin</td></tr>
     <tr><td><code>upload_init</code>, <code>upload_chunk</code>, <code>upload_commit</code></td><td>Sistem upload terfragmentasi untuk file besar (video/PDF/pool ZIP tanpa batas ukuran)</td><td>Developer, Reviewer, Admin, SuperAdmin</td></tr>
     <tr><td><code>upload_status</code>, <code>upload_cancel</code></td><td>Mengecek status & membatalkan sesi upload terfragmentasi</td><td>Developer, Reviewer, Admin, SuperAdmin</td></tr>
     <tr><td><code>content_delete</code>, <code>content_delete_files</code></td><td>Menghapus materi</td><td>Admin, SuperAdmin</td></tr>
@@ -342,9 +334,9 @@
   </thead>
   <tbody>
     <tr><td><code>users_list</code></td><td>Melihat semua pengguna terdaftar</td><td>SuperAdmin</td></tr>
-    <tr><td><code>users_ban</code>, <code>users_delete</code>, <code>users_remove_device</code>, <code>users_block_device</code></td><td>Moderasi & keamanan akun/perangkat</td><td>SuperAdmin</td></tr>
+    <tr><td><code>users_ban</code>, <code>users_reset_password</code>, <code>users_delete</code>, <code>users_remove_device</code>, <code>users_block_device</code></td><td>Moderasi & keamanan akun/perangkat</td><td>SuperAdmin</td></tr>
     <tr><td><code>users_add_admin</code>, <code>users_remove_admin</code></td><td>Mengangkat/menurunkan hak Admin</td><td>SuperAdmin</td></tr>
-    <tr><td><code>contributions_leaderboard</code>, <code>contributions_my</code></td><td>Melihat papan peringkat & riwayat sendiri</td><td>Semua pengguna terautentikasi</td></tr>
+    <tr><td><code>contributions_leaderboard</code>, <code>contributions_my</code>, <code>contributions_record</code></td><td>Melihat papan peringkat & riwayat sendiri</td><td>Semua pengguna terautentikasi</td></tr>
   </tbody>
 </table>
 
@@ -365,6 +357,17 @@
 <div class="alert-box">
   <strong>CATATAN:</strong> Tabel di atas menunjukkan role minimum yang dibutuhkan. Role yang lebih tinggi dalam hierarki (SuperAdmin &gt; Admin &gt; Reviewer/Developer) otomatis mewarisi akses baca dari role di bawahnya.
 </div>
+      </div>
+
+      <div class="docs-section" id="privacy">
+        <h2>3. Privacy Policy &amp; Data Protection</h2>
+        <p><strong>MR-CAPSULES Platform</strong> berkomitmen penuh untuk menjaga keamanan, privasi data pengguna, dan integritas materi edukasi kedokteran:</p>
+        <ul>
+          <li><strong>Zero Data Sale:</strong> Kami tidak pernah menjual, menyewakan, atau memperdagangkan data pribadi pengguna kepada pihak ketiga manapun.</li>
+          <li><strong>Autentikasi &amp; Enkripsi:</strong> Seluruh komunikasi data dilindungi melalui enkripsi SSL/TLS (HTTPS). Kunci API dan token OAuth di-hash satu arah menggunakan SHA-256 dengan siklus masa kedaluwarsa ketat.</li>
+          <li><strong>Akses AI Assistant:</strong> AI Assistant (ChatGPT Custom GPT, Claude MCP) hanya dapat mengakses data dan menjalankan perintah sesuai dengan hak akses (role) pengguna yang terotentikasi. Data percakapan diproses secara langsung antara klien AI dan gateway serverless tanpa penyimpanan histori di luar audit log operasional.</li>
+          <li><strong>Penghapusan Data:</strong> Pengguna dapat mencabut kunci API atau memutuskan sesi OAuth kapan saja melalui Admin Panel.</li>
+        </ul>
       </div>
     </div>
 
@@ -706,12 +709,12 @@ Buat semua task tersebut satu per satu.&rdquo;</pre>
       <li>Lampirkan materi/soal mentah ke chat AI.</li>
       <li>Gunakan <strong>Prompt Formal</strong> yang sudah disediakan di bagian 3 dokumentasi ini.</li>
     </ul>
+    <div class="alert-box" style="margin-top:12px;">
+      <strong>SELURUH WORKFLOW BISA DIJALANKAN MURNI VIA CLAUDE CONNECTOR</strong><br>
+      Semua langkah di atas —  dari claim task, membaca template, prompting, sampai upload &amp; submit —  bisa dilakukan <strong>100% lewat chat Claude.ai</strong> yang terhubung ke MCP MR-CAPSULES, <em>tanpa perlu membuka Admin Panel sekali pun</em>.<br><br>
+      <strong>Satu-satunya pengecualian:</strong> upload file referensi materi (PPT Lecture, Modul Praktikum, Naskah Soal) <strong>tidak bisa lewat Claude Connector</strong> karena file itu ada di perangkat lokal kamu. File referensi harus dilampirkan langsung ke chat Claude secara manual sebelum prompting.
+    </div>
   </li>
-<div class="alert-box">
-  <strong>SELURUH WORKFLOW BISA DIJALANKAN MURNI VIA CLAUDE CONNECTOR</strong><br>
-  Semua langkah di atas — dari claim task, membaca template, prompting, sampai upload &amp; submit — bisa dilakukan <strong>100% lewat chat Claude.ai</strong> yang terhubung ke MCP MR-CAPSULES, <em>tanpa perlu membuka Admin Panel sama sekali</em>.<br><br>
-  <strong>Satu-satunya pengecualian:</strong> upload file referensi materi (PPT Lecture, Modul Praktikum, Naskah Soal) <strong>tidak bisa lewat Claude Connector</strong> karena file itu ada di perangkat lokal kamu. File referensi harus dilampirkan langsung ke chat Claude secara manual sebelum prompting.
-</div>
   <li>
     <strong>Upload Hasil &amp; Submit Task</strong>
     <ul>
@@ -1160,49 +1163,103 @@ Tolong update explanation soal nomor 13 di file tersebut."</pre>
       const tabs = document.querySelectorAll('.top-nav .tab');
       const containers = document.querySelectorAll('.docs-container');
       const mobileSelect = document.getElementById('docsMobileTabSelect');
+      const contentArea = document.querySelector('.docs-content-area');
 
-      function activateTab(target) {
-        if (!target) return;
+      function activateTab(targetId, shouldScroll) {
+        if (!targetId) targetId = 'docsGeneral';
+
+        let targetContainerId = targetId;
+        let subElementToScroll = null;
+
+        // Check if targetId directly matches a container
+        const directEl = document.getElementById(targetId);
+        if (directEl && directEl.classList.contains('docs-container')) {
+          targetContainerId = targetId;
+        } else if (directEl) {
+          // Sub-element within a container (e.g., #privacy)
+          const parentContainer = directEl.closest('.docs-container');
+          if (parentContainer) {
+            targetContainerId = parentContainer.id;
+            subElementToScroll = directEl;
+          } else {
+            targetContainerId = 'docsGeneral';
+          }
+        } else {
+          // Check if matches a tab's data-target
+          const matchingTab = Array.from(tabs).find(t => t.getAttribute('data-target') === targetId);
+          if (matchingTab) {
+            targetContainerId = targetId;
+          } else {
+            targetContainerId = 'docsGeneral';
+          }
+        }
+
         tabs.forEach(t => {
-          if (t.getAttribute('data-target') === target) t.classList.add('active');
+          if (t.getAttribute('data-target') === targetContainerId) t.classList.add('active');
           else t.classList.remove('active');
         });
+
         containers.forEach(c => {
-          if (c.id === target) c.classList.add('active');
+          if (c.id === targetContainerId) c.classList.add('active');
           else c.classList.remove('active');
         });
-        if (mobileSelect && mobileSelect.value !== target) {
-          mobileSelect.value = target;
+
+        if (mobileSelect && mobileSelect.value !== targetContainerId) {
+          mobileSelect.value = targetContainerId;
         }
-        if (history.pushState) {
-          history.pushState(null, null, '#' + target);
-        } else {
-          location.hash = '#' + target;
+
+        if (subElementToScroll) {
+          setTimeout(() => {
+            subElementToScroll.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }, 60);
+        } else if (shouldScroll) {
+          if (contentArea) contentArea.scrollTo({ top: 0, behavior: 'smooth' });
+          window.scrollTo({ top: 0, behavior: 'smooth' });
         }
       }
 
       tabs.forEach(tab => {
         tab.onclick = () => {
           const target = tab.getAttribute('data-target');
-          activateTab(target);
+          if (history.pushState) {
+            history.pushState(null, null, '#' + target);
+          } else {
+            location.hash = '#' + target;
+          }
+          activateTab(target, true);
         };
       });
 
       if (mobileSelect) {
         mobileSelect.onchange = (e) => {
-          activateTab(e.target.value);
-          window.scrollTo({ top: 0, behavior: 'smooth' });
+          const target = e.target.value;
+          if (history.pushState) {
+            history.pushState(null, null, '#' + target);
+          } else {
+            location.hash = '#' + target;
+          }
+          activateTab(target, true);
         };
       }
 
-      const hash = location.hash.replace('#', '');
-      if (hash) {
-        activateTab(hash);
+      function handleHashChange() {
+        const hash = location.hash.replace('#', '');
+        if (hash) {
+          activateTab(hash, false);
+        } else {
+          activateTab('docsGeneral', false);
+        }
       }
+
+      window.addEventListener('hashchange', handleHashChange);
+      handleHashChange();
     }
 
-    document.addEventListener('DOMContentLoaded', initTabs);
-    initTabs();
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initTabs);
+    } else {
+      initTabs();
+    }
 
     /* ══ PERSONA ENGINE (Synced from Main Site) ══ */
     function walkAndReplaceMR(node, isMrs) {

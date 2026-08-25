@@ -1,16 +1,16 @@
-# Graph Report - MR-CAPSULES-main  (2026-08-18)
+# Graph Report - MR-CAPSULES-main  (2026-08-25)
 
 ## Corpus Check
-- 389 files · ~27,532,870 words
+- 395 files · ~27,558,066 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 7675 nodes · 15450 edges · 387 communities (355 shown, 32 thin omitted)
-- Extraction: 100% EXTRACTED · 0% INFERRED · 0% AMBIGUOUS · INFERRED: 77 edges (avg confidence: 0.51)
+- 7838 nodes · 16188 edges · 395 communities (363 shown, 32 thin omitted)
+- Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 85 edges (avg confidence: 0.52)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `fa68e21e`
+- Built from commit: `b8fc6ee3`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -165,6 +165,7 @@
 - graphify.md
 - graphify.md
 - gpush.sh
+- BAGIAN IV: PROTOKOL OBSERVASI MIKROSKOPIS DETAIL
 - 2.2_ Anggur Merah.html
 - vercel.json
 - 1.2 Ident PK_Flashcard PK 2.html
@@ -174,6 +175,7 @@
 - authorize.js
 - token.js
 - 2.5 PRAKTIKUM_PRAKTIKUM 2.html
+- BAGIAN IV: PROTOKOL OBSERVASI MIKROSKOPIS DETAIL
 - Admin Page Feature Expansion — Unified Comprehensive Implementation Plan
 - index.html
 - admin.js
@@ -308,6 +310,7 @@
 - 2.4 CBT 2_K21 AM I COMMUNICATIVE.html
 - Admin Page Feature Expansion — Unified Comprehensive Implementation Plan
 - 5. Verification & Testing Protocol
+- 3.1 PRAKTIKUM_HISTOLOGI.html
 - 2.3 CBT_Kicaw.html
 - mock_server.js
 - 4. Frontend Application Logic
@@ -321,6 +324,7 @@
 - 2.2_ Anggur Merah.html
 - 🤝 Contributing to MR-CAPSULES
 - vercel.json
+- 3.1 PRAKTIKUM_HISTOLOGI.html
 - 1.3 CBT 1_0. materuy.html
 - 1.4 CBT_0. COKI PARDEDE.html
 - 🤝 Contributing to MR-CAPSULES
@@ -334,6 +338,7 @@
 - err400
 - err403
 - DoctorTablet MCP Note Synthesis Rules
+- adminAction
 - download_offbit.js
 - font-review.html
 - font-review.html
@@ -361,6 +366,7 @@
 - inspect_block13.js
 - inspect_cbt_schemas_13.js
 - inspect_gasak_libas.js
+- MockResponse
 - rename_block24.js
 - convert_cbt_block14.js
 - convert_typeb_block14_part1.js
@@ -371,6 +377,8 @@
 - standardize_all_block_names.js
 - standardize_ident_by_subject.js
 - clean_public.js
+- uploadSessions
+- contributionsRecord
 
 ## God Nodes (most connected - your core abstractions)
 1. `routeMethod()` - 78 edges
@@ -387,35 +395,35 @@
 ## Surprising Connections (you probably didn't know these)
 - `testLocal()` --calls--> `handler()`  [EXTRACTED]
   scratch/test_mcp_local.js → api/mcp.js
+- `startTracking()` --indirect_call--> `toast()`  [INFERRED]
+  index.html → restyle-simulation.html
 - `runTests()` --calls--> `handler()`  [EXTRACTED]
   scratch/test_openapi.js → api/mcp.js
 - `runTests()` --calls--> `handler()`  [EXTRACTED]
   scratch/test_openapi.js → api/openapi.js
 - `makeQ()` --calls--> `wrap`  [INFERRED]
   public/content/semester 2/2.5/2.5 PRAKTIKUM_PRAKTIKUM 1.html → public/index.html
-- `handler()` --calls--> `getMcpToolsList()`  [EXTRACTED]
-  api/openapi.js → api/mcp.js
 
 ## Import Cycles
 - None detected.
 
-## Communities (387 total, 32 thin omitted)
+## Communities (395 total, 32 thin omitted)
 
 ### Community 0 - "2.4 CBT 2_K20C AM I CINEMATIC.html"
 Cohesion: 0.07
 Nodes (61): activeTypes, ALL_INTERPS, catInterp(), DILUSI, downloadCert(), endSession(), FK_TABLE, genFKQ() (+53 more)
 
 ### Community 1 - "2.5 PRAKTIKUM_PRAKTIKUM 2.html"
-Cohesion: 0.07
-Nodes (51): activeTypes, DEF_POOL, endSession(), genIMTQ(), genPersenLemakQ(), genPinggangQ(), genSitReachQ(), genWHRQ() (+43 more)
+Cohesion: 0.08
+Nodes (52): activeTypes, DEF_POOL, downloadCert(), endSession(), genIMTQ(), genPersenLemakQ(), genPinggangQ(), genSitReachQ() (+44 more)
 
 ### Community 2 - "index.html"
-Cohesion: 0.08
-Nodes (48): ./fp.js, apply(), applyData(), applyPerfMode(), applyPersona(), backgroundSync(), buildCoverflow(), cards (+40 more)
+Cohesion: 0.05
+Nodes (67): ./fp.js, apply(), applyData(), applyPerfMode(), applyPersona(), backgroundSync(), buildCoverflow(), cards (+59 more)
 
 ### Community 3 - "2.5 PRAKTIKUM_PRAKTIKUM 1.html"
-Cohesion: 0.07
-Nodes (47): activeTypes, AKTIV_LIST, AKTIVITAS_METs, BOUCHARD_HITUNG_KONSEP, BOUCHARD_KAT, BOUCHARD_KAT_KONSEP, DEFINISI_POOL, endSession() (+39 more)
+Cohesion: 0.08
+Nodes (48): activeTypes, AKTIV_LIST, AKTIVITAS_METs, BOUCHARD_HITUNG_KONSEP, BOUCHARD_KAT, BOUCHARD_KAT_KONSEP, DEFINISI_POOL, downloadCert() (+40 more)
 
 ### Community 4 - "1.3 CBT 1_10. Fungsi Medulla Spinalis dan Saraf Spinal.html"
 Cohesion: 0.25
@@ -470,24 +478,24 @@ Cohesion: 0.25
 Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 17 - "2.5 PRAKTIKUM_PRAKTIKUM 3.html"
-Cohesion: 0.08
-Nodes (45): activeTypes, DEF_POOL, endSession(), genHarvardCepatQ(), genHarvardLambatQ(), genLegKlinis(), genLegNormaQ(), genSitUpNormaQ() (+37 more)
+Cohesion: 0.09
+Nodes (46): activeTypes, DEF_POOL, downloadCert(), endSession(), genHarvardCepatQ(), genHarvardLambatQ(), genLegKlinis(), genLegNormaQ() (+38 more)
 
 ### Community 18 - "admin.js"
-Cohesion: 0.08
-Nodes (51): adminAction(), applyAdminPersona(), authMessage, authOverlay, bindUserActionEvents(), btnGuestCleanup, btnRefreshDash, currentTree (+43 more)
+Cohesion: 0.10
+Nodes (32): applyAdminPersona(), authMessage, authOverlay, bindUserActionEvents(), btnGuestCleanup, btnRefreshDash, dragOverlay, fileCache (+24 more)
 
 ### Community 19 - "2.5 LECTURE_K13B am-i-special-2.html"
 Cohesion: 0.07
-Nodes (44): activeTypes, endSession(), KEYS, makePicker(), makeQ(), nextQ(), nextType(), pick_pool_0 (+36 more)
+Nodes (45): activeTypes, downloadCert(), endSession(), KEYS, makePicker(), makeQ(), nextQ(), nextType() (+37 more)
 
 ### Community 20 - "2.5 LECTURE_K5 am-i-fueled.html"
 Cohesion: 0.07
-Nodes (44): activeTypes, endSession(), KEYS, makePicker(), makeQ(), nextQ(), nextType(), pick_pool_aktivitas_fisik (+36 more)
+Nodes (45): activeTypes, downloadCert(), endSession(), KEYS, makePicker(), makeQ(), nextQ(), nextType() (+37 more)
 
 ### Community 21 - "2.5 LECTURE_K9 am-i-educated.html"
 Cohesion: 0.07
-Nodes (44): activeTypes, endSession(), KEYS, makePicker(), makeQ(), nextQ(), nextType(), pick_pool_blum (+36 more)
+Nodes (45): activeTypes, downloadCert(), endSession(), KEYS, makePicker(), makeQ(), nextQ(), nextType() (+37 more)
 
 ### Community 22 - "2.3 CBT_99 TAHUN MEDAN TIPSEN.html"
 Cohesion: 0.29
@@ -502,36 +510,36 @@ Cohesion: 0.29
 Nodes (15): allScores, answered, clearHistory(), jumpTo(), KEYS, loadStats(), navigate(), QUESTIONS (+7 more)
 
 ### Community 25 - "2.4 CBT_20 Plato.html"
-Cohesion: 0.10
+Cohesion: 0.13
 Nodes (42): allScores, answered, clearHistory(), closeOverlay(), fadeOutWin(), fetchDirectory(), flagged, getAudioCtx() (+34 more)
 
 ### Community 26 - "2.4 CBT_21 Aristoteles.html"
-Cohesion: 0.10
+Cohesion: 0.13
 Nodes (42): allScores, answered, clearHistory(), closeOverlay(), fadeOutWin(), fetchDirectory(), flagged, getAudioCtx() (+34 more)
 
 ### Community 27 - "2.4 CBT_22 Socrates.html"
-Cohesion: 0.10
+Cohesion: 0.13
 Nodes (42): allScores, answered, clearHistory(), closeOverlay(), fadeOutWin(), fetchDirectory(), flagged, getAudioCtx() (+34 more)
 
 ### Community 28 - "2.4 CBT_23 Marcus Aurelius.html"
-Cohesion: 0.10
+Cohesion: 0.13
 Nodes (42): allScores, answered, clearHistory(), closeOverlay(), fadeOutWin(), fetchDirectory(), flagged, getAudioCtx() (+34 more)
 
 ### Community 29 - "2.4 CBT_24 Michael Jordan.html"
-Cohesion: 0.10
+Cohesion: 0.13
 Nodes (42): allScores, answered, clearHistory(), closeOverlay(), fadeOutWin(), fetchDirectory(), flagged, getAudioCtx() (+34 more)
 
 ### Community 30 - "2.5 LECTURE_K24 Am I Okay.html"
-Cohesion: 0.06
-Nodes (41): activeTypes, DISTRESS_POOL, endSession(), KESMENTAL_POOL, KEYS, KONTINUM_POOL, makePicker(), makeQ() (+33 more)
+Cohesion: 0.07
+Nodes (42): activeTypes, DISTRESS_POOL, downloadCert(), endSession(), KESMENTAL_POOL, KEYS, KONTINUM_POOL, makePicker() (+34 more)
 
 ### Community 31 - "2.5 LECTURE_K7A am-i-growing-1.html"
-Cohesion: 0.07
-Nodes (40): activeTypes, endSession(), KEYS, makePicker(), makeQ(), nextQ(), nextType(), pick_pool_clinical_cases (+32 more)
+Cohesion: 0.08
+Nodes (41): activeTypes, downloadCert(), endSession(), KEYS, makePicker(), makeQ(), nextQ(), nextType() (+33 more)
 
 ### Community 32 - "2.5 LECTURE_K21 am-i-nourished.html"
-Cohesion: 0.06
-Nodes (39): activeTypes, endSession(), KEYS, KLAS_POOL, KWA_POOL, makePicker(), makeQ(), MAR_POOL (+31 more)
+Cohesion: 0.07
+Nodes (40): activeTypes, downloadCert(), endSession(), KEYS, KLAS_POOL, KWA_POOL, makePicker(), makeQ() (+32 more)
 
 ### Community 33 - "2.3 CBT_21 SYAFIQ KECIL.html"
 Cohesion: 0.29
@@ -542,72 +550,72 @@ Cohesion: 0.29
 Nodes (15): allScores, answered, clearHistory(), jumpTo(), KEYS, loadStats(), navigate(), QUESTIONS (+7 more)
 
 ### Community 35 - "2.5 LECTURE_K14 am-i-feeding.html"
-Cohesion: 0.08
-Nodes (38): activeTypes, endSession(), KEYS, makePicker(), makeQ(), nextQ(), nextType(), pick_pool_ages (+30 more)
+Cohesion: 0.09
+Nodes (39): activeTypes, downloadCert(), endSession(), KEYS, makePicker(), makeQ(), nextQ(), nextType() (+31 more)
 
 ### Community 36 - "2.5 LECTURE_K4 am-i-fit.html"
-Cohesion: 0.08
-Nodes (38): activeTypes, endSession(), KEYS, makePicker(), makeQ(), nextQ(), nextType(), pick_pool_cases_cardio_ikf (+30 more)
+Cohesion: 0.09
+Nodes (39): activeTypes, downloadCert(), endSession(), KEYS, makePicker(), makeQ(), nextQ(), nextType() (+31 more)
 
 ### Community 37 - "2.5 LECTURE_K13A am-i-special-1.html"
-Cohesion: 0.08
-Nodes (36): activeTypes, cvd_rehab_kasus, dm_patofisiologi, dm_resep_kasus, endSession(), fitt_umum, hipertensi_jnc, hipertensi_resep_kasus (+28 more)
+Cohesion: 0.09
+Nodes (37): activeTypes, cvd_rehab_kasus, dm_patofisiologi, dm_resep_kasus, downloadCert(), endSession(), fitt_umum, hipertensi_jnc (+29 more)
 
 ### Community 38 - "2.5 LECTURE_K17 am-i-food-secure.html"
-Cohesion: 0.08
-Nodes (36): activeTypes, endSession(), KEYS, makePicker(), makeQ(), nextQ(), nextType(), pick_pool_cases_aksesibilitas (+28 more)
+Cohesion: 0.09
+Nodes (37): activeTypes, downloadCert(), endSession(), KEYS, makePicker(), makeQ(), nextQ(), nextType() (+29 more)
 
 ### Community 39 - "2.5 LECTURE_K2 am-i-healthy.html"
-Cohesion: 0.08
-Nodes (36): activeTypes, endSession(), KEYS, makePicker(), makeQ(), nextQ(), nextType(), pick_pool_clinical_cases (+28 more)
+Cohesion: 0.09
+Nodes (37): activeTypes, downloadCert(), endSession(), KEYS, makePicker(), makeQ(), nextQ(), nextType() (+29 more)
 
 ### Community 40 - "2.5 LECTURE_K3 am-i-active.html"
-Cohesion: 0.08
-Nodes (36): activeTypes, endSession(), KEYS, makePicker(), makeQ(), nextQ(), nextType(), pick_pool_clinical_cases (+28 more)
+Cohesion: 0.09
+Nodes (37): activeTypes, downloadCert(), endSession(), KEYS, makePicker(), makeQ(), nextQ(), nextType() (+29 more)
 
 ### Community 41 - "2.5 LECTURE_K7B am-i-growing-2.html"
-Cohesion: 0.08
-Nodes (36): activeTypes, endSession(), KEYS, makePicker(), makeQ(), nextQ(), nextType(), pick_pool_dewasa (+28 more)
+Cohesion: 0.09
+Nodes (37): activeTypes, downloadCert(), endSession(), KEYS, makePicker(), makeQ(), nextQ(), nextType() (+29 more)
 
 ### Community 42 - "2.5 LECTURE_K23 AM I AT RISK (by uzer).html"
-Cohesion: 0.07
-Nodes (35): activeTypes, AGRESI_POOL, BERKENDARA_POOL, endSession(), FAKTOR_POOL, KEYS, MAKAN_POOL, makePicker() (+27 more)
+Cohesion: 0.08
+Nodes (36): activeTypes, AGRESI_POOL, BERKENDARA_POOL, downloadCert(), endSession(), FAKTOR_POOL, KEYS, MAKAN_POOL (+28 more)
 
 ### Community 43 - "2.5 LECTURE_K12A am-i-healthy.html"
-Cohesion: 0.07
-Nodes (33): activeTypes, DAMPAK_POOL, endSession(), ENERGI_POOL, KEYS, makePicker(), makeQ(), MET_POOL (+25 more)
+Cohesion: 0.09
+Nodes (34): activeTypes, DAMPAK_POOL, downloadCert(), endSession(), ENERGI_POOL, KEYS, makePicker(), makeQ() (+26 more)
 
 ### Community 44 - "2.5 LECTURE_K14 Am I Healthy· FK Unsoed.html"
-Cohesion: 0.07
-Nodes (33): activeTypes, BLUM_POOL, DEF_POOL, DOMAIN_POOL, endSession(), HBM_POOL, INT_POOL, KEYS (+25 more)
+Cohesion: 0.09
+Nodes (34): activeTypes, BLUM_POOL, DEF_POOL, DOMAIN_POOL, downloadCert(), endSession(), HBM_POOL, INT_POOL (+26 more)
 
 ### Community 45 - "2.5 LECTURE_K16 Am I Clean.html"
-Cohesion: 0.07
-Nodes (33): activeTypes, AKTIF_POOL, CTPS_POOL, DEF_POOL, DOKTER_POOL, endSession(), IND_POOL, KEYS (+25 more)
+Cohesion: 0.09
+Nodes (34): activeTypes, AKTIF_POOL, CTPS_POOL, DEF_POOL, DOKTER_POOL, downloadCert(), endSession(), IND_POOL (+26 more)
 
 ### Community 46 - "2.5 LECTURE_K19 Am I Safe (to Eat).html"
-Cohesion: 0.07
-Nodes (33): activeTypes, AIR_POOL, endSession(), KEYS, makePicker(), makeQ(), MUTU_POOL, nextQ() (+25 more)
+Cohesion: 0.09
+Nodes (34): activeTypes, AIR_POOL, downloadCert(), endSession(), KEYS, makePicker(), makeQ(), MUTU_POOL (+26 more)
 
 ### Community 47 - "2.5 LECTURE_K20 Am I Coordinated.html"
-Cohesion: 0.07
-Nodes (33): activeTypes, CATAT_POOL, endSession(), KERAW_POOL, KEYS, LINTAS_POOL, makePicker(), makeQ() (+25 more)
+Cohesion: 0.09
+Nodes (34): activeTypes, CATAT_POOL, downloadCert(), endSession(), KERAW_POOL, KEYS, LINTAS_POOL, makePicker() (+26 more)
 
 ### Community 48 - "2.5 LECTURE_K18 am-i-nurtured.html"
-Cohesion: 0.09
-Nodes (32): activeTypes, endSession(), KEYS, makePicker(), makeQ(), nextQ(), nextType(), pick_pool_clinical_cases (+24 more)
+Cohesion: 0.11
+Nodes (33): activeTypes, downloadCert(), endSession(), KEYS, makePicker(), makeQ(), nextQ(), nextType() (+25 more)
 
 ### Community 49 - "2.5 LECTURE_K6 am-i-immune.html"
-Cohesion: 0.09
-Nodes (32): activeTypes, endSession(), KEYS, makePicker(), makeQ(), nextQ(), nextType(), pick_pool_clinical_cases (+24 more)
+Cohesion: 0.11
+Nodes (33): activeTypes, downloadCert(), endSession(), KEYS, makePicker(), makeQ(), nextQ(), nextType() (+25 more)
 
 ### Community 50 - "1.2-1_jarwo.html"
 Cohesion: 0.07
 Nodes (61): activeTypes, ALL_INTERPS, catInterp(), DILUSI, downloadCert(), endSession(), FK_TABLE, genFKQ() (+53 more)
 
 ### Community 51 - "2.5 LECTURE_K8 am-i-nourished.html"
-Cohesion: 0.09
-Nodes (30): activeTypes, endSession(), KEYS, makePicker(), makeQ(), nextQ(), nextType(), pick_pool_antropometri (+22 more)
+Cohesion: 0.11
+Nodes (31): activeTypes, downloadCert(), endSession(), KEYS, makePicker(), makeQ(), nextQ(), nextType() (+23 more)
 
 ### Community 52 - "1.3 CBT 2_emerald.html"
 Cohesion: 0.25
@@ -622,12 +630,12 @@ Cohesion: 0.25
 Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 55 - "2.5 LECTURE_K12B am-i-sedentary.html"
-Cohesion: 0.08
-Nodes (28): activeTypes, endSession(), KEYS, makePicker(), nextQ(), nextType(), pickCara, pickClinical (+20 more)
+Cohesion: 0.10
+Nodes (29): activeTypes, downloadCert(), endSession(), KEYS, makePicker(), nextQ(), nextType(), pickCara (+21 more)
 
 ### Community 56 - "2.5 LECTURE_K22 am-i-advocating.html"
-Cohesion: 0.10
-Nodes (28): activeTypes, endSession(), kasusPool, KEYS, makePicker(), makeQ(), nextQ(), nextType() (+20 more)
+Cohesion: 0.12
+Nodes (29): activeTypes, downloadCert(), endSession(), kasusPool, KEYS, makePicker(), makeQ(), nextQ() (+21 more)
 
 ### Community 57 - "1.2-2_Histo jaringan ikat.html"
 Cohesion: 0.12
@@ -650,7 +658,7 @@ Cohesion: 0.25
 Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 62 - "2.5 LECTURE_K99 WHOLESOME FROM MR PRODIGY.html"
-Cohesion: 0.08
+Cohesion: 0.11
 Nodes (26): activeTypes, answersLog, checkAns(), getPickers(), KER_POOL, KEYS, LIN_POOL, makePicker() (+18 more)
 
 ### Community 63 - "1.4 CBT_24 SCOTT JUMP.html"
@@ -678,12 +686,12 @@ Cohesion: 0.14
 Nodes (24): allScores, answered, clearHistory(), closeOverlay(), flagged, jumpTo(), loadStats(), navigate() (+16 more)
 
 ### Community 69 - "2.5 CBT_25 DIMAS GANTENG.html"
-Cohesion: 0.14
+Cohesion: 0.22
 Nodes (24): allScores, answered, clearHistory(), closeOverlay(), flagged, jumpTo(), loadStats(), navigate() (+16 more)
 
 ### Community 70 - "2.5 LECTURE_K10 am-i-counseling.html"
-Cohesion: 0.10
-Nodes (23): activeTypes, endSession(), KEYS, makePicker(), nextQ(), nextType(), pickers, pool_cases (+15 more)
+Cohesion: 0.13
+Nodes (24): activeTypes, downloadCert(), endSession(), KEYS, makePicker(), nextQ(), nextType(), pickers (+16 more)
 
 ### Community 71 - "1.2-2_Histo Epitel.html"
 Cohesion: 0.25
@@ -798,8 +806,8 @@ Cohesion: 0.25
 Nodes (22): closeModal(), confirmFinish(), flagged, handleKeyNav(), init(), jumpQ(), KEYS, loadState() (+14 more)
 
 ### Community 99 - "2.5 LECTURE_K11 am-i-addicted.html"
-Cohesion: 0.15
-Nodes (18): activeTypes, endSession(), KEYS, makePicker(), makeQ(), MASTER_POOL, nextQ(), nextType() (+10 more)
+Cohesion: 0.20
+Nodes (19): activeTypes, downloadCert(), endSession(), KEYS, makePicker(), makeQ(), MASTER_POOL, nextQ() (+11 more)
 
 ### Community 100 - "1.3 IDENT_GASAK LIBAS FISIO 1.html"
 Cohesion: 0.25
@@ -985,6 +993,10 @@ Nodes (9): DB_PRACTICUM, downloadCert(), KEYS, nextQ(), quizSet, renderQ(), sele
 Cohesion: 0.60
 Nodes (5): err(), info(), ok(), gpush.sh script, warn()
 
+### Community 158 - "BAGIAN IV: PROTOKOL OBSERVASI MIKROSKOPIS DETAIL"
+Cohesion: 0.05
+Nodes (38): 1.1 Tata Tertib Praktikum Histologi, 1.2 Ketentuan dan Tata Tertib Ujian Identifikasi Histologi, 2.1 Tujuan Pembelajaran, 2.2 Tinjauan Teori Sistem Hematopoietik & Imun, 2.3 Relevansi Klinis & Patologi Terkait, 2.4 Klasifikasi Organ Limfoid: Primer vs Sekunder, 3.1 Tabel Komparasi Ciri Identifikasi 6 Organ Target, 3.2 Golden Diagnostic Landmarks (Penanda Emas Pembeda) (+30 more)
+
 ### Community 159 - "2.2_ Anggur Merah.html"
 Cohesion: 0.19
 Nodes (14): curCards, downloadCert(), flashcardsData, KEYS, navCard(), nextQ(), quizPool, quizSet (+6 more)
@@ -1006,12 +1018,12 @@ Cohesion: 0.19
 Nodes (14): curCards, downloadCert(), flashcardsData, KEYS, navCard(), nextQ(), quizPool, quizSet (+6 more)
 
 ### Community 166 - "mcp.js"
-Cohesion: 0.08
-Nodes (50): activityLogsList(), codebaseSearch(), configGet(), contentList(), contentTree(), contentUploadFromAgentPath(), contributionsLeaderboard(), contributionsMy() (+42 more)
+Cohesion: 0.09
+Nodes (45): activityLogsList(), codebaseSearch(), configGet(), configUpdate(), contentList(), contentTree(), contentUploadFromAgentPath(), contributionsLeaderboard() (+37 more)
 
 ### Community 167 - "authorize.js"
-Cohesion: 0.38
-Nodes (6): canonicalizeUrl(), handleClientRegistration(), handler(), RFC-8707, RFC-7591, RFC-8414
+Cohesion: 0.36
+Nodes (7): canonicalizeUrl(), checkRegistrationRateLimit(), handleClientRegistration(), handler(), RFC-8707, RFC-7591, RFC-8414
 
 ### Community 168 - "token.js"
 Cohesion: 0.43
@@ -1021,17 +1033,21 @@ Nodes (6): base64url(), handler(), sanitizeBase64Url(), verifyPkce(), RFC-6749, 
 Cohesion: 0.08
 Nodes (52): activeTypes, DEF_POOL, downloadCert(), endSession(), genIMTQ(), genPersenLemakQ(), genPinggangQ(), genSitReachQ() (+44 more)
 
+### Community 170 - "BAGIAN IV: PROTOKOL OBSERVASI MIKROSKOPIS DETAIL"
+Cohesion: 0.05
+Nodes (38): 1.1 Tata Tertib Praktikum Histologi, 1.2 Ketentuan dan Tata Tertib Ujian Identifikasi Histologi, 2.1 Tujuan Pembelajaran, 2.2 Tinjauan Teori Sistem Hematopoietik & Imun, 2.3 Relevansi Klinis & Patologi Terkait, 2.4 Klasifikasi Organ Limfoid: Primer vs Sekunder, 3.1 Tabel Komparasi Ciri Identifikasi 6 Organ Target, 3.2 Golden Diagnostic Landmarks (Penanda Emas Pembeda) (+30 more)
+
 ### Community 171 - "Admin Page Feature Expansion — Unified Comprehensive Implementation Plan"
 Cohesion: 0.29
 Nodes (6): 1. System Architecture & Database Schema Migrations, 3. Frontend Client Implementation, 3b. Design Aesthetics & Colors Variables — `tokens.css`, 3c. Component Styles — `admin-styles.css`, Add inside `tokens.css` root scopes (~line 13):, Admin Page Feature Expansion — Unified Comprehensive Implementation Plan
 
 ### Community 172 - "index.html"
-Cohesion: 0.08
-Nodes (47): ./fp.js, apply(), applyData(), applyPerfMode(), applyPersona(), backgroundSync(), buildCoverflow(), cards (+39 more)
+Cohesion: 0.05
+Nodes (66): ./fp.js, apply(), applyData(), applyPerfMode(), applyPersona(), backgroundSync(), buildCoverflow(), cards (+58 more)
 
 ### Community 173 - "admin.js"
-Cohesion: 0.07
-Nodes (54): bindKeyEvents(), adminAction(), applyAdminPersona(), authMessage, authOverlay, bindKeyEvents(), bindUserActionEvents(), btnGuestCleanup (+46 more)
+Cohesion: 0.09
+Nodes (46): adminAction(), applyAdminPersona(), authMessage, authOverlay, bindUserActionEvents(), btnGuestCleanup, btnRefreshDash, currentTree (+38 more)
 
 ### Community 174 - "2.5 PRAKTIKUM_PRAKTIKUM 1.html"
 Cohesion: 0.08
@@ -1557,6 +1573,10 @@ Nodes (6): 1. System Architecture & Database Schema Migrations, 3. Frontend Clie
 Cohesion: 0.29
 Nodes (7): 1. Verification of Task Edit, Delete & Clone (Tiers 1a, A1), 2. Verification of Notifications & Realtime Channels (Tier 2a), 2b. Verification of Dashboard Charts (Tier 2b), 4. Verification of CSV Import & Exports (Tiers 2d, B4), 5. Verification of Version History Control (Tier 2c), 5. Verification & Testing Protocol, 6. Verification of Division Join Requests (Tier 3a)
 
+### Community 305 - "3.1 PRAKTIKUM_HISTOLOGI.html"
+Cohesion: 0.20
+Nodes (14): activePools, checkFuzzy(), endSession(), handleEnter(), nextQuestion(), QUESTION_BANK, renderCurrentQuestion(), sessionLog (+6 more)
+
 ### Community 306 - "2.3 CBT_Kicaw.html"
 Cohesion: 0.29
 Nodes (15): allScores, answered, clearHistory(), jumpTo(), KEYS, loadStats(), navigate(), QUESTIONS (+7 more)
@@ -1601,6 +1621,10 @@ Nodes (7): 1. 🎛️ Division Management (Pengurus), 2. 💻 Division Developme
 Cohesion: 0.50
 Nodes (3): cleanUrls, headers, routes
 
+### Community 320 - "3.1 PRAKTIKUM_HISTOLOGI.html"
+Cohesion: 0.20
+Nodes (14): activePools, checkFuzzy(), endSession(), handleEnter(), nextQuestion(), QUESTION_BANK, renderCurrentQuestion(), sessionLog (+6 more)
+
 ### Community 321 - "1.3 CBT 1_0. materuy.html"
 Cohesion: 0.40
 Nodes (3): allHtmlPaths, blocks, contentDir
@@ -1634,16 +1658,16 @@ Cohesion: 0.15
 Nodes (19): authenticateApiKey(), authenticateJWT(), authenticateOAuthAccessToken(), canonicalizeUrl(), checkRateLimit(), getMcpToolsList(), handleDirectUpload(), handleMcpStreamableGet() (+11 more)
 
 ### Community 335 - "logAction"
-Cohesion: 0.19
-Nodes (13): codebaseDeleteFile(), codebaseWriteFile(), configUpdate(), contentDelete(), divisionsAddMember(), divisionsRemoveMember(), handleAccountManager(), logAction() (+5 more)
+Cohesion: 0.20
+Nodes (14): codebaseDeleteFile(), codebaseReadFile(), codebaseWriteFile(), contentDelete(), contentDeleteFiles(), contentRename(), divisionsAddMember(), err404() (+6 more)
 
 ### Community 336 - "contentUpload"
-Cohesion: 0.26
-Nodes (13): contentDeleteFiles(), contentGet(), contentRename(), contentUpload(), docsAddSection(), docsAddTab(), docsDeleteTab(), docsGet() (+5 more)
+Cohesion: 0.50
+Nodes (8): contentGet(), contentUpload(), docsAddSection(), docsAddTab(), docsDeleteTab(), docsUpdateSection(), docsUpdateTab(), sanitizeDocsHtml()
 
 ### Community 337 - "err400"
-Cohesion: 0.15
-Nodes (23): cleanExpiredUploadSessions(), codebaseReadFile(), createApiKey(), doctortabletCreateCategory(), doctortabletDeleteNote(), doctortabletExportMergedDocument(), doctortabletFetchNotes(), doctortabletListCategories() (+15 more)
+Cohesion: 0.17
+Nodes (20): customMcpToolsMap, doctortabletCreateCategory(), doctortabletDeleteNote(), doctortabletExportMergedDocument(), doctortabletFetchNotes(), doctortabletListCategories(), doctortabletListNotes(), doctortabletReadNote() (+12 more)
 
 ### Community 338 - "err403"
 Cohesion: 0.10
@@ -1652,6 +1676,10 @@ Nodes (34): activeTypes, endSession(), KEYS, makeQ(), nextQ(), nextType(), pick_
 ### Community 347 - "DoctorTablet MCP Note Synthesis Rules"
 Cohesion: 0.29
 Nodes (6): 1. Dynamic Author Resolution (Nama Lengkap Tanpa Gelar), 2. Pre-Writing Analysis & Concept Mapping, 3. Karakter Catatan (High-Density & Anti-PPT Style), 4. Elemen Terstruktur Wajib, 5. Integrasi Tool MCP `doctortablet_save_note`, DoctorTablet MCP Note Synthesis Rules
+
+### Community 348 - "adminAction"
+Cohesion: 0.22
+Nodes (19): adminAction(), currentTree, fetchFileSecureBlob(), fetchFileSecureText(), fileBrowser, itemCount, loadTree(), ModalManager (+11 more)
 
 ### Community 349 - "download_offbit.js"
 Cohesion: 0.67
@@ -1693,29 +1721,41 @@ Nodes (5): cardsJson, content, m, rawCards, targetFile
 Cohesion: 0.33
 Nodes (5): cardsJson, content, m, rawCards, targetFile
 
+### Community 378 - "MockResponse"
+Cohesion: 0.18
+Nodes (8): bindKeyEvents(), bindKeyEvents(), generateApiKey(), loadApiKeys(), loadOAuthTokens(), mcpCall(), sanitize(), MockResponse
+
 ### Community 379 - "rename_block24.js"
 Cohesion: 0.50
 Nodes (3): dir, files, renames
 
+### Community 393 - "uploadSessions"
+Cohesion: 0.39
+Nodes (8): cleanExpiredUploadSessions(), restoreUploadSessionFromSb(), uploadCancel(), uploadChunk(), uploadCommit(), uploadInit(), uploadSessions, uploadStatus()
+
+### Community 394 - "contributionsRecord"
+Cohesion: 0.50
+Nodes (4): contributionsRecord(), recordContribution(), rewardUserForUpload(), tasksApprove()
+
 ## Knowledge Gaps
-- **1399 isolated node(s):** `fileCache`, `_statusTextEl`, `_statusBarEl`, `_itemCountEl`, `fileInput` (+1394 more)
+- **1252 isolated node(s):** `fileCache`, `_statusTextEl`, `_statusBarEl`, `_itemCountEl`, `fileInput` (+1247 more)
   These have ≤1 connection - possible missing edges or undocumented components.
 - **32 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `MockResponse` connect `admin.js` to `handler`?**
-  _High betweenness centrality (0.001) - this node is a cross-community bridge._
-- **Why does `bindKeyEvents()` connect `admin.js` to `admin.js`?**
+- **Why does `MockResponse` connect `MockResponse` to `handler`?**
+  _High betweenness centrality (0.000) - this node is a cross-community bridge._
+- **Why does `bindKeyEvents()` connect `MockResponse` to `admin.js`?**
+  _High betweenness centrality (0.000) - this node is a cross-community bridge._
+- **Why does `bindKeyEvents()` connect `MockResponse` to `admin.js`?**
   _High betweenness centrality (0.000) - this node is a cross-community bridge._
 - **What connects `fileCache`, `_statusTextEl`, `_statusBarEl` to the rest of the system?**
-  _1399 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _1252 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `2.4 CBT 2_K20C AM I CINEMATIC.html` be split into smaller, more focused modules?**
   _Cohesion score 0.07244843997884717 - nodes in this community are weakly interconnected._
 - **Should `2.5 PRAKTIKUM_PRAKTIKUM 2.html` be split into smaller, more focused modules?**
-  _Cohesion score 0.06821480406386067 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.07692307692307693 - nodes in this community are weakly interconnected._
 - **Should `index.html` be split into smaller, more focused modules?**
-  _Cohesion score 0.07609427609427609 - nodes in this community are weakly interconnected._
-- **Should `2.5 PRAKTIKUM_PRAKTIKUM 1.html` be split into smaller, more focused modules?**
-  _Cohesion score 0.07142857142857142 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.05365686944634313 - nodes in this community are weakly interconnected._

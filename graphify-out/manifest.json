@@ -5,802 +5,802 @@
     "semantic_hash": "d48db7cbcbd87d2238f12157551c6e21"
   },
   "admin-workflow.js": {
-    "mtime": 1786784261.7944639,
-    "ast_hash": "3eceefd6550d3e8a7605eec8954c0c10",
+    "mtime": 1787367915.518114,
+    "ast_hash": "0bf8ac0e3b58a49923d7611ca4936afe",
     "semantic_hash": ""
   },
   "admin.html": {
-    "mtime": 1787020666.6566596,
-    "ast_hash": "423224c7b11be5158666570bfe97a56f",
+    "mtime": 1787367915.518114,
+    "ast_hash": "e35510e62d692bd366a46be2834a8faa",
     "semantic_hash": ""
   },
   "admin.js": {
-    "mtime": 1787020678.0668097,
-    "ast_hash": "eea19ab04dd2abddf397ef5203cd6f59",
+    "mtime": 1787367915.518114,
+    "ast_hash": "84ac07c2d8bb3613cc13b555d3e772e2",
     "semantic_hash": ""
   },
   "api/admin.js": {
-    "mtime": 1786774473.694218,
-    "ast_hash": "de368bb79bc36848476073e7f32dbd6b",
+    "mtime": 1787367915.518114,
+    "ast_hash": "19636d1ba192fbcdfba9179215e59fe3",
     "semantic_hash": ""
   },
   "api/content.js": {
-    "mtime": 1785470020.8066106,
-    "ast_hash": "4f7dd6b9875ffd0232e5033e47754ea5",
+    "mtime": 1787367915.527858,
+    "ast_hash": "980bfc1e157eb2b238d6ed1c568be7b1",
     "semantic_hash": ""
   },
   "api/contributions.js": {
-    "mtime": 1785472708.5947318,
+    "mtime": 1787367915.5328655,
     "ast_hash": "ce60748f26fdf3f6b45fe8ab11654500",
     "semantic_hash": ""
   },
   "api/divisions.js": {
-    "mtime": 1785472706.5441477,
+    "mtime": 1787367915.5328655,
     "ast_hash": "daa68c4c877b4b49aa95978729ef49fe",
     "semantic_hash": ""
   },
   "api/tasks.js": {
-    "mtime": 1786251085.4297397,
-    "ast_hash": "07cdd773697d06c9f9bfd7cac2f295a1",
+    "mtime": 1787367915.5429044,
+    "ast_hash": "b44e878a68d658d542979269e9af3c6f",
     "semantic_hash": ""
   },
   "build.js": {
-    "mtime": 1786770736.8695621,
-    "ast_hash": "748f9c77fe72dd77ee28195818e52553",
+    "mtime": 1787367915.6080532,
+    "ast_hash": "184517d7df481f0c81f34a0b640ddf0d",
     "semantic_hash": ""
   },
   "content/semester 1/1.3/1.3 CBT 1_1. Organisasi dan Embriologi SSP dan SST.html": {
-    "mtime": 1786789906.8460553,
+    "mtime": 1787367915.653132,
     "ast_hash": "5953428bc9ca64c655ff1fe872dfd1c6",
     "semantic_hash": ""
   },
   "content/semester 1/1.3/1.3 CBT 1_10. Fungsi Medulla Spinalis dan Saraf Spinal.html": {
-    "mtime": 1786789906.9201515,
+    "mtime": 1787367915.6581845,
     "ast_hash": "69585a5c7cb6bb9a3a386121eaed56e9",
     "semantic_hash": ""
   },
   "content/semester 1/1.3/1.3 CBT 1_11. Fungsi Integratif.html": {
-    "mtime": 1786789906.925149,
+    "mtime": 1787367915.6581845,
     "ast_hash": "4a3819053804fc48aea44d570f6661a3",
     "semantic_hash": ""
   },
   "content/semester 1/1.3/1.3 CBT 1_12. Fungsi Sistem Saraf Otonom.html": {
-    "mtime": 1786789906.940139,
+    "mtime": 1787367915.6617138,
     "ast_hash": "3c5ff73ea8dd256974df09f0eda30d4e",
     "semantic_hash": ""
   },
   "content/semester 1/1.3/1.3 CBT 1_3. Pars Centralis Systema Nervosum Centrale (Cerebrum & Truncus Encephali) II.html": {
-    "mtime": 1786789906.8816514,
+    "mtime": 1787367915.6677423,
     "ast_hash": "0040ec50f4c4963b40ed89303dd3336e",
     "semantic_hash": ""
   },
   "content/semester 1/1.3/1.3 CBT 1_4. Cerebellum Et Medulla Spinalis.html": {
-    "mtime": 1786789906.8851638,
+    "mtime": 1787367915.6677423,
     "ast_hash": "6ee7a959b8af28d48391cfc9aa2558b6",
     "semantic_hash": ""
   },
   "content/semester 1/1.3/1.3 CBT 1_5. Vascularisasi Pars Centralis Systema Nervosum Central.html": {
-    "mtime": 1786789906.8962433,
+    "mtime": 1787367915.6677423,
     "ast_hash": "6bbc7c05cfb1121223ad6fcf4712e352",
     "semantic_hash": ""
   },
   "content/semester 1/1.3/1.3 CBT 1_6. Pars Peripherica Systema Nervosum Periphericum.html": {
-    "mtime": 1786789906.9006457,
+    "mtime": 1787367915.6677423,
     "ast_hash": "5e471f53e35c6c251c0338cdae9145ba",
     "semantic_hash": ""
   },
   "content/semester 1/1.3/1.3 CBT 1_7. Struktur Mikroskopis Sistem Saraf Pusat dan Sistem Saraf Tepi.html": {
-    "mtime": 1786789906.9071577,
+    "mtime": 1787367915.6777842,
     "ast_hash": "753dfd4f45775ef040a166d6b5c8051d",
     "semantic_hash": ""
   },
   "content/semester 1/1.3/1.3 CBT 1_8. Biokimiawi Sistem Saraf.html": {
-    "mtime": 1786789906.9111555,
+    "mtime": 1787367915.6778257,
     "ast_hash": "38bac47235f641f06bbdaa9288551894",
     "semantic_hash": ""
   },
   "content/semester 1/1.3/1.3 CBT 1_9. Fungsi Sistem Saraf.html": {
-    "mtime": 1786789906.9161527,
+    "mtime": 1787367915.6778257,
     "ast_hash": "5781451bab9bab2f0de86291d59f8f76",
     "semantic_hash": ""
   },
   "content/semester 1/1.3/1.3 CBT 1_merah.html": {
-    "mtime": 1786789906.950133,
+    "mtime": 1787367915.6828327,
     "ast_hash": "0b8eab77ab10da5d93b6843a3fa098ae",
     "semantic_hash": ""
   },
   "content/semester 1/1.3/1.3 CBT 2_ORANGE.html": {
-    "mtime": 1786789906.957129,
+    "mtime": 1787367915.6828327,
     "ast_hash": "977eddd6b7ca579242b9b5734dd0d240",
     "semantic_hash": ""
   },
   "content/semester 1/1.3/1.3 CBT 2_VIOLET.html": {
-    "mtime": 1786789906.9643092,
+    "mtime": 1787367915.6878698,
     "ast_hash": "1551d23647c552d70ecdca41546ba6b1",
     "semantic_hash": ""
   },
   "content/semester 1/1.3/1.3 CBT 2_emerald.html": {
-    "mtime": 1786789906.9728646,
+    "mtime": 1787367915.6878698,
     "ast_hash": "b8b91aa7b8a6257c8dc0667aa21bce42",
     "semantic_hash": ""
   },
   "content/semester 1/1.4/1.4 CBT_22 SIT UP.html": {
-    "mtime": 1786790108.3379107,
+    "mtime": 1787367915.70788,
     "ast_hash": "eec807a9950275006f6279d60b4d7552",
     "semantic_hash": ""
   },
   "content/semester 1/1.4/1.4 CBT_23 PULL UP.html": {
-    "mtime": 1786790108.3618968,
+    "mtime": 1787367915.7128873,
     "ast_hash": "bdad0948b94ec5cfd26405c82ef9e359",
     "semantic_hash": ""
   },
   "content/semester 1/1.4/1.4 CBT_24 SCOTT JUMP.html": {
-    "mtime": 1786790108.3701053,
+    "mtime": 1787367915.7128873,
     "ast_hash": "f22916b63c4f5074953958662699cf1e",
     "semantic_hash": ""
   },
   "content/semester 1/1.4/1.4 CBT_Histologi Lecture.html": {
-    "mtime": 1786790108.3771007,
+    "mtime": 1787367915.7179172,
     "ast_hash": "0c73d9e0a2c02366fab671814eed5d4c",
     "semantic_hash": ""
   },
   "content/semester 2/2.1/2.1 CBT_22 hours warmin up.html": {
-    "mtime": 1786788759.156043,
+    "mtime": 1787367915.737964,
     "ast_hash": "9eb77d4ccff46b1cdc3d7d51369e1709",
     "semantic_hash": ""
   },
   "content/semester 2/2.1/2.1 CBT_22 minute jogging.html": {
-    "mtime": 1786788759.2004383,
+    "mtime": 1787367915.737964,
     "ast_hash": "6d25e0cd0d95fcdd6eb5003ef751dfbf",
     "semantic_hash": ""
   },
   "content/semester 2/2.1/2.1 CBT_23 deadlift.html": {
-    "mtime": 1786788759.2186284,
+    "mtime": 1787367915.7479167,
     "ast_hash": "504866acfa2c0a2319aebb4f792f3c5f",
     "semantic_hash": ""
   },
   "content/semester 2/2.1/2.1 CBT_24 bench press.html": {
-    "mtime": 1786788759.2327793,
+    "mtime": 1787367915.7479167,
     "ast_hash": "4b9505ee3faab8f6723e0c0f78ec8f3a",
     "semantic_hash": ""
   },
   "content/semester 2/2.1/2.1 CBT_25 minute jumping jack.html": {
-    "mtime": 1786788759.2509196,
+    "mtime": 1787367915.7479167,
     "ast_hash": "517721824114ef141e640d07d9f6b8e6",
     "semantic_hash": ""
   },
   "content/semester 2/2.1/2.1 Ident Fisio_Praktikum 1.html": {
-    "mtime": 1786789169.4954412,
+    "mtime": 1787367915.7619803,
     "ast_hash": "5cf50f3db86732b38465d5d59ee2ba34",
     "semantic_hash": ""
   },
   "content/semester 2/2.2/2.2 CBT 1_22 FUFUFAFA.html": {
-    "mtime": 1786788895.7124066,
+    "mtime": 1787367915.7730248,
     "ast_hash": "d993029eacb8e4358f5c58b2ab3d9487",
     "semantic_hash": ""
   },
   "content/semester 2/2.2/2.2 CBT 1_23 JOKROWI.html": {
-    "mtime": 1786788895.8044436,
+    "mtime": 1787367915.7780643,
     "ast_hash": "da8b1786b75518d978850b12dae56d41",
     "semantic_hash": ""
   },
   "content/semester 2/2.2/2.2 CBT 1_24 PRANOWO.html": {
-    "mtime": 1786788895.8203936,
+    "mtime": 1787367915.7780643,
     "ast_hash": "02cf2c628e16d0abbce24e5e3522cc92",
     "semantic_hash": ""
   },
   "content/semester 2/2.2/2.2 CBT 1_45 BAXLIL.html": {
-    "mtime": 1786788895.8298025,
+    "mtime": 1787367915.7830727,
     "ast_hash": "7bcc5a09cff80a625732a95e8f2c13c9",
     "semantic_hash": ""
   },
   "content/semester 2/2.2/2.2 CBT 2_22 ANTON AYAM.html": {
-    "mtime": 1786788895.8688426,
+    "mtime": 1787367915.7876182,
     "ast_hash": "cc6fd93a8552a6cc3ffc5863a52dc480",
     "semantic_hash": ""
   },
   "content/semester 2/2.2/2.2 CBT 2_23 TONO GALON.html": {
-    "mtime": 1786788895.888143,
+    "mtime": 1787367915.794656,
     "ast_hash": "8777c5eb38c568b1e1f1c608b0a9a2df",
     "semantic_hash": ""
   },
   "content/semester 2/2.2/2.2 CBT 2_24 AMBAR LAUNDRY.html": {
-    "mtime": 1786788895.904847,
+    "mtime": 1787367915.7976537,
     "ast_hash": "d934d1b88763983ec4f6ede1e87b11e0",
     "semantic_hash": ""
   },
   "content/semester 2/2.2/2.2 CBT 2_45 TAHUN COPY PASTE.html": {
-    "mtime": 1786788895.9280412,
+    "mtime": 1787367915.80465,
     "ast_hash": "979a853313a63bdd4580324f1fadc100",
     "semantic_hash": ""
   },
   "content/semester 2/2.2/2.2 CBT 2_DEATHPAMIN 2.html": {
-    "mtime": 1786788895.992006,
+    "mtime": 1787367915.8076484,
     "ast_hash": "dd1075a9ae32badb59a5e9cf9aa1a3f5",
     "semantic_hash": ""
   },
   "content/semester 2/2.2/2.2 CBT 2_DEATHPAMIN.html": {
-    "mtime": 1786788896.0039995,
+    "mtime": 1787367915.8087537,
     "ast_hash": "efffdf7d31702b3c79a5ae4939892922",
     "semantic_hash": ""
   },
   "content/semester 2/2.3/2.3 CBT_21 SYAFIQ KECIL.html": {
-    "mtime": 1786788953.2187514,
+    "mtime": 1787367915.8087537,
     "ast_hash": "ea9d25df373e14d73fb91cc4ad4406f3",
     "semantic_hash": ""
   },
   "content/semester 2/2.3/2.3 CBT_22 SYAFIQ JUMBO.html": {
-    "mtime": 1786788953.4182796,
+    "mtime": 1787367915.8087537,
     "ast_hash": "30fc4963a599ca967d2a7bbf28310398",
     "semantic_hash": ""
   },
   "content/semester 2/2.3/2.3 CBT_23 SYAFIQ GIGA.html": {
-    "mtime": 1786788953.9576964,
+    "mtime": 1787367915.8178172,
     "ast_hash": "86ca1698f81b9c360296300ddcee8197",
     "semantic_hash": ""
   },
   "content/semester 2/2.3/2.3 CBT_24 SYAFIQ GALACTUS.html": {
-    "mtime": 1786788953.9740107,
+    "mtime": 1787367915.8178172,
     "ast_hash": "89e84abe1412d53ff53478c97ce940ae",
     "semantic_hash": ""
   },
   "content/semester 2/2.3/2.3 CBT_99 TAHUN MEDAN TIPSEN.html": {
-    "mtime": 1786788954.3134725,
+    "mtime": 1787367915.827934,
     "ast_hash": "ad1139440f9e8e712b1ddeed5e4cf822",
     "semantic_hash": ""
   },
   "content/semester 2/2.3/2.3 CBT_Kicaw.html": {
-    "mtime": 1786788954.3297517,
+    "mtime": 1787367915.827934,
     "ast_hash": "d7957fe2b9507f4080f70a79db01bca7",
     "semantic_hash": ""
   },
   "content/semester 2/2.4/2.4 CBT_20 Plato.html": {
-    "mtime": 1782875857.6631007,
-    "ast_hash": "0dd36418d14bdf53102a2c08f0e6aa98",
-    "semantic_hash": "0dd36418d14bdf53102a2c08f0e6aa98"
+    "mtime": 1787367915.827934,
+    "ast_hash": "4d935dacd4a3438b5bb682e4dbc9b059",
+    "semantic_hash": ""
   },
   "content/semester 2/2.4/2.4 CBT_21 Aristoteles.html": {
-    "mtime": 1782875857.6650987,
-    "ast_hash": "31b51dffad2e5c217d31a9d157767887",
-    "semantic_hash": "31b51dffad2e5c217d31a9d157767887"
+    "mtime": 1787367915.8380165,
+    "ast_hash": "2cd269dcd5a1577627b076b5b01d1ec0",
+    "semantic_hash": ""
   },
   "content/semester 2/2.4/2.4 CBT_22 Socrates.html": {
-    "mtime": 1782875857.6661,
-    "ast_hash": "e286759590ee0dbf3a397ab5f72f1c69",
-    "semantic_hash": "e286759590ee0dbf3a397ab5f72f1c69"
+    "mtime": 1787367915.8380165,
+    "ast_hash": "05a8ea171abc08756826a6f491148804",
+    "semantic_hash": ""
   },
   "content/semester 2/2.4/2.4 CBT_23 Marcus Aurelius.html": {
-    "mtime": 1782875857.6680994,
-    "ast_hash": "a36aecfafdc885d26574024a23cdc8d6",
-    "semantic_hash": "a36aecfafdc885d26574024a23cdc8d6"
+    "mtime": 1787367915.8380165,
+    "ast_hash": "ae5368f35278403994aa5d2b9dd68dda",
+    "semantic_hash": ""
   },
   "content/semester 2/2.4/2.4 CBT_24 Michael Jordan.html": {
-    "mtime": 1782875857.6700966,
-    "ast_hash": "b185313fd0407d8388bc5244521c45e2",
-    "semantic_hash": "b185313fd0407d8388bc5244521c45e2"
+    "mtime": 1787367915.8380165,
+    "ast_hash": "181218765246e037d1d2c0cae378baaf",
+    "semantic_hash": ""
   },
   "content/semester 2/2.5/2.5 CBT_21 REECHARD GANTENG.html": {
-    "mtime": 1782875349.126845,
+    "mtime": 1787367915.9031336,
     "ast_hash": "1671e722d18a245e24e3132e8c5cc724",
     "semantic_hash": "1671e722d18a245e24e3132e8c5cc724"
   },
   "content/semester 2/2.5/2.5 CBT_22 HAQQI GANTENG.html": {
-    "mtime": 1782875349.1303475,
+    "mtime": 1787367915.9075775,
     "ast_hash": "37f3e6e0b548367330f829a2b2a6fafa",
     "semantic_hash": "37f3e6e0b548367330f829a2b2a6fafa"
   },
   "content/semester 2/2.5/2.5 CBT_23 PANDYA GANTENG.html": {
-    "mtime": 1782875349.1353445,
+    "mtime": 1787367915.912578,
     "ast_hash": "6d9a054cd75be30e10a9b221013b8dd1",
     "semantic_hash": "6d9a054cd75be30e10a9b221013b8dd1"
   },
   "content/semester 2/2.5/2.5 CBT_24 GALIH KOPERASI.html": {
-    "mtime": 1782875349.1396053,
+    "mtime": 1787367915.9165783,
     "ast_hash": "98fb5783f42defcb6d93b8939921b116",
     "semantic_hash": "98fb5783f42defcb6d93b8939921b116"
   },
   "content/semester 2/2.5/2.5 CBT_25 DIMAS GANTENG.html": {
-    "mtime": 1782984592.332439,
-    "ast_hash": "6d9da2e87d7e455a3f71ef15b7b69ed6",
-    "semantic_hash": "6d9da2e87d7e455a3f71ef15b7b69ed6"
+    "mtime": 1787367915.9205759,
+    "ast_hash": "ef4e1295a2c20b1c3b11d75a69ca9920",
+    "semantic_hash": ""
   },
   "content/semester 2/2.5/2.5 LECTURE_K10 am-i-counseling.html": {
-    "mtime": 1783169421.2051985,
-    "ast_hash": "4e591a0ae14664e904e7e4cddf24ddff",
-    "semantic_hash": "4e591a0ae14664e904e7e4cddf24ddff"
+    "mtime": 1787367915.9265149,
+    "ast_hash": "0af180f925fb1b9e73a52ff7188e3d97",
+    "semantic_hash": ""
   },
   "content/semester 2/2.5/2.5 LECTURE_K11 am-i-addicted.html": {
-    "mtime": 1783169377.1604156,
-    "ast_hash": "10cebd2382f8cfa079c96fe160721b44",
-    "semantic_hash": "10cebd2382f8cfa079c96fe160721b44"
+    "mtime": 1787367915.931511,
+    "ast_hash": "d6e7f7b9f1563d95b796e936ff2f26e3",
+    "semantic_hash": ""
   },
   "content/semester 2/2.5/2.5 LECTURE_K12A am-i-healthy.html": {
-    "mtime": 1783169421.4935107,
-    "ast_hash": "12d73a0136f6ea540e808774a1880373",
-    "semantic_hash": "12d73a0136f6ea540e808774a1880373"
+    "mtime": 1787367915.9345078,
+    "ast_hash": "aaf318d602a8bb2a685a20ef7d87c5e3",
+    "semantic_hash": ""
   },
   "content/semester 2/2.5/2.5 LECTURE_K12B am-i-sedentary.html": {
-    "mtime": 1783169421.774917,
-    "ast_hash": "ff601d40b15ea0e32a13854b98c8e3cc",
-    "semantic_hash": "ff601d40b15ea0e32a13854b98c8e3cc"
+    "mtime": 1787367915.9410152,
+    "ast_hash": "ef047840d2d1afc6b7291cc96b89dfe8",
+    "semantic_hash": ""
   },
   "content/semester 2/2.5/2.5 LECTURE_K13A am-i-special-1.html": {
-    "mtime": 1783169377.5356789,
-    "ast_hash": "b76cee16017cdb4ec95ef7226580a773",
-    "semantic_hash": "b76cee16017cdb4ec95ef7226580a773"
+    "mtime": 1787367915.9450128,
+    "ast_hash": "71e47479bcf751cf5c505fea2981be19",
+    "semantic_hash": ""
   },
   "content/semester 2/2.5/2.5 LECTURE_K13B am-i-special-2.html": {
-    "mtime": 1783169377.6783254,
-    "ast_hash": "4dbd37e0a90a32620e60f9c7619dcdc6",
-    "semantic_hash": "4dbd37e0a90a32620e60f9c7619dcdc6"
+    "mtime": 1787367915.9500816,
+    "ast_hash": "3150a1033eceafddaa6b6a2458b0421f",
+    "semantic_hash": ""
   },
   "content/semester 2/2.5/2.5 LECTURE_K14 Am I Healthy\u00b7 FK Unsoed.html": {
-    "mtime": 1783169422.2777839,
-    "ast_hash": "d5161f84dd92004f1cb1046e6c469d98",
-    "semantic_hash": "d5161f84dd92004f1cb1046e6c469d98"
+    "mtime": 1787367915.9530776,
+    "ast_hash": "7178fa12816e191283b518936e283189",
+    "semantic_hash": ""
   },
   "content/semester 2/2.5/2.5 LECTURE_K14 am-i-feeding.html": {
-    "mtime": 1783169377.9558358,
-    "ast_hash": "58d5ab829c7e6f2ee5ccadeb2309f60f",
-    "semantic_hash": "58d5ab829c7e6f2ee5ccadeb2309f60f"
+    "mtime": 1787367915.9606884,
+    "ast_hash": "7d9451ce4fad51df8d0287e6f62903d9",
+    "semantic_hash": ""
   },
   "content/semester 2/2.5/2.5 LECTURE_K16 Am I Clean.html": {
-    "mtime": 1783169422.503858,
-    "ast_hash": "4a5d1cc0253ef60021694ed648f0b73b",
-    "semantic_hash": "4a5d1cc0253ef60021694ed648f0b73b"
+    "mtime": 1787367915.963934,
+    "ast_hash": "21ec9c99c5fe65c4c6098e188ff26668",
+    "semantic_hash": ""
   },
   "content/semester 2/2.5/2.5 LECTURE_K17 am-i-food-secure.html": {
-    "mtime": 1783169378.151942,
-    "ast_hash": "3b2088cb36ddce5a404c6ca1d137e188",
-    "semantic_hash": "3b2088cb36ddce5a404c6ca1d137e188"
+    "mtime": 1787367915.9676325,
+    "ast_hash": "66e34d0bcd3cf12faa0cdc3a8e1d717d",
+    "semantic_hash": ""
   },
   "content/semester 2/2.5/2.5 LECTURE_K18 am-i-nurtured.html": {
-    "mtime": 1783169378.3462193,
-    "ast_hash": "5588aadbb1799adb08127b6efd7bee7e",
-    "semantic_hash": "5588aadbb1799adb08127b6efd7bee7e"
+    "mtime": 1787367915.9744363,
+    "ast_hash": "e223aa8a0da2bc59edd421147d81da0c",
+    "semantic_hash": ""
   },
   "content/semester 2/2.5/2.5 LECTURE_K19 Am I Safe (to Eat).html": {
-    "mtime": 1783169422.8139586,
-    "ast_hash": "782c642a022cb058339cf457f810810a",
-    "semantic_hash": "782c642a022cb058339cf457f810810a"
+    "mtime": 1787367915.97788,
+    "ast_hash": "3c6e2eadd22b674fd44e67bf746af3f7",
+    "semantic_hash": ""
   },
   "content/semester 2/2.5/2.5 LECTURE_K2 am-i-healthy.html": {
-    "mtime": 1783169422.929574,
-    "ast_hash": "ae4c58bacf78f8c36f86a0bcfab4f342",
-    "semantic_hash": "ae4c58bacf78f8c36f86a0bcfab4f342"
+    "mtime": 1787367915.9828868,
+    "ast_hash": "69c33913bcc2f1d2971f302aa73c92aa",
+    "semantic_hash": ""
   },
   "content/semester 2/2.5/2.5 LECTURE_K20 Am I Coordinated.html": {
-    "mtime": 1783169423.044937,
-    "ast_hash": "8395853c449f69f46bcd38dd947d2588",
-    "semantic_hash": "8395853c449f69f46bcd38dd947d2588"
+    "mtime": 1787367915.987921,
+    "ast_hash": "9393b7e207ee1820fe57bfd2c7a75d97",
+    "semantic_hash": ""
   },
   "content/semester 2/2.5/2.5 LECTURE_K21 am-i-nourished.html": {
-    "mtime": 1783169423.1653295,
-    "ast_hash": "f2cf433245eed765e7a91d1a3594ebd7",
-    "semantic_hash": "f2cf433245eed765e7a91d1a3594ebd7"
+    "mtime": 1787367915.9926534,
+    "ast_hash": "0c29221ac77684f004847fea1ed7248c",
+    "semantic_hash": ""
   },
   "content/semester 2/2.5/2.5 LECTURE_K22 am-i-advocating.html": {
-    "mtime": 1783169378.9394965,
-    "ast_hash": "90b196b66343573cbdcfbbc7e6a7a2d3",
-    "semantic_hash": "90b196b66343573cbdcfbbc7e6a7a2d3"
+    "mtime": 1787367915.9983616,
+    "ast_hash": "7b7f71a859244cf205fb12927e7f19b6",
+    "semantic_hash": ""
   },
   "content/semester 2/2.5/2.5 LECTURE_K23 AM I AT RISK (by uzer).html": {
-    "mtime": 1783169423.363092,
-    "ast_hash": "111e3e8c308768a90366a95034228cc3",
-    "semantic_hash": "111e3e8c308768a90366a95034228cc3"
+    "mtime": 1787367915.9983616,
+    "ast_hash": "3af83449c9679407e4e0793c6e3f31ef",
+    "semantic_hash": ""
   },
   "content/semester 2/2.5/2.5 LECTURE_K24 Am I Okay.html": {
-    "mtime": 1783169423.453686,
-    "ast_hash": "3ecbb1f09d86becb23b43e366b2c5dc6",
-    "semantic_hash": "3ecbb1f09d86becb23b43e366b2c5dc6"
+    "mtime": 1787367916.0104358,
+    "ast_hash": "b962ca22ab9c03b9448bbac92117e107",
+    "semantic_hash": ""
   },
   "content/semester 2/2.5/2.5 LECTURE_K3 am-i-active.html": {
-    "mtime": 1783169423.5942104,
-    "ast_hash": "aa6f68b025cd80290135f9415f0b93d4",
-    "semantic_hash": "aa6f68b025cd80290135f9415f0b93d4"
+    "mtime": 1787367916.0164325,
+    "ast_hash": "82b5a8ca7096fb518fcd7aeb2081e2a5",
+    "semantic_hash": ""
   },
   "content/semester 2/2.5/2.5 LECTURE_K4 am-i-fit.html": {
-    "mtime": 1783169379.4093528,
-    "ast_hash": "77b6732e70a11d4d6bce592d7359a4dd",
-    "semantic_hash": "77b6732e70a11d4d6bce592d7359a4dd"
+    "mtime": 1787367916.0239525,
+    "ast_hash": "96866cefb5b2ff5c93797d63d96fa233",
+    "semantic_hash": ""
   },
   "content/semester 2/2.5/2.5 LECTURE_K5 am-i-fueled.html": {
-    "mtime": 1783169379.5462928,
-    "ast_hash": "f6e7ea5023d815d54ce682ed25b7fbb8",
-    "semantic_hash": "f6e7ea5023d815d54ce682ed25b7fbb8"
+    "mtime": 1787367916.0276716,
+    "ast_hash": "1aecf1bbf344109946cccc63cefd68f3",
+    "semantic_hash": ""
   },
   "content/semester 2/2.5/2.5 LECTURE_K6 am-i-immune.html": {
-    "mtime": 1783169379.67874,
-    "ast_hash": "4bbd9ec0b3ac187d1a0c09d4c891bb14",
-    "semantic_hash": "4bbd9ec0b3ac187d1a0c09d4c891bb14"
+    "mtime": 1787367916.040766,
+    "ast_hash": "31c67324cdfa44e2bf3c7afa02ae7deb",
+    "semantic_hash": ""
   },
   "content/semester 2/2.5/2.5 LECTURE_K7A am-i-growing-1.html": {
-    "mtime": 1783169379.8922985,
-    "ast_hash": "e0740616c4938fb931f1ca7e8dbbb962",
-    "semantic_hash": "e0740616c4938fb931f1ca7e8dbbb962"
+    "mtime": 1787367916.0475695,
+    "ast_hash": "864d19300979fcabd368965563804e1e",
+    "semantic_hash": ""
   },
   "content/semester 2/2.5/2.5 LECTURE_K7B am-i-growing-2.html": {
-    "mtime": 1783169380.0719707,
-    "ast_hash": "4d80ad87b36888c886d0ce90fd454651",
-    "semantic_hash": "4d80ad87b36888c886d0ce90fd454651"
+    "mtime": 1787367916.0475695,
+    "ast_hash": "83092aa8f173e7b2e62592daf26c64ac",
+    "semantic_hash": ""
   },
   "content/semester 2/2.5/2.5 LECTURE_K8 am-i-nourished.html": {
-    "mtime": 1783169380.2018166,
-    "ast_hash": "412dcd4d823fd89606591f57762f0292",
-    "semantic_hash": "412dcd4d823fd89606591f57762f0292"
+    "mtime": 1787367916.0585203,
+    "ast_hash": "4dfa1816508e16ae12ea2f4605de4ecf",
+    "semantic_hash": ""
   },
   "content/semester 2/2.5/2.5 LECTURE_K9 am-i-educated.html": {
-    "mtime": 1783169380.3615525,
-    "ast_hash": "8aed4a596ca5b3ad99bca138904e81cf",
-    "semantic_hash": "8aed4a596ca5b3ad99bca138904e81cf"
+    "mtime": 1787367916.062052,
+    "ast_hash": "a33b64d6bc95f09e02d65a8d5504fde0",
+    "semantic_hash": ""
   },
   "content/semester 2/2.5/2.5 LECTURE_K99 WHOLESOME FROM MR PRODIGY.html": {
-    "mtime": 1783169380.5800586,
-    "ast_hash": "cd1e4d0c9236eca57c1a6e67457f2cf3",
-    "semantic_hash": "cd1e4d0c9236eca57c1a6e67457f2cf3"
+    "mtime": 1787367916.0676136,
+    "ast_hash": "79cccd2b6e1e5f100c6e31465446e65f",
+    "semantic_hash": ""
   },
   "content/semester 2/2.5/2.5 PRAKTIKUM_PRAKTIKUM 1.html": {
-    "mtime": 1783169424.631681,
-    "ast_hash": "616c5c85cae9002e1f9d32c5ad5ecf28",
-    "semantic_hash": "616c5c85cae9002e1f9d32c5ad5ecf28"
+    "mtime": 1787367916.0827246,
+    "ast_hash": "8cbcf584e8ca931cafbdcf4ea8dc3223",
+    "semantic_hash": ""
   },
   "content/semester 2/2.5/2.5 PRAKTIKUM_PRAKTIKUM 2.html": {
-    "mtime": 1783169424.728533,
-    "ast_hash": "75c4998aca100915275b9cd12ef4105d",
-    "semantic_hash": "75c4998aca100915275b9cd12ef4105d"
+    "mtime": 1787367916.13278,
+    "ast_hash": "fee707275c99b88537640a87aa953f78",
+    "semantic_hash": ""
   },
   "content/semester 2/2.5/2.5 PRAKTIKUM_PRAKTIKUM 3.html": {
-    "mtime": 1783169424.8300123,
-    "ast_hash": "67e93b9315eb946290c41195c3ed31ce",
-    "semantic_hash": "67e93b9315eb946290c41195c3ed31ce"
+    "mtime": 1787367916.17696,
+    "ast_hash": "66d0a4e52db4e0de0e858bbe19436a24",
+    "semantic_hash": ""
   },
   "contributions_setup.sql": {
-    "mtime": 1783434012.964951,
+    "mtime": 1787367916.2762806,
     "ast_hash": "9a4ce52b5ae1fd97684b9f35a9cd04a6",
     "semantic_hash": "9a4ce52b5ae1fd97684b9f35a9cd04a6"
   },
   "data.js": {
-    "mtime": 1787021489.5747185,
-    "ast_hash": "70ac81270d00a20d92ac41c07017ffd3",
+    "mtime": 1787643292.7572646,
+    "ast_hash": "95faa49af18c4b459c4b339f251937e0",
     "semantic_hash": ""
   },
   "docs.html": {
-    "mtime": 1787020963.1026106,
-    "ast_hash": "121e1509e081c08b2d20deb8724ef30d",
+    "mtime": 1787643273.2884917,
+    "ast_hash": "2c8eff1864b9d9d5d56a70500bac497e",
     "semantic_hash": ""
   },
   "gpush.sh": {
-    "mtime": 1784080684.2899246,
+    "mtime": 1787367922.7080982,
     "ast_hash": "794b3b4c39f4c920d7dbe0fffbd3e10c",
     "semantic_hash": "794b3b4c39f4c920d7dbe0fffbd3e10c"
   },
   "index.html": {
-    "mtime": 1787020506.8902109,
-    "ast_hash": "a4750eaac505eb90718c4019f456f064",
+    "mtime": 1787367923.3074102,
+    "ast_hash": "b9158dd031e910cb2eddcaf9e914da57",
     "semantic_hash": ""
   },
   "live.html": {
-    "mtime": 1784645844.0837524,
-    "ast_hash": "8722a1f23a521d604ffc28711f8db9cc",
+    "mtime": 1787367923.3175743,
+    "ast_hash": "6ed6a5539b95cc745244a5ddb9d980be",
     "semantic_hash": ""
   },
   "live.js": {
-    "mtime": 1786784268.0685763,
-    "ast_hash": "7d0d305babf94b3b34708e04d00273a0",
+    "mtime": 1787367923.3175743,
+    "ast_hash": "d29095aaff4b2a6ea4b2998486accbc2",
     "semantic_hash": ""
   },
   "mock_server.js": {
-    "mtime": 1783488253.8427522,
+    "mtime": 1787367923.3175743,
     "ast_hash": "a66c365f95ca69ccc96e7dbebafe5e86",
     "semantic_hash": "a66c365f95ca69ccc96e7dbebafe5e86"
   },
   "package.json": {
-    "mtime": 1784645576.406296,
+    "mtime": 1787367923.327268,
     "ast_hash": "e548c7fff6973268865b1d78bb6f5a54",
     "semantic_hash": ""
   },
   "vercel.json": {
-    "mtime": 1787021351.4047058,
-    "ast_hash": "7f5939d4a3160b44ad4770654df07aa8",
+    "mtime": 1787367946.2463448,
+    "ast_hash": "06ae7c6fc04a3facec9f37cda2b89460",
     "semantic_hash": ""
   },
   "api/mcp.js": {
-    "mtime": 1787021228.303549,
+    "mtime": 1787367915.5378976,
     "ast_hash": "86fe74575f926221b6726e83f88f9694",
     "semantic_hash": ""
   },
   ".agents/rules/graphify.md": {
-    "mtime": 1784364801.4048157,
-    "ast_hash": "a0e4d192b9e2e17256124dbfc8e24e6a",
+    "mtime": 1787367915.480045,
+    "ast_hash": "f1e53ecc9194573d3c28fc116c743a2e",
     "semantic_hash": ""
   },
   ".agents/workflows/graphify.md": {
-    "mtime": 1784364801.4068155,
-    "ast_hash": "637776aa6f7496d069afe7520c845c8a",
+    "mtime": 1787367915.4810438,
+    "ast_hash": "0bc020d491fca99550c1ea3de0a5f862",
     "semantic_hash": ""
   },
   ".github/workflows/codeql.yml": {
-    "mtime": 1782310552.9858727,
-    "ast_hash": "6f5fda4dd2f16e37d876fec604c7221c",
+    "mtime": 1787367915.4860406,
+    "ast_hash": "a85a76b5647f5a4506a81717acba9e0c",
     "semantic_hash": ""
   },
   ".github/workflows/fortify.yml": {
-    "mtime": 1783049067.6499126,
-    "ast_hash": "4ff922e49994cb954110d4eaaa5ae7c7",
+    "mtime": 1787367915.4880395,
+    "ast_hash": "c34b904a6cb12fb5eac01dffbab065e8",
     "semantic_hash": ""
   },
   ".github/workflows/jscrambler-code-integrity.yml": {
-    "mtime": 1783049067.6509116,
-    "ast_hash": "f80c8d12e31a30c3a2b3e07463c949d6",
+    "mtime": 1787367915.4900446,
+    "ast_hash": "2967b5fc62cdf02642e5325a6e048576",
     "semantic_hash": ""
   },
   "ADMIN_IMPLEMENTATION_PLAN.md": {
-    "mtime": 1784460262.499386,
+    "mtime": 1787367915.4930902,
     "ast_hash": "be4720cbc97752ebc6c8e5503885f640",
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1787020690.6619866,
+    "mtime": 1787367915.508073,
     "ast_hash": "1e44ea2bcbee7ba1005b21d374387228",
     "semantic_hash": ""
   },
   "cover/04094a2a2088424b488e130b94859bc1.gif": {
-    "mtime": 1782875610.177438,
+    "mtime": 1787367916.3089187,
     "ast_hash": "04094a2a2088424b488e130b94859bc1",
     "semantic_hash": ""
   },
   "cover/05c48a6432e80f26141a5af542c9e1c7.gif": {
-    "mtime": 1782875610.3965697,
+    "mtime": 1787367916.4482746,
     "ast_hash": "a7c95f9e53ef80f9b32323fe5ba9dd14",
     "semantic_hash": ""
   },
   "cover/25bc8c5f5a2be59cc917267e1549bc15.gif": {
-    "mtime": 1782875610.4299562,
+    "mtime": 1787367916.4676175,
     "ast_hash": "7fc2212516c108c80396c5adff33a641",
     "semantic_hash": ""
   },
   "cover/35fad16ad3b0394ac0a276b9c5a9bf3f.jpg": {
-    "mtime": 1782875610.4379497,
+    "mtime": 1787367916.4676175,
     "ast_hash": "39bcbf36b572d5e588244c16fefc1aab",
     "semantic_hash": ""
   },
   "cover/40a5717e164e4aae7339ca73739bb89f.gif": {
-    "mtime": 1782875610.5689774,
+    "mtime": 1787367916.527761,
     "ast_hash": "af1e647d2673ec56983c2fb8ae310ed9",
     "semantic_hash": ""
   },
   "cover/432797c8fdde0ab37156d61908e39a23.gif": {
-    "mtime": 1782875610.7631593,
+    "mtime": 1787367916.617665,
     "ast_hash": "6b46924e68b9245acea8d06adb49b0bd",
     "semantic_hash": ""
   },
   "cover/4cb674823cbbec913fc84e3ebd124f0a.gif": {
-    "mtime": 1782875611.2541528,
+    "mtime": 1787367916.897427,
     "ast_hash": "4cb674823cbbec913fc84e3ebd124f0a",
     "semantic_hash": ""
   },
   "cover/4da0a8ccb3a3a63fc1ac94609831e4b2.jpg": {
-    "mtime": 1782875611.2591512,
+    "mtime": 1787367916.9091566,
     "ast_hash": "1feb50252f1beff490b09255da1a3fcd",
     "semantic_hash": ""
   },
   "cover/4ed8fdf6c981cfc40e8ec53aa6ee34cd.gif": {
-    "mtime": 1782875611.599343,
+    "mtime": 1787367917.0613384,
     "ast_hash": "ffe0450f6eb45c637954addacbeb2e56",
     "semantic_hash": ""
   },
   "cover/50479fc45011cab8fba096e42d00ed25.gif": {
-    "mtime": 1782875611.687995,
+    "mtime": 1787367917.1476202,
     "ast_hash": "0d94000dcf26647943bc2c284c538d67",
     "semantic_hash": ""
   },
   "cover/521aad3fecdeca88c06e6af02cb642a0.jpg": {
-    "mtime": 1782875611.692069,
+    "mtime": 1787367917.1476202,
     "ast_hash": "d28c828cfd81f76bde023e294e8b3cd7",
     "semantic_hash": ""
   },
   "cover/53e37ccab2be67cdc7e348c610d95bc6.gif": {
-    "mtime": 1782875612.0255365,
+    "mtime": 1787367917.3406649,
     "ast_hash": "53e37ccab2be67cdc7e348c610d95bc6",
     "semantic_hash": ""
   },
   "cover/58cac14809a564ac83d6fd244a58bb1d.jpg": {
-    "mtime": 1782875612.0364392,
+    "mtime": 1787367917.3446667,
     "ast_hash": "d5d1d1fc869a98a20fdbd0a8300c29be",
     "semantic_hash": ""
   },
   "cover/6ec59a46147bb7e1e21a748cb4ac63bd.gif": {
-    "mtime": 1782875612.2413716,
+    "mtime": 1787367917.4290352,
     "ast_hash": "7d07c5ed057ec35e824543a284a01329",
     "semantic_hash": ""
   },
   "cover/6ee97cdfd88ce6cd8877b327900e4ff7.gif": {
-    "mtime": 1782875612.2843082,
+    "mtime": 1787367917.4476438,
     "ast_hash": "df3e39cc547e57bce6845a9b7087df1f",
     "semantic_hash": ""
   },
   "cover/72d374167a5a04a3607d95a470798e55.gif": {
-    "mtime": 1782875612.3363547,
+    "mtime": 1787367917.4907162,
     "ast_hash": "d707308dbe8893fdd6067d5bc7aab3ba",
     "semantic_hash": ""
   },
   "cover/74c9011f548ab30c6b30b6bb13223459.gif": {
-    "mtime": 1782875612.7821221,
+    "mtime": 1787367917.7976496,
     "ast_hash": "74c9011f548ab30c6b30b6bb13223459",
     "semantic_hash": ""
   },
   "cover/764a31edb8e34d6b560d57eadaddffd3.gif": {
-    "mtime": 1782875612.97642,
+    "mtime": 1787367918.0022857,
     "ast_hash": "2489a3c8779eb3316920dd704c13294e",
     "semantic_hash": ""
   },
   "cover/7ddb507496f96111d9ee7252ddd9fd26.gif": {
-    "mtime": 1782875613.2306542,
+    "mtime": 1787367918.137639,
     "ast_hash": "7ddb507496f96111d9ee7252ddd9fd26",
     "semantic_hash": ""
   },
   "cover/893ac87fd8990ed431a5efd725b2a85d.gif": {
-    "mtime": 1782875614.6239243,
+    "mtime": 1787367918.5771682,
     "ast_hash": "28d606d44e46c2506618ec7e0dba3470",
     "semantic_hash": ""
   },
   "cover/8bd1af518f88ecb18c634210d26df0c2.gif": {
-    "mtime": 1782875614.6793447,
+    "mtime": 1787367918.6205578,
     "ast_hash": "8f49399d24562d9e4010ea2f74d7cea7",
     "semantic_hash": ""
   },
   "cover/a46cc8c58bdfd2422b1a0c86546b1643.gif": {
-    "mtime": 1782875615.0368633,
+    "mtime": 1787367918.8114707,
     "ast_hash": "23bf36bd5189d7d69d92028197fe642d",
     "semantic_hash": ""
   },
   "cover/a809f592065ad3c366f9b97a699e3af1.gif": {
-    "mtime": 1782875615.3212395,
+    "mtime": 1787367918.9375856,
     "ast_hash": "3c2d072087667a492ab32ae8f7800b4b",
     "semantic_hash": ""
   },
   "cover/b6123030f575bd0ec055c62550c153f0.gif": {
-    "mtime": 1782875615.6548202,
+    "mtime": 1787367919.232272,
     "ast_hash": "edd7416818098063405e9bb2765721d0",
     "semantic_hash": ""
   },
   "cover/c265623615503b6dae43954ece5988c1.gif": {
-    "mtime": 1782875615.6801562,
+    "mtime": 1787367919.251552,
     "ast_hash": "c265623615503b6dae43954ece5988c1",
     "semantic_hash": ""
   },
   "cover/c899dae38c04f739889622ebfc9a1553.gif": {
-    "mtime": 1782875616.0090678,
+    "mtime": 1787367919.412378,
     "ast_hash": "41c2bff2682543b1cc4c1c6ba19a9f9d",
     "semantic_hash": ""
   },
   "cover/ca0ca2b69536cfa0c5872bb8623cad92.gif": {
-    "mtime": 1782875616.441542,
+    "mtime": 1787367919.5175533,
     "ast_hash": "91489ff25844a3fe7b7ebbf51f3badd1",
     "semantic_hash": ""
   },
   "cover/cad0ee1e064aacd78eeaadbad7e73de1.gif": {
-    "mtime": 1782875616.7426033,
+    "mtime": 1787367919.6573281,
     "ast_hash": "71df0b55a905196c0e4cc1e8c9935eca",
     "semantic_hash": ""
   },
   "cover/cf12abf0721dd0104c96a6dfe615f853.gif": {
-    "mtime": 1782875616.8864331,
+    "mtime": 1787367919.7253766,
     "ast_hash": "35097416f39d9f8ddac6ea2d4d18ec39",
     "semantic_hash": ""
   },
   "cover/cover 1.png": {
-    "mtime": 1782875616.9237306,
+    "mtime": 1787367919.7374005,
     "ast_hash": "fb717ee66adcaff05ac5338429e03e35",
     "semantic_hash": ""
   },
   "cover/cover 10.png": {
-    "mtime": 1782875616.937979,
+    "mtime": 1787367919.7471957,
     "ast_hash": "ce24e82532e09335abb594694266a48e",
     "semantic_hash": ""
   },
   "cover/cover 2.png": {
-    "mtime": 1782875616.960226,
+    "mtime": 1787367919.7576182,
     "ast_hash": "f9340819c8c152317e1c9c0a3ac85485",
     "semantic_hash": ""
   },
   "cover/cover 3.png": {
-    "mtime": 1782875616.9813073,
+    "mtime": 1787367919.7679763,
     "ast_hash": "106b2c59e55283343a7b3b51dd907ddd",
     "semantic_hash": ""
   },
   "cover/cover 4.png": {
-    "mtime": 1782875617.0012963,
+    "mtime": 1787367919.7679763,
     "ast_hash": "e09b1320066b700c807f59351777a8fd",
     "semantic_hash": ""
   },
   "cover/cover 5.png": {
-    "mtime": 1782875617.0172882,
+    "mtime": 1787367919.7774446,
     "ast_hash": "b21427a9b284e50709321f50a8b302c4",
     "semantic_hash": ""
   },
   "cover/cover 6.png": {
-    "mtime": 1782875617.037569,
+    "mtime": 1787367919.7876165,
     "ast_hash": "ef45015e42e02fdbdec5060ec1847170",
     "semantic_hash": ""
   },
   "cover/cover 7.png": {
-    "mtime": 1782875617.0552833,
+    "mtime": 1787367919.7976434,
     "ast_hash": "cd6c8a1db98621609568072db3c4fa75",
     "semantic_hash": ""
   },
   "cover/cover 8.png": {
-    "mtime": 1782875617.0734062,
+    "mtime": 1787367919.8075948,
     "ast_hash": "946b487bc218006d3ba477453b5a0d96",
     "semantic_hash": ""
   },
   "cover/cover 9.png": {
-    "mtime": 1782875617.0865417,
+    "mtime": 1787367919.8075948,
     "ast_hash": "164df228ba1f84190a6f2ac29cc9759d",
     "semantic_hash": ""
   },
   "cover/d641b7068bdceb478a468834bd38b784.jpg": {
-    "mtime": 1782875617.0910876,
+    "mtime": 1787367919.8174899,
     "ast_hash": "2c28e5b46042fcd09e8a3424fb058874",
     "semantic_hash": ""
   },
   "cover/d71d256d9f9889cb4927ffa598046644.gif": {
-    "mtime": 1782875617.192698,
+    "mtime": 1787367919.8472798,
     "ast_hash": "6973189b2e7cdef7291f0ec04bfc6cb7",
     "semantic_hash": ""
   },
   "cover/e355dd57b792b4cef6f62d744b1608ce.gif": {
-    "mtime": 1782875617.2577224,
+    "mtime": 1787367919.8775117,
     "ast_hash": "415b515f6395e884cfce3cc72c0102c5",
     "semantic_hash": ""
   },
   "cover/e562ce67a72222111d0688e1d9f65363.gif": {
-    "mtime": 1782875617.666445,
+    "mtime": 1787367919.9974518,
     "ast_hash": "1299a03611eee9b253831cd43918b04b",
     "semantic_hash": ""
   },
   "cover/f1795f03d3d96c09bbbd448f8f01856c.gif": {
-    "mtime": 1782875617.9468167,
+    "mtime": 1787367920.1174135,
     "ast_hash": "f1795f03d3d96c09bbbd448f8f01856c",
     "semantic_hash": ""
   },
   "cover/f22635607bc881102b9c56c9e9f1ffda.gif": {
-    "mtime": 1782875618.2636936,
+    "mtime": 1787367920.2271414,
     "ast_hash": "9c6abf4fe13a4bd81c683c45ee2f566f",
     "semantic_hash": ""
   },
   "cover/f3703c12d72a12dabc9a804516b24708.gif": {
-    "mtime": 1782875618.488525,
+    "mtime": 1787367920.327128,
     "ast_hash": "0ae48e4fe7e72e4745f6f4a6d77178ca",
     "semantic_hash": ""
   },
   "cover/f56c730553fe1b0cf65d580c6b0dd004.gif": {
-    "mtime": 1782875618.9465618,
+    "mtime": 1787367922.6372275,
     "ast_hash": "ddf6e2623c5442a8cfc40fe0fff4d60b",
     "semantic_hash": ""
   },
   "logo-white.svg": {
-    "mtime": 1782875618.9609506,
-    "ast_hash": "2f31c32e3d19b416d86951422179af57",
+    "mtime": 1787367923.3175743,
+    "ast_hash": "f079497fdb15b2a06adfd1e59b60853d",
     "semantic_hash": ""
   },
   "logo.svg": {
-    "mtime": 1786768801.1847537,
+    "mtime": 1787367923.3175743,
     "ast_hash": "65f11cad18790fcc212161977fa68b77",
     "semantic_hash": ""
   },
   "api/authorize.js": {
-    "mtime": 1787021400.5206518,
-    "ast_hash": "5531902d3d87ea5e1a9b16e890728ae7",
+    "mtime": 1787367915.527858,
+    "ast_hash": "bfc2b13605457f113edd385b2b1906e0",
     "semantic_hash": ""
   },
   "api/token.js": {
-    "mtime": 1787020586.5366468,
+    "mtime": 1787367915.5479386,
     "ast_hash": "f405510f5f0108c2ce57a8238b534efe",
     "semantic_hash": ""
   },
   "oauth_setup.sql": {
-    "mtime": 1785472743.8301284,
+    "mtime": 1787367923.3175743,
     "ast_hash": "6af03a35f3f316201b321d42f88abcde",
     "semantic_hash": ""
   },
@@ -810,1227 +810,1227 @@
     "semantic_hash": ""
   },
   "public/admin-workflow.js": {
-    "mtime": 1786784261.7944639,
-    "ast_hash": "3eceefd6550d3e8a7605eec8954c0c10",
+    "mtime": 1787367915.518114,
+    "ast_hash": "0bf8ac0e3b58a49923d7611ca4936afe",
     "semantic_hash": ""
   },
   "public/admin.html": {
-    "mtime": 1787020666.6566596,
-    "ast_hash": "423224c7b11be5158666570bfe97a56f",
+    "mtime": 1787367915.518114,
+    "ast_hash": "e35510e62d692bd366a46be2834a8faa",
     "semantic_hash": ""
   },
   "public/admin.js": {
-    "mtime": 1787020678.0668097,
-    "ast_hash": "eea19ab04dd2abddf397ef5203cd6f59",
+    "mtime": 1787367915.518114,
+    "ast_hash": "84ac07c2d8bb3613cc13b555d3e772e2",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.3/1.3 CBT 1_1. Organisasi dan Embriologi SSP dan SST.html": {
-    "mtime": 1786789906.8460553,
+    "mtime": 1787367915.653132,
     "ast_hash": "5953428bc9ca64c655ff1fe872dfd1c6",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.3/1.3 CBT 1_10. Fungsi Medulla Spinalis dan Saraf Spinal.html": {
-    "mtime": 1786789906.9201515,
+    "mtime": 1787367915.6581845,
     "ast_hash": "69585a5c7cb6bb9a3a386121eaed56e9",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.3/1.3 CBT 1_11. Fungsi Integratif.html": {
-    "mtime": 1786789906.925149,
+    "mtime": 1787367915.6581845,
     "ast_hash": "4a3819053804fc48aea44d570f6661a3",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.3/1.3 CBT 1_12. Fungsi Sistem Saraf Otonom.html": {
-    "mtime": 1786789906.940139,
+    "mtime": 1787367915.6617138,
     "ast_hash": "3c5ff73ea8dd256974df09f0eda30d4e",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.3/1.3 CBT 1_3. Pars Centralis Systema Nervosum Centrale (Cerebrum & Truncus Encephali) II.html": {
-    "mtime": 1786789906.8816514,
+    "mtime": 1787367915.6677423,
     "ast_hash": "0040ec50f4c4963b40ed89303dd3336e",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.3/1.3 CBT 1_4. Cerebellum Et Medulla Spinalis.html": {
-    "mtime": 1786789906.8851638,
+    "mtime": 1787367915.6677423,
     "ast_hash": "6ee7a959b8af28d48391cfc9aa2558b6",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.3/1.3 CBT 1_5. Vascularisasi Pars Centralis Systema Nervosum Central.html": {
-    "mtime": 1786789906.8962433,
+    "mtime": 1787367915.6677423,
     "ast_hash": "6bbc7c05cfb1121223ad6fcf4712e352",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.3/1.3 CBT 1_6. Pars Peripherica Systema Nervosum Periphericum.html": {
-    "mtime": 1786789906.9006457,
+    "mtime": 1787367915.6677423,
     "ast_hash": "5e471f53e35c6c251c0338cdae9145ba",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.3/1.3 CBT 1_7. Struktur Mikroskopis Sistem Saraf Pusat dan Sistem Saraf Tepi.html": {
-    "mtime": 1786789906.9071577,
+    "mtime": 1787367915.6777842,
     "ast_hash": "753dfd4f45775ef040a166d6b5c8051d",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.3/1.3 CBT 1_8. Biokimiawi Sistem Saraf.html": {
-    "mtime": 1786789906.9111555,
+    "mtime": 1787367915.6778257,
     "ast_hash": "38bac47235f641f06bbdaa9288551894",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.3/1.3 CBT 1_9. Fungsi Sistem Saraf.html": {
-    "mtime": 1786789906.9161527,
+    "mtime": 1787367915.6778257,
     "ast_hash": "5781451bab9bab2f0de86291d59f8f76",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.3/1.3 CBT 1_merah.html": {
-    "mtime": 1786789906.950133,
+    "mtime": 1787367915.6828327,
     "ast_hash": "0b8eab77ab10da5d93b6843a3fa098ae",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.3/1.3 CBT 2_ORANGE.html": {
-    "mtime": 1786789906.957129,
+    "mtime": 1787367915.6828327,
     "ast_hash": "977eddd6b7ca579242b9b5734dd0d240",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.3/1.3 CBT 2_VIOLET.html": {
-    "mtime": 1786789906.9643092,
+    "mtime": 1787367915.6878698,
     "ast_hash": "1551d23647c552d70ecdca41546ba6b1",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.3/1.3 CBT 2_emerald.html": {
-    "mtime": 1786789906.9728646,
+    "mtime": 1787367915.6878698,
     "ast_hash": "b8b91aa7b8a6257c8dc0667aa21bce42",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.4/1.4 CBT_22 SIT UP.html": {
-    "mtime": 1786790108.3379107,
+    "mtime": 1787367915.70788,
     "ast_hash": "eec807a9950275006f6279d60b4d7552",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.4/1.4 CBT_23 PULL UP.html": {
-    "mtime": 1786790108.3618968,
+    "mtime": 1787367915.7128873,
     "ast_hash": "bdad0948b94ec5cfd26405c82ef9e359",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.4/1.4 CBT_24 SCOTT JUMP.html": {
-    "mtime": 1786790108.3701053,
+    "mtime": 1787367915.7128873,
     "ast_hash": "f22916b63c4f5074953958662699cf1e",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.4/1.4 CBT_Histologi Lecture.html": {
-    "mtime": 1786790108.3771007,
+    "mtime": 1787367915.7179172,
     "ast_hash": "0c73d9e0a2c02366fab671814eed5d4c",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.1/2.1 CBT_22 hours warmin up.html": {
-    "mtime": 1786788759.156043,
+    "mtime": 1787367915.737964,
     "ast_hash": "9eb77d4ccff46b1cdc3d7d51369e1709",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.1/2.1 CBT_22 minute jogging.html": {
-    "mtime": 1786788759.2004383,
+    "mtime": 1787367915.737964,
     "ast_hash": "6d25e0cd0d95fcdd6eb5003ef751dfbf",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.1/2.1 CBT_23 deadlift.html": {
-    "mtime": 1786788759.2186284,
+    "mtime": 1787367915.7479167,
     "ast_hash": "504866acfa2c0a2319aebb4f792f3c5f",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.1/2.1 CBT_24 bench press.html": {
-    "mtime": 1786788759.2327793,
+    "mtime": 1787367915.7479167,
     "ast_hash": "4b9505ee3faab8f6723e0c0f78ec8f3a",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.1/2.1 CBT_25 minute jumping jack.html": {
-    "mtime": 1786788759.2509196,
+    "mtime": 1787367915.7479167,
     "ast_hash": "517721824114ef141e640d07d9f6b8e6",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.1/2.1 Ident Fisio_Praktikum 1.html": {
-    "mtime": 1786789169.4954412,
+    "mtime": 1787367915.7619803,
     "ast_hash": "5cf50f3db86732b38465d5d59ee2ba34",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.2/2.2 CBT 1_22 FUFUFAFA.html": {
-    "mtime": 1786788895.7124066,
+    "mtime": 1787367915.7730248,
     "ast_hash": "d993029eacb8e4358f5c58b2ab3d9487",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.2/2.2 CBT 1_23 JOKROWI.html": {
-    "mtime": 1786788895.8044436,
+    "mtime": 1787367915.7780643,
     "ast_hash": "da8b1786b75518d978850b12dae56d41",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.2/2.2 CBT 1_24 PRANOWO.html": {
-    "mtime": 1786788895.8203936,
+    "mtime": 1787367915.7780643,
     "ast_hash": "02cf2c628e16d0abbce24e5e3522cc92",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.2/2.2 CBT 1_45 BAXLIL.html": {
-    "mtime": 1786788895.8298025,
+    "mtime": 1787367915.7830727,
     "ast_hash": "7bcc5a09cff80a625732a95e8f2c13c9",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.2/2.2 CBT 2_22 ANTON AYAM.html": {
-    "mtime": 1786788895.8688426,
+    "mtime": 1787367915.7876182,
     "ast_hash": "cc6fd93a8552a6cc3ffc5863a52dc480",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.2/2.2 CBT 2_23 TONO GALON.html": {
-    "mtime": 1786788895.888143,
+    "mtime": 1787367915.794656,
     "ast_hash": "8777c5eb38c568b1e1f1c608b0a9a2df",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.2/2.2 CBT 2_24 AMBAR LAUNDRY.html": {
-    "mtime": 1786788895.904847,
+    "mtime": 1787367915.7976537,
     "ast_hash": "d934d1b88763983ec4f6ede1e87b11e0",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.2/2.2 CBT 2_45 TAHUN COPY PASTE.html": {
-    "mtime": 1786788895.9280412,
+    "mtime": 1787367915.80465,
     "ast_hash": "979a853313a63bdd4580324f1fadc100",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.2/2.2 CBT 2_DEATHPAMIN 2.html": {
-    "mtime": 1786788895.992006,
+    "mtime": 1787367915.8076484,
     "ast_hash": "dd1075a9ae32badb59a5e9cf9aa1a3f5",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.2/2.2 CBT 2_DEATHPAMIN.html": {
-    "mtime": 1786788896.0039995,
+    "mtime": 1787367915.8087537,
     "ast_hash": "efffdf7d31702b3c79a5ae4939892922",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.3/2.3 CBT_21 SYAFIQ KECIL.html": {
-    "mtime": 1786788953.2187514,
+    "mtime": 1787367915.8087537,
     "ast_hash": "ea9d25df373e14d73fb91cc4ad4406f3",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.3/2.3 CBT_22 SYAFIQ JUMBO.html": {
-    "mtime": 1786788953.4182796,
+    "mtime": 1787367915.8087537,
     "ast_hash": "30fc4963a599ca967d2a7bbf28310398",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.3/2.3 CBT_23 SYAFIQ GIGA.html": {
-    "mtime": 1786788953.9576964,
+    "mtime": 1787367915.8178172,
     "ast_hash": "86ca1698f81b9c360296300ddcee8197",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.3/2.3 CBT_24 SYAFIQ GALACTUS.html": {
-    "mtime": 1786788953.9740107,
+    "mtime": 1787367915.8178172,
     "ast_hash": "89e84abe1412d53ff53478c97ce940ae",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.3/2.3 CBT_99 TAHUN MEDAN TIPSEN.html": {
-    "mtime": 1786788954.3134725,
+    "mtime": 1787367915.827934,
     "ast_hash": "ad1139440f9e8e712b1ddeed5e4cf822",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.3/2.3 CBT_Kicaw.html": {
-    "mtime": 1786788954.3297517,
+    "mtime": 1787367915.827934,
     "ast_hash": "d7957fe2b9507f4080f70a79db01bca7",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.4/2.4 CBT_20 Plato.html": {
-    "mtime": 1782875857.6631007,
-    "ast_hash": "0dd36418d14bdf53102a2c08f0e6aa98",
+    "mtime": 1787367915.827934,
+    "ast_hash": "4d935dacd4a3438b5bb682e4dbc9b059",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.4/2.4 CBT_21 Aristoteles.html": {
-    "mtime": 1782875857.6650987,
-    "ast_hash": "31b51dffad2e5c217d31a9d157767887",
+    "mtime": 1787367915.8380165,
+    "ast_hash": "2cd269dcd5a1577627b076b5b01d1ec0",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.4/2.4 CBT_22 Socrates.html": {
-    "mtime": 1782875857.6661,
-    "ast_hash": "e286759590ee0dbf3a397ab5f72f1c69",
+    "mtime": 1787367915.8380165,
+    "ast_hash": "05a8ea171abc08756826a6f491148804",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.4/2.4 CBT_23 Marcus Aurelius.html": {
-    "mtime": 1782875857.6680994,
-    "ast_hash": "a36aecfafdc885d26574024a23cdc8d6",
+    "mtime": 1787367915.8380165,
+    "ast_hash": "ae5368f35278403994aa5d2b9dd68dda",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.4/2.4 CBT_24 Michael Jordan.html": {
-    "mtime": 1782875857.6700966,
-    "ast_hash": "b185313fd0407d8388bc5244521c45e2",
+    "mtime": 1787367915.8380165,
+    "ast_hash": "181218765246e037d1d2c0cae378baaf",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.5/2.5 CBT_21 REECHARD GANTENG.html": {
-    "mtime": 1782875349.126845,
+    "mtime": 1787367915.9031336,
     "ast_hash": "1671e722d18a245e24e3132e8c5cc724",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.5/2.5 CBT_22 HAQQI GANTENG.html": {
-    "mtime": 1782875349.1303475,
+    "mtime": 1787367915.9075775,
     "ast_hash": "37f3e6e0b548367330f829a2b2a6fafa",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.5/2.5 CBT_23 PANDYA GANTENG.html": {
-    "mtime": 1782875349.1353445,
+    "mtime": 1787367915.912578,
     "ast_hash": "6d9a054cd75be30e10a9b221013b8dd1",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.5/2.5 CBT_24 GALIH KOPERASI.html": {
-    "mtime": 1782875349.1396053,
+    "mtime": 1787367915.9165783,
     "ast_hash": "98fb5783f42defcb6d93b8939921b116",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.5/2.5 CBT_25 DIMAS GANTENG.html": {
-    "mtime": 1782984592.332439,
-    "ast_hash": "6d9da2e87d7e455a3f71ef15b7b69ed6",
+    "mtime": 1787367915.9205759,
+    "ast_hash": "ef4e1295a2c20b1c3b11d75a69ca9920",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.5/2.5 LECTURE_K10 am-i-counseling.html": {
-    "mtime": 1783169421.2051985,
-    "ast_hash": "4e591a0ae14664e904e7e4cddf24ddff",
+    "mtime": 1787367915.9265149,
+    "ast_hash": "0af180f925fb1b9e73a52ff7188e3d97",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.5/2.5 LECTURE_K11 am-i-addicted.html": {
-    "mtime": 1783169377.1604156,
-    "ast_hash": "10cebd2382f8cfa079c96fe160721b44",
+    "mtime": 1787367915.931511,
+    "ast_hash": "d6e7f7b9f1563d95b796e936ff2f26e3",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.5/2.5 LECTURE_K12A am-i-healthy.html": {
-    "mtime": 1783169421.4935107,
-    "ast_hash": "12d73a0136f6ea540e808774a1880373",
+    "mtime": 1787367915.9345078,
+    "ast_hash": "aaf318d602a8bb2a685a20ef7d87c5e3",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.5/2.5 LECTURE_K12B am-i-sedentary.html": {
-    "mtime": 1783169421.774917,
-    "ast_hash": "ff601d40b15ea0e32a13854b98c8e3cc",
+    "mtime": 1787367915.9410152,
+    "ast_hash": "ef047840d2d1afc6b7291cc96b89dfe8",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.5/2.5 LECTURE_K13A am-i-special-1.html": {
-    "mtime": 1783169377.5356789,
-    "ast_hash": "b76cee16017cdb4ec95ef7226580a773",
+    "mtime": 1787367915.9450128,
+    "ast_hash": "71e47479bcf751cf5c505fea2981be19",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.5/2.5 LECTURE_K13B am-i-special-2.html": {
-    "mtime": 1783169377.6783254,
-    "ast_hash": "4dbd37e0a90a32620e60f9c7619dcdc6",
+    "mtime": 1787367915.9500816,
+    "ast_hash": "3150a1033eceafddaa6b6a2458b0421f",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.5/2.5 LECTURE_K14 Am I Healthy\u00b7 FK Unsoed.html": {
-    "mtime": 1783169422.2777839,
-    "ast_hash": "d5161f84dd92004f1cb1046e6c469d98",
+    "mtime": 1787367915.9530776,
+    "ast_hash": "7178fa12816e191283b518936e283189",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.5/2.5 LECTURE_K14 am-i-feeding.html": {
-    "mtime": 1783169377.9558358,
-    "ast_hash": "58d5ab829c7e6f2ee5ccadeb2309f60f",
+    "mtime": 1787367915.9606884,
+    "ast_hash": "7d9451ce4fad51df8d0287e6f62903d9",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.5/2.5 LECTURE_K16 Am I Clean.html": {
-    "mtime": 1783169422.503858,
-    "ast_hash": "4a5d1cc0253ef60021694ed648f0b73b",
+    "mtime": 1787367915.963934,
+    "ast_hash": "21ec9c99c5fe65c4c6098e188ff26668",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.5/2.5 LECTURE_K17 am-i-food-secure.html": {
-    "mtime": 1783169378.151942,
-    "ast_hash": "3b2088cb36ddce5a404c6ca1d137e188",
+    "mtime": 1787367915.9676325,
+    "ast_hash": "66e34d0bcd3cf12faa0cdc3a8e1d717d",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.5/2.5 LECTURE_K18 am-i-nurtured.html": {
-    "mtime": 1783169378.3462193,
-    "ast_hash": "5588aadbb1799adb08127b6efd7bee7e",
+    "mtime": 1787367915.9744363,
+    "ast_hash": "e223aa8a0da2bc59edd421147d81da0c",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.5/2.5 LECTURE_K19 Am I Safe (to Eat).html": {
-    "mtime": 1783169422.8139586,
-    "ast_hash": "782c642a022cb058339cf457f810810a",
+    "mtime": 1787367915.97788,
+    "ast_hash": "3c6e2eadd22b674fd44e67bf746af3f7",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.5/2.5 LECTURE_K2 am-i-healthy.html": {
-    "mtime": 1783169422.929574,
-    "ast_hash": "ae4c58bacf78f8c36f86a0bcfab4f342",
+    "mtime": 1787367915.9828868,
+    "ast_hash": "69c33913bcc2f1d2971f302aa73c92aa",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.5/2.5 LECTURE_K20 Am I Coordinated.html": {
-    "mtime": 1783169423.044937,
-    "ast_hash": "8395853c449f69f46bcd38dd947d2588",
+    "mtime": 1787367915.987921,
+    "ast_hash": "9393b7e207ee1820fe57bfd2c7a75d97",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.5/2.5 LECTURE_K21 am-i-nourished.html": {
-    "mtime": 1783169423.1653295,
-    "ast_hash": "f2cf433245eed765e7a91d1a3594ebd7",
+    "mtime": 1787367915.9926534,
+    "ast_hash": "0c29221ac77684f004847fea1ed7248c",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.5/2.5 LECTURE_K22 am-i-advocating.html": {
-    "mtime": 1783169378.9394965,
-    "ast_hash": "90b196b66343573cbdcfbbc7e6a7a2d3",
+    "mtime": 1787367915.9983616,
+    "ast_hash": "7b7f71a859244cf205fb12927e7f19b6",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.5/2.5 LECTURE_K23 AM I AT RISK (by uzer).html": {
-    "mtime": 1783169423.363092,
-    "ast_hash": "111e3e8c308768a90366a95034228cc3",
+    "mtime": 1787367915.9983616,
+    "ast_hash": "3af83449c9679407e4e0793c6e3f31ef",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.5/2.5 LECTURE_K24 Am I Okay.html": {
-    "mtime": 1783169423.453686,
-    "ast_hash": "3ecbb1f09d86becb23b43e366b2c5dc6",
+    "mtime": 1787367916.0104358,
+    "ast_hash": "b962ca22ab9c03b9448bbac92117e107",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.5/2.5 LECTURE_K3 am-i-active.html": {
-    "mtime": 1783169423.5942104,
-    "ast_hash": "aa6f68b025cd80290135f9415f0b93d4",
+    "mtime": 1787367916.0164325,
+    "ast_hash": "82b5a8ca7096fb518fcd7aeb2081e2a5",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.5/2.5 LECTURE_K4 am-i-fit.html": {
-    "mtime": 1783169379.4093528,
-    "ast_hash": "77b6732e70a11d4d6bce592d7359a4dd",
+    "mtime": 1787367916.0239525,
+    "ast_hash": "96866cefb5b2ff5c93797d63d96fa233",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.5/2.5 LECTURE_K5 am-i-fueled.html": {
-    "mtime": 1783169379.5462928,
-    "ast_hash": "f6e7ea5023d815d54ce682ed25b7fbb8",
+    "mtime": 1787367916.0276716,
+    "ast_hash": "1aecf1bbf344109946cccc63cefd68f3",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.5/2.5 LECTURE_K6 am-i-immune.html": {
-    "mtime": 1783169379.67874,
-    "ast_hash": "4bbd9ec0b3ac187d1a0c09d4c891bb14",
+    "mtime": 1787367916.040766,
+    "ast_hash": "31c67324cdfa44e2bf3c7afa02ae7deb",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.5/2.5 LECTURE_K7A am-i-growing-1.html": {
-    "mtime": 1783169379.8922985,
-    "ast_hash": "e0740616c4938fb931f1ca7e8dbbb962",
+    "mtime": 1787367916.0475695,
+    "ast_hash": "864d19300979fcabd368965563804e1e",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.5/2.5 LECTURE_K7B am-i-growing-2.html": {
-    "mtime": 1783169380.0719707,
-    "ast_hash": "4d80ad87b36888c886d0ce90fd454651",
+    "mtime": 1787367916.0475695,
+    "ast_hash": "83092aa8f173e7b2e62592daf26c64ac",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.5/2.5 LECTURE_K8 am-i-nourished.html": {
-    "mtime": 1783169380.2018166,
-    "ast_hash": "412dcd4d823fd89606591f57762f0292",
+    "mtime": 1787367916.0585203,
+    "ast_hash": "4dfa1816508e16ae12ea2f4605de4ecf",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.5/2.5 LECTURE_K9 am-i-educated.html": {
-    "mtime": 1783169380.3615525,
-    "ast_hash": "8aed4a596ca5b3ad99bca138904e81cf",
+    "mtime": 1787367916.062052,
+    "ast_hash": "a33b64d6bc95f09e02d65a8d5504fde0",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.5/2.5 LECTURE_K99 WHOLESOME FROM MR PRODIGY.html": {
-    "mtime": 1783169380.5800586,
-    "ast_hash": "cd1e4d0c9236eca57c1a6e67457f2cf3",
+    "mtime": 1787367916.0676136,
+    "ast_hash": "79cccd2b6e1e5f100c6e31465446e65f",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.5/2.5 PRAKTIKUM_PRAKTIKUM 1.html": {
-    "mtime": 1783169424.631681,
-    "ast_hash": "616c5c85cae9002e1f9d32c5ad5ecf28",
+    "mtime": 1787367916.0827246,
+    "ast_hash": "8cbcf584e8ca931cafbdcf4ea8dc3223",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.5/2.5 PRAKTIKUM_PRAKTIKUM 2.html": {
-    "mtime": 1783169424.728533,
-    "ast_hash": "75c4998aca100915275b9cd12ef4105d",
+    "mtime": 1787367916.13278,
+    "ast_hash": "fee707275c99b88537640a87aa953f78",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.5/2.5 PRAKTIKUM_PRAKTIKUM 3.html": {
-    "mtime": 1783169424.8300123,
-    "ast_hash": "67e93b9315eb946290c41195c3ed31ce",
+    "mtime": 1787367916.17696,
+    "ast_hash": "66d0a4e52db4e0de0e858bbe19436a24",
     "semantic_hash": ""
   },
   "public/data.js": {
-    "mtime": 1787021489.5747185,
-    "ast_hash": "70ac81270d00a20d92ac41c07017ffd3",
+    "mtime": 1787643292.7572646,
+    "ast_hash": "95faa49af18c4b459c4b339f251937e0",
     "semantic_hash": ""
   },
   "public/docs.html": {
-    "mtime": 1787020963.1026106,
-    "ast_hash": "121e1509e081c08b2d20deb8724ef30d",
+    "mtime": 1787643273.2884917,
+    "ast_hash": "2c8eff1864b9d9d5d56a70500bac497e",
     "semantic_hash": ""
   },
   "public/index.html": {
-    "mtime": 1787020506.8902109,
-    "ast_hash": "a4750eaac505eb90718c4019f456f064",
+    "mtime": 1787367923.3074102,
+    "ast_hash": "b9158dd031e910cb2eddcaf9e914da57",
     "semantic_hash": ""
   },
   "public/live.html": {
-    "mtime": 1784645844.0837524,
-    "ast_hash": "8722a1f23a521d604ffc28711f8db9cc",
+    "mtime": 1787367923.3175743,
+    "ast_hash": "6ed6a5539b95cc745244a5ddb9d980be",
     "semantic_hash": ""
   },
   "public/live.js": {
-    "mtime": 1786784268.0685763,
-    "ast_hash": "7d0d305babf94b3b34708e04d00273a0",
+    "mtime": 1787367923.3175743,
+    "ast_hash": "d29095aaff4b2a6ea4b2998486accbc2",
     "semantic_hash": ""
   },
   "public/package.json": {
-    "mtime": 1784645576.406296,
+    "mtime": 1787367923.327268,
     "ast_hash": "e548c7fff6973268865b1d78bb6f5a54",
     "semantic_hash": ""
   },
   "public/vercel.json": {
-    "mtime": 1787021351.4047058,
-    "ast_hash": "7f5939d4a3160b44ad4770654df07aa8",
+    "mtime": 1787367946.2463448,
+    "ast_hash": "06ae7c6fc04a3facec9f37cda2b89460",
     "semantic_hash": ""
   },
   "public/.github/workflows/codeql.yml": {
-    "mtime": 1782310552.9858727,
-    "ast_hash": "6f5fda4dd2f16e37d876fec604c7221c",
+    "mtime": 1787367915.4860406,
+    "ast_hash": "a85a76b5647f5a4506a81717acba9e0c",
     "semantic_hash": ""
   },
   "public/.github/workflows/fortify.yml": {
-    "mtime": 1783049067.6499126,
-    "ast_hash": "4ff922e49994cb954110d4eaaa5ae7c7",
+    "mtime": 1787367915.4880395,
+    "ast_hash": "c34b904a6cb12fb5eac01dffbab065e8",
     "semantic_hash": ""
   },
   "public/.github/workflows/jscrambler-code-integrity.yml": {
-    "mtime": 1783049067.6509116,
-    "ast_hash": "f80c8d12e31a30c3a2b3e07463c949d6",
+    "mtime": 1787367915.4900446,
+    "ast_hash": "2967b5fc62cdf02642e5325a6e048576",
     "semantic_hash": ""
   },
   "public/ADMIN_IMPLEMENTATION_PLAN.md": {
-    "mtime": 1784460262.499386,
+    "mtime": 1787367915.4930902,
     "ast_hash": "be4720cbc97752ebc6c8e5503885f640",
     "semantic_hash": ""
   },
   "public/README.md": {
-    "mtime": 1787020690.6619866,
+    "mtime": 1787367915.508073,
     "ast_hash": "1e44ea2bcbee7ba1005b21d374387228",
     "semantic_hash": ""
   },
   "public/cover/04094a2a2088424b488e130b94859bc1.gif": {
-    "mtime": 1782875610.177438,
+    "mtime": 1787367916.3089187,
     "ast_hash": "04094a2a2088424b488e130b94859bc1",
     "semantic_hash": ""
   },
   "public/cover/05c48a6432e80f26141a5af542c9e1c7.gif": {
-    "mtime": 1782875610.3965697,
+    "mtime": 1787367916.4482746,
     "ast_hash": "a7c95f9e53ef80f9b32323fe5ba9dd14",
     "semantic_hash": ""
   },
   "public/cover/25bc8c5f5a2be59cc917267e1549bc15.gif": {
-    "mtime": 1782875610.4299562,
+    "mtime": 1787367916.4676175,
     "ast_hash": "7fc2212516c108c80396c5adff33a641",
     "semantic_hash": ""
   },
   "public/cover/35fad16ad3b0394ac0a276b9c5a9bf3f.jpg": {
-    "mtime": 1782875610.4379497,
+    "mtime": 1787367916.4676175,
     "ast_hash": "39bcbf36b572d5e588244c16fefc1aab",
     "semantic_hash": ""
   },
   "public/cover/40a5717e164e4aae7339ca73739bb89f.gif": {
-    "mtime": 1782875610.5689774,
+    "mtime": 1787367916.527761,
     "ast_hash": "af1e647d2673ec56983c2fb8ae310ed9",
     "semantic_hash": ""
   },
   "public/cover/432797c8fdde0ab37156d61908e39a23.gif": {
-    "mtime": 1782875610.7631593,
+    "mtime": 1787367916.617665,
     "ast_hash": "6b46924e68b9245acea8d06adb49b0bd",
     "semantic_hash": ""
   },
   "public/cover/4cb674823cbbec913fc84e3ebd124f0a.gif": {
-    "mtime": 1782875611.2541528,
+    "mtime": 1787367916.897427,
     "ast_hash": "4cb674823cbbec913fc84e3ebd124f0a",
     "semantic_hash": ""
   },
   "public/cover/4da0a8ccb3a3a63fc1ac94609831e4b2.jpg": {
-    "mtime": 1782875611.2591512,
+    "mtime": 1787367916.9091566,
     "ast_hash": "1feb50252f1beff490b09255da1a3fcd",
     "semantic_hash": ""
   },
   "public/cover/4ed8fdf6c981cfc40e8ec53aa6ee34cd.gif": {
-    "mtime": 1782875611.599343,
+    "mtime": 1787367917.0613384,
     "ast_hash": "ffe0450f6eb45c637954addacbeb2e56",
     "semantic_hash": ""
   },
   "public/cover/50479fc45011cab8fba096e42d00ed25.gif": {
-    "mtime": 1782875611.687995,
+    "mtime": 1787367917.1476202,
     "ast_hash": "0d94000dcf26647943bc2c284c538d67",
     "semantic_hash": ""
   },
   "public/cover/521aad3fecdeca88c06e6af02cb642a0.jpg": {
-    "mtime": 1782875611.692069,
+    "mtime": 1787367917.1476202,
     "ast_hash": "d28c828cfd81f76bde023e294e8b3cd7",
     "semantic_hash": ""
   },
   "public/cover/53e37ccab2be67cdc7e348c610d95bc6.gif": {
-    "mtime": 1782875612.0255365,
+    "mtime": 1787367917.3406649,
     "ast_hash": "53e37ccab2be67cdc7e348c610d95bc6",
     "semantic_hash": ""
   },
   "public/cover/58cac14809a564ac83d6fd244a58bb1d.jpg": {
-    "mtime": 1782875612.0364392,
+    "mtime": 1787367917.3446667,
     "ast_hash": "d5d1d1fc869a98a20fdbd0a8300c29be",
     "semantic_hash": ""
   },
   "public/cover/6ec59a46147bb7e1e21a748cb4ac63bd.gif": {
-    "mtime": 1782875612.2413716,
+    "mtime": 1787367917.4290352,
     "ast_hash": "7d07c5ed057ec35e824543a284a01329",
     "semantic_hash": ""
   },
   "public/cover/6ee97cdfd88ce6cd8877b327900e4ff7.gif": {
-    "mtime": 1782875612.2843082,
+    "mtime": 1787367917.4476438,
     "ast_hash": "df3e39cc547e57bce6845a9b7087df1f",
     "semantic_hash": ""
   },
   "public/cover/72d374167a5a04a3607d95a470798e55.gif": {
-    "mtime": 1782875612.3363547,
+    "mtime": 1787367917.4907162,
     "ast_hash": "d707308dbe8893fdd6067d5bc7aab3ba",
     "semantic_hash": ""
   },
   "public/cover/74c9011f548ab30c6b30b6bb13223459.gif": {
-    "mtime": 1782875612.7821221,
+    "mtime": 1787367917.7976496,
     "ast_hash": "74c9011f548ab30c6b30b6bb13223459",
     "semantic_hash": ""
   },
   "public/cover/764a31edb8e34d6b560d57eadaddffd3.gif": {
-    "mtime": 1782875612.97642,
+    "mtime": 1787367918.0022857,
     "ast_hash": "2489a3c8779eb3316920dd704c13294e",
     "semantic_hash": ""
   },
   "public/cover/7ddb507496f96111d9ee7252ddd9fd26.gif": {
-    "mtime": 1782875613.2306542,
+    "mtime": 1787367918.137639,
     "ast_hash": "7ddb507496f96111d9ee7252ddd9fd26",
     "semantic_hash": ""
   },
   "public/cover/893ac87fd8990ed431a5efd725b2a85d.gif": {
-    "mtime": 1782875614.6239243,
+    "mtime": 1787367918.5771682,
     "ast_hash": "28d606d44e46c2506618ec7e0dba3470",
     "semantic_hash": ""
   },
   "public/cover/8bd1af518f88ecb18c634210d26df0c2.gif": {
-    "mtime": 1782875614.6793447,
+    "mtime": 1787367918.6205578,
     "ast_hash": "8f49399d24562d9e4010ea2f74d7cea7",
     "semantic_hash": ""
   },
   "public/cover/a46cc8c58bdfd2422b1a0c86546b1643.gif": {
-    "mtime": 1782875615.0368633,
+    "mtime": 1787367918.8114707,
     "ast_hash": "23bf36bd5189d7d69d92028197fe642d",
     "semantic_hash": ""
   },
   "public/cover/a809f592065ad3c366f9b97a699e3af1.gif": {
-    "mtime": 1782875615.3212395,
+    "mtime": 1787367918.9375856,
     "ast_hash": "3c2d072087667a492ab32ae8f7800b4b",
     "semantic_hash": ""
   },
   "public/cover/b6123030f575bd0ec055c62550c153f0.gif": {
-    "mtime": 1782875615.6548202,
+    "mtime": 1787367919.232272,
     "ast_hash": "edd7416818098063405e9bb2765721d0",
     "semantic_hash": ""
   },
   "public/cover/c265623615503b6dae43954ece5988c1.gif": {
-    "mtime": 1782875615.6801562,
+    "mtime": 1787367919.251552,
     "ast_hash": "c265623615503b6dae43954ece5988c1",
     "semantic_hash": ""
   },
   "public/cover/c899dae38c04f739889622ebfc9a1553.gif": {
-    "mtime": 1782875616.0090678,
+    "mtime": 1787367919.412378,
     "ast_hash": "41c2bff2682543b1cc4c1c6ba19a9f9d",
     "semantic_hash": ""
   },
   "public/cover/ca0ca2b69536cfa0c5872bb8623cad92.gif": {
-    "mtime": 1782875616.441542,
+    "mtime": 1787367919.5175533,
     "ast_hash": "91489ff25844a3fe7b7ebbf51f3badd1",
     "semantic_hash": ""
   },
   "public/cover/cad0ee1e064aacd78eeaadbad7e73de1.gif": {
-    "mtime": 1782875616.7426033,
+    "mtime": 1787367919.6573281,
     "ast_hash": "71df0b55a905196c0e4cc1e8c9935eca",
     "semantic_hash": ""
   },
   "public/cover/cf12abf0721dd0104c96a6dfe615f853.gif": {
-    "mtime": 1782875616.8864331,
+    "mtime": 1787367919.7253766,
     "ast_hash": "35097416f39d9f8ddac6ea2d4d18ec39",
     "semantic_hash": ""
   },
   "public/cover/cover 1.png": {
-    "mtime": 1782875616.9237306,
+    "mtime": 1787367919.7374005,
     "ast_hash": "fb717ee66adcaff05ac5338429e03e35",
     "semantic_hash": ""
   },
   "public/cover/cover 10.png": {
-    "mtime": 1782875616.937979,
+    "mtime": 1787367919.7471957,
     "ast_hash": "ce24e82532e09335abb594694266a48e",
     "semantic_hash": ""
   },
   "public/cover/cover 2.png": {
-    "mtime": 1782875616.960226,
+    "mtime": 1787367919.7576182,
     "ast_hash": "f9340819c8c152317e1c9c0a3ac85485",
     "semantic_hash": ""
   },
   "public/cover/cover 3.png": {
-    "mtime": 1782875616.9813073,
+    "mtime": 1787367919.7679763,
     "ast_hash": "106b2c59e55283343a7b3b51dd907ddd",
     "semantic_hash": ""
   },
   "public/cover/cover 4.png": {
-    "mtime": 1782875617.0012963,
+    "mtime": 1787367919.7679763,
     "ast_hash": "e09b1320066b700c807f59351777a8fd",
     "semantic_hash": ""
   },
   "public/cover/cover 5.png": {
-    "mtime": 1782875617.0172882,
+    "mtime": 1787367919.7774446,
     "ast_hash": "b21427a9b284e50709321f50a8b302c4",
     "semantic_hash": ""
   },
   "public/cover/cover 6.png": {
-    "mtime": 1782875617.037569,
+    "mtime": 1787367919.7876165,
     "ast_hash": "ef45015e42e02fdbdec5060ec1847170",
     "semantic_hash": ""
   },
   "public/cover/cover 7.png": {
-    "mtime": 1782875617.0552833,
+    "mtime": 1787367919.7976434,
     "ast_hash": "cd6c8a1db98621609568072db3c4fa75",
     "semantic_hash": ""
   },
   "public/cover/cover 8.png": {
-    "mtime": 1782875617.0734062,
+    "mtime": 1787367919.8075948,
     "ast_hash": "946b487bc218006d3ba477453b5a0d96",
     "semantic_hash": ""
   },
   "public/cover/cover 9.png": {
-    "mtime": 1782875617.0865417,
+    "mtime": 1787367919.8075948,
     "ast_hash": "164df228ba1f84190a6f2ac29cc9759d",
     "semantic_hash": ""
   },
   "public/cover/d641b7068bdceb478a468834bd38b784.jpg": {
-    "mtime": 1782875617.0910876,
+    "mtime": 1787367919.8174899,
     "ast_hash": "2c28e5b46042fcd09e8a3424fb058874",
     "semantic_hash": ""
   },
   "public/cover/d71d256d9f9889cb4927ffa598046644.gif": {
-    "mtime": 1782875617.192698,
+    "mtime": 1787367919.8472798,
     "ast_hash": "6973189b2e7cdef7291f0ec04bfc6cb7",
     "semantic_hash": ""
   },
   "public/cover/e355dd57b792b4cef6f62d744b1608ce.gif": {
-    "mtime": 1782875617.2577224,
+    "mtime": 1787367919.8775117,
     "ast_hash": "415b515f6395e884cfce3cc72c0102c5",
     "semantic_hash": ""
   },
   "public/cover/e562ce67a72222111d0688e1d9f65363.gif": {
-    "mtime": 1782875617.666445,
+    "mtime": 1787367919.9974518,
     "ast_hash": "1299a03611eee9b253831cd43918b04b",
     "semantic_hash": ""
   },
   "public/cover/f1795f03d3d96c09bbbd448f8f01856c.gif": {
-    "mtime": 1782875617.9468167,
+    "mtime": 1787367920.1174135,
     "ast_hash": "f1795f03d3d96c09bbbd448f8f01856c",
     "semantic_hash": ""
   },
   "public/cover/f22635607bc881102b9c56c9e9f1ffda.gif": {
-    "mtime": 1782875618.2636936,
+    "mtime": 1787367920.2271414,
     "ast_hash": "9c6abf4fe13a4bd81c683c45ee2f566f",
     "semantic_hash": ""
   },
   "public/cover/f3703c12d72a12dabc9a804516b24708.gif": {
-    "mtime": 1782875618.488525,
+    "mtime": 1787367920.327128,
     "ast_hash": "0ae48e4fe7e72e4745f6f4a6d77178ca",
     "semantic_hash": ""
   },
   "public/cover/f56c730553fe1b0cf65d580c6b0dd004.gif": {
-    "mtime": 1782875618.9465618,
+    "mtime": 1787367922.6372275,
     "ast_hash": "ddf6e2623c5442a8cfc40fe0fff4d60b",
     "semantic_hash": ""
   },
   "public/logo-white.svg": {
-    "mtime": 1782875618.9609506,
-    "ast_hash": "2f31c32e3d19b416d86951422179af57",
+    "mtime": 1787367923.3175743,
+    "ast_hash": "f079497fdb15b2a06adfd1e59b60853d",
     "semantic_hash": ""
   },
   "public/logo.svg": {
-    "mtime": 1786768801.1847537,
+    "mtime": 1787367923.3175743,
     "ast_hash": "65f11cad18790fcc212161977fa68b77",
     "semantic_hash": ""
   },
   "api/env.js": {
-    "mtime": 1787021336.0008745,
+    "mtime": 1787367915.5328655,
     "ast_hash": "5d6a4a357dac9bebb75fdf6818508a26",
     "semantic_hash": ""
   },
   "favicon.svg": {
-    "mtime": 1786768809.6126819,
+    "mtime": 1787367922.6912756,
     "ast_hash": "88160bc2782cc90891c6f1fb58b1bded",
     "semantic_hash": ""
   },
   "public/favicon.svg": {
-    "mtime": 1786768809.6126819,
+    "mtime": 1787367922.6912756,
     "ast_hash": "88160bc2782cc90891c6f1fb58b1bded",
     "semantic_hash": ""
   },
   "public/build.js": {
-    "mtime": 1786770736.8695621,
-    "ast_hash": "748f9c77fe72dd77ee28195818e52553",
+    "mtime": 1787367915.6080532,
+    "ast_hash": "184517d7df481f0c81f34a0b640ddf0d",
     "semantic_hash": ""
   },
   "public/contributions_setup.sql": {
-    "mtime": 1783434012.964951,
+    "mtime": 1787367916.2762806,
     "ast_hash": "9a4ce52b5ae1fd97684b9f35a9cd04a6",
     "semantic_hash": ""
   },
   "public/gpush.sh": {
-    "mtime": 1784080684.2899246,
+    "mtime": 1787367922.7080982,
     "ast_hash": "794b3b4c39f4c920d7dbe0fffbd3e10c",
     "semantic_hash": ""
   },
   "public/mock_server.js": {
-    "mtime": 1783488253.8427522,
+    "mtime": 1787367923.3175743,
     "ast_hash": "a66c365f95ca69ccc96e7dbebafe5e86",
     "semantic_hash": ""
   },
   "public/oauth_setup.sql": {
-    "mtime": 1785472743.8301284,
+    "mtime": 1787367923.3175743,
     "ast_hash": "6af03a35f3f316201b321d42f88abcde",
     "semantic_hash": ""
   },
   "assets/animated-banner.svg": {
-    "mtime": 1784645250.8042624,
+    "mtime": 1787367915.5479386,
     "ast_hash": "4722f95af82170c7bfd6dce17ee24f96",
     "semantic_hash": ""
   },
   "public/animated-banner.svg": {
-    "mtime": 1784645257.2353797,
+    "mtime": 1787367923.3675003,
     "ast_hash": "4722f95af82170c7bfd6dce17ee24f96",
     "semantic_hash": ""
   },
   ".github/ISSUE_TEMPLATE/bug_report.md": {
-    "mtime": 1784646070.5455618,
+    "mtime": 1787367915.4820428,
     "ast_hash": "b1f664d0dd71b5aa7ffd11ae27808f7e",
     "semantic_hash": ""
   },
   ".github/ISSUE_TEMPLATE/feature_request.md": {
-    "mtime": 1784646074.8282657,
+    "mtime": 1787367915.4830427,
     "ast_hash": "ba76ce930fdf4df063f6d6513cb0b63f",
     "semantic_hash": ""
   },
   ".github/PULL_REQUEST_TEMPLATE.md": {
-    "mtime": 1784646079.630386,
+    "mtime": 1787367915.4840415,
     "ast_hash": "4614b929607750ca5d250dee911b2f59",
     "semantic_hash": ""
   },
   "CONTRIBUTING.md": {
-    "mtime": 1784646065.4834716,
+    "mtime": 1787367915.4981294,
     "ast_hash": "424569d5b9eabb7627cdaf4aacad9eb3",
     "semantic_hash": ""
   },
   "public/.github/ISSUE_TEMPLATE/bug_report.md": {
-    "mtime": 1784646070.5455618,
+    "mtime": 1787367915.4820428,
     "ast_hash": "b1f664d0dd71b5aa7ffd11ae27808f7e",
     "semantic_hash": ""
   },
   "public/.github/ISSUE_TEMPLATE/feature_request.md": {
-    "mtime": 1784646074.8282657,
+    "mtime": 1787367915.4830427,
     "ast_hash": "ba76ce930fdf4df063f6d6513cb0b63f",
     "semantic_hash": ""
   },
   "public/.github/PULL_REQUEST_TEMPLATE.md": {
-    "mtime": 1784646079.630386,
+    "mtime": 1787367915.4840415,
     "ast_hash": "4614b929607750ca5d250dee911b2f59",
     "semantic_hash": ""
   },
   "public/CONTRIBUTING.md": {
-    "mtime": 1784646065.4834716,
+    "mtime": 1787367915.4981294,
     "ast_hash": "424569d5b9eabb7627cdaf4aacad9eb3",
     "semantic_hash": ""
   },
   "public/assets/animated-banner.svg": {
-    "mtime": 1784645250.8042624,
+    "mtime": 1787367915.5479386,
     "ast_hash": "4722f95af82170c7bfd6dce17ee24f96",
     "semantic_hash": ""
   },
   "scratch/check_oauth_logs.js": {
-    "mtime": 1784679195.6174326,
+    "mtime": 1787367937.4536588,
     "ast_hash": "83b9b99f0d6c8494d1f36724081bd1aa",
     "semantic_hash": ""
   },
   "scratch/generate_logos.py": {
-    "mtime": 1784678097.3311627,
+    "mtime": 1787367942.3382683,
     "ast_hash": "4ba114ec93dbf589da1e327067fc7217",
     "semantic_hash": ""
   },
   "scratch/test_bearer_token.js": {
-    "mtime": 1784679351.5502415,
+    "mtime": 1787367945.1336372,
     "ast_hash": "1ec3f1b21212a06ba072a4a5ea786759",
     "semantic_hash": ""
   },
   "scratch/test_full_flow.js": {
-    "mtime": 1784682253.0477405,
+    "mtime": 1787367945.565555,
     "ast_hash": "939ce2bf336b20419a7419e41a7ca5fa",
     "semantic_hash": ""
   },
   "scratch/test_mcp_local.js": {
-    "mtime": 1784679415.9166489,
+    "mtime": 1787367945.5665696,
     "ast_hash": "c6c153e80cdab00df8fbcdd0df61164d",
     "semantic_hash": ""
   },
   "apple-touch-icon.png": {
-    "mtime": 1784678106.555831,
+    "mtime": 1787367915.5479386,
     "ast_hash": "2c66194727a5f7c10b122b014c2286f0",
     "semantic_hash": ""
   },
   "favicon.png": {
-    "mtime": 1784678106.61716,
+    "mtime": 1787367922.6879065,
     "ast_hash": "2c66194727a5f7c10b122b014c2286f0",
     "semantic_hash": ""
   },
   "logo.png": {
-    "mtime": 1784678106.45675,
+    "mtime": 1787367923.3175743,
     "ast_hash": "2c66194727a5f7c10b122b014c2286f0",
     "semantic_hash": ""
   },
   "public/apple-touch-icon.png": {
-    "mtime": 1784678106.555831,
+    "mtime": 1787367915.5479386,
     "ast_hash": "2c66194727a5f7c10b122b014c2286f0",
     "semantic_hash": ""
   },
   "public/favicon.png": {
-    "mtime": 1784678106.61716,
+    "mtime": 1787367922.6879065,
     "ast_hash": "2c66194727a5f7c10b122b014c2286f0",
     "semantic_hash": ""
   },
   "public/logo-square.svg": {
-    "mtime": 1784678110.710615,
+    "mtime": 1787367937.1723895,
     "ast_hash": "831e3919df240071a6965a320d159ffc",
     "semantic_hash": ""
   },
   "public/logo.png": {
-    "mtime": 1784678106.45675,
+    "mtime": 1787367923.3175743,
     "ast_hash": "2c66194727a5f7c10b122b014c2286f0",
     "semantic_hash": ""
   },
   "Mr. Capsules/.obsidian/app.json": {
-    "mtime": 1784730025.104522,
+    "mtime": 1787367915.4981294,
     "ast_hash": "99914b932bd37a50b983c5e7c90ae93b",
     "semantic_hash": ""
   },
   "Mr. Capsules/.obsidian/appearance.json": {
-    "mtime": 1784730025.108522,
+    "mtime": 1787367915.4981294,
     "ast_hash": "99914b932bd37a50b983c5e7c90ae93b",
     "semantic_hash": ""
   },
   "Mr. Capsules/.obsidian/core-plugins.json": {
-    "mtime": 1784730025.030155,
+    "mtime": 1787367915.4981294,
     "ast_hash": "7c877bea49eaeabb100563bd157b9051",
     "semantic_hash": ""
   },
   "Mr. Capsules/.obsidian/graph.json": {
-    "mtime": 1784730026.144,
+    "mtime": 1787367915.4981294,
     "ast_hash": "da0efe3df3594d4c3a95e40c4565aa18",
     "semantic_hash": ""
   },
   "Mr. Capsules/.obsidian/workspace.json": {
-    "mtime": 1784730031.1044767,
+    "mtime": 1787367915.4981294,
     "ast_hash": "43552d649ea8c0aaa7a716dc162cdd73",
     "semantic_hash": ""
   },
   "public/Mr. Capsules/.obsidian/app.json": {
-    "mtime": 1784730025.104522,
+    "mtime": 1787367915.4981294,
     "ast_hash": "99914b932bd37a50b983c5e7c90ae93b",
     "semantic_hash": ""
   },
   "public/Mr. Capsules/.obsidian/appearance.json": {
-    "mtime": 1784730025.108522,
+    "mtime": 1787367915.4981294,
     "ast_hash": "99914b932bd37a50b983c5e7c90ae93b",
     "semantic_hash": ""
   },
   "public/Mr. Capsules/.obsidian/core-plugins.json": {
-    "mtime": 1784730025.030155,
+    "mtime": 1787367915.4981294,
     "ast_hash": "7c877bea49eaeabb100563bd157b9051",
     "semantic_hash": ""
   },
   "public/Mr. Capsules/.obsidian/graph.json": {
-    "mtime": 1784730026.144,
+    "mtime": 1787367915.4981294,
     "ast_hash": "da0efe3df3594d4c3a95e40c4565aa18",
     "semantic_hash": ""
   },
   "public/Mr. Capsules/.obsidian/workspace.json": {
-    "mtime": 1784730031.1044767,
+    "mtime": 1787367915.4981294,
     "ast_hash": "43552d649ea8c0aaa7a716dc162cdd73",
     "semantic_hash": ""
   },
   "Mr. Capsules/Untitled.md": {
-    "mtime": 1784730007.7839477,
+    "mtime": 1787367915.508073,
     "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
     "semantic_hash": ""
   },
   "Mr. Capsules/Welcome.md": {
-    "mtime": 1784729964.2298276,
+    "mtime": 1787367915.508073,
     "ast_hash": "5dce4937496ad2d20178a7578f1a1368",
     "semantic_hash": ""
   },
   "public/Mr. Capsules/Untitled.md": {
-    "mtime": 1784730007.7839477,
+    "mtime": 1787367915.508073,
     "ast_hash": "d41d8cd98f00b204e9800998ecf8427e",
     "semantic_hash": ""
   },
   "public/Mr. Capsules/Welcome.md": {
-    "mtime": 1784729964.2298276,
+    "mtime": 1787367915.508073,
     "ast_hash": "5dce4937496ad2d20178a7578f1a1368",
     "semantic_hash": ""
   },
   ".agents/rules/doctortablet.md": {
-    "mtime": 1785141356.9796264,
+    "mtime": 1787367915.4790397,
     "ast_hash": "96ba65eb0a9329c033b7b9184ac628c9",
     "semantic_hash": ""
   },
   "font-review.html": {
-    "mtime": 1786769559.8498962,
+    "mtime": 1787367922.693812,
     "ast_hash": "d68b3b2f4fafc999b18c5ecb1afad249",
     "semantic_hash": ""
   },
   "public/font-review.html": {
-    "mtime": 1786769559.8498962,
+    "mtime": 1787367922.693812,
     "ast_hash": "d68b3b2f4fafc999b18c5ecb1afad249",
     "semantic_hash": ""
   },
   "scratch/download_offbit.js": {
-    "mtime": 1786769473.050154,
+    "mtime": 1787367941.9225833,
     "ast_hash": "e9d4da4f3df8a1eb4799829ed08e8624",
     "semantic_hash": ""
   },
   "scratch/render_specimen.py": {
-    "mtime": 1786770496.650747,
+    "mtime": 1787367943.8981426,
     "ast_hash": "8f1b620c35e69038cb90b0f06f2ecc25",
     "semantic_hash": ""
   },
   "assets/offbit_specimen.png": {
-    "mtime": 1786770505.4309285,
+    "mtime": 1787367915.6080532,
     "ast_hash": "f4995481330c17d842625a97ba343f18",
     "semantic_hash": ""
   },
   "public/assets/offbit_specimen.png": {
-    "mtime": 1786770505.4309285,
+    "mtime": 1787367915.6080532,
     "ast_hash": "f4995481330c17d842625a97ba343f18",
     "semantic_hash": ""
   },
   "add_allow_guest.sql": {
-    "mtime": 1786772745.6787233,
+    "mtime": 1787367915.508073,
     "ast_hash": "497bf0b9ec615cee940d97516ecb440e",
     "semantic_hash": ""
   },
   "public/add_allow_guest.sql": {
-    "mtime": 1786772745.6787233,
+    "mtime": 1787367915.508073,
     "ast_hash": "497bf0b9ec615cee940d97516ecb440e",
     "semantic_hash": ""
   },
   "content/semester 3/3.1/3.1 LECTURE_K.21. Farmakokinetika obat.html": {
-    "mtime": 1786781427.828122,
-    "ast_hash": "702b03e62878cf1ce29ccfb754ceceac",
+    "mtime": 1787367916.2176952,
+    "ast_hash": "000000f029eeaabc0f75968b1217ec09",
     "semantic_hash": ""
   },
   "public/content/semester 3/3.1/3.1 LECTURE_K.21. Farmakokinetika obat.html": {
-    "mtime": 1786781427.828122,
-    "ast_hash": "702b03e62878cf1ce29ccfb754ceceac",
+    "mtime": 1787367916.2176952,
+    "ast_hash": "000000f029eeaabc0f75968b1217ec09",
     "semantic_hash": ""
   },
   "scratch/analyze_files.js": {
-    "mtime": 1786788410.664428,
+    "mtime": 1787367937.4536588,
     "ast_hash": "2df87bcb3b608cbc592568f5f2833a4c",
     "semantic_hash": ""
   },
   "scratch/convert_cbt_block12.js": {
-    "mtime": 1786789451.9297018,
+    "mtime": 1787367937.7563138,
     "ast_hash": "f36d55b4dcfaa55b4e8cd099ceeb75bb",
     "semantic_hash": ""
   },
   "scratch/convert_cbt_block21.js": {
-    "mtime": 1786788742.7060611,
+    "mtime": 1787367938.8933547,
     "ast_hash": "085fc6d98bbf16a0ee5244264d077f16",
     "semantic_hash": ""
   },
   "scratch/convert_cbt_block22.js": {
-    "mtime": 1786788888.5195193,
+    "mtime": 1787367939.1519668,
     "ast_hash": "24431f16545af40063a4d6ca47e66b94",
     "semantic_hash": ""
   },
   "scratch/convert_cbt_block23.js": {
-    "mtime": 1786788940.8781953,
+    "mtime": 1787367939.3144853,
     "ast_hash": "15ee5aa24d0a5069c73152813e5fb735",
     "semantic_hash": ""
   },
   "scratch/convert_typeb_bioromance.js": {
-    "mtime": 1786789731.7186007,
+    "mtime": 1787367939.489544,
     "ast_hash": "af06e647b76d07fb421e82afec1097d2",
     "semantic_hash": ""
   },
   "scratch/convert_typeb_jarwo.js": {
-    "mtime": 1786789758.5123918,
+    "mtime": 1787367940.8310237,
     "ast_hash": "14d27f20d6d24a4434c80a1eab09bd13",
     "semantic_hash": ""
   },
   "scratch/convert_typeb_pk1.js": {
-    "mtime": 1786789497.173022,
+    "mtime": 1787367941.1303496,
     "ast_hash": "e4af70483269ffdc2bc35dd6fdf5d002",
     "semantic_hash": ""
   },
   "scratch/convert_typeb_pk2.js": {
-    "mtime": 1786789530.1195335,
+    "mtime": 1787367941.460618,
     "ast_hash": "7be3e6146c83075653ff832cc75cdca5",
     "semantic_hash": ""
   },
   "scratch/convert_typeb_pk3.js": {
-    "mtime": 1786789561.2253704,
+    "mtime": 1787367941.9225833,
     "ast_hash": "310efd832ff4015ee6b20575f7647d90",
     "semantic_hash": ""
   },
   "scratch/inspect_bio_romance.js": {
-    "mtime": 1786789667.9179792,
+    "mtime": 1787367942.3390014,
     "ast_hash": "e3f40aafa396fa082e4d7ef29d037406",
     "semantic_hash": ""
   },
   "scratch/inspect_block12.js": {
-    "mtime": 1786789330.7275789,
+    "mtime": 1787367942.5555036,
     "ast_hash": "61756b95698eca5c1a7efdcfa090af5f",
     "semantic_hash": ""
   },
   "scratch/inspect_block22_questions.js": {
-    "mtime": 1786788863.2574563,
+    "mtime": 1787367942.5555036,
     "ast_hash": "533450b8b6ce3a9a520dad13e1dacd39",
     "semantic_hash": ""
   },
   "scratch/inspect_block23_questions.js": {
-    "mtime": 1786788910.0026107,
+    "mtime": 1787367942.7893348,
     "ast_hash": "b45decbe6f80eeca8030ff0029d639ef",
     "semantic_hash": ""
   },
   "scratch/inspect_cbt_schemas_12.js": {
-    "mtime": 1786789415.651753,
+    "mtime": 1787367942.7893348,
     "ast_hash": "b0c7af64d24d80571ed7e91e825724fb",
     "semantic_hash": ""
   },
   "scratch/inspect_jarwo.js": {
-    "mtime": 1786789685.2378407,
+    "mtime": 1787367943.0556993,
     "ast_hash": "56a762b93d126ea9f087387e0e8c9405",
     "semantic_hash": ""
   },
   "scratch/inspect_jarwo_bank.js": {
-    "mtime": 1786789699.8167813,
+    "mtime": 1787367943.0556993,
     "ast_hash": "225690e095d6254224bbefef633b2d6a",
     "semantic_hash": ""
   },
   "scratch/inspect_specific_12.js": {
-    "mtime": 1786789340.5997257,
+    "mtime": 1787367943.470213,
     "ast_hash": "21b319934a21b24d777255cfb524764a",
     "semantic_hash": ""
   },
   "scratch/upgrade_type_b_certs.js": {
-    "mtime": 1786789161.6535056,
+    "mtime": 1787367946.2326453,
     "ast_hash": "32b562c9edd7b8f674bec8eb5790c7ce",
     "semantic_hash": ""
   },
   "scratch/convert_cbt_block13.js": {
-    "mtime": 1786789897.501163,
+    "mtime": 1787367938.2566903,
     "ast_hash": "d9ea2fec95ff2ba7d9c60e959cc68437",
     "semantic_hash": ""
   },
   "scratch/convert_typeb_gasak1.js": {
-    "mtime": 1786789940.857403,
+    "mtime": 1787367940.2473133,
     "ast_hash": "228280c1190a731a24110e3ddbd8ae65",
     "semantic_hash": ""
   },
   "scratch/convert_typeb_gasak2.js": {
-    "mtime": 1786789971.9577165,
+    "mtime": 1787367940.4539597,
     "ast_hash": "b57427a5eeb4c4b76f99ff2b002613b4",
     "semantic_hash": ""
   },
   "scratch/inspect_block13.js": {
-    "mtime": 1786789849.557473,
+    "mtime": 1787367942.5555036,
     "ast_hash": "a160b9adc3f5473b1f19881a15e1c847",
     "semantic_hash": ""
   },
   "scratch/inspect_cbt_schemas_13.js": {
-    "mtime": 1786789872.8803256,
+    "mtime": 1787367943.0536418,
     "ast_hash": "6a998f3507290ff2baa41cb0006b7048",
     "semantic_hash": ""
   },
   "scratch/inspect_gasak_libas.js": {
-    "mtime": 1786789914.4132595,
+    "mtime": 1787367943.0556993,
     "ast_hash": "95b219903b543e9134f4606737382c40",
     "semantic_hash": ""
   },
   "api/openapi.js": {
-    "mtime": 1787021311.630034,
+    "mtime": 1787367915.5429044,
     "ast_hash": "e2b84feaa35a76fbacacbcd33acc5a5b",
     "semantic_hash": ""
   },
   "content/semester 1/1.2/1.2 CBT 1_Pull up 1.html": {
-    "mtime": 1786789457.494903,
+    "mtime": 1787367915.6080532,
     "ast_hash": "66b16a9c37431935424b30737a3b92de",
     "semantic_hash": ""
   },
   "content/semester 1/1.2/1.2 CBT 1_Pull up 2.html": {
-    "mtime": 1786789457.5130126,
+    "mtime": 1787367915.617918,
     "ast_hash": "398bc3da07e621ac3ca61d22cd1b44ea",
     "semantic_hash": ""
   },
   "content/semester 1/1.2/1.2 CBT 2_Biomoll DNA Repair.html": {
-    "mtime": 1786789457.4036195,
+    "mtime": 1787367915.617918,
     "ast_hash": "d1e1b5aec03174d851c6222f813cd7e3",
     "semantic_hash": ""
   },
   "content/semester 1/1.2/1.2 CBT 2_Histo Apoptosis & Penuaan.html": {
-    "mtime": 1786789457.4279625,
+    "mtime": 1787367915.617918,
     "ast_hash": "7b15a917f28df23e3e094eba49712a52",
     "semantic_hash": ""
   },
   "content/semester 1/1.2/1.2 CBT 2_Histo Cell Connect.html": {
-    "mtime": 1786789457.4329593,
+    "mtime": 1787367915.617918,
     "ast_hash": "2e452bf7989aac8ecdeaf3a13ae9ea03",
     "semantic_hash": ""
   },
   "content/semester 1/1.2/1.2 CBT 2_Histo Epitel.html": {
-    "mtime": 1786789457.4530227,
+    "mtime": 1787367915.6278138,
     "ast_hash": "d5965a5f2dbb7f31403f45f2163a5ef7",
     "semantic_hash": ""
   },
   "content/semester 1/1.2/1.2 CBT 2_Histo Jaringan Ikat.html": {
-    "mtime": 1786789457.462019,
+    "mtime": 1787367915.6278138,
     "ast_hash": "31122ebc6d3753ed24118cbf15bca6f2",
     "semantic_hash": ""
   },
   "content/semester 1/1.2/1.2 CBT 2_Histo Matrix Intraseluler.html": {
-    "mtime": 1786789457.4689226,
+    "mtime": 1787367915.6278138,
     "ast_hash": "3c52f92dd3fd1b6b58ecaa8851b246be",
     "semantic_hash": ""
   },
   "content/semester 1/1.2/1.2 CBT 2_Histo Otot.html": {
-    "mtime": 1786789457.4759147,
+    "mtime": 1787367915.6278138,
     "ast_hash": "5c1c482c5f21e82859bebf1ee9b48dc5",
     "semantic_hash": ""
   },
   "content/semester 1/1.2/1.2 CBT 2_Histo Saraf.html": {
-    "mtime": 1786789457.4799116,
+    "mtime": 1787367915.6278138,
     "ast_hash": "187c6887bb984c2a21c15b7caf8ffe96",
     "semantic_hash": ""
   },
   "content/semester 1/1.2/1.2 CBT 2_Histo Siklus & Regulasi Sel.html": {
-    "mtime": 1786789457.48391,
+    "mtime": 1787367915.6380675,
     "ast_hash": "8d3462ef37b6a957564aed7d0f7c9114",
     "semantic_hash": ""
   },
   "content/semester 1/1.2/1.2 CBT 2_Overall CBT.html": {
-    "mtime": 1786789457.5310023,
+    "mtime": 1787367915.6380675,
     "ast_hash": "731e8ccc26ea959e5ff8a6721f66bac3",
     "semantic_hash": ""
   },
   "content/semester 1/1.2/1.2 IDENT BIOKIM_Flashcard Phlebotomy.html": {
-    "mtime": 1786789739.455834,
+    "mtime": 1787367915.6430755,
     "ast_hash": "ef62b14fdc07465aab618f6dfdcaeaa2",
     "semantic_hash": ""
   },
   "content/semester 1/1.2/1.2 IDENT BIOKIM_Simulasi Reaksi Biokimia JARWO.html": {
-    "mtime": 1786789767.765275,
+    "mtime": 1787367915.6430755,
     "ast_hash": "5545bec68d6becf754ba4bec8c3a918a",
     "semantic_hash": ""
   },
   "content/semester 1/1.2/1.2 IDENT PK_Flashcard Hemostasis & Golongan Darah.html": {
-    "mtime": 1786789542.4985902,
+    "mtime": 1787367915.6481254,
     "ast_hash": "6041eee12329a7302386a339e6bb6820",
     "semantic_hash": ""
   },
   "content/semester 1/1.2/1.2 IDENT PK_Flashcard Patologi Klinik.html": {
-    "mtime": 1786789503.3565054,
+    "mtime": 1787367915.6481254,
     "ast_hash": "b646028171006d95d3381179598b155f",
     "semantic_hash": ""
   },
   "content/semester 1/1.2/1.2 IDENT PK_Latsol Patologi Klinik.html": {
-    "mtime": 1786789637.8948433,
+    "mtime": 1787367915.653132,
     "ast_hash": "44f9d23548f521509eab8eb0a0788678",
     "semantic_hash": ""
   },
   "content/semester 1/1.3/1.3 CBT 1_2. Pars Centralis Systema Nervosum Centrale (Cerebrum & Truncus Encephali).html": {
-    "mtime": 1786789906.869042,
+    "mtime": 1787367915.6617138,
     "ast_hash": "9d5dae5a5ba5c7bf7b08cc4abe1a3814",
     "semantic_hash": ""
   },
@@ -2055,77 +2055,77 @@
     "semantic_hash": ""
   },
   "content/semester 1/1.3/1.3 CBT_Push Up 1.html": {
-    "mtime": 1786789906.9822538,
+    "mtime": 1787367915.6878698,
     "ast_hash": "73f361db734e6d97a839cabd1be4a300",
     "semantic_hash": ""
   },
   "content/semester 1/1.3/1.3 CBT_Push Up 2.html": {
-    "mtime": 1786789906.9935784,
+    "mtime": 1787367915.6976585,
     "ast_hash": "dd71f79d12d160ec18e7b61f448e52d9",
     "semantic_hash": ""
   },
   "content/semester 1/1.3/1.3 IDENT FISIO_Lengkung Refleks Seri 1.html": {
-    "mtime": 1786789948.735314,
+    "mtime": 1787367915.6976585,
     "ast_hash": "992c710c9a05c4c348ff6e74eb53d212",
     "semantic_hash": ""
   },
   "content/semester 1/1.3/1.3 IDENT FISIO_Panca Indra & Saraf Seri 2.html": {
-    "mtime": 1786789980.2377348,
+    "mtime": 1787367915.6976585,
     "ast_hash": "74965c8e02029d6b0710b3787efcf114",
     "semantic_hash": ""
   },
   "content/semester 1/1.3/1.3 LECTURE_0. Materuy.html": {
-    "mtime": 1782875857.3316069,
-    "ast_hash": "0dd0ae1df483e32cbb7b8ebdf7f1911e",
+    "mtime": 1787367915.6976585,
+    "ast_hash": "0c601655807c989e95b1fb568a3c3ae9",
     "semantic_hash": ""
   },
   "content/semester 1/1.3/1.3 TOOL_Player Card Generator.html": {
-    "mtime": 1783169368.7813046,
-    "ast_hash": "4cefa543b0c8c6094c52e406ddfe2352",
+    "mtime": 1787367915.70788,
+    "ast_hash": "31c7b97bea3a0eda310dc06d20118dc8",
     "semantic_hash": ""
   },
   "content/semester 1/1.4/1.4 IDENT ANATOMI_5 Regio Muskuloskeletal.html": {
-    "mtime": 1786790171.2463305,
+    "mtime": 1787367915.7179172,
     "ast_hash": "34c1292d290b4d3a56887ac562353fe4",
     "semantic_hash": ""
   },
   "content/semester 1/1.4/1.4 IDENT BIOKIM_Metabolisme Tulang & Mineral.html": {
-    "mtime": 1786790171.2760122,
+    "mtime": 1787367915.7179172,
     "ast_hash": "506c271727011e3e1907435faa9c727f",
     "semantic_hash": ""
   },
   "content/semester 1/1.4/1.4 IDENT BIOKIM_Modul Kalsium & Fosfat.html": {
-    "mtime": 1786790171.2870898,
+    "mtime": 1787367915.7179172,
     "ast_hash": "44cfa7b1cce805e4344d8a0aafb54e81",
     "semantic_hash": ""
   },
   "content/semester 1/1.4/1.4 IDENT HISTO_Osteoblas & Integumen.html": {
-    "mtime": 1786790171.2971356,
+    "mtime": 1787367915.727981,
     "ast_hash": "139b8c65b395561102a5fa5e18c90174",
     "semantic_hash": ""
   },
   "content/semester 1/1.4/1.4 LECTURE_0. Coki Pardede.html": {
-    "mtime": 1782875857.4088292,
-    "ast_hash": "dcd65dbc8478c7794f4ba8a8d63497a3",
+    "mtime": 1787367915.727981,
+    "ast_hash": "193dda8c58dddd3b9ea1c74397d7d01d",
     "semantic_hash": ""
   },
   "content/semester 1/1.4/1.4 LECTURE_Anatomi Otot & Osteo-Arthro.html": {
-    "mtime": 1786790140.2756102,
+    "mtime": 1787367915.727981,
     "ast_hash": "5c4dae9deb72ceed662f7e6562579938",
     "semantic_hash": ""
   },
   "content/semester 1/1.4/1.4 LECTURE_Biokim Integumen & Tulang.html": {
-    "mtime": 1786790140.2956045,
+    "mtime": 1787367915.727981,
     "ast_hash": "56976006f20b4bfab2f5d3fe63adf4c7",
     "semantic_hash": ""
   },
   "content/semester 1/1.4/1.4 LECTURE_Fisiologi Muskuloskeletal.html": {
-    "mtime": 1786790140.30391,
+    "mtime": 1787367915.737964,
     "ast_hash": "1ae49a4a2b86b1351673143224b39617",
     "semantic_hash": ""
   },
   "content/semester 2/2.1/2.1 IDENT FISIO_Arvena.html": {
-    "mtime": 1786789169.4670987,
+    "mtime": 1787367915.757944,
     "ast_hash": "db188d6c405215a31f2938ec2d19dd17",
     "semantic_hash": ""
   },
@@ -2135,187 +2135,187 @@
     "semantic_hash": ""
   },
   "content/semester 2/2.1/2.1 IDENT FISIO_Pre & Post Test.html": {
-    "mtime": 1786789169.5022454,
+    "mtime": 1787367915.7619803,
     "ast_hash": "ed0626ca64751945a0a7b4c16697077c",
     "semantic_hash": ""
   },
   "content/semester 2/2.2/2.2 CBT 1_Anggur Merah.html": {
-    "mtime": 1786789169.5070086,
+    "mtime": 1787367915.7875838,
     "ast_hash": "cbebf552c3e22dc1c674f9026ab68f1e",
     "semantic_hash": ""
   },
   "content/semester 2/2.2/2.2 CBT 2_25 PARNO SAPI.html": {
-    "mtime": 1786788896.0129926,
+    "mtime": 1787367915.8016515,
     "ast_hash": "71e92a62472f71dffa74cffd100ac660",
     "semantic_hash": ""
   },
   "content/semester 2/2.4/2.4 LECTURE_K1 AM I HUMAN.html": {
-    "mtime": 1786790224.616629,
-    "ast_hash": "2ff31f2b4ec8c2089d7c26480e50c1de",
+    "mtime": 1787367915.8475988,
+    "ast_hash": "37364b2010fb1dd1b0f034159ef940cc",
     "semantic_hash": ""
   },
   "content/semester 2/2.4/2.4 LECTURE_K12 AM I COMMUNICATIVE.html": {
-    "mtime": 1786790224.6222854,
-    "ast_hash": "cead536124cba7528a2dc372e72eb4d9",
+    "mtime": 1787367915.8475988,
+    "ast_hash": "3c2488733cc075246487a25c3e556863",
     "semantic_hash": ""
   },
   "content/semester 2/2.4/2.4 LECTURE_K13 AM I CULTURALLY HUMBLE.html": {
-    "mtime": 1786790224.6279573,
-    "ast_hash": "9fc0fdfcbaf47cc1cdd0d61e618b3be9",
+    "mtime": 1787367915.8475988,
+    "ast_hash": "c2b3eaa3c21a25f2a07b8bfb68aea635",
     "semantic_hash": ""
   },
   "content/semester 2/2.4/2.4 LECTURE_K16A AM I VISUAL.html": {
-    "mtime": 1786790224.6322906,
-    "ast_hash": "cdb0ec7c8ca38b85b17ff6b5dd97dfa4",
+    "mtime": 1787367915.8580716,
+    "ast_hash": "29b3a190a282dc5da8657650ec6d82f2",
     "semantic_hash": ""
   },
   "content/semester 2/2.4/2.4 LECTURE_K16B AM I PERCEIVING.html": {
-    "mtime": 1786790224.6472814,
-    "ast_hash": "a004f6d713321c3000d7efd3980ee585",
+    "mtime": 1787367915.8621087,
+    "ast_hash": "cfc272173ed91a6786fcdbc6c2ceb5dc",
     "semantic_hash": ""
   },
   "content/semester 2/2.4/2.4 LECTURE_K19 AM I VISUAL.html": {
-    "mtime": 1786790224.6515994,
-    "ast_hash": "8e77cfde1c3fc4bec140632146135372",
+    "mtime": 1787367915.8621087,
+    "ast_hash": "a28d3d15e7c357efc5d7a8cad8b90d37",
     "semantic_hash": ""
   },
   "content/semester 2/2.4/2.4 LECTURE_K20A AM I PERSUASIVE.html": {
-    "mtime": 1786790224.6618578,
-    "ast_hash": "c0a4b86b6c1df7a66fcc9cde0e62c4b9",
+    "mtime": 1787367915.86767,
+    "ast_hash": "27682cd53b365a9b4e77c8ce2d820e2b",
     "semantic_hash": ""
   },
   "content/semester 2/2.4/2.4 LECTURE_K20B AM I IMPACTFUL.html": {
-    "mtime": 1786790224.6708841,
-    "ast_hash": "2bcdf558b4925274be87f1195245c561",
+    "mtime": 1787367915.86767,
+    "ast_hash": "1fd65f2d12c11c79517fc54b619786d9",
     "semantic_hash": ""
   },
   "content/semester 2/2.4/2.4 LECTURE_K20C AM I CINEMATIC.html": {
-    "mtime": 1786790224.674881,
-    "ast_hash": "c13edeb4c342849505f6bd123ef9f6dd",
+    "mtime": 1787367915.86767,
+    "ast_hash": "0a7a16fb2c95e235cde171fcf01e0906",
     "semantic_hash": ""
   },
   "content/semester 2/2.4/2.4 LECTURE_K20D AM I AUTHENTIC.html": {
-    "mtime": 1786790224.681876,
-    "ast_hash": "9096ec50e1466ce5d075809dd681e64c",
+    "mtime": 1787367915.87758,
+    "ast_hash": "4a4e448d7914d003c5f5caa511a87425",
     "semantic_hash": ""
   },
   "content/semester 2/2.4/2.4 LECTURE_K21 AM I COMMUNICATIVE.html": {
-    "mtime": 1786790224.6898713,
-    "ast_hash": "7d953742c0c029f68b7f8e2cc0d9c774",
+    "mtime": 1787367915.87758,
+    "ast_hash": "00247c929483f2b4041d485a72886b84",
     "semantic_hash": ""
   },
   "content/semester 2/2.4/2.4 LECTURE_K22 AM I VOCAL.html": {
-    "mtime": 1786790224.6940155,
-    "ast_hash": "6f06408bca831d11e822edcda6fcdb42",
+    "mtime": 1787367915.87758,
+    "ast_hash": "d9303fd42bb8a592501eb7e3e8d788f0",
     "semantic_hash": ""
   },
   "content/semester 2/2.4/2.4 LECTURE_K23 AM I CULTURED.html": {
-    "mtime": 1786790224.6988733,
-    "ast_hash": "0a01721c5e1ffc473214f97d1b4faf96",
+    "mtime": 1787367915.8875687,
+    "ast_hash": "2810cd6b148be8bb0afae9c60fe15b15",
     "semantic_hash": ""
   },
   "content/semester 2/2.4/2.4 LECTURE_K24 AM I PRESENTABLE.html": {
-    "mtime": 1786790224.710164,
-    "ast_hash": "c4b14a1f96796087f8a82bf224145e0d",
+    "mtime": 1787367915.8875687,
+    "ast_hash": "2f0a6bfe81137b972d6ffe5bb72aa24c",
     "semantic_hash": ""
   },
   "content/semester 2/2.4/2.4 LECTURE_K25 AM I VISUAL-LITERATE.html": {
-    "mtime": 1786790224.7151635,
-    "ast_hash": "2b7483e4d11683e002c9a3c7c4814fa6",
+    "mtime": 1787367915.8875687,
+    "ast_hash": "2dcc9047aaf26c8badcbd18f982ea0d6",
     "semantic_hash": ""
   },
   "content/semester 2/2.4/2.4 LECTURE_K9 AM I EMPATHETIC.html": {
-    "mtime": 1786790224.7191608,
-    "ast_hash": "1a2e40fa76ae0564cea76107271f3ce9",
+    "mtime": 1787367915.8975472,
+    "ast_hash": "88567efa8eddd9c8469889f7697f44e9",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.2/1.2 CBT 1_Pull up 1.html": {
-    "mtime": 1786789457.494903,
+    "mtime": 1787367915.6080532,
     "ast_hash": "66b16a9c37431935424b30737a3b92de",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.2/1.2 CBT 1_Pull up 2.html": {
-    "mtime": 1786789457.5130126,
+    "mtime": 1787367915.617918,
     "ast_hash": "398bc3da07e621ac3ca61d22cd1b44ea",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.2/1.2 CBT 2_Biomoll DNA Repair.html": {
-    "mtime": 1786789457.4036195,
+    "mtime": 1787367915.617918,
     "ast_hash": "d1e1b5aec03174d851c6222f813cd7e3",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.2/1.2 CBT 2_Histo Apoptosis & Penuaan.html": {
-    "mtime": 1786789457.4279625,
+    "mtime": 1787367915.617918,
     "ast_hash": "7b15a917f28df23e3e094eba49712a52",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.2/1.2 CBT 2_Histo Cell Connect.html": {
-    "mtime": 1786789457.4329593,
+    "mtime": 1787367915.617918,
     "ast_hash": "2e452bf7989aac8ecdeaf3a13ae9ea03",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.2/1.2 CBT 2_Histo Epitel.html": {
-    "mtime": 1786789457.4530227,
+    "mtime": 1787367915.6278138,
     "ast_hash": "d5965a5f2dbb7f31403f45f2163a5ef7",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.2/1.2 CBT 2_Histo Jaringan Ikat.html": {
-    "mtime": 1786789457.462019,
+    "mtime": 1787367915.6278138,
     "ast_hash": "31122ebc6d3753ed24118cbf15bca6f2",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.2/1.2 CBT 2_Histo Matrix Intraseluler.html": {
-    "mtime": 1786789457.4689226,
+    "mtime": 1787367915.6278138,
     "ast_hash": "3c52f92dd3fd1b6b58ecaa8851b246be",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.2/1.2 CBT 2_Histo Otot.html": {
-    "mtime": 1786789457.4759147,
+    "mtime": 1787367915.6278138,
     "ast_hash": "5c1c482c5f21e82859bebf1ee9b48dc5",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.2/1.2 CBT 2_Histo Saraf.html": {
-    "mtime": 1786789457.4799116,
+    "mtime": 1787367915.6278138,
     "ast_hash": "187c6887bb984c2a21c15b7caf8ffe96",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.2/1.2 CBT 2_Histo Siklus & Regulasi Sel.html": {
-    "mtime": 1786789457.48391,
+    "mtime": 1787367915.6380675,
     "ast_hash": "8d3462ef37b6a957564aed7d0f7c9114",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.2/1.2 CBT 2_Overall CBT.html": {
-    "mtime": 1786789457.5310023,
+    "mtime": 1787367915.6380675,
     "ast_hash": "731e8ccc26ea959e5ff8a6721f66bac3",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.2/1.2 IDENT BIOKIM_Flashcard Phlebotomy.html": {
-    "mtime": 1786789739.455834,
+    "mtime": 1787367915.6430755,
     "ast_hash": "ef62b14fdc07465aab618f6dfdcaeaa2",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.2/1.2 IDENT BIOKIM_Simulasi Reaksi Biokimia JARWO.html": {
-    "mtime": 1786789767.765275,
+    "mtime": 1787367915.6430755,
     "ast_hash": "5545bec68d6becf754ba4bec8c3a918a",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.2/1.2 IDENT PK_Flashcard Hemostasis & Golongan Darah.html": {
-    "mtime": 1786789542.4985902,
+    "mtime": 1787367915.6481254,
     "ast_hash": "6041eee12329a7302386a339e6bb6820",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.2/1.2 IDENT PK_Flashcard Patologi Klinik.html": {
-    "mtime": 1786789503.3565054,
+    "mtime": 1787367915.6481254,
     "ast_hash": "b646028171006d95d3381179598b155f",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.2/1.2 IDENT PK_Latsol Patologi Klinik.html": {
-    "mtime": 1786789637.8948433,
+    "mtime": 1787367915.653132,
     "ast_hash": "44f9d23548f521509eab8eb0a0788678",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.3/1.3 CBT 1_2. Pars Centralis Systema Nervosum Centrale (Cerebrum & Truncus Encephali).html": {
-    "mtime": 1786789906.869042,
+    "mtime": 1787367915.6617138,
     "ast_hash": "9d5dae5a5ba5c7bf7b08cc4abe1a3814",
     "semantic_hash": ""
   },
@@ -2340,77 +2340,77 @@
     "semantic_hash": ""
   },
   "public/content/semester 1/1.3/1.3 CBT_Push Up 1.html": {
-    "mtime": 1786789906.9822538,
+    "mtime": 1787367915.6878698,
     "ast_hash": "73f361db734e6d97a839cabd1be4a300",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.3/1.3 CBT_Push Up 2.html": {
-    "mtime": 1786789906.9935784,
+    "mtime": 1787367915.6976585,
     "ast_hash": "dd71f79d12d160ec18e7b61f448e52d9",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.3/1.3 IDENT FISIO_Lengkung Refleks Seri 1.html": {
-    "mtime": 1786789948.735314,
+    "mtime": 1787367915.6976585,
     "ast_hash": "992c710c9a05c4c348ff6e74eb53d212",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.3/1.3 IDENT FISIO_Panca Indra & Saraf Seri 2.html": {
-    "mtime": 1786789980.2377348,
+    "mtime": 1787367915.6976585,
     "ast_hash": "74965c8e02029d6b0710b3787efcf114",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.3/1.3 LECTURE_0. Materuy.html": {
-    "mtime": 1782875857.3316069,
-    "ast_hash": "0dd0ae1df483e32cbb7b8ebdf7f1911e",
+    "mtime": 1787367915.6976585,
+    "ast_hash": "0c601655807c989e95b1fb568a3c3ae9",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.3/1.3 TOOL_Player Card Generator.html": {
-    "mtime": 1783169368.7813046,
-    "ast_hash": "4cefa543b0c8c6094c52e406ddfe2352",
+    "mtime": 1787367915.70788,
+    "ast_hash": "31c7b97bea3a0eda310dc06d20118dc8",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.4/1.4 IDENT ANATOMI_5 Regio Muskuloskeletal.html": {
-    "mtime": 1786790171.2463305,
+    "mtime": 1787367915.7179172,
     "ast_hash": "34c1292d290b4d3a56887ac562353fe4",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.4/1.4 IDENT BIOKIM_Metabolisme Tulang & Mineral.html": {
-    "mtime": 1786790171.2760122,
+    "mtime": 1787367915.7179172,
     "ast_hash": "506c271727011e3e1907435faa9c727f",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.4/1.4 IDENT BIOKIM_Modul Kalsium & Fosfat.html": {
-    "mtime": 1786790171.2870898,
+    "mtime": 1787367915.7179172,
     "ast_hash": "44cfa7b1cce805e4344d8a0aafb54e81",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.4/1.4 IDENT HISTO_Osteoblas & Integumen.html": {
-    "mtime": 1786790171.2971356,
+    "mtime": 1787367915.727981,
     "ast_hash": "139b8c65b395561102a5fa5e18c90174",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.4/1.4 LECTURE_0. Coki Pardede.html": {
-    "mtime": 1782875857.4088292,
-    "ast_hash": "dcd65dbc8478c7794f4ba8a8d63497a3",
+    "mtime": 1787367915.727981,
+    "ast_hash": "193dda8c58dddd3b9ea1c74397d7d01d",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.4/1.4 LECTURE_Anatomi Otot & Osteo-Arthro.html": {
-    "mtime": 1786790140.2756102,
+    "mtime": 1787367915.727981,
     "ast_hash": "5c4dae9deb72ceed662f7e6562579938",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.4/1.4 LECTURE_Biokim Integumen & Tulang.html": {
-    "mtime": 1786790140.2956045,
+    "mtime": 1787367915.727981,
     "ast_hash": "56976006f20b4bfab2f5d3fe63adf4c7",
     "semantic_hash": ""
   },
   "public/content/semester 1/1.4/1.4 LECTURE_Fisiologi Muskuloskeletal.html": {
-    "mtime": 1786790140.30391,
+    "mtime": 1787367915.737964,
     "ast_hash": "1ae49a4a2b86b1351673143224b39617",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.1/2.1 IDENT FISIO_Arvena.html": {
-    "mtime": 1786789169.4670987,
+    "mtime": 1787367915.757944,
     "ast_hash": "db188d6c405215a31f2938ec2d19dd17",
     "semantic_hash": ""
   },
@@ -2420,168 +2420,198 @@
     "semantic_hash": ""
   },
   "public/content/semester 2/2.1/2.1 IDENT FISIO_Pre & Post Test.html": {
-    "mtime": 1786789169.5022454,
+    "mtime": 1787367915.7619803,
     "ast_hash": "ed0626ca64751945a0a7b4c16697077c",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.2/2.2 CBT 1_Anggur Merah.html": {
-    "mtime": 1786789169.5070086,
+    "mtime": 1787367915.7875838,
     "ast_hash": "cbebf552c3e22dc1c674f9026ab68f1e",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.2/2.2 CBT 2_25 PARNO SAPI.html": {
-    "mtime": 1786788896.0129926,
+    "mtime": 1787367915.8016515,
     "ast_hash": "71e92a62472f71dffa74cffd100ac660",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.4/2.4 LECTURE_K1 AM I HUMAN.html": {
-    "mtime": 1786790224.616629,
-    "ast_hash": "2ff31f2b4ec8c2089d7c26480e50c1de",
+    "mtime": 1787367915.8475988,
+    "ast_hash": "37364b2010fb1dd1b0f034159ef940cc",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.4/2.4 LECTURE_K12 AM I COMMUNICATIVE.html": {
-    "mtime": 1786790224.6222854,
-    "ast_hash": "cead536124cba7528a2dc372e72eb4d9",
+    "mtime": 1787367915.8475988,
+    "ast_hash": "3c2488733cc075246487a25c3e556863",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.4/2.4 LECTURE_K13 AM I CULTURALLY HUMBLE.html": {
-    "mtime": 1786790224.6279573,
-    "ast_hash": "9fc0fdfcbaf47cc1cdd0d61e618b3be9",
+    "mtime": 1787367915.8475988,
+    "ast_hash": "c2b3eaa3c21a25f2a07b8bfb68aea635",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.4/2.4 LECTURE_K16A AM I VISUAL.html": {
-    "mtime": 1786790224.6322906,
-    "ast_hash": "cdb0ec7c8ca38b85b17ff6b5dd97dfa4",
+    "mtime": 1787367915.8580716,
+    "ast_hash": "29b3a190a282dc5da8657650ec6d82f2",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.4/2.4 LECTURE_K16B AM I PERCEIVING.html": {
-    "mtime": 1786790224.6472814,
-    "ast_hash": "a004f6d713321c3000d7efd3980ee585",
+    "mtime": 1787367915.8621087,
+    "ast_hash": "cfc272173ed91a6786fcdbc6c2ceb5dc",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.4/2.4 LECTURE_K19 AM I VISUAL.html": {
-    "mtime": 1786790224.6515994,
-    "ast_hash": "8e77cfde1c3fc4bec140632146135372",
+    "mtime": 1787367915.8621087,
+    "ast_hash": "a28d3d15e7c357efc5d7a8cad8b90d37",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.4/2.4 LECTURE_K20A AM I PERSUASIVE.html": {
-    "mtime": 1786790224.6618578,
-    "ast_hash": "c0a4b86b6c1df7a66fcc9cde0e62c4b9",
+    "mtime": 1787367915.86767,
+    "ast_hash": "27682cd53b365a9b4e77c8ce2d820e2b",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.4/2.4 LECTURE_K20B AM I IMPACTFUL.html": {
-    "mtime": 1786790224.6708841,
-    "ast_hash": "2bcdf558b4925274be87f1195245c561",
+    "mtime": 1787367915.86767,
+    "ast_hash": "1fd65f2d12c11c79517fc54b619786d9",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.4/2.4 LECTURE_K20C AM I CINEMATIC.html": {
-    "mtime": 1786790224.674881,
-    "ast_hash": "c13edeb4c342849505f6bd123ef9f6dd",
+    "mtime": 1787367915.86767,
+    "ast_hash": "0a7a16fb2c95e235cde171fcf01e0906",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.4/2.4 LECTURE_K20D AM I AUTHENTIC.html": {
-    "mtime": 1786790224.681876,
-    "ast_hash": "9096ec50e1466ce5d075809dd681e64c",
+    "mtime": 1787367915.87758,
+    "ast_hash": "4a4e448d7914d003c5f5caa511a87425",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.4/2.4 LECTURE_K21 AM I COMMUNICATIVE.html": {
-    "mtime": 1786790224.6898713,
-    "ast_hash": "7d953742c0c029f68b7f8e2cc0d9c774",
+    "mtime": 1787367915.87758,
+    "ast_hash": "00247c929483f2b4041d485a72886b84",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.4/2.4 LECTURE_K22 AM I VOCAL.html": {
-    "mtime": 1786790224.6940155,
-    "ast_hash": "6f06408bca831d11e822edcda6fcdb42",
+    "mtime": 1787367915.87758,
+    "ast_hash": "d9303fd42bb8a592501eb7e3e8d788f0",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.4/2.4 LECTURE_K23 AM I CULTURED.html": {
-    "mtime": 1786790224.6988733,
-    "ast_hash": "0a01721c5e1ffc473214f97d1b4faf96",
+    "mtime": 1787367915.8875687,
+    "ast_hash": "2810cd6b148be8bb0afae9c60fe15b15",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.4/2.4 LECTURE_K24 AM I PRESENTABLE.html": {
-    "mtime": 1786790224.710164,
-    "ast_hash": "c4b14a1f96796087f8a82bf224145e0d",
+    "mtime": 1787367915.8875687,
+    "ast_hash": "2f0a6bfe81137b972d6ffe5bb72aa24c",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.4/2.4 LECTURE_K25 AM I VISUAL-LITERATE.html": {
-    "mtime": 1786790224.7151635,
-    "ast_hash": "2b7483e4d11683e002c9a3c7c4814fa6",
+    "mtime": 1787367915.8875687,
+    "ast_hash": "2dcc9047aaf26c8badcbd18f982ea0d6",
     "semantic_hash": ""
   },
   "public/content/semester 2/2.4/2.4 LECTURE_K9 AM I EMPATHETIC.html": {
-    "mtime": 1786790224.7191608,
-    "ast_hash": "1a2e40fa76ae0564cea76107271f3ce9",
+    "mtime": 1787367915.8975472,
+    "ast_hash": "88567efa8eddd9c8469889f7697f44e9",
     "semantic_hash": ""
   },
   "scratch/clean_public.js": {
-    "mtime": 1786790514.9775994,
+    "mtime": 1787367937.4536588,
     "ast_hash": "188a03f2e78f811f20dbb261e12c98d0",
     "semantic_hash": ""
   },
   "scratch/convert_cbt_block14.js": {
-    "mtime": 1786790101.0661678,
+    "mtime": 1787367938.636707,
     "ast_hash": "9d8a4fc236f244c8f9d68c953f0a8820",
     "semantic_hash": ""
   },
   "scratch/convert_typeb_block14_part1.js": {
-    "mtime": 1786790129.57129,
+    "mtime": 1787367939.695268,
     "ast_hash": "3a659668f66d3686c5887eea04e050a9",
     "semantic_hash": ""
   },
   "scratch/convert_typeb_block14_part2.js": {
-    "mtime": 1786790161.6590858,
+    "mtime": 1787367939.9634104,
     "ast_hash": "b1f2d3b43992c4567c93b636b9116b6a",
     "semantic_hash": ""
   },
   "scratch/inspect_all_blocks.js": {
-    "mtime": 1786790269.2841313,
+    "mtime": 1787367942.3390014,
     "ast_hash": "6110a9e2389fcfeede0e786287067aaf",
     "semantic_hash": ""
   },
   "scratch/inspect_block14.js": {
-    "mtime": 1786790059.2608192,
+    "mtime": 1787367942.5555036,
     "ast_hash": "710d8704b6271c6f8803c9c7cd05efc9",
     "semantic_hash": ""
   },
   "scratch/inspect_final_categories.js": {
-    "mtime": 1786790440.3949363,
+    "mtime": 1787367943.0546384,
     "ast_hash": "7aa10d2dc63482abc337d821d68125c8",
     "semantic_hash": ""
   },
   "scratch/inspect_schemas_14.js": {
-    "mtime": 1786790073.856788,
+    "mtime": 1787367943.470213,
     "ast_hash": "81bdb415f4ca146992e977c7d0c6d0e4",
     "semantic_hash": ""
   },
   "scratch/rename_block24.js": {
-    "mtime": 1786790218.9080293,
+    "mtime": 1787367943.470213,
     "ast_hash": "880663d8a3981107b4466682a9103ff2",
     "semantic_hash": ""
   },
   "scratch/restore_cbt_editions.js": {
-    "mtime": 1786790369.4255214,
+    "mtime": 1787367944.2775638,
     "ast_hash": "98c2eb5a1c33c0a61adaafbe30479ee9",
     "semantic_hash": ""
   },
   "scratch/standardize_all_block_names.js": {
-    "mtime": 1786790286.5405777,
+    "mtime": 1787367944.6805365,
     "ast_hash": "2c10b15007baab333f4b9954b9fe0d17",
     "semantic_hash": ""
   },
   "scratch/standardize_ident_by_subject.js": {
-    "mtime": 1786790420.476875,
+    "mtime": 1787367945.131632,
     "ast_hash": "885c22fef5ebd3ae5d18262819f64bd7",
     "semantic_hash": ""
   },
   "scratch/verify_catalog.js": {
-    "mtime": 1786790317.7989051,
+    "mtime": 1787367946.2435832,
     "ast_hash": "1f0dd98434d9dc4235ec0d5a71ad6054",
     "semantic_hash": ""
   },
   "scratch/test_openapi.js": {
-    "mtime": 1787021370.2834601,
-    "ast_hash": "9fdb6200d417b626cce8d9a1ed44e08d",
+    "mtime": 1787367945.9332495,
+    "ast_hash": "a2faa860951ba744b324d5e4724c1d3a",
+    "semantic_hash": ""
+  },
+  "content/semester 3/3.1/3.1 PRAKTIKUM_HISTOLOGI.html": {
+    "mtime": 1787367916.2678225,
+    "ast_hash": "d51bd9aa3320f4737273257ceff352b7",
+    "semantic_hash": ""
+  },
+  "public/content/semester 3/3.1/3.1 PRAKTIKUM_HISTOLOGI.html": {
+    "mtime": 1787367916.2678225,
+    "ast_hash": "d51bd9aa3320f4737273257ceff352b7",
+    "semantic_hash": ""
+  },
+  "public/restyle-simulation.html": {
+    "mtime": 1787372419.488254,
+    "ast_hash": "e34e2a38f34ac5c7c343dd4e91ec4cd3",
+    "semantic_hash": ""
+  },
+  "restyle-simulation.html": {
+    "mtime": 1787372419.488254,
+    "ast_hash": "e34e2a38f34ac5c7c343dd4e91ec4cd3",
+    "semantic_hash": ""
+  },
+  "content/semester 3/3.1/3.1 PRAKTIKUM_HISTOLOGI.md": {
+    "mtime": 1787367916.273992,
+    "ast_hash": "ebabc404f11ba4febe02fad0f41d5a3d",
+    "semantic_hash": ""
+  },
+  "public/content/semester 3/3.1/3.1 PRAKTIKUM_HISTOLOGI.md": {
+    "mtime": 1787367916.273992,
+    "ast_hash": "ebabc404f11ba4febe02fad0f41d5a3d",
     "semantic_hash": ""
   }
 }
