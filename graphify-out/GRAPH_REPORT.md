@@ -1,16 +1,16 @@
 # Graph Report - MR-CAPSULES-main  (2026-08-25)
 
 ## Corpus Check
-- 397 files · ~27,567,206 words
+- 397 files · ~27,569,553 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 7911 nodes · 16305 edges · 396 communities (365 shown, 31 thin omitted)
+- 7913 nodes · 16309 edges · 396 communities (365 shown, 31 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 86 edges (avg confidence: 0.52)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `b7224dab`
+- Built from commit: `e92463b1`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -398,12 +398,12 @@
   scratch/test_mcp_local.js → api/mcp.js
 - `startTracking()` --indirect_call--> `toast()`  [INFERRED]
   index.html → restyle-simulation.html
+- `makeQ()` --calls--> `wrap`  [INFERRED]
+  public/content/semester 2/2.5/2.5 PRAKTIKUM_PRAKTIKUM 1.html → public/index.html
 - `runTests()` --calls--> `handler()`  [EXTRACTED]
   scratch/test_openapi.js → api/mcp.js
 - `runTests()` --calls--> `handler()`  [EXTRACTED]
   scratch/test_openapi.js → api/openapi.js
-- `makeQ()` --calls--> `wrap`  [INFERRED]
-  public/content/semester 2/2.5/2.5 PRAKTIKUM_PRAKTIKUM 1.html → public/index.html
 
 ## Import Cycles
 - None detected.
@@ -927,7 +927,7 @@ Cohesion: 0.38
 Nodes (11): apiCall(), createNewTaskPrompt(), initWorkflow(), loadContributions(), loadDivisions(), loadTasks(), openTaskModal(), parseCBTHtml() (+3 more)
 
 ### Community 129 - "admin-workflow.js"
-Cohesion: 0.39
+Cohesion: 0.35
 Nodes (11): apiCall(), createNewTaskPrompt(), initTaskKanbanDelegation(), initWorkflow(), loadDivisions(), loadTasks(), openTaskModal(), parseCBTHtml() (+3 more)
 
 ### Community 130 - "1.2-1_flashcard biochemical romance.html"
@@ -971,7 +971,7 @@ Cohesion: 0.83
 Nodes (3): build(), copyRecursiveSync(), walkDir()
 
 ### Community 140 - "mock_server.js"
-Cohesion: 0.43
+Cohesion: 0.50
 Nodes (6): COUPLE_EMAILS, COUPLE_USER_IDS, fetchAllAdminUsers(), handler(), isCoupleMember(), server
 
 ### Community 141 - "1.2 other_Pull up 1.html"
@@ -1048,7 +1048,7 @@ Nodes (6): 1. System Architecture & Database Schema Migrations, 3. Frontend Clie
 
 ### Community 172 - "index.html"
 Cohesion: 0.05
-Nodes (66): ./fp.js, apply(), applyData(), applyPerfMode(), applyPersona(), backgroundSync(), buildCoverflow(), cards (+58 more)
+Nodes (67): ./fp.js, apply(), applyData(), applyPerfMode(), applyPersona(), backgroundSync(), buildCoverflow(), cards (+59 more)
 
 ### Community 173 - "admin.js"
 Cohesion: 0.09
@@ -1056,7 +1056,7 @@ Nodes (46): adminAction(), applyAdminPersona(), authMessage, authOverlay, bindUs
 
 ### Community 174 - "2.5 PRAKTIKUM_PRAKTIKUM 1.html"
 Cohesion: 0.08
-Nodes (49): activeTypes, AKTIV_LIST, AKTIVITAS_METs, BOUCHARD_HITUNG_KONSEP, BOUCHARD_KAT, BOUCHARD_KAT_KONSEP, DEFINISI_POOL, downloadCert() (+41 more)
+Nodes (48): activeTypes, AKTIV_LIST, AKTIVITAS_METs, BOUCHARD_HITUNG_KONSEP, BOUCHARD_KAT, BOUCHARD_KAT_KONSEP, DEFINISI_POOL, downloadCert() (+40 more)
 
 ### Community 175 - "1.3 CBT 1_10. Fungsi Medulla Spinalis dan Saraf Spinal.html"
 Cohesion: 0.25
@@ -1555,7 +1555,7 @@ Cohesion: 0.38
 Nodes (11): apiCall(), createNewTaskPrompt(), initWorkflow(), loadContributions(), loadDivisions(), loadTasks(), openTaskModal(), parseCBTHtml() (+3 more)
 
 ### Community 299 - "admin-workflow.js"
-Cohesion: 0.39
+Cohesion: 0.35
 Nodes (11): apiCall(), createNewTaskPrompt(), initTaskKanbanDelegation(), initWorkflow(), loadDivisions(), loadTasks(), openTaskModal(), parseCBTHtml() (+3 more)
 
 ### Community 300 - "1.2-1_flashcard biochemical romance.html"
@@ -1758,6 +1758,8 @@ _Questions this graph is uniquely positioned to answer:_
   _High betweenness centrality (0.000) - this node is a cross-community bridge._
 - **Why does `bindKeyEvents()` connect `MockResponse` to `admin.js`?**
   _High betweenness centrality (0.000) - this node is a cross-community bridge._
+- **Why does `makeQ()` connect `2.5 PRAKTIKUM_PRAKTIKUM 1.html` to `index.html`?**
+  _High betweenness centrality (0.000) - this node is a cross-community bridge._
 - **What connects `fileCache`, `_statusTextEl`, `_statusBarEl` to the rest of the system?**
   _1280 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `2.4 CBT 2_K20C AM I CINEMATIC.html` be split into smaller, more focused modules?**
@@ -1766,5 +1768,3 @@ _Questions this graph is uniquely positioned to answer:_
   _Cohesion score 0.07692307692307693 - nodes in this community are weakly interconnected._
 - **Should `index.html` be split into smaller, more focused modules?**
   _Cohesion score 0.05365686944634313 - nodes in this community are weakly interconnected._
-- **Should `2.5 PRAKTIKUM_PRAKTIKUM 1.html` be split into smaller, more focused modules?**
-  _Cohesion score 0.08163265306122448 - nodes in this community are weakly interconnected._

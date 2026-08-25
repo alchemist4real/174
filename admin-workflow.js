@@ -940,6 +940,79 @@ async function getCachedOrFreshUsers() {
     return [];
 }
 
+window.renderAddMemberUserDropdown = function(targetDivId, usersList) {
+    const selectUser = document.getElementById('selectMemberUser');
+    const showAllCheckbox = document.getElementById('chkShowAllUsersForDivision');
+    if (!selectUser) return;
+
+    const users = usersList || window.lastLoadedUsers || window.allUsersCache || [];
+    const showAll = showAllCheckbox ? showAllCheckbox.checked : false;
+
+    // Collect all emails already in any division (or in the target division)
+    const assignedEmails = new Set();
+    const targetDivEmails = new Set();
+
+    if (Array.isArray(window.divisionData)) {
+        window.divisionData.forEach(d => {
+            if (Array.isArray(d.members)) {
+                d.members.forEach(m => {
+                    const em = (typeof m === 'string' ? m : m.email || '').toLowerCase();
+                    if (em) {
+                        assignedEmails.add(em);
+                        if (d.id === targetDivId) {
+                            targetDivEmails.add(em);
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    let filteredUsers = users;
+    if (!showAll) {
+        // Only show users who haven't joined ANY division yet
+        filteredUsers = users.filter(u => {
+            const email = (u.email || '').toLowerCase();
+            const hasDivMeta = !!(u.user_metadata?.division);
+            const isAssigned = assignedEmails.has(email);
+            return !hasDivMeta && !isAssigned;
+        });
+    } else {
+        // If showAll is checked, only exclude users who are ALREADY in the target division
+        filteredUsers = users.filter(u => {
+            const email = (u.email || '').toLowerCase();
+            const isInTargetDiv = targetDivEmails.has(email);
+            const hasTargetDivMeta = (u.user_metadata?.division === targetDivId);
+            return !isInTargetDiv && !hasTargetDivMeta;
+        });
+    }
+
+    selectUser.innerHTML = '';
+
+    if (filteredUsers.length === 0) {
+        selectUser.innerHTML = '<option value="">-- Tidak ada user baru (Semua user sudah bergabung divisi) --</option>';
+        return;
+    }
+
+    selectUser.innerHTML = `<option value="">-- Pilih User (${filteredUsers.length} user belum join) --</option>`;
+
+    // Sort users alphabetically
+    const sortedUsers = [...filteredUsers].sort((a, b) => {
+        const nameA = (a.user_metadata?.username || a.email || '').toLowerCase();
+        const nameB = (b.user_metadata?.username || b.email || '').toLowerCase();
+        return nameA.localeCompare(nameB);
+    });
+
+    sortedUsers.forEach(u => {
+        const username = u.user_metadata?.username || u.email.split('@')[0];
+        const currentDiv = u.user_metadata?.division ? ` [Divisi saat ini: ${u.user_metadata.division}]` : '';
+        const opt = document.createElement('option');
+        opt.value = u.email;
+        opt.textContent = `${username} (${u.email})${currentDiv}`;
+        selectUser.appendChild(opt);
+    });
+};
+
 window.promptAddMember = async function(divId) {
     let targetDivId = divId || window.currentDivisionId;
     if (!targetDivId || targetDivId === 'all') targetDivId = 'development';
@@ -948,33 +1021,25 @@ window.promptAddMember = async function(divId) {
     const selectUser = document.getElementById('selectMemberUser');
     const selectDiv = document.getElementById('selectMemberDivision');
     const selectRole = document.getElementById('selectMemberRole');
+    const showAllCheckbox = document.getElementById('chkShowAllUsersForDivision');
 
     if (!modal || !selectUser) return;
 
     if (selectDiv) selectDiv.value = targetDivId;
     if (selectRole) selectRole.value = 'member';
+    if (showAllCheckbox) showAllCheckbox.checked = false;
 
-    selectUser.innerHTML = '<option value="">Loading users...</option>';
+    selectUser.innerHTML = '<option value="">Loading unassigned users...</option>';
     if (window.ModalManager) window.ModalManager.open(modal);
     else modal.classList.add('active');
 
-    const users = await getCachedOrFreshUsers();
-    selectUser.innerHTML = '<option value="">-- Pilih User --</option>';
-    
-    // Sort users alphabetically by username or email
-    const sortedUsers = [...users].sort((a, b) => {
-        const nameA = (a.user_metadata?.username || a.email || '').toLowerCase();
-        const nameB = (b.user_metadata?.username || b.email || '').toLowerCase();
-        return nameA.localeCompare(nameB);
-    });
+    // Ensure divisionData is loaded
+    if (!window.divisionData && typeof loadDivisions === 'function') {
+        await loadDivisions();
+    }
 
-    sortedUsers.forEach(u => {
-        const username = u.user_metadata?.username || u.email.split('@')[0];
-        const opt = document.createElement('option');
-        opt.value = u.email;
-        opt.textContent = `${username} (${u.email})`;
-        selectUser.appendChild(opt);
-    });
+    const users = await getCachedOrFreshUsers();
+    window.renderAddMemberUserDropdown(targetDivId, users);
 };
 
 window.closeAddMemberModal = function() {
