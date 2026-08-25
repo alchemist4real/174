@@ -917,22 +917,213 @@ async function loadDivisions() {
     }
 }
 
+async function getCachedOrFreshUsers() {
+    if (Array.isArray(window.lastLoadedUsers) && window.lastLoadedUsers.length > 0) {
+        return window.lastLoadedUsers;
+    }
+    if (Array.isArray(window.allUsersCache) && window.allUsersCache.length > 0) {
+        return window.allUsersCache;
+    }
+    try {
+        const res = await fetch('/api/admin', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Authorization': `Bearer ${sessionToken}` },
+            body: JSON.stringify({ action: 'get_users' })
+        });
+        const data = await res.json();
+        if (data && data.success && Array.isArray(data.users)) {
+            window.lastLoadedUsers = data.users;
+            window.allUsersCache = data.users;
+            return data.users;
+        }
+    } catch(e) {}
+    return [];
+}
+
 window.promptAddMember = async function(divId) {
     let targetDivId = divId || window.currentDivisionId;
-    if (!targetDivId || targetDivId === 'all') {
-        const selected = await customPrompt("Choose division to add member into (development, review, management):", "development");
-        if (!selected) return;
-        targetDivId = selected.toLowerCase().trim();
-    }
-    const email = await customPrompt(`Enter member's exact email address for division "${targetDivId}":`);
-    if(!email || !email.trim()) return;
+    if (!targetDivId || targetDivId === 'all') targetDivId = 'development';
+
+    const modal = document.getElementById('addDivisionMemberModal');
+    const selectUser = document.getElementById('selectMemberUser');
+    const selectDiv = document.getElementById('selectMemberDivision');
+    const selectRole = document.getElementById('selectMemberRole');
+
+    if (!modal || !selectUser) return;
+
+    if (selectDiv) selectDiv.value = targetDivId;
+    if (selectRole) selectRole.value = 'member';
+
+    selectUser.innerHTML = '<option value="">Loading users...</option>';
+    if (window.ModalManager) window.ModalManager.open(modal);
+    else modal.classList.add('active');
+
+    const users = await getCachedOrFreshUsers();
+    selectUser.innerHTML = '<option value="">-- Pilih User --</option>';
+    
+    // Sort users alphabetically by username or email
+    const sortedUsers = [...users].sort((a, b) => {
+        const nameA = (a.user_metadata?.username || a.email || '').toLowerCase();
+        const nameB = (b.user_metadata?.username || b.email || '').toLowerCase();
+        return nameA.localeCompare(nameB);
+    });
+
+    sortedUsers.forEach(u => {
+        const username = u.user_metadata?.username || u.email.split('@')[0];
+        const opt = document.createElement('option');
+        opt.value = u.email;
+        opt.textContent = `${username} (${u.email})`;
+        selectUser.appendChild(opt);
+    });
+};
+
+window.closeAddMemberModal = function() {
+    const modal = document.getElementById('addDivisionMemberModal');
+    if (!modal) return;
+    if (window.ModalManager) window.ModalManager.close(modal);
+    else modal.classList.remove('active');
+};
+
+window.submitAddMember = async function() {
+    const selectUser = document.getElementById('selectMemberUser');
+    const selectDiv = document.getElementById('selectMemberDivision');
+    const selectRole = document.getElementById('selectMemberRole');
+
+    const email = selectUser ? selectUser.value.trim() : '';
+    const divId = selectDiv ? selectDiv.value : 'development';
+    const role = selectRole ? selectRole.value : 'member';
+
+    if (!email) return showToast('Pilih user terlebih dahulu', 'error');
+
     showToast('Assigning member...');
-    const res = await apiCall('divisions', { action: 'assign_member', target_email: email.trim(), division_id: targetDivId });
-    if(res && res.success) { 
-        showToast('Assigned successfully!', 'success'); 
-        loadDivisions(); 
-    } else { 
-        showToast('Failed: ' + (res?.error || 'Unknown error'), 'error'); 
+    const res = await apiCall('divisions', {
+        action: 'assign_member',
+        target_email: email,
+        division_id: divId,
+        role: role
+    });
+
+    if (res && res.success) {
+        showToast(`Berhasil menambahkan ${email} ke divisi ${divId} (${role})!`, 'success');
+        window.closeAddMemberModal();
+        if (typeof loadDivisions === 'function') loadDivisions();
+        if (typeof loadUsers === 'function') loadUsers();
+    } else {
+        showToast('Failed: ' + (res?.error || 'Unknown error'), 'error');
+    }
+};
+
+window.openManageCoupleModal = async function() {
+    const modal = document.getElementById('manageCoupleModal');
+    const p1Select = document.getElementById('selectCouplePartner1');
+    const p2Select = document.getElementById('selectCouplePartner2');
+    const statusText = document.getElementById('coupleCurrentStatusText');
+
+    if (!modal || !p1Select || !p2Select) return;
+
+    p1Select.innerHTML = '<option value="">Loading users...</option>';
+    p2Select.innerHTML = '<option value="">Loading users...</option>';
+
+    if (window.ModalManager) window.ModalManager.open(modal);
+    else modal.classList.add('active');
+
+    const [users, coupleRes] = await Promise.all([
+        getCachedOrFreshUsers(),
+        apiCall('contributions', { action: 'get_couple_package' })
+    ]);
+
+    const sortedUsers = [...users].sort((a, b) => {
+        const nameA = (a.user_metadata?.username || a.email || '').toLowerCase();
+        const nameB = (b.user_metadata?.username || b.email || '').toLowerCase();
+        return nameA.localeCompare(nameB);
+    });
+
+    p1Select.innerHTML = '<option value="">-- Pilih Partner 1 --</option>';
+    p2Select.innerHTML = '<option value="">-- Pilih Partner 2 --</option>';
+
+    sortedUsers.forEach(u => {
+        const username = u.user_metadata?.username || u.email.split('@')[0];
+        const text = `${username} (${u.email})`;
+
+        const opt1 = document.createElement('option');
+        opt1.value = u.email;
+        opt1.textContent = text;
+        p1Select.appendChild(opt1);
+
+        const opt2 = document.createElement('option');
+        opt2.value = u.email;
+        opt2.textContent = text;
+        p2Select.appendChild(opt2);
+    });
+
+    if (coupleRes && coupleRes.success && Array.isArray(coupleRes.couple) && coupleRes.couple.length >= 2) {
+        const p1 = coupleRes.couple[0];
+        const p2 = coupleRes.couple[1];
+        p1Select.value = p1.email;
+        p2Select.value = p2.email;
+        if (statusText) statusText.textContent = `${p1.username} (${p1.email}) & ${p2.username} (${p2.email})`;
+        const sidebarNames = document.getElementById('coupleSidebarNames');
+        if (sidebarNames) sidebarNames.textContent = `${p1.username} & ${p2.username}`;
+    } else {
+        p1Select.value = 'farid.hmzh00@gmail.com';
+        p2Select.value = 'khesyian@gmail.com';
+        if (statusText) statusText.textContent = 'Farid (farid.hmzh00@gmail.com) & Khesy (khesyian@gmail.com)';
+    }
+};
+
+window.closeManageCoupleModal = function() {
+    const modal = document.getElementById('manageCoupleModal');
+    if (!modal) return;
+    if (window.ModalManager) window.ModalManager.close(modal);
+    else modal.classList.remove('active');
+};
+
+window.saveCouplePackage = async function() {
+    const p1Select = document.getElementById('selectCouplePartner1');
+    const p2Select = document.getElementById('selectCouplePartner2');
+
+    const email1 = p1Select ? p1Select.value.trim() : '';
+    const email2 = p2Select ? p2Select.value.trim() : '';
+
+    if (!email1 || !email2) return showToast('Pilih kedua partner couple', 'error');
+    if (email1.toLowerCase() === email2.toLowerCase()) return showToast('Partner 1 dan Partner 2 tidak boleh sama', 'error');
+
+    showToast('Saving couple package...');
+    const res = await apiCall('contributions', {
+        action: 'set_couple_package',
+        partner1_email: email1,
+        partner2_email: email2
+    });
+
+    if (res && res.success) {
+        showToast('Paket Contribution Couple berhasil disimpan!', 'success');
+        window.closeManageCoupleModal();
+        if (typeof window.loadContributions === 'function') window.loadContributions();
+        const sidebarNames = document.getElementById('coupleSidebarNames');
+        if (sidebarNames && res.couple) {
+            sidebarNames.textContent = `${res.couple[0].username} & ${res.couple[1].username}`;
+        }
+    } else {
+        showToast('Failed: ' + (res?.error || 'Unknown error'), 'error');
+    }
+};
+
+window.unlinkCouplePackage = async function() {
+    if (!await customConfirm('Apakah Anda yakin ingin memisahkan (unlink) akun couple ini?')) return;
+    showToast('Unlinking couple package...');
+    const res = await apiCall('contributions', {
+        action: 'set_couple_package',
+        unlink: true
+    });
+
+    if (res && res.success) {
+        showToast('Couple package unlinked', 'success');
+        window.closeManageCoupleModal();
+        if (typeof window.loadContributions === 'function') window.loadContributions();
+        const sidebarNames = document.getElementById('coupleSidebarNames');
+        if (sidebarNames) sidebarNames.textContent = 'None (Unlinked)';
+    } else {
+        showToast('Failed: ' + (res?.error || 'Unknown error'), 'error');
     }
 };
 

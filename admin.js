@@ -1449,6 +1449,7 @@ Object.defineProperty(window, 'supabaseClient', { get() { return supabaseClient;
         clearTimeout(userTimeoutId);
         const data = await res.json();
         if (data.success) {
+          window.allUsersCache = data.users;
           let displayUsers = data.users;
           if (filterToUse && window.divisionData) {
               const div = window.divisionData.find(d => d.id === filterToUse);

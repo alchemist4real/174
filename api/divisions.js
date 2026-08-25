@@ -149,12 +149,21 @@ export default async function handler(req, res) {
       if (!targetUser) return res.status(404).json({ error: 'User not found' });
       
       if (action === 'assign_member') {
+        const { role } = req.body;
         const resRole = await fetch(`${supabaseUrl}/rest/v1/division_members`, {
           method: 'POST',
           headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}`, 'Content-Type': 'application/json', 'Prefer': 'resolution=merge-duplicates' },
           body: JSON.stringify({ user_id: targetUser.id, division_id })
         });
         if (!resRole.ok) throw new Error(await resRole.text());
+
+        if (role === 'admin') {
+          await fetch(`${supabaseUrl}/rest/v1/user_roles`, {
+            method: 'POST',
+            headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}`, 'Content-Type': 'application/json', 'Prefer': 'resolution=ignore-duplicates' },
+            body: JSON.stringify({ identifier: targetUser.email, role: 'admin' })
+          });
+        }
         return res.status(200).json({ success: true });
       }
 

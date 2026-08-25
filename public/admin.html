@@ -224,6 +224,19 @@
                     <!-- Dynamic divisions injected here -->
                 </div>
                 
+                <div id="coupleSidebarWidget" class="org-sidebar-couple-widget" style="padding:12px; margin-top:14px; border:1px solid var(--border-light); border-radius:4px; background:color-mix(in srgb, var(--c2) 18%, transparent);">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:6px;">
+                        <span style="font-size:11px; font-weight:700; color:var(--text-main); display:flex; align-items:center; gap:4px;">
+                            <span>💑 COUPLE PACKAGE</span>
+                        </span>
+                        <button class="btn-unified" style="padding:2px 8px; font-size:11px;" onclick="window.openManageCoupleModal()" title="Manage Couple Package">Configure</button>
+                    </div>
+                    <div id="coupleSidebarStatus" style="font-size:11px; color:var(--text-muted); line-height:1.4;">
+                        <span id="coupleSidebarNames" style="font-weight:600; color:var(--text-main);">Farid &amp; Khesy</span><br>
+                        <span style="color:var(--text-muted);">Points &amp; access synced</span>
+                    </div>
+                </div>
+
                 <div id="waConfigContainer" class="org-sidebar-wa-config">
                     <div class="org-sidebar-wa-config-label">
                       <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"></path></svg>
@@ -755,6 +768,86 @@
       <div class="settings-body settings-body-gap">
         <div id="contextActions" class="context-actions-list"></div>
         <button class="btn-unified context-cancel-btn" id="contextCancel" onclick="if(window.ModalManager) ModalManager.close(document.getElementById('contextModal')); else this.closest('.settings-overlay').classList.remove('active');">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Division Member Modal (User Dropdown) -->
+  <div id="addDivisionMemberModal" class="settings-overlay">
+    <div class="settings-box prompt-box-limit" style="max-width: 480px;">
+      <div class="settings-header">
+        <span class="modal-title">ASSIGN USER TO DIVISION</span>
+        <button class="btn-text" onclick="if(window.ModalManager) ModalManager.close(document.getElementById('addDivisionMemberModal')); else this.closest('.settings-overlay').classList.remove('active');">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          CLOSE
+        </button>
+      </div>
+      <div class="settings-body settings-body-gap">
+        <div class="form-group" style="text-align:left;">
+          <label for="selectMemberUser" style="display:block; margin-bottom:6px; font-size:12px; font-weight:700; color:var(--text-main);">PILIH USER</label>
+          <select id="selectMemberUser" class="auth-input" style="width:100%;">
+            <option value="">-- Pilih User --</option>
+          </select>
+        </div>
+        <div class="form-group" style="text-align:left;">
+          <label for="selectMemberDivision" style="display:block; margin-bottom:6px; font-size:12px; font-weight:700; color:var(--text-main);">DIVISI TUJUAN</label>
+          <select id="selectMemberDivision" class="auth-input" style="width:100%;">
+            <option value="development">Development Division</option>
+            <option value="review">Review Division</option>
+            <option value="management">Management Division</option>
+          </select>
+        </div>
+        <div class="form-group" style="text-align:left;">
+          <label for="selectMemberRole" style="display:block; margin-bottom:6px; font-size:12px; font-weight:700; color:var(--text-main);">PERAN / ROLE</label>
+          <select id="selectMemberRole" class="auth-input" style="width:100%;">
+            <option value="member">Division Member</option>
+            <option value="admin">Division Admin</option>
+          </select>
+        </div>
+        <div class="modal-actions">
+          <button class="btn-unified" onclick="if(window.ModalManager) ModalManager.close(document.getElementById('addDivisionMemberModal')); else this.closest('.settings-overlay').classList.remove('active');">Cancel</button>
+          <button id="btnSubmitAddMember" class="btn-unified primary" onclick="window.submitAddMember()">Assign Member</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Manage Couple Contribution Package Modal -->
+  <div id="manageCoupleModal" class="settings-overlay">
+    <div class="settings-box prompt-box-limit" style="max-width: 480px;">
+      <div class="settings-header">
+        <span class="modal-title">💑 PAKET CONTRIBUTION COUPLE</span>
+        <button class="btn-text" onclick="if(window.ModalManager) ModalManager.close(document.getElementById('manageCoupleModal')); else this.closest('.settings-overlay').classList.remove('active');">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+          CLOSE
+        </button>
+      </div>
+      <div class="settings-body settings-body-gap">
+        <p style="font-size:12px; line-height:1.4; color:var(--text-muted); text-align:left;">
+          Hubungkan dua akun anggota sebagai pasangan. Poin kontribusi dan masa aktif akses 30 hari keduanya otomatis digabungkan &amp; ditampilkan sebagai satu entitas gabungan (usn &amp; usn) di Leaderboard.
+        </p>
+        <div class="form-group" style="text-align:left;">
+          <label for="selectCouplePartner1" style="display:block; margin-bottom:6px; font-size:12px; font-weight:700; color:var(--text-main);">PARTNER 1</label>
+          <select id="selectCouplePartner1" class="auth-input" style="width:100%;">
+            <option value="">-- Pilih Partner 1 --</option>
+          </select>
+        </div>
+        <div class="form-group" style="text-align:left;">
+          <label for="selectCouplePartner2" style="display:block; margin-bottom:6px; font-size:12px; font-weight:700; color:var(--text-main);">PARTNER 2</label>
+          <select id="selectCouplePartner2" class="auth-input" style="width:100%;">
+            <option value="">-- Pilih Partner 2 --</option>
+          </select>
+        </div>
+        <div id="coupleCurrentBox" style="padding:10px 14px; background:var(--c1); border:1px solid var(--border-light); border-radius:4px; font-size:12px; line-height:1.4; text-align:left;">
+          <span style="font-weight:700;">Status Saat Ini:</span> <span id="coupleCurrentStatusText" style="color:var(--text-main);">Farid (farid.hmzh00@gmail.com) &amp; Khesy (khesyian@gmail.com)</span>
+        </div>
+        <div class="modal-actions" style="display:flex; justify-content:space-between; gap:10px;">
+          <button class="btn-unified" style="color:var(--danger);" onclick="window.unlinkCouplePackage()">Unlink Couple</button>
+          <div style="display:flex; gap:8px;">
+            <button class="btn-unified" onclick="if(window.ModalManager) ModalManager.close(document.getElementById('manageCoupleModal')); else this.closest('.settings-overlay').classList.remove('active');">Cancel</button>
+            <button id="btnSaveCouplePackage" class="btn-unified primary" onclick="window.saveCouplePackage()">Save Couple Link</button>
+          </div>
+        </div>
       </div>
     </div>
   </div>

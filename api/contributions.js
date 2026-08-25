@@ -215,6 +215,71 @@ export default async function handler(req, res) {
       return res.status(200).json({ success: true, has_contributed: hasContributed });
     }
 
+    if (action === 'get_couple_package') {
+      const allUsers = await fetchAllAdminUsers(supabaseUrl, sbKey);
+      const coupleUsers = allUsers.filter(isCoupleMember);
+      return res.status(200).json({
+        success: true,
+        enabled: coupleUsers.length > 0,
+        couple: coupleUsers.map(u => ({
+          id: u.id,
+          email: u.email,
+          username: u.user_metadata?.username || u.email.split('@')[0],
+          full_name: u.user_metadata?.full_name || u.user_metadata?.name || ''
+        }))
+      });
+    }
+
+    if (action === 'set_couple_package') {
+      // Role check for admin actions
+      const encEmail = encodeURIComponent(userData.email);
+      const roleRes = await fetch(`${supabaseUrl}/rest/v1/user_roles?identifier=eq.${encEmail}&select=role`, {
+        headers: { 'apikey': sbKey, 'Authorization': `Bearer ${sbKey}` }
+      });
+      let roleData = [];
+      if (roleRes.ok) roleData = await roleRes.json();
+      const isSuperAdmin = userData.email === (process.env.SUPERADMIN_EMAIL || 'muqorroben@gmail.com');
+      const hasAdminRole = roleData && roleData.length > 0 && roleData[0].role === 'admin';
+      if (!isSuperAdmin && !hasAdminRole) {
+        return res.status(403).json({ error: 'Forbidden. Admin only.' });
+      }
+
+      const { partner1_email, partner2_email, unlink } = body;
+      if (unlink) {
+        COUPLE_EMAILS.clear();
+        COUPLE_USER_IDS.clear();
+        return res.status(200).json({ success: true, message: 'Couple package unlinked.' });
+      }
+
+      if (!partner1_email || !partner2_email) {
+        return res.status(400).json({ error: 'Both partner emails are required.' });
+      }
+
+      const allUsers = await fetchAllAdminUsers(supabaseUrl, sbKey);
+      const p1 = allUsers.find(u => (u.email || '').toLowerCase() === partner1_email.toLowerCase());
+      const p2 = allUsers.find(u => (u.email || '').toLowerCase() === partner2_email.toLowerCase());
+
+      if (!p1 || !p2) {
+        return res.status(404).json({ error: 'One or both partners not found in user accounts.' });
+      }
+
+      COUPLE_EMAILS.clear();
+      COUPLE_USER_IDS.clear();
+      COUPLE_EMAILS.add(p1.email.toLowerCase());
+      COUPLE_EMAILS.add(p2.email.toLowerCase());
+      COUPLE_USER_IDS.add(p1.id);
+      COUPLE_USER_IDS.add(p2.id);
+
+      return res.status(200).json({
+        success: true,
+        message: 'Couple package successfully updated!',
+        couple: [
+          { id: p1.id, email: p1.email, username: p1.user_metadata?.username || p1.email.split('@')[0] },
+          { id: p2.id, email: p2.email, username: p2.user_metadata?.username || p2.email.split('@')[0] }
+        ]
+      });
+    }
+
     return res.status(400).json({ error: 'Unknown action' });
   } catch (error) {
     return res.status(500).json({ error: error.message });

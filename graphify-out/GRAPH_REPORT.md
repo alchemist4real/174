@@ -1,16 +1,16 @@
 # Graph Report - MR-CAPSULES-main  (2026-08-25)
 
 ## Corpus Check
-- 397 files · ~27,567,037 words
+- 397 files · ~27,567,206 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 7907 nodes · 16297 edges · 397 communities (366 shown, 31 thin omitted)
+- 7911 nodes · 16305 edges · 396 communities (365 shown, 31 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 86 edges (avg confidence: 0.52)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `5651fd2b`
+- Built from commit: `b7224dab`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -378,7 +378,6 @@
 - standardize_ident_by_subject.js
 - clean_public.js
 - uploadSessions
-- contributionsRecord
 - K 4-Am I Injured_ — Konsep Umum Penyakit Quiz.html
 - K 4-Am I Injured_ — Konsep Umum Penyakit Quiz.html
 
@@ -409,7 +408,7 @@
 ## Import Cycles
 - None detected.
 
-## Communities (397 total, 31 thin omitted)
+## Communities (396 total, 31 thin omitted)
 
 ### Community 0 - "2.4 CBT 2_K20C AM I CINEMATIC.html"
 Cohesion: 0.07
@@ -972,8 +971,8 @@ Cohesion: 0.83
 Nodes (3): build(), copyRecursiveSync(), walkDir()
 
 ### Community 140 - "mock_server.js"
-Cohesion: 0.53
-Nodes (4): fetchAllAdminUsers(), handler(), isCoupleMember(), server
+Cohesion: 0.43
+Nodes (6): COUPLE_EMAILS, COUPLE_USER_IDS, fetchAllAdminUsers(), handler(), isCoupleMember(), server
 
 ### Community 141 - "1.2 other_Pull up 1.html"
 Cohesion: 0.19
@@ -1024,8 +1023,8 @@ Cohesion: 0.19
 Nodes (14): curCards, downloadCert(), flashcardsData, KEYS, navCard(), nextQ(), quizPool, quizSet (+6 more)
 
 ### Community 166 - "mcp.js"
-Cohesion: 0.09
-Nodes (45): activityLogsList(), codebaseSearch(), configGet(), configUpdate(), contentList(), contentTree(), contentUploadFromAgentPath(), contributionsLeaderboard() (+37 more)
+Cohesion: 0.08
+Nodes (48): activityLogsList(), codebaseSearch(), configGet(), configUpdate(), contentList(), contentTree(), contentUploadFromAgentPath(), contributionsLeaderboard() (+40 more)
 
 ### Community 167 - "authorize.js"
 Cohesion: 0.36
@@ -1664,16 +1663,16 @@ Cohesion: 0.15
 Nodes (19): authenticateApiKey(), authenticateJWT(), authenticateOAuthAccessToken(), canonicalizeUrl(), checkRateLimit(), getMcpToolsList(), handleDirectUpload(), handleMcpStreamableGet() (+11 more)
 
 ### Community 335 - "logAction"
-Cohesion: 0.22
-Nodes (13): codebaseDeleteFile(), codebaseReadFile(), codebaseWriteFile(), contentDelete(), contentDeleteFiles(), contentRename(), divisionsAddMember(), err404() (+5 more)
+Cohesion: 0.24
+Nodes (12): codebaseDeleteFile(), codebaseReadFile(), codebaseWriteFile(), contentDelete(), contentDeleteFiles(), contentRename(), err404(), ghApi() (+4 more)
 
 ### Community 336 - "contentUpload"
-Cohesion: 0.50
-Nodes (8): contentGet(), contentUpload(), docsAddSection(), docsAddTab(), docsDeleteTab(), docsUpdateSection(), docsUpdateTab(), sanitizeDocsHtml()
+Cohesion: 0.27
+Nodes (12): contentGet(), contentUpload(), contributionsRecord(), docsAddSection(), docsAddTab(), docsDeleteTab(), docsUpdateSection(), docsUpdateTab() (+4 more)
 
 ### Community 337 - "err400"
-Cohesion: 0.15
-Nodes (22): customMcpToolsMap, doctortabletCreateCategory(), doctortabletDeleteNote(), doctortabletExportMergedDocument(), doctortabletFetchNotes(), doctortabletListCategories(), doctortabletListNotes(), doctortabletReadNote() (+14 more)
+Cohesion: 0.20
+Nodes (19): cleanExpiredUploadSessions(), doctortabletCreateCategory(), doctortabletDeleteNote(), doctortabletExportMergedDocument(), doctortabletFetchNotes(), doctortabletListCategories(), doctortabletListNotes(), doctortabletReadNote() (+11 more)
 
 ### Community 338 - "err403"
 Cohesion: 0.10
@@ -1736,12 +1735,8 @@ Cohesion: 0.50
 Nodes (3): dir, files, renames
 
 ### Community 393 - "uploadSessions"
-Cohesion: 0.39
-Nodes (8): cleanExpiredUploadSessions(), restoreUploadSessionFromSb(), uploadCancel(), uploadChunk(), uploadCommit(), uploadInit(), uploadSessions, uploadStatus()
-
-### Community 394 - "contributionsRecord"
-Cohesion: 0.50
-Nodes (4): contributionsRecord(), recordContribution(), rewardUserForUpload(), tasksApprove()
+Cohesion: 0.18
+Nodes (11): customMcpToolsMap, err403(), executeCustomTool(), getActiveCustomTools(), mcpCreateTool(), mcpDeleteTool(), mcpListCustomTools(), revokeApiKey() (+3 more)
 
 ### Community 395 - "K 4-Am I Injured_ — Konsep Umum Penyakit Quiz.html"
 Cohesion: 0.10
