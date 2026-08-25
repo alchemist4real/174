@@ -129,35 +129,41 @@ export default async function handler(req, res) {
         const email = u ? u.email : 'Unknown';
         const username = u?.user_metadata?.username || (u ? u.email.split('@')[0] : 'Unknown');
         const userIsCouple = isCoupleMember(u);
-        if (!scores[email]) {
-          scores[email] = {
-            points: 0,
-            username,
-            is_couple: userIsCouple
-          };
-        }
         if (!userIsCouple) {
+          if (!scores[email]) {
+            scores[email] = {
+              points: 0,
+              username,
+              is_couple: false
+            };
+          }
           scores[email].points += (c.points || 0);
         }
       });
 
-      // Ensure couple users have their points connected/synced to coupleTotalPoints
-      allUsers.filter(isCoupleMember).forEach(cu => {
-        const email = cu.email;
-        const username = cu.user_metadata?.username || cu.email.split('@')[0];
-        scores[email] = {
+      const list = Object.keys(scores)
+        .filter(k => scores[k].points > 0)
+        .map(k => ({
+          email: k,
+          username: scores[k].username,
+          points: scores[k].points,
+          is_couple: false
+        }));
+
+      // Add 1 single combined couple entry only if coupleTotalPoints > 0
+      if (coupleTotalPoints > 0) {
+        const coupleUsers = allUsers.filter(isCoupleMember);
+        const coupleNames = coupleUsers.map(u => u?.user_metadata?.username || u.email.split('@')[0]);
+        const coupleUsername = coupleNames.length > 0 ? coupleNames.join(' & ') : 'farid.hmzh00 & khesyian';
+        list.push({
+          email: coupleUsers.map(u => u.email).join(', '),
+          username: coupleUsername,
           points: coupleTotalPoints,
-          username,
           is_couple: true
-        };
-      });
+        });
+      }
        
-      const leaderboard = Object.keys(scores).map(k => ({
-        email: k,
-        username: scores[k].username,
-        points: scores[k].points,
-        is_couple: scores[k].is_couple || false
-      })).sort((a,b) => b.points - a.points);
+      const leaderboard = list.sort((a,b) => b.points - a.points);
                                
       return res.status(200).json({ success: true, leaderboard });
     }

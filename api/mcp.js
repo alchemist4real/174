@@ -2884,24 +2884,30 @@ async function contributionsLeaderboard(su, sk) {
     const email = u ? u.email : 'Unknown';
     const username = u?.user_metadata?.username || email.split('@')[0];
     const userIsCouple = isCoupleMember(u);
-    if (!scores[email]) scores[email] = { points: 0, username: u?.user_metadata?.username || email.split('@')[0], is_couple: userIsCouple };
-    if (!userIsCouple) scores[email].points += (c.points || 0);
+    if (!userIsCouple) {
+      if (!scores[email]) scores[email] = { points: 0, username, is_couple: false };
+      scores[email].points += (c.points || 0);
+    }
   });
 
-  // Ensure couple users have their points connected/synced to coupleTotalPoints
-  allUsers.filter(isCoupleMember).forEach(cu => {
-    const email = cu.email;
-    const username = cu.user_metadata?.username || cu.email.split('@')[0];
-    scores[email] = {
+  const list = Object.entries(scores)
+    .filter(([email, d]) => d.points > 0)
+    .map(([email, d]) => ({ email, username: d.username, points: d.points, is_couple: false }));
+
+  // Add 1 single combined couple entry only if coupleTotalPoints > 0
+  if (coupleTotalPoints > 0) {
+    const coupleUsers = allUsers.filter(isCoupleMember);
+    const coupleNames = coupleUsers.map(u => u?.user_metadata?.username || u.email.split('@')[0]);
+    const coupleUsername = coupleNames.length > 0 ? coupleNames.join(' & ') : 'farid.hmzh00 & khesyian';
+    list.push({
+      email: coupleUsers.map(u => u.email).join(', '),
+      username: coupleUsername,
       points: coupleTotalPoints,
-      username,
       is_couple: true
-    };
-  });
+    });
+  }
 
-  const leaderboard = Object.entries(scores)
-    .map(([email, d]) => ({ email, username: d.username, points: d.points, is_couple: d.is_couple || false }))
-    .sort((a, b) => b.points - a.points);
+  const leaderboard = list.sort((a, b) => b.points - a.points);
   return { leaderboard };
 }
 

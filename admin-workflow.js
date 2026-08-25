@@ -988,19 +988,23 @@ window.loadContributions = async function() {
     if(resLeader.success) {
         const list = document.getElementById('leaderboardList');
         list.innerHTML = '';
-        resLeader.leaderboard.forEach((u, i) => {
-            const medal = i === 0 ? '1st' : (i === 1 ? '2nd' : (i === 2 ? '3rd' : `${i+1}.`));
-            const coupleBadge = u.is_couple ? ' <span style="font-size:12px; vertical-align:middle;" title="Paket Contribution Couple: Farid & Khesy">💑</span>' : '';
-            list.innerHTML += `
-                <li style="display:flex; justify-content:space-between; padding:12px 24px; border-bottom:1px solid var(--border-light); align-items:center; gap:12px; min-width:0;">
-                    <div style="display:flex; gap:16px; align-items:center; min-width:0; flex:1;">
-                        <span style="font-size:16px; font-weight:600; width:24px; flex-shrink:0;">${medal}</span>
-                        <span style="font-size:14px; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${u.username || u.email.split('@')[0]}${coupleBadge}</span>
-                    </div>
-                    <div style="font-weight:700; color:var(--accent); flex-shrink:0;">${u.points} pts</div>
-                </li>
-            `;
-        });
+        if(!resLeader.leaderboard || resLeader.leaderboard.length === 0) {
+            list.innerHTML = '<li style="padding:16px 24px; text-align:center; color:var(--text-muted); font-size:13px;">Belum ada kontributor dengan poin.</li>';
+        } else {
+            resLeader.leaderboard.forEach((u, i) => {
+                const medal = i === 0 ? '1st' : (i === 1 ? '2nd' : (i === 2 ? '3rd' : `${i+1}.`));
+                const coupleBadge = u.is_couple ? ' <span style="font-size:12px; vertical-align:middle;" title="Paket Contribution Couple: Farid & Khesy">💑</span>' : '';
+                list.innerHTML += `
+                    <li style="display:flex; justify-content:space-between; padding:12px 24px; border-bottom:1px solid var(--border-light); align-items:center; gap:12px; min-width:0;">
+                        <div style="display:flex; gap:16px; align-items:center; min-width:0; flex:1;">
+                            <span style="font-size:16px; font-weight:600; width:24px; flex-shrink:0;">${medal}</span>
+                            <span style="font-size:14px; min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${u.username || u.email.split('@')[0]}${coupleBadge}</span>
+                        </div>
+                        <div style="font-weight:700; color:var(--accent); flex-shrink:0;">${u.points} pts</div>
+                    </li>
+                `;
+            });
+        }
     } else {
         console.error('Failed to get leaderboard:', resLeader);
         showToast('Error getting leaderboard: ' + (resLeader.error || 'Unknown'), 'error');
