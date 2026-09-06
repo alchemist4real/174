@@ -375,6 +375,7 @@ export function getMcpToolsList() {
     { name: 'content_tree', description: 'Get the full file tree of content/ and cover/ directories', inputSchema: { type: 'object', properties: {} } },
     { name: 'content_upload', description: 'Upload a content file directly. You can pass contentBase64, contentGzipBase64 (compressed & 100% checksum-verified, ideal when network egress is blocked), OR a public url (for files up to 100MB) to fetch and commit the file reliably without chunking.', inputSchema: { type: 'object', properties: { path: { type: 'string', description: 'Target path, e.g. content/Semester 1/file.html' }, contentBase64: { type: 'string', description: 'Base64 encoded file content' }, contentGzipBase64: { type: 'string', description: 'Gzip compressed base64 encoded content (80% smaller, checksum verified)' }, url: { type: 'string', description: 'Public URL to fetch the file from' } }, required: ['path'] } },
     { name: 'content_upload_from_agent_path', description: 'Generates authenticated curl commands and instructions for Claude to upload a large local file directly from the sandbox filesystem (avoiding base64 typing corruption).', inputSchema: { type: 'object', properties: { agentFilePath: { type: 'string', description: 'Absolute file path in agent sandbox, e.g. /mnt/user-data/outputs/farmakokinetik.html' }, targetPath: { type: 'string', description: 'Target path in repository, e.g. content/semester 3/3.1/3.1 LECTURE_Am I Kinetic.html' } }, required: ['agentFilePath', 'targetPath'] } },
+    { name: 'content_pull_to_sandbox', description: 'Pull/download a content file from the repository directly into the Claude agent sandbox filesystem as a real file — instant, zero typing. Returns ready-to-run bash commands that Claude executes automatically.', inputSchema: { type: 'object', properties: { path: { type: 'string', description: 'Repository file path, e.g. content/semester 3/3.1/3.1 LECTURE_Farmakokinetika.html' }, saveTo: { type: 'string', description: 'Optional absolute destination path in sandbox. Defaults to /mnt/user-data/outputs/<filename>' } }, required: ['path'] } },
     { name: 'upload_init', description: 'Initialize a bulletproof chunked upload session for large files of any size (videos, PDFs, zip pools, large HTML). Prevents serverless size limits & timeouts.', inputSchema: { type: 'object', properties: { path: { type: 'string', description: 'Target path, e.g. content/Semester 1/video.mp4 or cover/semester1.png' }, totalChunks: { type: 'number', description: 'Total number of chunks to be uploaded' }, totalSizeBytes: { type: 'number', description: 'Optional estimated file size in bytes' } }, required: ['path', 'totalChunks'] } },
     { name: 'upload_chunk', description: 'Upload a single Base64 chunk (recommended size: 500KB - 1.5MB per chunk) for an active upload session.', inputSchema: { type: 'object', properties: { uploadId: { type: 'string', description: 'Session ID returned by upload_init' }, chunkIndex: { type: 'number', description: '1-indexed chunk number (1 to totalChunks)' }, chunkBase64: { type: 'string', description: 'Base64 encoded chunk data' } }, required: ['uploadId', 'chunkIndex', 'chunkBase64'] } },
     { name: 'upload_commit', description: 'Reassemble all uploaded chunks, verify integrity, and commit the complete large file to GitHub reliably.', inputSchema: { type: 'object', properties: { uploadId: { type: 'string', description: 'Session ID returned by upload_init' } }, required: ['uploadId'] } },
@@ -768,6 +769,10 @@ async function routeMethod(method, params, auth, roles, cfg) {
     if (!params.agentFilePath || !params.targetPath) throw err400('Missing params.agentFilePath or params.targetPath');
     validatePath(params.targetPath);
     return contentUploadFromAgentPath(params, auth, cfg.reqHost, gt, go, gr);
+  }
+  if (m === 'content_pull_to_sandbox') {
+    if (!params.path) throw err400('Missing params.path');
+    return contentPullToSandbox(params, gt, go, gr);
   }
   if (m === 'upload_init') {
     if (!roles.hasDivision && !roles.isAdmin) throw err403('Division membership required to upload');
@@ -1966,6 +1971,51 @@ ${pyCmd}
 2. Call the tool \`content_upload\` via MCP with:
    - path: "${targetPath}"
    - contentGzipBase64: "<paste the output string from python command>"`;
+}
+
+async function contentPullToSandbox(params, githubToken, owner, repo) {
+  const repoPath = params.path;
+  const filename = repoPath.split('/').pop();
+  const saveTo = params.saveTo || `/mnt/user-data/outputs/${filename}`;
+  const saveDir = saveTo.substring(0, saveTo.lastIndexOf('/'));
+
+  // Verify file exists in repo first
+  const checkRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/contents/${encodeURIComponent(repoPath)}`, {
+    headers: { 'Authorization': `Bearer ${githubToken}`, 'Accept': 'application/vnd.github.v3+json', 'User-Agent': 'MR-CAPSULES-MCP' }
+  });
+  if (!checkRes.ok) throw err404('File not found in repo: ' + repoPath);
+  const fileInfo = await checkRes.json();
+  const fileSizeKB = fileInfo.size ? (fileInfo.size / 1024).toFixed(1) : '?';
+  const rawUrl = `https://raw.githubusercontent.com/${owner}/${repo}/main/${encodeURIComponent(repoPath)}`;
+
+  // Method 1: curl raw (fastest, works if github.com is in egress allowlist)
+  const curlRawCmd = `mkdir -p '${saveDir}' && curl -fsSL -H "Authorization: Bearer ${githubToken}" -H "Accept: application/vnd.github.v3.raw" "https://api.github.com/repos/${owner}/${repo}/contents/${encodeURIComponent(repoPath)}" -o '${saveTo}' && echo "✅ Saved $(wc -c < '${saveTo}') bytes to ${saveTo}"`;
+
+  // Method 2: GitHub API + base64 decode (if raw fails)
+  const curlApiCmd = `mkdir -p '${saveDir}' && curl -fsSL -H "Authorization: Bearer ${githubToken}" -H "Accept: application/vnd.github.v3+json" "https://api.github.com/repos/${owner}/${repo}/contents/${encodeURIComponent(repoPath)}" | python3 -c "import sys,json,base64; d=json.load(sys.stdin); open('${saveTo}','wb').write(base64.b64decode(d['content'])); print('✅ Saved',len(base64.b64decode(d['content'])),'bytes to ${saveTo}')"`;
+
+  // Method 3: Python-only (if curl is not available)
+  const pyCmd = `python3 -c "
+import urllib.request, json, base64, os
+os.makedirs('${saveDir}', exist_ok=True)
+req = urllib.request.Request('https://api.github.com/repos/${owner}/${repo}/contents/${encodeURIComponent(repoPath)}', headers={'Authorization': 'Bearer ${githubToken}', 'Accept': 'application/vnd.github.v3+json', 'User-Agent': 'MR-CAPSULES-MCP'})
+data = json.loads(urllib.request.urlopen(req).read())
+content = base64.b64decode(data['content'])
+open('${saveTo}', 'wb').write(content)
+print(f'✅ Saved {len(content)} bytes to ${saveTo}')
+"`;
+
+  return {
+    success: true,
+    file: repoPath,
+    size_kb: fileSizeKB,
+    save_to: saveTo,
+    instructions: `File "${repoPath}" (${fileSizeKB} KB) is ready to pull. Run ONE of these commands in your bash/terminal tool — the file will appear instantly at ${saveTo}`,
+    method_1_curl_raw: curlRawCmd,
+    method_2_curl_api: curlApiCmd,
+    method_3_python: pyCmd,
+    auto_command: curlRawCmd
+  };
 }
 
 async function contentDelete(params, adminEmail, githubToken, owner, repo, su, sk) {
