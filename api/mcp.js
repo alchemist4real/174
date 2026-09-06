@@ -3010,6 +3010,80 @@ async function reviewIssuesDelete(issueId, su, sk) {
   return { success: true, issueId };
 }
 
+async function usersResetPassword(userId, email, newPassword, adminEmail, su, sk) {
+  if (!newPassword || newPassword.length < 6) throw err400('Password must be at least 6 characters');
+
+  // Resolve target user by ID or email
+  let targetId = userId;
+  let targetEmail = email;
+  if (!targetId && email) {
+    const listRes = await fetch(`${su}/auth/v1/admin/users?per_page=1000`, {
+      headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}` }
+    });
+    if (listRes.ok) {
+      const data = await listRes.json();
+      const found = (data.users || []).find(u =>
+        (u.email && u.email.toLowerCase() === email.trim().toLowerCase())
+      );
+      if (found) { targetId = found.id; targetEmail = found.email; }
+    }
+  }
+  if (!targetId) throw err400('User not found. Provide a valid user_id or email.');
+
+  const res = await fetch(`${su}/auth/v1/admin/users/${targetId}`, {
+    method: 'PUT',
+    headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ password: newPassword })
+  });
+  if (!res.ok) throw new Error('Failed to reset password: ' + await res.text());
+  await logAction(adminEmail, 'mcp_reset_user_password', { targetUserId: targetId, targetEmail }, su, sk);
+  return { success: true, message: `Password for ${targetEmail || targetId} updated successfully`, user_id: targetId };
+}
+
+async function usersList(su, sk) {
+  const listRes = await fetch(`${su}/auth/v1/admin/users?per_page=1000`, {
+    headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}` }
+  });
+  if (!listRes.ok) throw new Error('Failed to list users: ' + await listRes.text());
+  const data = await listRes.json();
+  const users = (data.users || []).map(u => ({
+    id: u.id,
+    email: u.email || '',
+    full_name: (u.user_metadata && u.user_metadata.full_name) || '',
+    username: (u.user_metadata && u.user_metadata.username) || '',
+    whatsapp: (u.user_metadata && u.user_metadata.whatsapp) || '',
+    banned: !!(u.banned_until || (u.app_metadata && u.app_metadata.banned)),
+    created_at: u.created_at,
+    last_sign_in_at: u.last_sign_in_at
+  }));
+  return { success: true, total: users.length, users };
+}
+
+async function usersBan(userId, banned, adminEmail, su, sk) {
+  if (!userId) throw err400('Missing userId');
+  const payload = banned
+    ? { banned_until: '2999-12-31T23:59:59Z', app_metadata: { banned: true } }
+    : { banned_until: null, app_metadata: { banned: false } };
+  const res = await fetch(`${su}/auth/v1/admin/users/${userId}`, {
+    method: 'PUT',
+    headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload)
+  });
+  if (!res.ok) throw new Error('Failed to ' + (banned ? 'ban' : 'unban') + ' user: ' + await res.text());
+  await logAction(adminEmail, banned ? 'mcp_ban_user' : 'mcp_unban_user', { targetUserId: userId }, su, sk);
+  return { success: true, user_id: userId, banned };
+}
+
+async function usersDelete(userId, su, sk) {
+  if (!userId) throw err400('Missing userId');
+  const res = await fetch(`${su}/auth/v1/admin/users/${userId}`, {
+    method: 'DELETE',
+    headers: { 'apikey': sk, 'Authorization': `Bearer ${sk}` }
+  });
+  if (!res.ok) throw new Error('Failed to delete user: ' + await res.text());
+  return { success: true, user_id: userId, message: 'User deleted successfully' };
+}
+
 async function usersAddAdmin(targetEmail, adminEmail, su, sk) {
   const res = await fetch(`${su}/rest/v1/user_roles`, {
     method: 'POST',

@@ -460,13 +460,13 @@
     "semantic_hash": "9a4ce52b5ae1fd97684b9f35a9cd04a6"
   },
   "data.js": {
-    "mtime": 1787650489.134207,
+    "mtime": 1787650862.8644261,
     "ast_hash": "40f658ca84e63ea4192a62c1e8df5f03",
     "semantic_hash": ""
   },
   "docs.html": {
-    "mtime": 1787647769.5388527,
-    "ast_hash": "4d5605915b61b61f7085922e335deb3c",
+    "mtime": 1787650853.975822,
+    "ast_hash": "2d3b880631bee7f437130b9e78e5a242",
     "semantic_hash": ""
   },
   "gpush.sh": {
@@ -505,8 +505,8 @@
     "semantic_hash": ""
   },
   "api/mcp.js": {
-    "mtime": 1787649698.7174668,
-    "ast_hash": "54324016a39d344fb9056ffddd1b2bd1",
+    "mtime": 1788734475.8251822,
+    "ast_hash": "fb3cd6c28f690d964ba7523f85618ef2",
     "semantic_hash": ""
   },
   ".agents/rules/graphify.md": {
@@ -540,8 +540,8 @@
     "semantic_hash": ""
   },
   "README.md": {
-    "mtime": 1787367915.508073,
-    "ast_hash": "1e44ea2bcbee7ba1005b21d374387228",
+    "mtime": 1787650819.3762205,
+    "ast_hash": "dd39d1305fc55d2963abefb15f8bc67e",
     "semantic_hash": ""
   },
   "cover/04094a2a2088424b488e130b94859bc1.gif": {
@@ -1230,13 +1230,13 @@
     "semantic_hash": ""
   },
   "public/data.js": {
-    "mtime": 1787650489.134207,
+    "mtime": 1787650862.8644261,
     "ast_hash": "40f658ca84e63ea4192a62c1e8df5f03",
     "semantic_hash": ""
   },
   "public/docs.html": {
-    "mtime": 1787647769.5388527,
-    "ast_hash": "4d5605915b61b61f7085922e335deb3c",
+    "mtime": 1787650853.975822,
+    "ast_hash": "2d3b880631bee7f437130b9e78e5a242",
     "semantic_hash": ""
   },
   "public/index.html": {
@@ -1285,8 +1285,8 @@
     "semantic_hash": ""
   },
   "public/README.md": {
-    "mtime": 1787367915.508073,
-    "ast_hash": "1e44ea2bcbee7ba1005b21d374387228",
+    "mtime": 1787650819.3762205,
+    "ast_hash": "dd39d1305fc55d2963abefb15f8bc67e",
     "semantic_hash": ""
   },
   "public/cover/04094a2a2088424b488e130b94859bc1.gif": {
@@ -1600,8 +1600,8 @@
     "semantic_hash": ""
   },
   "CONTRIBUTING.md": {
-    "mtime": 1787367915.4981294,
-    "ast_hash": "424569d5b9eabb7627cdaf4aacad9eb3",
+    "mtime": 1787650789.38948,
+    "ast_hash": "86535f73e695c616235148fbf07b3cb0",
     "semantic_hash": ""
   },
   "public/.github/ISSUE_TEMPLATE/bug_report.md": {
@@ -1620,8 +1620,8 @@
     "semantic_hash": ""
   },
   "public/CONTRIBUTING.md": {
-    "mtime": 1787367915.4981294,
-    "ast_hash": "424569d5b9eabb7627cdaf4aacad9eb3",
+    "mtime": 1787650789.38948,
+    "ast_hash": "86535f73e695c616235148fbf07b3cb0",
     "semantic_hash": ""
   },
   "public/assets/animated-banner.svg": {
@@ -2622,6 +2622,26 @@
   "public/content/semester 3/3.1/K 4-Am I Injured_ \u2014 Konsep Umum Penyakit Quiz.html": {
     "mtime": 1787647765.9485052,
     "ast_hash": "7abcf5650b4e53ee5d3f59566ad310fa",
+    "semantic_hash": ""
+  },
+  "assets/mr-capsules-thumbnail.png": {
+    "mtime": 1787662372.3525927,
+    "ast_hash": "faca95d9983a9e798bccbf6b700731d1",
+    "semantic_hash": ""
+  },
+  "assets/mr-capsules-beat-promo.mp4": {
+    "mtime": 1787798419.942758,
+    "ast_hash": "f6962d2c79f44d6777d04208bbffc32e",
+    "semantic_hash": ""
+  },
+  "assets/mr-capsules-full-promo.mp4": {
+    "mtime": 1787664147.1895113,
+    "ast_hash": "9b98036e1e4e277054a69eda12004233",
+    "semantic_hash": ""
+  },
+  "assets/mr-capsules-promo.mp4": {
+    "mtime": 1787661375.9944575,
+    "ast_hash": "2a72d5ce0ecdeb47bdd5792539ae7326",
     "semantic_hash": ""
   }
 }

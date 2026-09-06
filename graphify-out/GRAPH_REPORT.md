@@ -1,16 +1,16 @@
-# Graph Report - MR-CAPSULES-main  (2026-08-25)
+# Graph Report - MR-CAPSULES-main  (2026-09-07)
 
 ## Corpus Check
-- 397 files · ~27,570,105 words
+- 397 files · ~27,603,344 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 7913 nodes · 16309 edges · 396 communities (365 shown, 31 thin omitted)
+- 7917 nodes · 16324 edges · 397 communities (366 shown, 31 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 86 edges (avg confidence: 0.52)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `5983b489`
+- Built from commit: `6e0e4170`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -378,13 +378,14 @@
 - standardize_ident_by_subject.js
 - clean_public.js
 - uploadSessions
+- contributionsRecord
 - K 4-Am I Injured_ — Konsep Umum Penyakit Quiz.html
 - K 4-Am I Injured_ — Konsep Umum Penyakit Quiz.html
 
 ## God Nodes (most connected - your core abstractions)
-1. `routeMethod()` - 78 edges
-2. `err400()` - 27 edges
-3. `logAction()` - 26 edges
+1. `routeMethod()` - 82 edges
+2. `err400()` - 30 edges
+3. `logAction()` - 28 edges
 4. `4b. Workflow Logic Enhancements — `admin-workflow.js`` - 18 edges
 5. `4b. Workflow Logic Enhancements — `admin-workflow.js`` - 18 edges
 6. `makeQ()` - 17 edges
@@ -398,17 +399,17 @@
   scratch/test_mcp_local.js → api/mcp.js
 - `startTracking()` --indirect_call--> `toast()`  [INFERRED]
   index.html → restyle-simulation.html
-- `makeQ()` --calls--> `wrap`  [INFERRED]
-  public/content/semester 2/2.5/2.5 PRAKTIKUM_PRAKTIKUM 1.html → public/index.html
 - `runTests()` --calls--> `handler()`  [EXTRACTED]
   scratch/test_openapi.js → api/mcp.js
 - `runTests()` --calls--> `handler()`  [EXTRACTED]
   scratch/test_openapi.js → api/openapi.js
+- `makeQ()` --calls--> `wrap`  [INFERRED]
+  public/content/semester 2/2.5/2.5 PRAKTIKUM_PRAKTIKUM 1.html → public/index.html
 
 ## Import Cycles
 - None detected.
 
-## Communities (396 total, 31 thin omitted)
+## Communities (397 total, 31 thin omitted)
 
 ### Community 0 - "2.4 CBT 2_K20C AM I CINEMATIC.html"
 Cohesion: 0.07
@@ -1024,7 +1025,7 @@ Nodes (14): curCards, downloadCert(), flashcardsData, KEYS, navCard(), nextQ(), 
 
 ### Community 166 - "mcp.js"
 Cohesion: 0.08
-Nodes (48): activityLogsList(), codebaseSearch(), configGet(), configUpdate(), contentList(), contentTree(), contentUploadFromAgentPath(), contributionsLeaderboard() (+40 more)
+Nodes (49): activityLogsList(), codebaseSearch(), configGet(), configUpdate(), contentList(), contentTree(), contentUploadFromAgentPath(), contributionsLeaderboard() (+41 more)
 
 ### Community 167 - "authorize.js"
 Cohesion: 0.36
@@ -1048,7 +1049,7 @@ Nodes (6): 1. System Architecture & Database Schema Migrations, 3. Frontend Clie
 
 ### Community 172 - "index.html"
 Cohesion: 0.05
-Nodes (67): ./fp.js, apply(), applyData(), applyPerfMode(), applyPersona(), backgroundSync(), buildCoverflow(), cards (+59 more)
+Nodes (66): ./fp.js, apply(), applyData(), applyPerfMode(), applyPersona(), backgroundSync(), buildCoverflow(), cards (+58 more)
 
 ### Community 173 - "admin.js"
 Cohesion: 0.09
@@ -1056,7 +1057,7 @@ Nodes (46): adminAction(), applyAdminPersona(), authMessage, authOverlay, bindUs
 
 ### Community 174 - "2.5 PRAKTIKUM_PRAKTIKUM 1.html"
 Cohesion: 0.08
-Nodes (48): activeTypes, AKTIV_LIST, AKTIVITAS_METs, BOUCHARD_HITUNG_KONSEP, BOUCHARD_KAT, BOUCHARD_KAT_KONSEP, DEFINISI_POOL, downloadCert() (+40 more)
+Nodes (49): activeTypes, AKTIV_LIST, AKTIVITAS_METs, BOUCHARD_HITUNG_KONSEP, BOUCHARD_KAT, BOUCHARD_KAT_KONSEP, DEFINISI_POOL, downloadCert() (+41 more)
 
 ### Community 175 - "1.3 CBT 1_10. Fungsi Medulla Spinalis dan Saraf Spinal.html"
 Cohesion: 0.25
@@ -1663,16 +1664,16 @@ Cohesion: 0.15
 Nodes (19): authenticateApiKey(), authenticateJWT(), authenticateOAuthAccessToken(), canonicalizeUrl(), checkRateLimit(), getMcpToolsList(), handleDirectUpload(), handleMcpStreamableGet() (+11 more)
 
 ### Community 335 - "logAction"
-Cohesion: 0.24
-Nodes (12): codebaseDeleteFile(), codebaseReadFile(), codebaseWriteFile(), contentDelete(), contentDeleteFiles(), contentRename(), err404(), ghApi() (+4 more)
+Cohesion: 0.21
+Nodes (14): codebaseDeleteFile(), codebaseReadFile(), contentDelete(), contentDeleteFiles(), contentRename(), err404(), ghApi(), handleAccountManager() (+6 more)
 
 ### Community 336 - "contentUpload"
-Cohesion: 0.27
-Nodes (12): contentGet(), contentUpload(), contributionsRecord(), docsAddSection(), docsAddTab(), docsDeleteTab(), docsUpdateSection(), docsUpdateTab() (+4 more)
+Cohesion: 0.42
+Nodes (9): codebaseWriteFile(), contentGet(), contentUpload(), docsAddSection(), docsAddTab(), docsDeleteTab(), docsUpdateSection(), docsUpdateTab() (+1 more)
 
 ### Community 337 - "err400"
-Cohesion: 0.20
-Nodes (19): cleanExpiredUploadSessions(), doctortabletCreateCategory(), doctortabletDeleteNote(), doctortabletExportMergedDocument(), doctortabletFetchNotes(), doctortabletListCategories(), doctortabletListNotes(), doctortabletReadNote() (+11 more)
+Cohesion: 0.17
+Nodes (22): cleanExpiredUploadSessions(), doctortabletCreateCategory(), doctortabletDeleteNote(), doctortabletExportMergedDocument(), doctortabletFetchNotes(), doctortabletListCategories(), doctortabletListNotes(), doctortabletReadNote() (+14 more)
 
 ### Community 338 - "err403"
 Cohesion: 0.10
@@ -1735,8 +1736,12 @@ Cohesion: 0.50
 Nodes (3): dir, files, renames
 
 ### Community 393 - "uploadSessions"
-Cohesion: 0.18
-Nodes (11): customMcpToolsMap, err403(), executeCustomTool(), getActiveCustomTools(), mcpCreateTool(), mcpDeleteTool(), mcpListCustomTools(), revokeApiKey() (+3 more)
+Cohesion: 0.25
+Nodes (8): customMcpToolsMap, err403(), executeCustomTool(), getActiveCustomTools(), mcpCreateTool(), mcpDeleteTool(), mcpListCustomTools(), revokeApiKey()
+
+### Community 394 - "contributionsRecord"
+Cohesion: 0.50
+Nodes (4): contributionsRecord(), recordContribution(), rewardUserForUpload(), tasksApprove()
 
 ### Community 395 - "K 4-Am I Injured_ — Konsep Umum Penyakit Quiz.html"
 Cohesion: 0.10
@@ -1758,7 +1763,7 @@ _Questions this graph is uniquely positioned to answer:_
   _High betweenness centrality (0.000) - this node is a cross-community bridge._
 - **Why does `bindKeyEvents()` connect `MockResponse` to `admin.js`?**
   _High betweenness centrality (0.000) - this node is a cross-community bridge._
-- **Why does `makeQ()` connect `2.5 PRAKTIKUM_PRAKTIKUM 1.html` to `index.html`?**
+- **Why does `bindKeyEvents()` connect `MockResponse` to `admin.js`?**
   _High betweenness centrality (0.000) - this node is a cross-community bridge._
 - **What connects `fileCache`, `_statusTextEl`, `_statusBarEl` to the rest of the system?**
   _1280 weakly-connected nodes found - possible documentation gaps or missing edges._
