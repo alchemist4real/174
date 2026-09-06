@@ -330,7 +330,7 @@ export default async function handler(req, res) {
   // ── Route to handler ──────────────────────────────────────────────────────
   try {
     const result = await routeMethod(method, params, authResult, roles, {
-      SUPABASE_URL, SB_SERVICE_KEY, GITHUB_TOKEN, GH_OWNER, GH_REPO, MAX_KEYS_PER_USER,
+      SUPABASE_URL, SB_SERVICE_KEY, GITHUB_TOKEN, GH_OWNER, GH_REPO, MAX_KEYS_PER_USER, SUPERADMIN_EMAIL,
       reqHost: currentReqHost
     });
 
@@ -704,7 +704,7 @@ async function ghApi(method, endpoint, bodyObj, githubToken, owner, repo) {
 // ═══════════════════════════════════════════════════════════════
 
 async function routeMethod(method, params, auth, roles, cfg) {
-  const { SUPABASE_URL: su, SB_SERVICE_KEY: sk, GITHUB_TOKEN: gt, GH_OWNER: go, GH_REPO: gr, MAX_KEYS_PER_USER: maxKeys } = cfg;
+  const { SUPABASE_URL: su, SB_SERVICE_KEY: sk, GITHUB_TOKEN: gt, GH_OWNER: go, GH_REPO: gr, MAX_KEYS_PER_USER: maxKeys, SUPERADMIN_EMAIL } = cfg;
 
   validateToolArguments(method, params);
 
